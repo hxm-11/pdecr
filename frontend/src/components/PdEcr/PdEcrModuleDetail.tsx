@@ -1,3 +1,4 @@
+import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import {
   ArrowLeft,
@@ -6,6 +7,7 @@ import {
   FileText,
   Home,
   Link2,
+  Sparkles,
   Upload,
 } from "lucide-react"
 import { type ReactNode, useEffect, useMemo, useState } from "react"
@@ -13,17 +15,22 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Button } from "@/components/ui/button"
 import {
+  createPdEcrCase,
+  generatePdEcrReport,
   getPdEcrModuleDraft,
   resolvePdEcrAssetUrl,
   savePdEcrModuleDraft,
 } from "@/lib/pdEcrApi"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
+import { buildPdEcrOnePageHtml } from "./pdEcrExport"
 import {
+  buildGeneratedResult,
   findModule,
   loadActiveResult,
   loadGeneratedResult,
   loadHistoryResult,
   saveActiveResult,
+  saveGeneratedResult,
   type PdEcrApprovalSuggestion,
   type PdEcrDisplayModule,
 } from "./pdEcrState"
@@ -61,17 +68,59 @@ function StatusLights({
   )
 }
 
-function ToolFooter() {
+function ToolFooter({ module }: { module?: PdEcrDisplayModule }) {
+  const exportCsv = () => {
+    if (!module) return
+    const rows = [["Module", "Field", "Value"]]
+    rows.push([module.title, "Title", module.title])
+    rows.push([module.title, "Summary", module.summary || ""])
+    Object.entries(module.data).forEach(([key, value]) => {
+      rows.push([module.title, key, typeof value === "string" ? value : JSON.stringify(value)])
+    })
+    const csv = rows.map((r) => r.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(",")).join("\n")
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url; a.download = `pd-ecr-${module.id}.csv`; a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const exportOnePage = () => {
+    if (!module) return
+    const html = buildPdEcrOnePageHtml({
+      cases: [],
+      result: {
+        source: "generated",
+        relatedCases: [],
+        modules: [module],
+      },
+    })
+    const blob = new Blob([html], { type: "text/html;charset=utf-8" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url; a.download = `pd-ecr-${module.id}-one-page.html`; a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (!files?.length) return
+    const names = Array.from(files).map((f) => f.name).join(", ")
+    alert(`Files selected: ${names}\n(Backend upload integration pending)`)
+  }
+
   return (
     <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-stone-200 pt-4">
-      <Button type="button" variant="outline" className="bg-white">
-        <Upload className="size-4" />
-        Upload files
+      <Button asChild type="button" variant="outline" className="bg-white cursor-pointer">
+        <label>
+          <Upload className="size-4" />
+          Upload files
+          <input type="file" multiple className="hidden" onChange={(e) => handleFileUpload(e.target.files)} />
+        </label>
       </Button>
-      <Button type="button" variant="outline" className="bg-white">
+      <Button type="button" variant="outline" className="bg-white" onClick={exportCsv}>
         Export PD-ECR excel file
       </Button>
-      <Button type="button" variant="outline" className="bg-white">
+      <Button type="button" variant="outline" className="bg-white" onClick={exportOnePage}>
         Export PD-ECR One-page
       </Button>
       <Button type="button" variant="outline" className="ml-auto bg-amber-50">
@@ -885,7 +934,92 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
       return initialDraft
     }
   })
+  const navigate = useNavigate()
   const [saveStatus, setSaveStatus] = useState("Auto-filled from history")
+
+  const generateMutation = useMutation({
+    mutationFn: async () => {
+      // Save draft first
+      localStorage.setItem(storageKey, JSON.stringify(draft))
+      const active = loadActiveResult()
+      saveActiveResult({
+        ...active,
+        modules: active.modules.map((item) =>
+          item.id === module.id
+            ? {
+                ...item,
+                data: {
+                  ...item.data,
+                  source: draft.source,
+                  change_reason: draft.reason,
+                  department: draft.department,
+                  initiator: draft.initiator,
+                  date: draft.date,
+                  product_no: draft.product,
+                  customer_project: draft.customer,
+                  component_no: draft.partNumber,
+                  title: draft.title,
+                  change_proposal: draft.changeSummary,
+                  not_change: draft.notChange,
+                  affected_departments: draft.departments.join(", "),
+                },
+              }
+            : item,
+        ),
+      })
+
+      // Build PdEcrInput from draft (same pattern as Platform page)
+      const input = {
+        dc_no: `PD-ECR-${Date.now()}`,
+        date: draft.date || new Date().toISOString().slice(0, 10),
+        customer_project: draft.customer || "PD-ECR Platform",
+        initiator: draft.initiator || draft.source,
+        reason: draft.reason,
+        change_proposal: draft.changeSummary,
+        remarks: [
+          `Source: ${draft.source}`,
+          `Product: ${draft.product}`,
+          `Part: ${draft.partNumber}`,
+          `Not change: ${draft.notChange}`,
+          `Affected departments: ${draft.departments.join(", ")}`,
+        ].join("\n"),
+      }
+
+      return generatePdEcrReport(input)
+    },
+    onSuccess: (response) => {
+      const result = buildGeneratedResult(response)
+      saveGeneratedResult(result)
+
+      // Create DB case in background (non-blocking)
+      const caseNo = response.draft_id || `PD-ECR-${Date.now()}`
+      createPdEcrCase({
+        case_no: caseNo,
+        title: draft.title || draft.changeSummary || "New PD-ECR Change Request",
+        status: "draft",
+        source_type: "ai_generated",
+        dc_no: `PD-ECR-${Date.now()}`,
+        initiator: draft.initiator || draft.source || "AI Generated",
+        customer_project: draft.customer || "PD-ECR Platform",
+        product_no: draft.product || undefined,
+        part_no: draft.partNumber || undefined,
+        change_type: "Engineering Change",
+      }).catch(() => {
+        // Case creation is non-blocking
+      })
+
+      setSaveStatus("All 6 modules regenerated from RAG history.")
+      navigate({ to: "/pd-ecr/content" })
+    },
+    onError: (error) => {
+      setSaveStatus(
+        error instanceof Error
+          ? error.message
+          : "Generation failed. Please try again.",
+      )
+    },
+  })
+
   const [beforeAttachments, setBeforeAttachments] = useState<
     BeforeAfterAttachment[]
   >(() => loadStoredAttachments(module, "before"))
@@ -1063,14 +1197,27 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
             <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
               {saveStatus}
             </span>
-            <Button
-              type="button"
-              size="sm"
-              className="bg-amber-600 hover:bg-amber-700"
-              onClick={saveDraft}
-            >
-              Save changes
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="bg-white"
+                onClick={saveDraft}
+              >
+                Save changes
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="bg-amber-600 hover:bg-amber-700"
+                onClick={() => generateMutation.mutate()}
+                disabled={generateMutation.isPending}
+              >
+                <Sparkles className="size-4" />
+                {generateMutation.isPending ? "AI 生成中..." : "生成"}
+              </Button>
+            </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {changeFieldSpecs.map((field) => (
@@ -1148,13 +1295,13 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
           <p className="mt-8 text-2xl font-semibold">Flow:</p>
         </div>
       </div>
-      <ToolFooter />
+      <ToolFooter module={module} />
     </div>
   )
 }
 
 export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
-  const impactRows = [
+  const impactLabels = [
     "Function & Performance influenced",
     "Interface and Appearance influenced",
     "Reliability and robustness influenced",
@@ -1162,7 +1309,7 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
     "Manufactory / assembly / testing influenced",
     "Influence on supplier part",
   ]
-  const documentRows = [
+  const documentLabels = [
     "Interface FMEA relevant / IFMEA",
     "Product FMEA relevant / DFMEA",
     "Special Characteristics relevant / PSC",
@@ -1172,9 +1319,61 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
     "Norm, WB, HF relevant",
   ]
 
+  const storageKey = `pd-ecr-impact-analysis-${module.id}`
+  type DocRow = { label: string; no: boolean; yes: boolean; respPerson: string; dueDate: string }
+
+  const [impacts, setImpacts] = useState(() => {
+    const raw = localStorage.getItem(storageKey)
+    if (raw) {
+      try { const parsed = JSON.parse(raw); if (parsed.impacts) return parsed.impacts as typeof defaultImpacts } catch {}
+    }
+    return impactLabels.map((label, i) => ({
+      label,
+      no: i !== 0 && i !== 4,
+      yes: i === 0 || i === 4,
+      confirmedBy: (i === 0 || i === 4) ? "Engineer" : "",
+    }))
+  })
+  const defaultImpacts = impactLabels.map((label, i) => ({
+    label, no: i !== 0 && i !== 4, yes: i === 0 || i === 4, confirmedBy: (i === 0 || i === 4) ? "Engineer" : "",
+  }))
+
+  const [documents, setDocuments] = useState<DocRow[]>(() => {
+    const raw = localStorage.getItem(storageKey)
+    if (raw) {
+      try { const parsed = JSON.parse(raw); if (parsed.documents) return parsed.documents } catch {}
+    }
+    return documentLabels.map((label, i) => ({
+      label, no: i > 2, yes: i <= 2, respPerson: "", dueDate: "",
+    }))
+  })
+  const [saveStatus, setSaveStatus] = useState("Draft")
+
+  const toggleImpact = (index: number, field: "no" | "yes") => {
+    setImpacts((prev) => prev.map((r, i) => i === index ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  }
+  const updateImpactConfirmedBy = (index: number, value: string) => {
+    setImpacts((prev) => prev.map((r, i) => i === index ? { ...r, confirmedBy: value } : r))
+  }
+  const toggleDocument = (index: number, field: "no" | "yes") => {
+    setDocuments((prev) => prev.map((r, i) => i === index ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  }
+  const updateDocumentField = (index: number, field: "respPerson" | "dueDate", value: string) => {
+    setDocuments((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+  }
+
+  const saveImpactAnalysis = () => {
+    localStorage.setItem(storageKey, JSON.stringify({ impacts, documents }))
+    setSaveStatus("Saved")
+  }
+
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
       <div className="space-y-5">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
+          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={saveImpactAnalysis}>Save changes</Button>
+        </div>
         <div className="overflow-hidden rounded-lg border border-stone-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead className="bg-amber-600 text-white">
@@ -1186,25 +1385,12 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
               </tr>
             </thead>
             <tbody>
-              {impactRows.map((row, index) => (
-                <tr
-                  key={row}
-                  className="border-t border-stone-200 even:bg-stone-50"
-                >
-                  <td className="px-3 py-2">
-                    {index + 1}. {row}
-                  </td>
-                  <td className="px-3 py-2">
-                    <input type="checkbox" readOnly />
-                  </td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="checkbox"
-                      readOnly
-                      defaultChecked={index === 0 || index === 4}
-                    />
-                  </td>
-                  <td className="px-3 py-2 text-stone-500">Engineer</td>
+              {impacts.map((row, index) => (
+                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
+                  <td className="px-3 py-2">{index + 1}. {row.label}</td>
+                  <td className="px-3 py-2"><input type="checkbox" checked={row.no} onChange={() => toggleImpact(index, "no")} /></td>
+                  <td className="px-3 py-2"><input type="checkbox" checked={row.yes} onChange={() => toggleImpact(index, "yes")} /></td>
+                  <td className="px-3 py-2"><input value={row.confirmedBy} onChange={(e) => updateImpactConfirmedBy(index, e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Engineer name" /></td>
                 </tr>
               ))}
             </tbody>
@@ -1222,30 +1408,13 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
               </tr>
             </thead>
             <tbody>
-              {documentRows.map((row, index) => (
-                <tr
-                  key={row}
-                  className="border-t border-stone-200 even:bg-stone-50"
-                >
-                  <td className="px-3 py-2">
-                    {index + 1}. {row}
-                  </td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="checkbox"
-                      readOnly
-                      defaultChecked={index > 2}
-                    />
-                  </td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="checkbox"
-                      readOnly
-                      defaultChecked={index <= 2}
-                    />
-                  </td>
-                  <td className="px-3 py-2 text-stone-500">Resp.</td>
-                  <td className="px-3 py-2 text-stone-500">Target date</td>
+              {documents.map((row, index) => (
+                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
+                  <td className="px-3 py-2">{index + 1}. {row.label}</td>
+                  <td className="px-3 py-2"><input type="checkbox" checked={row.no} onChange={() => toggleDocument(index, "no")} /></td>
+                  <td className="px-3 py-2"><input type="checkbox" checked={row.yes} onChange={() => toggleDocument(index, "yes")} /></td>
+                  <td className="px-3 py-2"><input value={row.respPerson} onChange={(e) => updateDocumentField(index, "respPerson", e.target.value)} className="h-8 w-28 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Resp." /></td>
+                  <td className="px-3 py-2"><input type="date" value={row.dueDate} onChange={(e) => updateDocumentField(index, "dueDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
                 </tr>
               ))}
             </tbody>
@@ -1253,14 +1422,12 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
         </div>
         <GeneratedContent module={module} />
         <FirstSignatureStatus module={module} />
-        <ToolFooter />
+        <ToolFooter module={module} />
       </div>
       <SignatureDashboard module={module} />
       <AiTask>
         <ol className="list-decimal space-y-2 pl-5">
-          <li>
-            检索历史相似 CASE 的影响分析部分内容，自动生成影响分析问题条的答案。
-          </li>
+          <li>检索历史相似 CASE 的影响分析部分内容，自动生成影响分析问题条的答案。</li>
           <li>AI 再次检查工程师调整后的内容，推介后续相关措施。</li>
         </ol>
       </AiTask>
@@ -1269,74 +1436,71 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
 }
 
 export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
-  const rows = [
-    "Try run",
-    "Capability Studies CMK",
-    "Capability Studies MSA",
-    "MAE release",
-    "Cleanness test",
-    "QZ test",
-    "200h PDL",
-    "BOM check",
-    "Test report",
-    "PAV release",
-    "Other",
+  const rowLabels = [
+    "Try run", "Capability Studies CMK", "Capability Studies MSA", "MAE release",
+    "Cleanness test", "QZ test", "200h PDL", "BOM check", "Test report", "PAV release", "Other",
   ]
+  const storageKey = `pd-ecr-validation-plan-${module.id}`
+  type ValRow = { label: string; checked: boolean; criteria: string; finishDate: string; respPerson: string; comments: string }
+
+  const [rows, setRows] = useState<ValRow[]>(() => {
+    const raw = localStorage.getItem(storageKey)
+    if (raw) {
+      try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
+    }
+    return rowLabels.map((label) => ({ label, checked: false, criteria: "AI suggested criteria", finishDate: "", respPerson: "", comments: "" }))
+  })
+  const [saveStatus, setSaveStatus] = useState("Draft")
+
+  const toggleCheck = (index: number) => setRows((prev) => prev.map((r, i) => i === index ? { ...r, checked: !r.checked } : r))
+  const updateField = (index: number, field: keyof Omit<ValRow, "label" | "checked">, value: string) => {
+    setRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+  }
+  const savePlan = () => {
+    localStorage.setItem(storageKey, JSON.stringify({ rows }))
+    setSaveStatus("Saved")
+  }
+
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
       <div className="space-y-5">
-        <h2 className="text-3xl font-semibold">
-          <span className="bg-yellow-200 px-1">
-            QAC / Validation plan (with evaluation criteria)
-          </span>{" "}
-          in trial run:
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-3xl font-semibold">
+            <span className="bg-yellow-200 px-1">QAC / Validation plan (with evaluation criteria)</span> in trial run:
+          </h2>
+          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={savePlan}>Save changes</Button>
+        </div>
+        <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
         <div className="overflow-hidden rounded-lg border border-stone-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead className="bg-amber-600 text-white">
               <tr>
-                {[
-                  "Validations",
-                  "Evaluation criteria",
-                  "Plan finish date",
-                  "Resp. person",
-                  "Comments",
-                ].map((h) => (
-                  <th key={h} className="px-3 py-2">
-                    {h}
-                  </th>
+                {["Validations", "Evaluation criteria", "Plan finish date", "Resp. person", "Comments"].map((h) => (
+                  <th key={h} className="px-3 py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
-                <tr
-                  key={row}
-                  className="border-t border-stone-200 even:bg-stone-50"
-                >
+              {rows.map((row, index) => (
+                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
                   <td className="px-3 py-2">
-                    <input type="checkbox" readOnly className="mr-2" />
-                    {row}
+                    <input type="checkbox" checked={row.checked} onChange={() => toggleCheck(index)} className="mr-2" />
+                    {row.label}
                   </td>
-                  <td className="px-3 py-2 text-stone-500">
-                    AI suggested criteria
-                  </td>
-                  <td className="px-3 py-2 text-stone-500">Target date</td>
-                  <td className="px-3 py-2 text-stone-500">Owner</td>
-                  <td className="px-3 py-2 text-stone-500">Remark</td>
+                  <td className="px-3 py-2"><input value={row.criteria} onChange={(e) => updateField(index, "criteria", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" /></td>
+                  <td className="px-3 py-2"><input type="date" value={row.finishDate} onChange={(e) => updateField(index, "finishDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
+                  <td className="px-3 py-2"><input value={row.respPerson} onChange={(e) => updateField(index, "respPerson", e.target.value)} className="h-8 w-24 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Owner" /></td>
+                  <td className="px-3 py-2"><input value={row.comments} onChange={(e) => updateField(index, "comments", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Remark" /></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <GeneratedContent module={module} />
-        <ToolFooter />
+        <ToolFooter module={module} />
       </div>
       <SignatureDashboard module={module} />
-      <AiTask>
-        检索历史相似 CASE 的 validation plan 内容，自动生成各个 validation plan
-        的内容，提供给业务工程师校准。
-      </AiTask>
+      <AiTask>检索历史相似 CASE 的 validation plan 内容，自动生成各个 validation plan 的内容，提供给业务工程师校准。</AiTask>
     </div>
   )
 }
@@ -1368,7 +1532,7 @@ export function _ValidationResultView({
         </div>
         <div className="md:col-span-2">
           <GeneratedContent module={module} />
-          <ToolFooter />
+          <ToolFooter module={module} />
         </div>
       </div>
       <SignatureDashboard module={module} />
@@ -1577,7 +1741,7 @@ export function ValidationResultFunctionalView({
         </div>
 
         <GeneratedContent module={module} />
-        <ToolFooter />
+        <ToolFooter module={module} />
       </div>
       <SignatureDashboard module={module} />
     </div>
@@ -1591,7 +1755,7 @@ export function ImplementationView({
   module: PdEcrDisplayModule
   resultOnly?: boolean
 }) {
-  const rows = [
+  const rowLabels = [
     "Change BOMs & Drawings & Documents in POE system",
     "Inform documents update",
     "Update offer drawing, TCD, D-FMEA",
@@ -1602,73 +1766,84 @@ export function ImplementationView({
     "Old tooling / cutting / fixture disposal",
     "Old materials disposal",
   ]
+  const storageKey = `pd-ecr-implementation-${module.id}`
+  type ImplRow = { label: string; department: string; yn: string; description: string; responsible: string; dueDate: string; result: string }
+
+  const [rows, setRows] = useState<ImplRow[]>(() => {
+    const raw = localStorage.getItem(storageKey)
+    if (raw) {
+      try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
+    }
+    return rowLabels.map((label, i) => ({
+      label,
+      department: i < 5 ? "Development" : "Manufacturing",
+      yn: i % 3 === 0 ? "Y" : "N",
+      description: label,
+      responsible: resultOnly ? "XXX" : "",
+      dueDate: resultOnly ? "Apr. 30" : "",
+      result: resultOnly ? "Done" : "",
+    }))
+  })
+  const [saveStatus, setSaveStatus] = useState("Draft")
+
+  const updateField = (index: number, field: keyof ImplRow, value: string) => {
+    setRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+  }
+  const saveImplementation = () => {
+    localStorage.setItem(storageKey, JSON.stringify({ rows }))
+    setSaveStatus("Saved")
+  }
+
   return (
     <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
       <div className="space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
+          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={saveImplementation}>Save changes</Button>
+        </div>
         <div className="overflow-hidden rounded-lg border border-stone-200">
           <table className="w-full border-collapse text-left text-sm">
             <thead className="bg-amber-600 text-white">
               <tr>
-                {[
-                  "Departments",
-                  "Y/N",
-                  "Description",
-                  "Responsible",
-                  "Due date",
-                  "Implementation result",
-                ].map((h) => (
-                  <th key={h} className="px-3 py-2">
-                    {h}
-                  </th>
+                {["Departments", "Y/N", "Description", "Responsible", "Due date", "Implementation result"].map((h) => (
+                  <th key={h} className="px-3 py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {rows.map((row, index) => (
-                <tr
-                  key={row}
-                  className="border-t border-stone-200 even:bg-stone-50"
-                >
-                  <td className="px-3 py-2 font-medium">
-                    {index < 5 ? "Development" : "Manufacturing"}
-                  </td>
-                  <td className="px-3 py-2">{index % 3 === 0 ? "Y" : "N"}</td>
-                  <td className="px-3 py-2">{row}</td>
-                  <td className="px-3 py-2 text-stone-500">
-                    {resultOnly ? "XXX" : "Resp."}
-                  </td>
-                  <td className="px-3 py-2 text-stone-500">
-                    {resultOnly ? "Apr. 30" : "Target date"}
-                  </td>
-                  <td className="px-3 py-2 text-stone-500">
-                    {resultOnly ? "Done" : "Closed / Ongoing / Open"}
-                  </td>
+                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
+                  <td className="px-3 py-2"><select value={row.department} onChange={(e) => updateField(index, "department", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-1 text-sm"><option>Development</option><option>Manufacturing</option><option>Purchasing</option><option>Quality</option></select></td>
+                  <td className="px-3 py-2"><select value={row.yn} onChange={(e) => updateField(index, "yn", e.target.value)} className="h-8 w-16 rounded border border-stone-300 bg-white px-1 text-sm"><option>Y</option><option>N</option></select></td>
+                  <td className="px-3 py-2"><input value={row.description} onChange={(e) => updateField(index, "description", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" /></td>
+                  <td className="px-3 py-2"><input value={row.responsible} onChange={(e) => updateField(index, "responsible", e.target.value)} className="h-8 w-24 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Resp." /></td>
+                  <td className="px-3 py-2"><input type="date" value={row.dueDate} onChange={(e) => updateField(index, "dueDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
+                  <td className="px-3 py-2"><select value={row.result} onChange={(e) => updateField(index, "result", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-1 text-sm"><option value="">-</option><option>Closed</option><option>Ongoing</option><option>Open</option></select></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <GeneratedContent module={module} />
-        <ToolFooter />
+        <ToolFooter module={module} />
       </div>
       <div className="space-y-5">
         <SignatureDashboard module={module} />
-        <div className="hidden rounded-lg border border-stone-200 bg-white p-4">
+        <div className="rounded-lg border border-stone-200 bg-white p-4">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="font-semibold">Dashboard</p>
-              <h3 className="mt-3 text-xl font-semibold">
-                Overdue of Measures
-              </h3>
+              <h3 className="mt-3 text-xl font-semibold">Overdue of Measures</h3>
             </div>
             <StatusLights active={resultOnly ? "green" : "amber"} />
           </div>
           <div className="mt-4 flex gap-4 text-sm">
             <Clock3 className="size-10 text-amber-600" />
             <ul className="space-y-1">
-              <li>Action 1: xxx Resp. xxx</li>
-              <li>Action 2: xxx Resp. xxx</li>
-              <li>Action 3: xxx Resp. xxx</li>
+              {rows.filter((r) => r.dueDate && !r.result).slice(0, 3).map((r) => (
+                <li key={r.label}>{r.description.slice(0, 40)}... Resp. {r.responsible || "TBD"}</li>
+              ))}
+              {rows.filter((r) => r.dueDate && !r.result).length === 0 && <li>No overdue measures</li>}
             </ul>
           </div>
         </div>
@@ -1721,11 +1896,21 @@ function renderModuleBody(module: PdEcrDisplayModule) {
     case "change_description":
     case "change-description":
       return <ChangeDescriptionView module={module} />
+    case "impact-analysis":
+      return <ImpactAnalysisView module={module} />
+    case "validation-plan":
+      return <ValidationPlanView module={module} />
+    case "validation-result":
+      return <ValidationResultFunctionalView module={module} />
+    case "implementation-plan":
+      return <ImplementationView module={module} resultOnly={false} />
+    case "implementation-result":
+      return <ImplementationView module={module} resultOnly={true} />
     default:
       return (
         <div className="space-y-5">
           <GeneratedContent module={module} />
-          <ToolFooter />
+          <ToolFooter module={module} />
         </div>
       )
   }

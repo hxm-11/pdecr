@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router"
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 
 import AppSidebar from "@/components/Sidebar/AppSidebar"
 import {
@@ -6,20 +6,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { isLoggedIn } from "@/hooks/useAuth"
 
 export const Route = createFileRoute("/_layout")({
   component: Layout,
-  // beforeLoad: async ({ location }) => {
-  //   if (location.pathname.startsWith("/pd-ecr")) {
-  //     return
-  //   }
-
-  //   if (!isLoggedIn()) {
-  //     throw redirect({
-  //       to: "/login",
-  //     })
-  //   }
-  // },
+  beforeLoad: async ({ location }) => {
+    if (!isLoggedIn()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+      })
+    }
+  },
 })
 
 function Layout() {

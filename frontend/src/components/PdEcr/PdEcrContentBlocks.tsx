@@ -20,18 +20,55 @@ import {
   saveActiveResult,
 } from "./pdEcrState"
 
-/** Strip markdown formatting for clean card preview text. */
-function stripMarkdown(text: string) {
+function normalizePreviewToken(text: string) {
   return text
-    .replace(/#{1,6}\s+/g, "")          // headings
-    .replace(/\*\*(.+?)\*\*/g, "$1")     // bold
-    .replace(/\*(.+?)\*/g, "$1")         // italic
-    .replace(/`{1,3}[^`]*`{1,3}/g, "")  // inline/block code
-    .replace(/\|/g, " ")                 // table pipes
-    .replace(/[-*+]\s+/g, "")            // list markers
-    .replace(/\[(.+?)\]\(.*?\)/g, "$1")  // links
-    .replace(/ {2,}/g, " ")              // collapse whitespace
-    .replace(/\n{2,}/g, "\n")            // collapse blank lines
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "")
+    .trim()
+}
+
+function isTemplateNoiseLine(line: string, module: PdEcrDisplayModule) {
+  const normalizedLine = normalizePreviewToken(line)
+  const normalizedTitle = normalizePreviewToken(module.title)
+  const normalizedSubtitle = normalizePreviewToken(module.subtitle)
+
+  if (!normalizedLine) return true
+  if (normalizedLine === normalizedTitle || normalizedLine === normalizedSubtitle) {
+    return true
+  }
+
+  return (
+    /^[-:|\s]+$/.test(line) ||
+    /^field\s*\/.*content\s*\//i.test(line) ||
+    /^content\s*\d+\s*\/\s*\d+$/i.test(line) ||
+    /^step\s*\d+(\.\d+)?\b/i.test(line) ||
+    /^sheet\s*:/i.test(line)
+  )
+}
+
+/** Strip template markdown for clean card preview text. */
+function cleanModulePreviewText(module: PdEcrDisplayModule) {
+  const source = String(module.summary || module.data.content || "")
+  const lines = source
+    .replace(/```[\s\S]*?```/g, " ")
+    .split(/\r?\n/)
+    .map((line) =>
+      line
+        .replace(/^#{1,6}\s*/, "")
+        .replace(/^>\s*/, "")
+        .replace(/^[-*+]\s+/, "")
+        .replace(/\*\*(.+?)\*\*/g, "$1")
+        .replace(/\*(.+?)\*/g, "$1")
+        .replace(/`([^`]+)`/g, "$1")
+        .replace(/\[(.+?)\]\(.*?\)/g, "$1")
+        .trim(),
+    )
+    .filter((line) => !line.includes("|"))
+    .filter((line) => !isTemplateNoiseLine(line, module))
+
+  return lines
+    .join(" ")
+    .replace(/\s+/g, " ")
     .trim()
 }
 
@@ -42,7 +79,7 @@ function GeneratedBlock({
   module: PdEcrDisplayModule
   onOpen: (module: PdEcrDisplayModule) => void
 }) {
-  const cleanSummary = stripMarkdown(module.summary)
+  const cleanSummary = cleanModulePreviewText(module)
   const empty =
     !cleanSummary ||
     cleanSummary === "暂无内容" ||

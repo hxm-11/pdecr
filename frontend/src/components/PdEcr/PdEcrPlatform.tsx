@@ -12,6 +12,7 @@ import { type ReactNode, useId, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
+  createPdEcrCase,
   generatePdEcrReport,
   type PdEcrInput,
   searchPdEcrHistory,
@@ -190,7 +191,24 @@ export function PdEcrPlatform() {
       const result = buildGeneratedResult(response)
       saveGeneratedResult(result)
       setRelatedCasesCount(result.relatedCases.length)
-      navigate({ to: "/pd-ecr/content" })
+
+      // Create DB case in background (non-blocking)
+      const caseNo = response.draft_id || `PD-ECR-${Date.now()}`
+      createPdEcrCase({
+        case_no: caseNo,
+        title: newChange.description || "New PD-ECR Change Request",
+        status: "draft",
+        source_type: "ai_generated",
+        dc_no: `PD-ECR-${Date.now()}`,
+        initiator: newChange.source || "AI Generated",
+        customer_project: "PD-ECR Platform",
+        target_close_date: newChange.targetCloseDate || undefined,
+        change_type: "Engineering Change",
+      }).catch(() => {
+        // Case creation is non-blocking — draft is already saved locally
+      })
+
+      navigate({ to: "/pd-ecr/content/$moduleId", params: { moduleId: "change-description" } })
     },
     onError: () => {
       const result = buildGeneratedResult({
@@ -199,7 +217,7 @@ export function PdEcrPlatform() {
       })
       saveGeneratedResult(result)
       setRelatedCasesCount(result.relatedCases.length)
-      navigate({ to: "/pd-ecr/content" })
+      navigate({ to: "/pd-ecr/content/$moduleId", params: { moduleId: "change-description" } })
     },
   })
 
@@ -307,7 +325,7 @@ export function PdEcrPlatform() {
                     AI 一键生成每页内容
                   </p>
                   <p className="mt-1 text-sm leading-5 text-stone-500">
-                    生成后进入内容块页面，并逐个模块查看完整报告字段。
+                    生成后直接进入变更描述页面，可继续填写完整报告字段。
                   </p>
                 </div>
               </div>
@@ -338,9 +356,16 @@ export function PdEcrPlatform() {
           <Button
             variant="outline"
             className="bg-white"
-            onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}
+            onClick={() => navigate({ to: "/pd-ecr/dashboard" })}
           >
             <FolderKanban className="size-4" />
+            Case Dashboard
+          </Button>
+          <Button
+            variant="outline"
+            className="bg-white"
+            onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}
+          >
             All Pd-ECR list
           </Button>
           <PdEcrProcessFlowButton />

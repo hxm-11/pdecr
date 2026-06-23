@@ -7,11 +7,12 @@ import {
   Circle,
   Download,
   FileCheck2,
+  Home,
   Search,
   Sparkles,
   Upload,
 } from "lucide-react"
-import { useMemo, useRef, useState } from "react"
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,6 +34,7 @@ import {
   saveActiveResult,
   saveGeneratedResult,
   saveHistoryResult,
+  type PdEcrApprovalSuggestion,
   type PdEcrDisplayModule,
   type PdEcrPdEcrCaseRow,
 } from "./pdEcrState"
@@ -340,7 +342,7 @@ function getWorkflowApprovalLeadDays(): number {
   return generated.approvalLeadDays || 12
 }
 
-function workflowSuggestedApprovalDate(baseDate: string, targetClose?: Date) {
+export function workflowSuggestedApprovalDate(baseDate: string, targetClose?: Date) {
   // 如果有 Target Close date，反向推算：截止日 - 历史案例估算工作日
   if (targetClose) {
     const start = new Date(targetClose)
@@ -434,7 +436,7 @@ function StepIcon({ done, active }: { done: boolean; active: boolean }) {
   return <Circle className="size-4 text-slate-300" />
 }
 
-function ActionBanner({
+export function ActionBanner({
   icon,
   title,
   children,
@@ -458,7 +460,7 @@ function ActionBanner({
   )
 }
 
-function StepTemplatePreview({
+export function StepTemplatePreview({
   title,
   data,
   approvalSuggestions,
@@ -895,7 +897,11 @@ export function PdEcrCreationWorkflow() {
 
   // Auto-fill Change Description from RAG key fields when entering Content 1/6 (once only)
   const content1StepIndex = stepConfigs.findIndex(
-    (c) => c.fields.length === 1 && c.fields[0] === "changeDescription",
+    (config) =>
+      config.groups?.some(
+        (group) =>
+          group.fields.length === 1 && group.fields[0] === "changeDescription",
+      ) ?? false,
   )
   const autoFilledRef = useRef(false)
   useEffect(() => {

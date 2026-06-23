@@ -229,7 +229,7 @@ test("searches historical PD-ECR data and opens a historical module detail", asy
   ).toBeVisible()
   await expect(page.getByText("PDECR26-001")).toBeVisible()
 
-  await page.getByRole("button", { name: "Open modules" }).first().click()
+  await page.getByRole("button", { name: "Modules" }).first().click()
 
   await expect(page).toHaveURL(/\/pd-ecr\/content$/)
   await expect(
@@ -308,6 +308,49 @@ test("shows active generated related cases and six content modules on platform",
   await expect(page.getByText("Modules").locator("..")).toContainText("6")
 })
 
+test("shows clean module card previews instead of raw markdown templates", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    const markdownTemplate = [
+      "# Change Request Description / 变更描述",
+      "",
+      "| Field / 字段 | Content / 内容 |",
+      "| --- | --- |",
+      "| Corresponding DC No. / 对应开发更改编号 | PD-ECR-001 |",
+      "",
+      "Use second supplier bolts while keeping material unchanged.",
+    ].join("\n")
+    const result = {
+      source: "generated",
+      relatedCases: ["PDECR26-001"],
+      modules: [
+        {
+          id: "change-description",
+          title: "Change Request description",
+          subtitle: "Content 1 / 6",
+          summary: markdownTemplate,
+          data: { content: markdownTemplate },
+        },
+      ],
+    }
+    localStorage.setItem("pd-ecr-generated-result", JSON.stringify(result))
+    localStorage.setItem("pd-ecr-active-result", JSON.stringify(result))
+  })
+
+  await page.goto("/pd-ecr/content")
+
+  const card = page.getByRole("button", {
+    name: /Change Request description/,
+  })
+  await expect(card).toContainText(
+    "Use second supplier bolts while keeping material unchanged.",
+  )
+  await expect(card).not.toContainText("Field / 字段")
+  await expect(card).not.toContainText("Content / 内容")
+  await expect(card).not.toContainText("Corresponding DC No.")
+})
+
 test("completes V1 flow from form retrieval to generated module export", async ({
   page,
 }) => {
@@ -323,12 +366,22 @@ test("completes V1 flow from form retrieval to generated module export", async (
   await expect(page.getByText("2026-06-19")).toBeVisible()
   await expect(page.getByText("Second signature target")).toBeVisible()
   await expect(page.getByText("2026-06-26")).toBeVisible()
-  await page.getByRole("button", { name: "Search similar cases" }).click()
+  await page.getByRole("button", { name: "Next" }).click()
+  await page
+    .getByRole("button", { name: /Search similar cases|搜索相似案例/ })
+    .click()
 
   await expect(page.getByText("PDECR26-001")).toBeVisible()
-  await expect(page.getByText("pilot_supplier_change.md")).toBeVisible()
+  await expect(
+    page.getByText("Supplier switch with unchanged material properties."),
+  ).toBeVisible()
 
   await page.getByRole("button", { name: /Generate editable draft/ }).click()
+
+  await expect(
+    page.getByText("Generated editable PD-ECR draft PD-ECR-DEMO-001."),
+  ).toBeVisible()
+  await page.getByRole("button", { name: "查看全部模块" }).click()
 
   await expect(page).toHaveURL(/\/pd-ecr\/content$/)
   await expect(

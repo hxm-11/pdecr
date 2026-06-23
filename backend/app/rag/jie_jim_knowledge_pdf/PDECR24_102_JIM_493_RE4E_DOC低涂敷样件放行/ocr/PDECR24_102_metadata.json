@@ -1,0 +1,356 @@
+{
+  "Customer_project_Name": "JIM-493",
+  "source_file": "PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行",
+  "metadata": {
+    "dc_no": "24_102",
+    "date": "2024-08-08",
+    "customer_project": ["JIM-493"],
+    "mcr_no": "",
+    "sample_status": ["A Sample"]
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF新鲜件(不可拆): F01ZH003EC-01; DOC+SDPF老化件(不可拆): F01ZH0033J-51; SCR新鲜件: F01ZH0033J; DOC+SDPF新鲜件(可拆): F01ZH003G1-00; DOC+SDPF老化件(可拆): F01ZH003G1-51; SCR老化件: F01ZH003ED-51",
+    "reason_for_change": "系统工程师要求释放RZ4E DOC 50g催化剂新鲜件老化件（可拆+不可拆）样件做测试；",
+    "change_source": ["Customer request", "Other"]
+  },
+  "responsibility": {
+    "change_inform_to": [
+      "Zhang Shengchang",
+      "Zhang Hanquan",
+      "Shen Weibo",
+      "Li Yicen",
+      "Fang Jiayan",
+      "Yin Kangzhuang",
+      "Yang Guangtuo",
+      "Jia Kebin",
+      "Luo Jing",
+      "Lu Qingsong"
+    ],
+    "design_engineer": "卢青松",
+    "check_engineer": "杨广拓"
+  },
+  "impact": {
+    "impact_other_product": "no"
+  },
+  "description_of_change": {
+    "raw_text": "",
+    "affected_parts": []
+  },
+  "source_trace": {
+    "pdf_page": [1],
+    "raw_md_path": "raw_md/PDECR25_032.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "mcr_no",
+      "sample_status",
+      "signature_names",
+      "description_table"
+    ]
+  },
+  {
+    "case_id": "PDECR24_102",
+    "source_file": "PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.pdf",
+    "metadata": {
+      "dc_no": "24_102",
+      "document_title": "Design Change Review Sheet / 设计变更评审表",
+      "version": "13",
+      "effective_date": "2024-08-08"
+    },
+    "modules": {
+      "change_review_sheet": {
+        "page": 2,
+        "review_items": [
+          {
+            "section_no": "1",
+            "section_title": "Function & Performance will be influenced / 系统性能影响",
+            "result": "no",
+            "remark": "",
+            "responsible_roles": [
+              {
+                "role": "System",
+                "signature_name": "沈伟波",
+                "date": "",
+                "confidence": "low"
+              },
+              {
+                "role": "Catalyst",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "2",
+            "section_title": "Interface & boundary (internal and customer) will be influenced / 接口边界影响",
+            "result": "no",
+            "remark": "",
+            "responsible_roles": [
+              {
+                "role": "Design",
+                "signature_name": "卢青松",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "3",
+            "section_title": "Mechanical strength / Durability will be influenced / 机械强度与耐久性影响",
+            "result": "no",
+            "remark": "A样件无需FEA仿真",
+            "responsible_roles": [
+              {
+                "role": "Validation",
+                "signature_name": "卢青松",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "4",
+            "section_title": "Product document influenced / 产品文件影响",
+            "document_items": [
+              {
+                "item": "Interface FMEA relevant / IFMEA",
+                "result": "no",
+                "note": ""
+              },
+              {
+                "item": "Product FMEA relevant / DFMEA",
+                "result": "no",
+                "note": ""
+              },
+              {
+                "item": "Special Characteristic / PSC",
+                "result": "no",
+                "note": ""
+              },
+              {
+                "item": "IMDS relevant",
+                "result": "no",
+                "note": ""
+              },
+              {
+                "item": "OFR drawing relevant",
+                "result": "no",
+                "note": ""
+              },
+              {
+                "item": "TCD relevant",
+                "result": "no",
+                "note": ""
+              }
+            ],
+            "responsible_roles": [
+              {
+                "role": "Design",
+                "signature_name": "卢青松",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "5",
+            "section_title": "Changed parts Stocks treatment / 需要变更零件的库存统计和处理",
+            "result": "need_human_check",
+            "stock_items": [
+              {
+                "item": "RBCW RDC(外库）和RBCW仓库，是否有库存",
+                "treatment": "No",
+                "remark": "RZ量产改催化剂样件不涉及量产库存问题"
+              },
+              {
+                "item": "Supplier stock",
+                "treatment": "No",
+                "remark": "RZ量产改催化剂样件不涉及量产库存问题"
+              },
+              {
+                "item": "LPN stock",
+                "treatment": "",
+                "remark": ""
+              },
+              {
+                "item": "Manufacturing parts stock",
+                "treatment": "",
+                "remark": ""
+              },
+              {
+                "item": "Affected customer stock",
+                "treatment": "",
+                "remark": ""
+              }
+            ],
+            "responsible_roles": [
+              {
+                "role": "PUE",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              },
+              {
+                "role": "PUE",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "6",
+            "section_title": "Influence on supplier part / 供应商影响",
+            "result": "need_human_check",
+            "questions": [
+              {
+                "question": "Was this change confirmed with Purchasing / Supplier for feasibility?",
+                "answer": "",
+                "remark": ""
+              },
+              {
+                "question": "Influence on purchasing part delivery time",
+                "answer": "",
+                "remark": ""
+              },
+              {
+                "question": "Influence on purchasing cost",
+                "answer": "",
+                "remark": ""
+              }
+            ],
+            "responsible_roles": [
+              {
+                "role": "PUE",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "7",
+            "section_title": "DFMA & Sample production OPL / 必要时附DFMA文件",
+            "result": "need_human_check",
+            "remark": "",
+            "responsible_roles": [
+              {
+                "role": "Design",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "8",
+            "section_title": "Influence on LPN manufacturing / assembly process / 制造装配影响",
+            "result": "no",
+            "questions": [
+              {
+                "question": "Feedback from manufacturing engineer",
+                "answer": "无"
+              },
+              {
+                "question": "Influence on project / product delivery time",
+                "answer": ""
+              },
+              {
+                "question": "Influence on manufacturing cost",
+                "answer": ""
+              }
+            ],
+            "responsible_roles": [
+              {
+                "role": "LPN",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              },
+              {
+                "role": "PM",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "9",
+            "section_title": "PM alignment / 项目经理确认",
+            "result": "confirmed",
+            "remark": "RBCW/TQR3",
+            "responsible_roles": [
+              {
+                "role": "PM",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          },
+          {
+            "section_no": "10",
+            "section_title": "Additional process impact / 额外流程影响",
+            "result": "need_human_check",
+            "items": [
+              {
+                "item": "NA / 无影响",
+                "selected": null
+              },
+              {
+                "item": "新事前认可",
+                "selected": null
+              },
+              {
+                "item": "不涉及",
+                "selected": null
+              },
+              {
+                "item": "生产成本增加",
+                "selected": null
+              }
+            ],
+            "responsible_roles": [
+              {
+                "role": "Project Team Leader",
+                "name": "System SM-ENG-CV1",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              },
+              {
+                "role": "Department Manager",
+                "name": "TCR3",
+                "signature_name": "",
+                "date": "",
+                "confidence": "low"
+              }
+            ],
+            "need_human_check": true
+          }
+        ]
+      }
+    },
+    "source_trace": {
+      "page": 2,
+      "source_type": "scanned_pdf",
+      "ocr_quality": "medium",
+      "need_human_check": [
+        "所有手写签名",
+        "所有勾选框",
+        "第5部分库存处理选项",
+        "第6部分采购影响选项",
+        "第10部分流程影响选项"
+      ]
+    }
+  }

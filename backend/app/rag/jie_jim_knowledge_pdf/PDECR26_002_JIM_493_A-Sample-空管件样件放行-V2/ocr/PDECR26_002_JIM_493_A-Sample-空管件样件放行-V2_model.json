@@ -1,0 +1,743 @@
+[
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9493,
+                "bbox": [
+                    57,
+                    100,
+                    1579,
+                    2127
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=5>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effective date:2026-01-14th</td></tr><tr><td rowspan=1 colspan=1>26_002</td></tr><tr><td rowspan=1 colspan=4>Customer project Name/客户项目名称：              JIM-493</td><td rowspan=1 colspan=3>MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=7>Sample status /样件状态：     A Sample     B Sample     C Sample     D Sample</td></tr><tr><td rowspan=1 colspan=7>Change part&amp;product Name/更改零部件产品的名称(简要描述)</td></tr><tr><td rowspan=1 colspan=7>DOC+SDPFUNIT:F01ZH003VK-00 SCRUNIT:F01ZH003VL-00</td></tr><tr><td rowspan=1 colspan=7>Reason of changes/更改理由（简要描述):</td></tr><tr><td rowspan=1 colspan=7>按客户要求释放JIE PT611B样件；</td></tr><tr><td rowspan=1 colspan=2>Change from/变更来源：</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=3>Customer request /客户要求√</td><td rowspan=1 colspan=4>Supplier request/供应商请求                      Design optimization /设计优化</td></tr><tr><td rowspan=1 colspan=3>Correction/更正(错误)</td><td rowspan=1 colspan=4>Other/其他</td></tr><tr><td rowspan=1 colspan=2>Change inform to/变更通知人：</td><td rowspan=1 colspan=5>Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Ge Jilong</td></tr><tr><td rowspan=1 colspan=7>Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong, Min Lingyun</td></tr><tr><td rowspan=1 colspan=7>Whether this change impact others component or product 此变更是否影响到其他部件和产品：        yes/是    no/否</td></tr><tr><td rowspan=1 colspan=7>Ifimpact others product， Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=7></td></tr><tr><td rowspan=1 colspan=2>Design/设计工程师</td><td rowspan=3 colspan=3>卢青松</td><td rowspan=3 colspan=1>Date/日期：</td><td></td></tr><tr><td rowspan=2 colspan=2>Signature /签名：</td><td></td></tr><tr><td rowspan=1 colspan=1>2026.1.28</td></tr><tr><td rowspan=1 colspan=2>Check/校对工程师</td><td rowspan=3 colspan=3>杨拓</td><td rowspan=3 colspan=1>Date/日期:</td><td></td></tr><tr><td rowspan=2 colspan=2>Signature/签名：</td><td></td></tr><tr><td rowspan=1 colspan=1>2026.01.4</td></tr><tr><td rowspan=1 colspan=7>Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 0,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.986,
+                "bbox": [
+                    108,
+                    89,
+                    1511,
+                    2271
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=10 colspan=1></td><td rowspan=3 colspan=1>BOSCH博世Confidential</td><td rowspan=3 colspan=6>Design Change Review Sheet设计变更评审表</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Version 13Effective date 2026-01-19</td></tr><tr><td rowspan=1 colspan=1>Design ChangeRequest No.      26_002</td></tr><tr><td rowspan=1 colspan=8>1.Function&amp;Performance wil be influenced?/系统性能影响？         yes/是    no/否</td></tr><tr><td rowspan=1 colspan=3>如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=1 colspan=4>空管件</td><td rowspan=2 colspan=1>卢青故System/签名</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test?Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=4></td></tr><tr><td rowspan=1 colspan=3>Whether the catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC)</td><td rowspan=1 colspan=4>空管件</td><td rowspan=1 colspan=1>卢高坛Catalyst/签名</td></tr><tr><td rowspan=1 colspan=3>2.Interface&amp;boundary(internal and customer)</td><td rowspan=1 colspan=5>wil be influenced?/接口&amp;边界(内部和客户)影响？          yes/是       no/否</td></tr><tr><td rowspan=1 colspan=3>if impact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=1>Desien/名卢么</td></tr><tr><td rowspan=1 colspan=3>3. Mechanical strength&amp;Durability willbe infu</td><td rowspan=1 colspan=4>enced?/机械强度&amp;可靠性影响？                           yes/是</td><td rowspan=1 colspan=1>no/否</td></tr><tr><td></td><td rowspan=1 colspan=3>If Yes, How to evaluate?Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等）</td><td rowspan=1 colspan=4>A样件无需FEA</td><td rowspan=2 colspan=1>Wvanat</td></tr><tr><td></td><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=4></td></tr><tr><td></td><td rowspan=1 colspan=3>4.Product document infuenced?</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=3>4.1 Interface FMEA-relevant /IFMEA:</td><td rowspan=1 colspan=4>no/否    yes/是 Note</td><td></td></tr><tr><td></td><td rowspan=3 colspan=3>4.2.Product FMEA-relevant /DFMEA:</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=6 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=4>no/否    yes/是Note</td></tr><tr><td></td><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC:(针对C Sample)</td><td rowspan=1 colspan=4>no/否    yes/是 Note</td></tr><tr><td></td><td rowspan=1 colspan=3>4.4.IMDS relevant： (针对C Sample)</td><td rowspan=1 colspan=4>no/否    yes/是 Note</td></tr><tr><td></td><td rowspan=1 colspan=3>4.5Offer drawing relevant(针对C Sample)</td><td rowspan=1 colspan=4>no/否    yes/是 Note</td></tr><tr><td></td><td rowspan=1 colspan=3>4.6.TCD relevant:</td><td rowspan=1 colspan=4>no/否     yes/是Note</td></tr><tr><td></td><td rowspan=1 colspan=8>5.Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）                                 NA.(新零件放行，不涉及库存）涉及到已经生产过的零件变更</td></tr><tr><td></td><td rowspan=1 colspan=3>RBCW RDC（外库）和RBCW仓库，是否有库存，</td><td rowspan=1 colspan=4>无库存     □有库存，库存数量</td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=3>供应商处（已做好，未发货）是否有库存，</td><td rowspan=1 colspan=1>□无</td><td rowspan=1 colspan=3>库荐    □有库存，库存数量</td><td rowspan=3 colspan=1>0B12</td></tr><tr><td></td><td rowspan=1 colspan=3>LPN厂是否有库存，</td><td rowspan=1 colspan=1>无库</td><td rowspan=1 colspan=3>存    □有库存，库存数量</td></tr><tr><td></td><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=1>□无库</td><td rowspan=1 colspan=3>存    □有库存，库存数量</td></tr><tr><td></td><td rowspan=2 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=4>□可以继续使用完     □改制后使用   □报废</td><td rowspan=1 colspan=1>Design/签名_</td></tr><tr><td></td><td rowspan=1 colspan=4>报品成本  改制费用           □</td><td rowspan=1 colspan=1>PPS/签名</td></tr><tr><td></td><td rowspan=1 colspan=3>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论)</td><td rowspan=1 colspan=4>其(单独说明)：改制                       更换</td><td rowspan=1 colspan=1>PM/签名</td></tr><tr><td></td><td rowspan=2 colspan=7>6. Influence on supplier part?</td><td></td></tr><tr><td></td><td rowspan=2 colspan=1></td></tr><tr><td rowspan=2 colspan=8>变更后的零件，生产可行性供应商是否确认？反馈？</td></tr><tr><td rowspan=6 colspan=1>PPS/签名</td></tr><tr><td rowspan=1 colspan=8></td></tr><tr><td rowspan=1 colspan=8>Influence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=8>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.     no/否□yes/是</td></tr><tr><td rowspan=1 colspan=8>Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额                           □decrease/降低，金额                      ho change/不变</td></tr><tr><td rowspan=2 colspan=8>7. DFMA &amp; Sample prodcution OPL?</td></tr><tr><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=8></td><td></td></tr><tr><td rowspan=2 colspan=8>空管件，无需DFMA</td><td></td></tr><tr><td rowspan=1 colspan=1>卢清松Design /签名_</td></tr><tr><td rowspan=1 colspan=9>8.Infuence on product manufacturing &amp; assembly process?</td></tr><tr><td rowspan=1 colspan=8></td><td></td></tr><tr><td rowspan=2 colspan=8></td><td></td></tr><tr><td rowspan=4 colspan=1>PUQ/签名</td></tr><tr><td rowspan=1 colspan=8>Iinfuence on project&amp;product delivery time？对项&amp;产品交货时间的影响？                                     日次性样件，没用4量</td></tr><tr><td rowspan=1 colspan=8>Influence on manufacturing cost /对产成本的影响？increase/增加，金额                        decrease/降低，金额                         mo change/不变</td></tr><tr><td rowspan=3 colspan=8>9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响                需求样品订单数量ENG-ATS                     PPS                                                              TCR3</td></tr><tr><td rowspan=1 colspan=1>P3</td></tr><tr><td rowspan=1 colspan=1></td><td></td></tr><tr><td rowspan=3 colspan=3>Signature/签名</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td rowspan=2 colspan=2>RRC</td></tr><tr><td rowspan=1 colspan=3>Signture/</td><td rowspan=1 colspan=1>Signature/签名：</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 1,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.5121,
+                "bbox": [
+                    163,
+                    0,
+                    603,
+                    2303
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.5685,
+                "bbox": [
+                    900,
+                    1472,
+                    1123,
+                    2203
+                ],
+                "index": 2
+            }
+        ],
+        "page_info": {
+            "page_no": 2,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6066,
+                "bbox": [
+                    1339,
+                    684,
+                    1407,
+                    2216
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9824,
+                "bbox": [
+                    323,
+                    164,
+                    1334,
+                    2247
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=2></td><td rowspan=1 colspan=1>零件号</td><td></td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1>零件名称</td></tr><tr><td rowspan=1 colspan=1>F01Z510364-00</td><td></td><td></td><td rowspan=1 colspan=1>INLET CONE</td><td rowspan=1 colspan=2>JIM 493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=2>变更描述</td><td rowspan=1 colspan=5>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=5>のF01Z5102D0</td><td rowspan=1 colspan=3>0F01Z510364-00</td></tr><tr><td rowspan=1 colspan=2>变更原因</td><td rowspan=1 colspan=8>客户要求取消温度传感器及NOX传感器，因此端锥孔堵上;</td></tr><tr><td rowspan=1 colspan=2>风险点（影响）</td><td rowspan=1 colspan=8>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=9>无</td></tr><tr><td rowspan=1 colspan=10></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6971,
+                "bbox": [
+                    212,
+                    1773,
+                    290,
+                    2253
+                ],
+                "index": 4
+            }
+        ],
+        "page_info": {
+            "page_no": 3,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9824,
+                "bbox": [
+                    322,
+                    164,
+                    1335,
+                    2247
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td></td><td></td><td></td><td rowspan=1 colspan=5></td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td rowspan=1 colspan=1>F01Z5103JA-00</td><td></td><td></td><td></td><td rowspan=1 colspan=4>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=6>变更后</td></tr><tr><td rowspan=1 colspan=3>F01Z5101BH</td><td rowspan=1 colspan=6>F01Z5103JA-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=9>客户要求取消尿素喷嘴，因此混合器尿素喷嘴孔堵上;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=9>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=9>无</td></tr><tr><td rowspan=1 colspan=10></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7116,
+                "bbox": [
+                    213,
+                    1773,
+                    291,
+                    2253
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6534,
+                "bbox": [
+                    1340,
+                    680,
+                    1406,
+                    2223
+                ],
+                "index": 5
+            }
+        ],
+        "page_info": {
+            "page_no": 4,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.562,
+                "bbox": [
+                    1344,
+                    685,
+                    1410,
+                    2219
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9811,
+                "bbox": [
+                    323,
+                    164,
+                    1336,
+                    2245
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5103JB-00</td><td rowspan=1 colspan=1>SLEEVE</td><td rowspan=1 colspan=2>JIM 493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>客户要求取消尿素喷嘴，因此混合器尿素喷嘴孔堵上；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6748,
+                "bbox": [
+                    214,
+                    1772,
+                    291,
+                    2252
+                ],
+                "index": 4
+            }
+        ],
+        "page_info": {
+            "page_no": 5,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9784,
+                "bbox": [
+                    326,
+                    162,
+                    1339,
+                    2246
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=2></td><td rowspan=1 colspan=1>零件号</td><td></td><td></td><td></td><td rowspan=1 colspan=5></td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td rowspan=1 colspan=1>F01Z5019C0-00</td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>SLEEVE</td><td rowspan=1 colspan=1>JIM493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=2>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=6>变更后</td></tr><tr><td rowspan=1 colspan=3>-F01Z5017W6</td><td rowspan=1 colspan=6>F01Z5019C0-00</td></tr><tr><td rowspan=1 colspan=2>变更原因</td><td rowspan=1 colspan=9>取消混合器尿素喷嘴座，压差座及T5温度传感器座;</td></tr><tr><td rowspan=1 colspan=2>风险点（影响）</td><td rowspan=1 colspan=9>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=10>无</td></tr><tr><td rowspan=1 colspan=11></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6952,
+                "bbox": [
+                    216,
+                    1773,
+                    294,
+                    2250
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5523,
+                "bbox": [
+                    1344,
+                    685,
+                    1411,
+                    2210
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1378,
+                    1907,
+                    1392,
+                    1933
+                ],
+                "score": 0.694,
+                "text": "00"
+            }
+        ],
+        "page_info": {
+            "page_no": 6,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5391,
+                "bbox": [
+                    1339,
+                    684,
+                    1405,
+                    2221
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9783,
+                "bbox": [
+                    321,
+                    164,
+                    1333,
+                    2245
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td></td><td></td><td></td><td rowspan=1 colspan=5></td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td rowspan=1 colspan=1>F01Z510367-00</td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>CONE</td><td rowspan=1 colspan=1>JIM493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=6>变更后</td></tr><tr><td rowspan=1 colspan=3>9F01Z51025W</td><td rowspan=1 colspan=6>F01Z510367-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=9>客户要求取消压差传感器，因此端锥孔堵上；无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7174,
+                "bbox": [
+                    214,
+                    1773,
+                    290,
+                    2253
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1373,
+                    1927,
+                    1387,
+                    1984
+                ],
+                "score": 0.574,
+                "text": "(XOM）"
+            }
+        ],
+        "page_info": {
+            "page_no": 7,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9797,
+                "bbox": [
+                    320,
+                    164,
+                    1335,
+                    2245
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>DOC+SDPF WELDING</td><td rowspan=1 colspan=2>JIM 493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>广QF01Z5017W5</td><td rowspan=1 colspan=3>F01Z5019BZ-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.客户要求取消DOCDPF催化剂及衬垫；2.取消压差架，取消温度.NOX及压差传感器座，取消尿素喷嘴;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5998,
+                "bbox": [
+                    1338,
+                    686,
+                    1406,
+                    2223
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6678,
+                "bbox": [
+                    213,
+                    1773,
+                    291,
+                    2252
+                ],
+                "index": 4
+            }
+        ],
+        "page_info": {
+            "page_no": 8,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9837,
+                "bbox": [
+                    320,
+                    176,
+                    1331,
+                    2251
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td>Project</td><td colspan=\"2\">样件阶段</td><td>变更来源</td></tr><tr><td></td><td>INSULATION 变更前</td><td>JIM 493</td><td>A</td><td>BOSCH/Customer</td></tr><tr><td colspan=\"4\">变更描述</td><td colspan=\"2\">变更后</td></tr><tr><td rowspan=\"2\">E415</td><td colspan=\"3\">BOSCH OsO B BOSCH DOC封装：博世汽车系统（无锡）有限公司 SDPF封装：博世汽车系统（无锡）有限公司 DOC载体：NGK（苏州）环保陶瓷有限公司 SDPF载体：NGK（苏州）环保陶瓷有限公司 DOC涂层：庄信万丰（上海）化工有限公司 SUPF涂层：庄信万丰（上海）化工有限公司 CA100271851 F01ZH003FU</td><td colspan=\"2\">BOSCH O5O BOSCH 05C SOPF SDPF SDPF</td></tr><tr><td colspan=\"3\">E415 CA100271851 F01ZH003FU Made in China Made in Chine F01Z5018AW F01Z5018AZ</td><td colspan=\"2\">DoC E415 E415 CA100302750 CA100302750 FO1ZH003VK-00 Made in Chine F01ZH003VK-0O Made in Chine</td></tr><tr><td></td><td colspan=\"5\"></td></tr><tr><td>变更原因</td><td colspan=\"5\">保温铭牌信息更改;</td></tr><tr><td>风险点（影响）</td><td colspan=\"5\">无</td></tr><tr><td>验证方法</td><td colspan=\"5\">无</td></tr></table>"
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.6492,
+                "bbox": [
+                    214,
+                    1783,
+                    291,
+                    2262
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5907,
+                "bbox": [
+                    1344,
+                    691,
+                    1403,
+                    2216
+                ],
+                "index": 6
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1368,
+                    2061,
+                    1388,
+                    2099
+                ],
+                "score": 0.618,
+                "text": "BADOI"
+            }
+        ],
+        "page_info": {
+            "page_no": 9,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7105,
+                "bbox": [
+                    1336,
+                    683,
+                    1400,
+                    2265
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9848,
+                "bbox": [
+                    318,
+                    165,
+                    1329,
+                    2245
+                ],
+                "index": 3,
+                "html": "<table><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>F01ZH003VK-00</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=1>JIM 493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=8>变更后</td></tr><tr><td rowspan=1 colspan=3>F01ZH003FU</td><td rowspan=1 colspan=8>2nF01ZH003VK-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=4 colspan=11>取消压差管压差支架；无无</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7331,
+                "bbox": [
+                    210,
+                    1775,
+                    288,
+                    2254
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1370,
+                    1934,
+                    1384,
+                    1979
+                ],
+                "score": 0.803,
+                "text": "IXOM"
+            }
+        ],
+        "page_info": {
+            "page_no": 10,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6469,
+                "bbox": [
+                    1342,
+                    683,
+                    1408,
+                    2262
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9742,
+                "bbox": [
+                    325,
+                    164,
+                    1336,
+                    2248
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td></td><td></td><td></td><td rowspan=1 colspan=5></td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td rowspan=1 colspan=1>F01Z5103JC-00</td><td></td><td></td><td></td><td rowspan=1 colspan=4>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=6>变更后</td></tr><tr><td rowspan=1 colspan=3>®F01Z5102CY</td><td rowspan=1 colspan=6>©F01Z5103JC-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=9>客户要求取消压差传感器，因此端锥孔堵上；无无</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7037,
+                "bbox": [
+                    217,
+                    1773,
+                    294,
+                    2256
+                ],
+                "index": 4
+            }
+        ],
+        "page_info": {
+            "page_no": 11,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6455,
+                "bbox": [
+                    1342,
+                    684,
+                    1408,
+                    2265
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9835,
+                "bbox": [
+                    324,
+                    167,
+                    1336,
+                    2250
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>F01Z5103JD-00</td><td rowspan=1 colspan=1>OUTLET PIPE</td><td rowspan=1 colspan=1>JIM 493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=7>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=10>客户要求取消压差传感器，因此端锥孔堵上；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=2 colspan=10>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6811,
+                "bbox": [
+                    217,
+                    1777,
+                    294,
+                    2258
+                ],
+                "index": 5
+            }
+        ],
+        "page_info": {
+            "page_no": 12,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6117,
+                "bbox": [
+                    1344,
+                    684,
+                    1410,
+                    2267
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9812,
+                "bbox": [
+                    325,
+                    170,
+                    1335,
+                    2249
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5019C3-00</td><td rowspan=1 colspan=1>SCR WELDING</td><td rowspan=1 colspan=2>JIM493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.客户要求取消SCR催化剂及衬垫；2.取消温度.NOX及PM传感器座;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>"
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.6637,
+                "bbox": [
+                    218,
+                    1776,
+                    296,
+                    2258
+                ],
+                "index": 4
+            }
+        ],
+        "page_info": {
+            "page_no": 13,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9822,
+                "bbox": [
+                    322,
+                    173,
+                    1330,
+                    2252
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td colspan=\"2\">Project</td><td>样件阶段</td><td colspan=\"2\">变更来源</td></tr><tr><td>F01Z5019C4-00</td><td colspan=\"2\">INSULATION</td><td colspan=\"2\">JIM 493</td><td colspan=\"2\">BOSCH/Customer</td></tr><tr><td rowspan=\"2\">变更描述</td><td colspan=\"3\">变更前</td><td colspan=\"3\">A 变更后</td></tr><tr><td colspan=\"3\">BOSCH 05C SCR（含ASC）封装：博世汽车系统（无锡）有限公司 SCR（含ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万丰（上海）化工有限公司 E415 CA100271870 F01ZHO03FV Made in China</td><td colspan=\"3\">BOSCH 05C SCR(含ASC) SCR（含ASC） SCR（含ASC） E415 CA100302760 F01ZHO03VL-0O</td></tr><tr><td></td><td colspan=\"2\">F01Z5018C0 F01Z5019C4-00</td><td colspan=\"3\">Made in China</td></tr><tr><td></td><td colspan=\"6\"></td></tr><tr><td>变更原因</td><td colspan=\"6\">保温铭牌信息更改;</td></tr><tr><td>风险点（影响）</td><td colspan=\"6\">无</td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6731,
+                "bbox": [
+                    215,
+                    1783,
+                    293,
+                    2263
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6803,
+                "bbox": [
+                    1342,
+                    689,
+                    1402,
+                    2266
+                ],
+                "index": 3
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1374,
+                    1499,
+                    1394,
+                    1600
+                ],
+                "score": 0.696,
+                "text": "esodspAue"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1376,
+                    1910,
+                    1390,
+                    1937
+                ],
+                "score": 0.527,
+                "text": "00"
+            }
+        ],
+        "page_info": {
+            "page_no": 14,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6518,
+                "bbox": [
+                    1342,
+                    686,
+                    1406,
+                    2268
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9824,
+                "bbox": [
+                    325,
+                    171,
+                    1333,
+                    2249
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003VL-00</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>上述变更后SCR总成随之更改;无无</td></tr><tr><td rowspan=1 colspan=1>风险点 (影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.63,
+                "bbox": [
+                    216,
+                    1778,
+                    293,
+                    2259
+                ],
+                "index": 5
+            }
+        ],
+        "page_info": {
+            "page_no": 15,
+            "width": 1653,
+            "height": 2339
+        }
+    }
+]

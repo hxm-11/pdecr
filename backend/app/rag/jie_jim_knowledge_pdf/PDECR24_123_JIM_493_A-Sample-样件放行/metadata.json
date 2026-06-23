@@ -1,0 +1,26 @@
+{
+  "case_id": "PDECR24_123",
+  "source_file": "PDECR24_123_JIM_493_A-Sample-样件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "24_123",
+    "date": "2024-10-23",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Customer request / 客户要求；Design optimization / 设计优化；Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF一体化件：F01ZH003FU-52; SCR老化件：F01ZH003FV-52; DOC+SDPF分体新鲜件：F01ZH003G1-01; DOC+SDPF分体化件：F01ZH003G1-52; DOC+SDPF分体A样可拆空管件：F01ZH003G1-20; SCRA样空管件：F01ZH003FV-20; DOC+SDPF分体B样可拆空管件：F01ZH003G1-21; SCRB样空管件：F01ZH003FV-21; SDPF背压极大值件：F01Z5017XC-61; SDPF背压极小值件：F01Z5017XC-71; SDPF背压中值件：F01Z5017XC-81; DOC+SDPF（DOC涂敷上极限件）：F01ZH003G1-30; DOC涂敷下极限件：F01Z5017X9-35; RZ4EDOC+DPF再生件：F01ZH003GG-00",
+    "reason_for_change": "系统工程师测试样件放行。",
+    "change_source": [
+      "Customer request",
+      "Design optimization",
+      "Other"
+    ]
+  }
+}

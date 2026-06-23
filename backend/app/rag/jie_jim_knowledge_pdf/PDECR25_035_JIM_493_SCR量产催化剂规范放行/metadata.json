@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR25_035",
+  "source_file": "PDECR25_035_JIM_493_SCR量产催化剂规范放行_origin.pdf",
+  "metadata": {
+    "dc_no": "25_035",
+    "date": "2025-04-17",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "D Sample"
+    ],
+    "change_type": "Customer request / 客户要求; Supplier request / 供应商请求",
+    "sample_type": "D Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "F01Z5018CM-01 SCR催化剂量产规范释放",
+    "reason_for_change": "JIM493项目催化剂PPAP计划排在2025年5月份，需要SCR催化剂量产规范，用于量产催化剂放行。",
+    "change_source": [
+      "Customer request"
+    ]
+  }
+}

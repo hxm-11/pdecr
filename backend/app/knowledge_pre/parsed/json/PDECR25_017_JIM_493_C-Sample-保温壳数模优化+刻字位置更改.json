@@ -1,0 +1,80 @@
+{
+  "case_id": "PDECR25_017",
+  "source_file": "jie_jim_knowledge_pdf/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改/ocr/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改.md",
+  "metadata": {
+    "dc_no": "PDECR25_017",
+    "date": "2025-03-31",
+    "mcr_no": "",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "sample_type": [
+      "C Sample"
+    ],
+    "sample_type_candidates": [
+      "A Sample",
+      "B Sample",
+      "C Sample",
+      "D Sample"
+    ],
+    "change_type_raw": [],
+    "change_type_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ],
+    "source_type": "mineru_markdown",
+    "language": "zh/en",
+    "requires_validation": "need_human_check"
+  },
+  "business_fields": {
+    "responsible_person": "卢青松",
+    "responsible_department": "",
+    "approval_persons": [
+      "Yang Guangtuo",
+      "Jia Kebin",
+      "Luo jing",
+      "Lu Qingsong"
+    ],
+    "approval_departments": [],
+    "affected_documents": [],
+    "check_engineer": "3"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPFUNIT:F01ZH003FU-06 SCRUNIT:F01ZH003FV-06",
+    "reason_for_change": "1.保温壳供应商基于生产可行性优化数模;2.弗吉亚基于工装更改刻字位置;",
+    "change_source_selected": [],
+    "change_source_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ]
+  },
+  "modules": {
+    "change_request_description": "Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-03-31th\n25_017\nCustomer project Name/客户项目名称： JIM-493 MCR No./ MCR号:\nSample status /样件状态： □A Sample ]B Sample C Sample □D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC+SDPFUNIT:F01ZH003FU-06 SCRUNIT:F01ZH003FV-06\nReason of changes/更改理由（简要描述)：\n1.保温壳供应商基于生产可行性优化数模;2.弗吉亚基于工装更改刻字位置;\nChange from/变更来源：\nCustomer request/客户要求 | Supplier request/供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang\nYang Guangtuo, Jia Kebin, Luo jing， Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢青松 | Date/日期：\nSignature/签名：\n2025.4.1\nCheck/校对工程师 | 3 | i | Date /日期：\nSignature/签名：\n2005.4.1\nDescription of Change/更改描述 | ：（下面空白处请列出详细的变更前后对比）\n\nBOSCH博世Confiential |",
+    "impact_analysis": "Design Change Review Sheet设计变更评审表 | Version 13Effectivedate:2025-03-31th\nDesign ChangeRequest No. | 25_017\n1.Function&Performance wil be influenced?/系统性能影响？ yes/是no/否\nIf Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 称统天影响 | Ssvstem/签名体\nWhether need sample to test?Plan?是否需要样件进行验证？计划？ | NA\nWhether he catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC） | Catalst/签名长\n2.Interface&boundary (internal and cu | stomer) wil be infuenced?/接口&边界(内部和客户)影响？yes/是 | no/否\nif impact custmer,whether get confrm fromcustomer side?请说明影响和是否得到客户的确认？ | 客户已确认 | Dol\n3. Mechanical strength&Durability wil be in | fuenced?/机械强度&可靠性影响？ yes/是 | no/否\nIf Yes,， Howto evaluate？Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等) | 结构强府影响低 | 芯4Validation/签名\nWhether need sample to test? Plan?是否需要样件进行验证？计划？\n4.Product document influenced?\n4.1 Interface FMEA-relevant/IFMEA: | no/否 | Note | 0502\n4.2.Product FMEA-relevant /DFMEA: | no/否 | yes/是 Note\n4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 | yes/是 Note\n4.4.IMDSrelevant: (针对C Sample) | no/否 ye | s/是 Note\n4.5 Offer drawing relevant(对C Sample) | no/否 | yes/是 Note_\n4.6. TCD relevant. | no/否 | Note\n5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） NA.(新零件放行，不涉及库存）涉及到已经生产过的零件变更\nRBCW RDC（外库)和RBCW仓库，是否有库存， | 无库存 | □有库存，库存数量\n供应商处（已做好，未发货）是否有库存， | □无库存 | 无□有库存，库存数量 | PE答\nLPN工厂是否有库存， | 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | 无库存 | □有库存，库存数量\n被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名\n改制费用 报废成□ □本 | PUE /签名\n已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换□\n6. Influence on supplier par?\nWas this change confirmed withPurchasing (Supplier) for feasibilty?Feedack from Supplie变更后的零件，生产可行性供应商是否确认？反馈？\n李亮岑PUE/签名\n0k\nInfluenceon purchasing part deliver time？对采购件交货时间的影响？无\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/yes是\nDoes the change influence on purchasing cost？变更对采购成本的影响？increase/增加，金额 decrease/降低，金额 no change/不变\n7. DFMA & Sample prodcution OPL?\n必要时附加DFMA 文件\n0\n己开DFMA 参考PDECR24-146\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\n共se u答\nInfluence on project&productdelivery time？对项目&产品交货时间的影响？\nInfuence on manufacturing cost /对产成本的影响？ chngeincrease/增加n，金额decrease/降低，金额\n9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 ;需求样品订单数量\nm/3\n10.如果涉及以下情况需TCR3审核确认。不涉及则NA.:□库存报废，金额 平购成本增加，金额 生产成本增加，金额 RBC\nW/TCR3\nDesign Team Leader | ENG-CV1 | PUR | TCR32025\nSignture/签名杨 | Signature 签名么 | Signature/签 | Signature签名：福\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AV-02 | DOCINSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于生产可行性优化数模;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AW-02 | DOC INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更后\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;铭牌信息随之更改;风险点（影响） 无无\n风险点(影响)\n验证方法\n\nsau8u Auadoid\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AX-01 | MIXER INSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于生产可行性优化数模;无无\n风险点(影响)\n验证方法\n\nsayBu Auedond uonnqunsip S\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AY-01 | MIXER INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nMIXERINSULATION02:F01Z5018AY-00INSULATIONFOIL:F01Z5017NU-01INSULATIONMAT:F01Z5102RM-00INSULATIONMAT：F01Z5102RN-00 | MIXERINSULATION02:F01Z5018AY-01INSULATIONFOIL:F01Z5017NU-02INSULATIONMAT:F01Z5102RM-01INSULATIONMAT: F01Z5102RN-01\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;风险点（影响） 无无\n风险点(影响)\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AZ-02 | DPF INSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于产可性优化数模;铭牌信息随之更改;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018B0-01 | DPF INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;无无\n风险点(影响)\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FU-06 | DOC+SDPF UNIT | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 1.保温壳更新后，DOC+SDPF组件随之更新;2.弗吉亚基于装更改刻字位置;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5017W9-03 | SCR WELDING | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nX一检具检测：用φ7.4，从温度传感器底座端面起L=85mm的插销插入无干涉中OO ① QO0OQO 日O00X50（圆周对$4处)13F01Z5017W9-03 | X检且怡测.用7.4，以是度传感器底座端面L=70mm的插销适人无干步X50（圆对4处）13F01Z5017W9-03\n变更原因 | 弗吉亚请求SCR隔板检具缩短到70mm;\n风险点（影响） | 无\n验证方法 | 无\n\nse112Msunpeuoneoidxe870\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FV-06 | SCR UNIT | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后 0\n0 XXXXXX-XX-xX | ② 0 BOSCH CO SCR（含ASC）封装：博世汽车系统（无锡）有核公司 SCR（含ASC）体：NGK（苏州）不保资有限公司 xx-Xx-x0x×x00X SCR（含ASC）涂展：庄位万丰（上海）化工有限公司 E415 CA100271870 F01ZH003FV-06 Made in China SCRUNIT:F01ZH003FV-06 INSULATION：F01Z5018C0-02 1.弗吉亚基于工装更改刻字位置;2.铭牌刻字信息随之更改;\n- BOSCH 05O SCR（合ASC）封装：博世汽车系统（无锡）有限公司 SCR（合ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万车（上海）化工有限公司 E415 CA100271870 F01ZH003FV-05 Made in Chine\n\nsuau Auadod espu\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5102EU-02 | BRACKET | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n.F01Z5102EU-01 | F01Z5102EU-02\n变更原因 客户要求在支架上新增刻字信息，便于追溯;风险点（影响) 无无\n风险点(影响)\n验证方法",
+    "full_clean_text": "BOSCH博世Confdential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-03-31th\n25_017\nCustomer project Name/客户项目名称： JIM-493 MCR No./ MCR号:\nSample status /样件状态： □A Sample ]B Sample C Sample □D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC+SDPFUNIT:F01ZH003FU-06 SCRUNIT:F01ZH003FV-06\nReason of changes/更改理由（简要描述)：\n1.保温壳供应商基于生产可行性优化数模;2.弗吉亚基于工装更改刻字位置;\nChange from/变更来源：\nCustomer request/客户要求 | Supplier request/供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang\nYang Guangtuo, Jia Kebin, Luo jing， Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢青松 | Date/日期：\nSignature/签名：\n2025.4.1\nCheck/校对工程师 | 3 | i | Date /日期：\nSignature/签名：\n2005.4.1\nDescription of Change/更改描述 | ：（下面空白处请列出详细的变更前后对比）\n\nBOSCH博世Confiential | Design Change Review Sheet设计变更评审表 | Version 13Effectivedate:2025-03-31th\nDesign ChangeRequest No. | 25_017\n1.Function&Performance wil be influenced?/系统性能影响？ yes/是no/否\nIf Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 称统天影响 | Ssvstem/签名体\nWhether need sample to test?Plan?是否需要样件进行验证？计划？ | NA\nWhether he catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC） | Catalst/签名长\n2.Interface&boundary (internal and cu | stomer) wil be infuenced?/接口&边界(内部和客户)影响？yes/是 | no/否\nif impact custmer,whether get confrm fromcustomer side?请说明影响和是否得到客户的确认？ | 客户已确认 | Dol\n3. Mechanical strength&Durability wil be in | fuenced?/机械强度&可靠性影响？ yes/是 | no/否\nIf Yes,， Howto evaluate？Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等) | 结构强府影响低 | 芯4Validation/签名\nWhether need sample to test? Plan?是否需要样件进行验证？计划？\n4.Product document influenced?\n4.1 Interface FMEA-relevant/IFMEA: | no/否 | Note | 0502\n4.2.Product FMEA-relevant /DFMEA: | no/否 | yes/是 Note\n4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 | yes/是 Note\n4.4.IMDSrelevant: (针对C Sample) | no/否 ye | s/是 Note\n4.5 Offer drawing relevant(对C Sample) | no/否 | yes/是 Note_\n4.6. TCD relevant. | no/否 | Note\n5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） NA.(新零件放行，不涉及库存）涉及到已经生产过的零件变更\nRBCW RDC（外库)和RBCW仓库，是否有库存， | 无库存 | □有库存，库存数量\n供应商处（已做好，未发货）是否有库存， | □无库存 | 无□有库存，库存数量 | PE答\nLPN工厂是否有库存， | 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | 无库存 | □有库存，库存数量\n被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名\n改制费用 报废成□ □本 | PUE /签名\n已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换□\n6. Influence on supplier par?\nWas this change confirmed withPurchasing (Supplier) for feasibilty?Feedack from Supplie变更后的零件，生产可行性供应商是否确认？反馈？\n李亮岑PUE/签名\n0k\nInfluenceon purchasing part deliver time？对采购件交货时间的影响？无\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/yes是\nDoes the change influence on purchasing cost？变更对采购成本的影响？increase/增加，金额 decrease/降低，金额 no change/不变\n7. DFMA & Sample prodcution OPL?\n必要时附加DFMA 文件\n0\n己开DFMA 参考PDECR24-146\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\n共se u答\nInfluence on project&productdelivery time？对项目&产品交货时间的影响？\nInfuence on manufacturing cost /对产成本的影响？ chngeincrease/增加n，金额decrease/降低，金额\n9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 ;需求样品订单数量\nm/3\n10.如果涉及以下情况需TCR3审核确认。不涉及则NA.:□库存报废，金额 平购成本增加，金额 生产成本增加，金额 RBC\nW/TCR3\nDesign Team Leader | ENG-CV1 | PUR | TCR32025\nSignture/签名杨 | Signature 签名么 | Signature/签 | Signature签名：福\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AV-02 | DOCINSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于生产可行性优化数模;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AW-02 | DOC INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更后\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;铭牌信息随之更改;风险点（影响） 无无\n风险点(影响)\n验证方法\n\nsau8u Auadoid\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AX-01 | MIXER INSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于生产可行性优化数模;无无\n风险点(影响)\n验证方法\n\nsayBu Auedond uonnqunsip S\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AY-01 | MIXER INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nMIXERINSULATION02:F01Z5018AY-00INSULATIONFOIL:F01Z5017NU-01INSULATIONMAT:F01Z5102RM-00INSULATIONMAT：F01Z5102RN-00 | MIXERINSULATION02:F01Z5018AY-01INSULATIONFOIL:F01Z5017NU-02INSULATIONMAT:F01Z5102RM-01INSULATIONMAT: F01Z5102RN-01\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;风险点（影响） 无无\n风险点(影响)\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018AZ-02 | DPF INSULATION 01 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 保温壳供应商基于产可性优化数模;铭牌信息随之更改;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5018B0-01 | DPF INSULATION 02 | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 变更原因 保温壳供应商基于生产可行性优化数模;无无\n风险点(影响)\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FU-06 | DOC+SDPF UNIT | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 1.保温壳更新后，DOC+SDPF组件随之更新;2.弗吉亚基于装更改刻字位置;\n风险点（影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5017W9-03 | SCR WELDING | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nX一检具检测：用φ7.4，从温度传感器底座端面起L=85mm的插销插入无干涉中OO ① QO0OQO 日O00X50（圆周对$4处)13F01Z5017W9-03 | X检且怡测.用7.4，以是度传感器底座端面L=70mm的插销适人无干步X50（圆对4处）13F01Z5017W9-03\n变更原因 | 弗吉亚请求SCR隔板检具缩短到70mm;\n风险点（影响） | 无\n验证方法 | 无\n\nse112Msunpeuoneoidxe870\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FV-06 | SCR UNIT | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后 0\n0 XXXXXX-XX-xX | ② 0 BOSCH CO SCR（含ASC）封装：博世汽车系统（无锡）有核公司 SCR（含ASC）体：NGK（苏州）不保资有限公司 xx-Xx-x0x×x00X SCR（含ASC）涂展：庄位万丰（上海）化工有限公司 E415 CA100271870 F01ZH003FV-06 Made in China SCRUNIT:F01ZH003FV-06 INSULATION：F01Z5018C0-02 1.弗吉亚基于工装更改刻字位置;2.铭牌刻字信息随之更改;\n- BOSCH 05O SCR（合ASC）封装：博世汽车系统（无锡）有限公司 SCR（合ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万车（上海）化工有限公司 E415 CA100271870 F01ZH003FV-05 Made in Chine\n\nsuau Auadod espu\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5102EU-02 | BRACKET | JIM-493 | C | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n.F01Z5102EU-01 | F01Z5102EU-02\n变更原因 客户要求在支架上新增刻字信息，便于追溯;风险点（影响) 无无\n风险点(影响)\n验证方法"
+  },
+  "source_trace": {
+    "raw_md_file": "jie_jim_knowledge_pdf/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改/ocr/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ],
+    "cleaning_notes": [
+      "Converted HTML tables to pipe-separated text rows.",
+      "Normalized whitespace, HTML entities, and image placeholders.",
+      "Extracted common PD-ECR fields with deterministic regex and label rules.",
+      "Kept full_clean_text so RAG can still retrieve content not captured by fields."
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR24_146",
+  "source_file": "PDECR24_146_JIM_493_C-sample release-V3_origin.pdf",
+  "metadata": {
+    "dc_no": "24_146",
+    "date": "2024-01-09",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "C Sample"
+    ],
+    "change_type": "ustomer request / 客户要求；Design optimization / 设计优化。",
+    "sample_type": "C Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC-DPF: F01ZH003FU-05; SCR: F01ZH003FV-05",
+    "reason_for_change": "C样件放行",
+    "change_source": [
+      "Design optimization"
+    ]
+  }
+}

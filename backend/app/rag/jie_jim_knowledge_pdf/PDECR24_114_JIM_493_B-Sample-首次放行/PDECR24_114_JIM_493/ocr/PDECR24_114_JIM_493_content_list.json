@@ -1,0 +1,846 @@
+[
+    {
+        "type": "table",
+        "img_path": "images/30aa86c8173ba3792b182ba8a679247652385f02060c9fd7f9c568324bd71c79.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=2>BOSCH博世Confidential</td><td rowspan=2 colspan=6>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effective date:2024-09-29th</td></tr><tr><td rowspan=1 colspan=1>24_114</td></tr><tr><td rowspan=1 colspan=9>Customer project Name/客户项目名称：               JIM-493           MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=9>Sample status / 样件状态：     A Sample B Sample   C Sample    D Sample</td></tr><tr><td rowspan=1 colspan=9>Change part&amp;product Name/更改零部件产品的名称（简要描述)</td></tr><tr><td rowspan=1 colspan=9>DOC+SDPF新鲜件：F01ZH003FU-02 SCR新鲜件：F01ZH003FV-02</td></tr><tr><td rowspan=1 colspan=9>Reason of changes/更改理由（简要描述)：</td></tr><tr><td rowspan=1 colspan=9>JIM493新鲜件化件（可拆+不可拆）样件次释放；</td></tr><tr><td rowspan=1 colspan=4>Change from/变更来源：</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=4>Customer request /客户要求√</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=4>Supplier request /供应商请求                   Design optimization /设计优化</td></tr><tr><td rowspan=1 colspan=4>Correction /更正(错误)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=4>Other/其他       （</td></tr><tr><td rowspan=1 colspan=4>Change inform to/变更通知人：</td><td rowspan=1 colspan=5>Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan,Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=9>Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong</td></tr><tr><td rowspan=1 colspan=9>Whether this change impact others component or product 此变更是否影响到其他部件和产品：        yes/是    no/否</td></tr><tr><td rowspan=1 colspan=9>If impact others product， Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=9></td></tr><tr><td rowspan=1 colspan=4>Design /设计工程师</td><td rowspan=2 colspan=3>卢青松</td><td rowspan=2 colspan=1>Date /日期:</td><td rowspan=2 colspan=1>2024.10.9</td></tr><tr><td rowspan=1 colspan=4>Signature /签名：</td></tr><tr><td rowspan=1 colspan=4>Check/校对工程师</td><td rowspan=2 colspan=3>杨抓</td><td rowspan=2 colspan=1>Date /日期：</td><td rowspan=2 colspan=1>2024.10.09</td></tr><tr><td rowspan=1 colspan=4>Signature/签名：</td></tr><tr><td rowspan=1 colspan=9>Description of Change/更改描述：(下面空白处请列出详细的变更前后对比）</td></tr><tr><td></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=3>新鲜件</td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=1 colspan=2>Catalyst</td><td rowspan=1 colspan=2>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=1 colspan=2>DOC</td><td rowspan=2 colspan=2>F01ZH003FU-02</td><td rowspan=1 colspan=1>F01Z50178N-00</td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=1 colspan=2>DPF</td><td rowspan=1 colspan=1>F01Z501890</td><td></td><td></td><td></td></tr><tr><td></td><td rowspan=1 colspan=2>SCR/ASC</td><td rowspan=1 colspan=2>F01ZH003FV-02</td><td rowspan=1 colspan=1>F01Z501891</td><td></td><td></td><td></td></tr></table>",
+        "bbox": [
+            11,
+            42,
+            966,
+            914
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "table",
+        "img_path": "images/cdf65b71856a60e7cbda07f22a32d7e500696a5d89f65e51760225ab83e26e9a.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=8>Design Change Review Sheet设计变更评审表</td><td rowspan=1 colspan=3>Version 13Effectivedate:2024-09-29th</td></tr><tr><td rowspan=1 colspan=3>Design ChangeRequest No.       24_114</td></tr><tr><td rowspan=1 colspan=3>1.Function&amp;Performance will be influence</td><td rowspan=1 colspan=9>d?/系统性能影响？      yes/是√no/否</td></tr><tr><td rowspan=1 colspan=3>If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=1 colspan=7>否.</td><td rowspan=2 colspan=2>Ssrtem波</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=7>否.标定样件</td></tr><tr><td rowspan=1 colspan=3>Whether te catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC)</td><td rowspan=1 colspan=7>DOC新方案.SDPF.SUR/ASC都是量产</td><td rowspan=1 colspan=2>catals张</td></tr><tr><td rowspan=1 colspan=3>2.Interface&amp;boundary(internal and custome</td><td rowspan=1 colspan=7>r) wil be influenced?/接口&amp;边界(内部和客户)影响？    yes/是</td><td rowspan=1 colspan=2>no/否</td></tr><tr><td rowspan=1 colspan=3>Ifimpact custmerwhether get confirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=7>客户已确认边界无间题</td><td rowspan=1 colspan=2>Des2</td></tr><tr><td rowspan=1 colspan=3>3.Mechanical srength&amp;Durabilit wil be inf</td><td rowspan=1 colspan=7>luenced?/机械强度&amp;可靠性影响？                      yes/是</td><td rowspan=1 colspan=2>no/否</td></tr><tr><td rowspan=1 colspan=3>IfYes， How to evaluate？Plan？如果是，请说明影响和如何评估，计划？（例如：仿真分析等）</td><td rowspan=1 colspan=7>除支禁外结构强的用险件.</td><td rowspan=2 colspan=2>年Validation/签名</td></tr><tr><td rowspan=1 colspan=3>Whether need samle to test?Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=7></td></tr><tr><td rowspan=1 colspan=3>4.Product document influenced?</td><td rowspan=1 colspan=7></td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>4.1 Interface FMEA-relevant / FMEA:</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=6>yes/是  Note</td><td rowspan=6 colspan=2>Desien%，</td></tr><tr><td rowspan=1 colspan=3>4.2.Product FMEA-relevant /DFMEA:</td><td rowspan=1 colspan=7>n0否    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC:(+对c Sample)</td><td rowspan=1 colspan=7>n0否   yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.4.IMDS relevant： (针对C Sample)</td><td rowspan=1 colspan=7>n0否    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.5Offer drawing relevant：(针对C Sample)</td><td rowspan=1 colspan=7>√n0/否    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.6.TCD relevant:</td><td rowspan=1 colspan=7>no/香    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>5.Changed parts Stock&amp; treatment/需（只针对涉及到已经生产过的零件变更，新</td><td rowspan=1 colspan=9>要变更零件的库存统计和处理？                          ]NA.(新零件放行，不涉及库存)放行零件和本条不相关)                               涉及到已经生产过的零件变更</td></tr><tr><td rowspan=1 colspan=3>RBCWRDC（外库)和RBCW仓库，是否有库存，</td><td rowspan=1 colspan=7>□无库存     □有库存，库存数量</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>供应商处(已做好，未发货）是否有库存，</td><td rowspan=1 colspan=2>□未</td><td rowspan=1 colspan=5>库存     □有库存，库存数量</td><td rowspan=3 colspan=2>李琴PUE /签名</td></tr><tr><td rowspan=1 colspan=3>LPN工厂是否有库存，</td><td rowspan=1 colspan=2>□无</td><td rowspan=1 colspan=5>库存     □有库存，库存数量</td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=2>□无</td><td rowspan=1 colspan=5>库存     □有库存，库存数量</td></tr><tr><td rowspan=2 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=2>□可以继续</td><td rowspan=1 colspan=5>使用完      □改制后使用   □报废</td><td rowspan=1 colspan=2>Design/签名</td></tr><tr><td rowspan=1 colspan=7>改制费用           □                报废成</td><td rowspan=1 colspan=2>PUE/签名本</td></tr><tr><td rowspan=1 colspan=3>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论）</td><td rowspan=1 colspan=7>改制                       更换其他（单独说明）；</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>6. Influence on supplier part?</td><td rowspan=1 colspan=7></td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？</td><td rowspan=5 colspan=2></td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>Infuence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=10>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.    □no/否yes/是</td></tr><tr><td rowspan=1 colspan=10>□increase/增加，金额                          decrease/降低，金额                      ho change/不变</td></tr><tr><td rowspan=1 colspan=10>7. DFMA &amp; Sample prodcution OPL?</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>必要时附加DFMA文件</td><td rowspan=2 colspan=2>oe</td></tr><tr><td rowspan=1 colspan=10>已开DFMA，参考附件</td></tr><tr><td rowspan=1 colspan=10>8. Influence on LPN manufacturing&amp;assembly process?</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>Feedback from manufacturing engineer?产制造装配是否影响，反馈？</td><td rowspan=4 colspan=2>印心方PUE/签名_</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>Influence on project&amp;productdelivery time？对项&amp;产品交货时间的影响？</td></tr><tr><td rowspan=1 colspan=10>increase/增加，金额                            decrease/降低，金额                        no change/不变</td></tr><tr><td rowspan=2 colspan=10>9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响               需求样品订单数量</td><td></td><td></td></tr><tr><td rowspan=1 colspan=2>w张家区</td></tr><tr><td rowspan=1 colspan=10>10.如果涉及以下情况需TCR3审核确认。 不涉及则NA.:                                          RBC□库存报废，金额            平购成本增加，金额                牛产成本增加，金额</td><td rowspan=1 colspan=2>W/TCR3</td></tr><tr><td rowspan=1 colspan=2>Design Team Leader</td><td rowspan=1 colspan=4>ENG-CV1</td><td rowspan=1 colspan=1>PUR</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>TCR32024</td></tr><tr><td rowspan=1 colspan=2>Signature/签名个</td><td rowspan=1 colspan=4>Signature/签名：</td><td rowspan=1 colspan=1>Signat</td><td rowspan=1 colspan=1>ure</td><td rowspan=1 colspan=1>2.12.10</td><td rowspan=1 colspan=2>Signature/签名：友</td><td rowspan=1 colspan=1>3</td></tr><tr><td rowspan=1 colspan=7>2024.12.19</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=3></td><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            75,
+            38,
+            904,
+            973
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "B Sample Drawing initial Release Checklist ATS B Sample initial release precondition",
+        "bbox": [
+            826,
+            70,
+            949,
+            804
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "table",
+        "img_path": "images/b72ca60698b8ec71bf803b9ee54c4386b464af3f175b72b3e0bdc195f8d8baa0.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=1 colspan=2>Pre-condition Checklist</td><td rowspan=1 colspan=1>Resul/Report</td><td rowspan=1 colspan=1>Date</td><td rowspan=1 colspan=1>Resp.</td></tr><tr><td rowspan=4 colspan=1>Design</td><td rowspan=1 colspan=1>1. B Sample 3D model confirmed by customer?           (除支架)本欢支架不放行</td><td rowspan=1 colspan=1>ok</td><td rowspan=1 colspan=1>2024.10.9</td><td rowspan=1 colspan=1>情松</td></tr><tr><td rowspan=1 colspan=1>2. B Sample Nameplate confirmed by customer? Email or drawing confirm?</td><td rowspan=1 colspan=1>0k</td><td rowspan=1 colspan=1>2024.10.9</td><td rowspan=1 colspan=1>卢青松</td></tr><tr><td rowspan=1 colspan=1>3. B Sample ingle part manufacturing feasibity study and drawing confirmed by supplier?</td><td rowspan=1 colspan=1>oK</td><td rowspan=1 colspan=1>2024.10.9</td><td rowspan=1 colspan=1>卢松</td></tr><tr><td rowspan=1 colspan=1>4.B Sample MAT design fixed?</td><td rowspan=1 colspan=1>ok</td><td rowspan=1 colspan=1>2024.10.9</td><td rowspan=1 colspan=1>卢松</td></tr><tr><td rowspan=3 colspan=1>PUR/MOE</td><td rowspan=1 colspan=1>1. B Sample Make and Buy confirmed?</td><td rowspan=1 colspan=1>ok</td><td rowspan=1 colspan=1>2024.10.9</td><td rowspan=1 colspan=1>李兵岑</td></tr><tr><td rowspan=1 colspan=1>2.B Sample DFMA welding process finished with MOE?</td><td rowspan=1 colspan=1>0K</td><td rowspan=1 colspan=1>2024.10.10</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>3. B Sample Canning process confirmed?</td><td rowspan=1 colspan=1>自动球装改社ange&#x27;</td><td rowspan=1 colspan=1>2024.10.0</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>Validation</td><td rowspan=1 colspan=1>1.B Sample CFD report?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>2.B Sample FEA report?                                                    支架尊不放行，</td><td rowspan=1 colspan=1>一</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>POC</td><td rowspan=1 colspan=1>1.POC statusreult(DO/DPF/SCR caliration status)PC不涉及没计</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>2024.10.1</td><td rowspan=1 colspan=1>0大件波</td></tr><tr><td rowspan=1 colspan=1>2.lnsertion loss test status/result?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            169,
+            66,
+            781,
+            939
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "Internal|Diesel Systems|RBCD/EEC5|2021-02-02th",
+        "bbox": [
+            77,
+            105,
+            100,
+            323
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            58,
+            828,
+            99,
+            934
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "ENG-CV PDECR24-114",
+        "text_level": 2,
+        "bbox": [
+            307,
+            58,
+            440,
+            370
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            909,
+            169,
+            973
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/dad4f6194ebfce650804084fd4c4ce5598f57ee3d6a68393c34c828065d5d116.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22 surtal propery nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5102CZ-02</td><td rowspan=1 colspan=1>FLANGE</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>a法兰螺栓孔直径由9m</td><td rowspan=1 colspan=3>Dm增大到10mm；</td></tr><tr><td rowspan=3 colspan=7>为装车时便客户调整DOCSDPF位置，增法兰螺栓孔直径;无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            925
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            878,
+            171,
+            970
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/496a8f468836443a099d86edd8f9559846f6833c2f66645ff89b9b84df660193.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Ltd Internal |Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22 allrighe"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5102D0-02</td><td rowspan=1 colspan=1>CONE</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>客户要求，端锥增加螺</td><td rowspan=1 colspan=3>母避让缺口；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>客户要求，为方便装配螺母，端锥增加螺母避让缺口；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            926
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            880,
+            171,
+            970
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "",
+        "bbox": [
+            154,
+            32,
+            174,
+            42
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114",
+        "text_level": 2,
+        "bbox": [
+            808,
+            34,
+            860,
+            239
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22 indusmal propery nghs",
+        "bbox": [
+            141,
+            57,
+            176,
+            709
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/deaf50f9f462b48348e4a483560fd59838cb380b9abd018d4561167e1d0418b3.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017NM-01</td><td rowspan=1 colspan=1>DOC CANNING</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>DOCCANNING:F01Z5017NM-00DOCSLEEVE:F01Z5101BGDOCCATALYST：F01Z50178N-00F01Z5017NM-00          DOCMAT:F01Z5101PSxx-xx-xx-x$x×××xxxxxxx×xxxx1.采购要求衬垫更换2.封装筒体增加倒角</td><td rowspan=1 colspan=3>DOCCANNING:F01Z5017NM-01DOCSLEEVE:F01Z5102ED-00DOCCATALYST：F01Z50178N-00DOCMAT:F01Z5102E9-00F01Z5017NM-0xx-xx-xx-xxXXXx×xX为CCMAX衬垫；，方便硬填；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.降本采CCMAX衬垫，2.弗吉亚采硬填艺，供应商要求增加筒体倒;</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响）</td><td rowspan=1 colspan=6>更换衬垫催化剂有吹出风险；</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>进行Canning DV实验；</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>",
+        "bbox": [
+            183,
+            38,
+            793,
+            927
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            880,
+            171,
+            971
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/6250e06168c9cddf0bda354fa4b8351bbe40847a4cd781235d9cfa90200a6305.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 ndusuial propeny nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017X1-01</td><td rowspan=1 colspan=1>DP TUBE BRACKET WITH NUT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>DPTUBEBRACKE:F01Z5017X1-00DPTUBEBRACKET:F01Z5101BTDPTUBEBRACKET:F01Z5102D2-00根据客户边界调整压WELDINGNUT:F01Z500068</td><td rowspan=1 colspan=3>DPTUBEBRACKE:F01Z5017X1-01DPTUBEBRACKET:F01Z51026E-00DPTUBEBRACKET:F01Z5102D2-00差支架大小及位置WELDINGNUT:F01Z500068</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界调整压差支架大小及位置;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>支架强度不足</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>FEA仿真报告详见附件</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            925
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            880,
+            169,
+            971
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/4cae548654b8b3c1154e4bcdb6163283983a629301ce466f23011f5b89925f01.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22 ediing. even o"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z51026F-00</td><td rowspan=1 colspan=1>DP TUBE BRACKET</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>F01Z5101BU上述压差架变更后，压差</td><td rowspan=1 colspan=3>附属架随之变更</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>根据客户边界调整压差支架大小及位置;支架强度不足FEA仿真报告详见附件</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            183,
+            36,
+            793,
+            926
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "table",
+        "img_path": "images/ea658efd354aa76ddc03f7d21d3d0d5069604e26b468db9b7fa7a3577ffed35d.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal | Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22 reserved, regarding any explonadon,reproduction, editing, distibuton. as wellas in the event of applcatons forindusttal propery nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5102DH-01</td><td rowspan=1 colspan=1>SENSOR BRACKET</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>根据仿真结果增加支架厚度支架强度不足FEA仿真报告详见附件</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            184,
+            36,
+            791,
+            926
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "table",
+        "img_path": "images/ffed3b497f9bbe335f06a57b255e8bb10adef677ec8f7423de4c8e89b050d63b.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 piopery nghes"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017NP-01</td><td rowspan=1 colspan=1>DPF CANNING</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>F0125017NP-06DPFCANNING: F01Z5017NP-00DPFSLEEVE:F01Z5101BYDPFCATALYST：F01Z501890         1.采购要求衬垫更换DPFMAT:F01Z5101VW-00            2.封装筒体增加倒角</td><td rowspan=1 colspan=3>DPFCANNING:F01Z5017NP-01DPFSLEEVE:F01Z5102EE-00为CCMAX衬垫；       DPFCATALYST:F01Z501890，方便硬填；             DPFMAT：F01Z5102EA-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.降本采CCMAX衬垫，2.弗吉亚采硬填艺，供应商要求增加筒体倒;</td></tr><tr><td rowspan=2 colspan=7>更换衬垫催化剂有吹出风险；进行Canning DV实验;</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            183,
+            38,
+            791,
+            926
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            134,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114 stem Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 eseived ediing, disui naustmal property nahts",
+        "bbox": [
+            810,
+            33,
+            860,
+            238
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            141,
+            57,
+            176,
+            707
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "table",
+        "img_path": "images/2df44ea9f61b1e48ffaced01d6efae8cc90571e23558a463c2a97a5ca248a21a.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5016MU</td><td rowspan=1 colspan=1>DPF BRACKET1</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>DPFBRACKET1:F01Z5017XR-00DPFBRACKET:F01Z5102DJ-00DPFBRACKET:F01Z5102DK-00根据仿真结果重新使用</td><td rowspan=1 colspan=3>DPFBRACKET1:F01Z5016MUDPFBRACKET:F01Z5101C0RZ4E量产支架；WELDINGNUT:F01Z500753</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界重新设计DPF安装支架;</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响）</td><td rowspan=1 colspan=6>支架更改强度不满足设计要求;</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>FEA仿真报告详见附件；</td></tr></table>",
+        "bbox": [
+            184,
+            35,
+            793,
+            925
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "",
+        "bbox": [
+            154,
+            32,
+            174,
+            42
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            139,
+            878,
+            171,
+            970
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "table",
+        "img_path": "images/0db65ea76e930a682ab6b365052ce85cdd361dc19ed1ea91bf4d41e2097f31bf.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal| Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22 Inausural propeny nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017XR-01</td><td rowspan=1 colspan=1>DPF BRACKET1</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>DPFBRACKET1:F01Z5016MVDPFBRACKET:F01Z5101C1DPFBRACKET:F01Z5101C2根据仿真结果重新设计</td><td rowspan=1 colspan=3>DPFBRACKET1:F01Z5017XR-01DPFBRACKET:F01Z5102DJ-01WELDINGNUT:F01Z500753支架；                 DPFBRACKET:F01Z5102DJ-01</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界重新设计DPF安装支架;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>支架更改强度不满足设计要求;</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>FEA仿真报告详见附件；</td></tr></table>",
+        "bbox": [
+            184,
+            36,
+            791,
+            926
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            880,
+            169,
+            971
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "table",
+        "img_path": "images/7068a27e7e92d825d9d51b16f9508cd3fdff680a14102e382e3a96f384536155.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "all nights i Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22 reseved."
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017XS-01</td><td rowspan=1 colspan=1>CONNECTION PIPE</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>O1.根据仿真结果使R2.法兰孔根据焊接螺母</td><td rowspan=1 colspan=3>OFLANGE:F01Z5017XS-01Z4ESCR法兰，    FLANGE:F01Z5102ET-00扩成013孔；        WELDINGNUT:F01Z500753</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据仿真结果减轻法兰重量</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            183,
+            36,
+            791,
+            926
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            878,
+            169,
+            972
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114 all nights Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 industrtal propery ngne",
+        "bbox": [
+            806,
+            33,
+            858,
+            239
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            139,
+            55,
+            174,
+            707
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "table",
+        "img_path": "images/877d5723ab2e7a0a81d5f9dc87fd7e307a91cc50a25c1b8b9b13498cf5cebe85.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z51025W-01</td><td rowspan=1 colspan=1>DPF OUTLET CONE</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>1.缩短出端锥进直2.与4JJ统一，增加客户</td><td rowspan=1 colspan=3>线段长度；螺栓避让口；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.端锥内插与筒体装配，为避免与衬垫干涉，缩短进直线段长度；2.与4JJ共DPF出端锥，增加4JJ客户变速箱安装螺栓避让凹槽；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            925
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "table",
+        "img_path": "images/944feae605ba63019a4952ff813b393ca0519fd4a735995070b1478a1605efdb.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017W5-01</td><td rowspan=1 colspan=1>DOC+SDPF WELDING</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>CRoo98</td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>上述变更后，焊接组件随之更改;</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            926
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "table",
+        "img_path": "images/c69b367c486cecd604618ee22dbe952f2c27705c3576fb463473cd6532512c02.jpg",
+        "table_caption": [
+            "PDECR 24-114",
+            "Allrights Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 /ec editing, tor industal propeny nighes"
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DP tube inlet</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>oのDPtubeinlet:F01Z5017W8-00DPtubeinlet:F01Z5102D5-00DPTUBECLAMP:F01Z51021B-00</td><td rowspan=1 colspan=3>-0mDPtubeinlet:F01Z5017W8-01DPtubeinlet：F01Z5102D5-01DPTUBECLAMP:F01Z501598</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界更改压差管向；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            35,
+            791,
+            925
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            878,
+            171,
+            971
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114",
+        "bbox": [
+            806,
+            32,
+            858,
+            238
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Ltd Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 somal propeny nghts",
+        "bbox": [
+            141,
+            58,
+            173,
+            705
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "table",
+        "img_path": "images/839bc23990eb8b3bda9095c18bf12b76fd724cccc4ef0a499aa0798911fe5a86.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DP tube OUTlet</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>9DPtubeOUTIet:F01Z5017W7-00DPtubeOUTIet:F01Z5102D4-00DPTUBECLAMP:F01Z51021B-00</td><td rowspan=1 colspan=3>0DPtubeOUTIet:F01Z5017W7-01DPtubeOUTlet:F01Z5102D4-01DPTUBECLAMP:F01Z501598</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界更改压差管向;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            35,
+            791,
+            925
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            878,
+            171,
+            970
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "table",
+        "img_path": "images/6d510a7fdb9e19606649617667720554fd4c2c680f3740b7c4d529425667fd1f.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 exploitaton, edting. as as in the event of applicanons tor ndusutal propeny nghes."
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003FU-02</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3></td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>上述更改后后处理总成随之更改，保温用手工保温;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            926
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            880,
+            169,
+            970
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "table",
+        "img_path": "images/bd982c41bf5c17b64df3b1f12011471e92e6e60e5d9026a4ed1b222d552a67cd.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Ltd Internal| Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22 All rgnts reserved. egarding any disposal. exploitaton. ias in the event of applicatons tor industal propery nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>BRACKET</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>BRACKET:F01Z5017XS-001.根据客户边界更DPFBRACKET2:F01Z51025B-00NUT:F01Z560017                      2.铸件和冲压支架</td><td rowspan=1 colspan=3>F01Z51025B-01                         F01Z5102EU-00新支架；量产时二选一；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.根据客户边界重新设计转接支架；2.开铸件和冲压两个软模架于耐久验证;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>支架强度不，有断裂风险</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>根据路谱采集及仿真结果评估</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            927
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114",
+        "bbox": [
+            808,
+            34,
+            860,
+            241
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22 trial propery nghts",
+        "bbox": [
+            141,
+            55,
+            176,
+            706
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "table",
+        "img_path": "images/ab5ac649391a205f1271014c15ebcb9650560adaaf3f94a761f2c11ddab8173e.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5102D1-01</td><td rowspan=1 colspan=1>DPF BRACKET2</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>BRACKET:F01Z5017XT-00DPFBRACKET2:F01Z5102D1-00NUT:F01Z500753                      根据客户边界支架</td><td rowspan=1 colspan=3>改为拼焊支架；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>根据客户边界支架改为拼焊支架；</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>支架强度不足，有断裂风险</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>根据路谱采集及仿真结果评估</td></tr></table>",
+        "bbox": [
+            183,
+            38,
+            793,
+            927
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            881,
+            171,
+            972
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "table",
+        "img_path": "images/dc3f5c0c3eb0221db993ebcb1b89cfba3f55b14fbe456f026bccdf1f55f498d1.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22 propeny nshs"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>SCR CANNING</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>降本更换催化剂衬垫;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响）</td><td rowspan=1 colspan=6>更换衬垫催化剂有吹出风险；</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>CanningDV实验已通过;</td></tr></table>",
+        "bbox": [
+            184,
+            38,
+            793,
+            926
+        ],
+        "page_idx": 21
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            880,
+            169,
+            971
+        ],
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "PDECR 24-114",
+        "bbox": [
+            808,
+            35,
+            858,
+            242
+        ],
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22 reproducicn,",
+        "bbox": [
+            141,
+            60,
+            176,
+            710
+        ],
+        "page_idx": 22
+    },
+    {
+        "type": "table",
+        "img_path": "images/bdf9019ec4f328e29e29fa36e1105e0080656f06333c16d9a6acaf8218b55b63.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5101V1-01</td><td rowspan=1 colspan=1>TEMP-SENSOR BOSS</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>-T6温度传感器座借用</td><td rowspan=1 colspan=3>OJP560传感器座；</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>借用供应商现有温度传感器座;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            186,
+            39,
+            793,
+            928
+        ],
+        "page_idx": 22
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            137,
+            881,
+            171,
+            972
+        ],
+        "page_idx": 22
+    },
+    {
+        "type": "table",
+        "img_path": "images/d37e0474e25e15e4cf9924f4530c81dc644d28e7616c7758dff141c508d009a9.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z560280</td><td rowspan=1 colspan=1>FLEX ELEMENT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>采购要求波纹管选用BOA量产波纹管;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>波纹管强度不足，有断裂风险；</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>C样放行前进行DV实验;</td></tr></table>",
+        "bbox": [
+            184,
+            39,
+            793,
+            929
+        ],
+        "page_idx": 23
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            881,
+            169,
+            973
+        ],
+        "page_idx": 23
+    },
+    {
+        "type": "table",
+        "img_path": "images/bb6a5a0b4b0c327b963d5c479fd12d8b104504f35733b27867492ed70a5fb1a0.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22 expl epi editing, indusmial propenty nghts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017W9-01</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>上述更改后SCR焊接总成随之更改;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>",
+        "bbox": [
+            184,
+            36,
+            794,
+            925
+        ],
+        "page_idx": 24
+    },
+    {
+        "type": "table",
+        "img_path": "images/9aae3017dc4b689723fa22263dc78426c05117def2c5120e0a87191b9c5809fc.jpg",
+        "table_caption": [
+            "PDECR 24-114"
+        ],
+        "table_footnote": [
+            "Internal|Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22 industtal propeny ngnts"
+        ],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003FV-02</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>上述更改后SCR总成随之更改;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            184,
+            36,
+            793,
+            925
+        ],
+        "page_idx": 25
+    },
+    {
+        "type": "page_number",
+        "text": "BOSCH",
+        "bbox": [
+            136,
+            878,
+            169,
+            971
+        ],
+        "page_idx": 25
+    }
+]

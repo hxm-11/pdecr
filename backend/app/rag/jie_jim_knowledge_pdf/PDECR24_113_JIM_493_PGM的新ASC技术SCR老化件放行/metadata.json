@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR24_113",
+  "source_file": "PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "24_113",
+    "date": "2024-09-29",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other(其他）系统工程师",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "JP560 SCR老化件：F01ZH003G6-51（1.5g/cft PGM）; 493 SCR老化件：F01ZH003G7-51（1.5g/cft PGM）",
+    "reason_for_change": "系统工程师要求释放JP560及493 1.5g/cft PGM SCR催化剂做验证。",
+    "change_source": [
+      "Other"
+    ]
+  }
+}

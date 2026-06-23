@@ -1,0 +1,54 @@
+{
+  "case_id": "T0003",
+  "source_file": "backend/app/rag/excel_source/T0003-PD-ECR_PTS_Enhancement.xlsx",
+  "metadata": {
+    "dc_no": "",
+    "date": "2024-09-23",
+    "mcr_no": "",
+    "customer_project": [
+      "PTS"
+    ],
+    "affected_product_no": [
+      "F019.A60.000-01"
+    ],
+    "component_no": [
+      "F019.A66.014-01/ F019A66004-01"
+    ],
+    "sample_type": "B",
+    "change_type_raw": "Supplier request",
+    "change_type": "supplier_request",
+    "source_type": "excel",
+    "language": "zh",
+    "requires_validation": "yes"
+  },
+  "business_fields": {
+    "responsible_person": "",
+    "responsible_department": "check work-on can met requirements",
+    "approval_persons": [
+      "PN No",
+      "导入清单",
+      "执行日期",
+      "变更计划",
+      "研发",
+      "采购",
+      "工艺",
+      "样品",
+      "质量",
+      "客户项目",
+      "生产",
+      "其他"
+    ],
+    "approval_departments": [],
+    "affected_documents": []
+  },
+  "modules": {
+    "modules": {
+    "change_request_description": "",
+    "impact_analysis": "",
+    "validation_trial_run_plan": "",
+    "validation_trial_run_result": "",
+    "implementation_task_plan": "",
+    "implementation_task_result": ""
+  }
+  }
+}

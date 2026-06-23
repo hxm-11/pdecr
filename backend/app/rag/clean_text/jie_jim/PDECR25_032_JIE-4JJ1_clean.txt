@@ -1,0 +1,447 @@
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effectivedate:2025-05-10th
+25_032
+Customer project Name/客户项目名称： JIM-4JJ MCR No./ MCR号:
+Sample status /样件状态： A Sample ]B Sample C Sample □D Sample
+Change part&product Name/更改零部件产品的名称(简要描述)
+DOC+SDPF新鲜件(不可拆)：F01ZH003EA-03 07SSCR新鲜件：F01ZH003EB-05
+Reason of changes/更改理由(简要描述)：
+依据客户需求，提供JIE-4JJC样OTS件;
+Change from/变更来源：
+Customer request/客户要求√ | Supplier request /供应商请求 Design optimization/设计优化
+Correction/更正(错误) □ | Other/其他 □(）
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong,Xie Youfu
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+If impact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design/设计工程师 | 阳 | Date/日期： | 2015.08.05
+Signature/签名：
+Check/校对工程师 | 杨广拓 | Date /日期: | 2025.08.27
+Signature/签名：
+Description of Change/更改描述：(下面空白处请列出详细的变更前后对比)
+
+BOSCH博世Confidential | Design Change Review Sheet设计变更评审表 | Version 13Effectivedate:2025-05-10th
+Design ChangeRequest No.
+1.Function&Performance wil be influenced?/系统性能影响？ yes/是no/否
+If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的） | ATSPOCE完成. | rse
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | NA
+Whether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC） | 同493催化剂 | Ccatays
+2.Interface&boundary (internal and custome | r) willbe influenced?/接口&边界(内部和客户)影响？ yes/是 | no/香
+If impact custmer,whether get confirm fromcustomer side?请说明影响和是否得到客户的确认？ | 客户确认 | Desisn1阳
+3. Mechanical strength&Durability will be in | fluenced?/机械强度&可靠性影响？ yes/是 | no/否
+If Yes,How to evaluate？Plan?如果是，请说明影响和如何评估,计划？（例如：仿真分析等） | aldtin/签名XRm
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | Dv finiohed veru(t6 possed
+4.Product document influenced?
+4.1 Interface FMEA-relevant /IFMEA: | no/否 yes/是 Note_ | Design /签名
+4.2.Product FMEA-relevant /DFMEA: | no/否 yes/是 Note
+4.3.Special Charecteristics /PSC:(针对C Sample) | no/否 yes/是 Note_
+4.4.IMDS relevant：(针对C Sample) | no/否 yes/是 Note
+4.5Offer drawing relevant:(针对C Sample) | no/否 yes/是 Note_
+4.6.TCD relevant: | no/否 yes/是 Note_
+5.Changed parts Stock& treatment/需（只针对涉及到已经生产过的零件变更，新 | 要变更零件的库存统计和处理？ ]NA.(新零件放行,不涉及库存)放行零件和本条不相关） 涉及到已经生产过的零件变更
+RBCW RDC(外库)和RBCW仓库，是否有库存， | 无库存 □有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | 无库 □有库存，库存数量 | PUE 本岑
+LPN工厂是否有库存， | 无库存 有库存，库存数量
+在途，运输中是否有库存 | □ | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：(设计工程师组织会议讨论) | □可以继续 | 使用完 □改制后使用 □报废 | Design/签名
+□改制费用 报废成本 | PUE 本y
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | □改制 更换其他（单独说明）;
+6. Infiuence on supplier part?
+Was this change confirmed with Purchasing (Supplier) for feasibiity? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？
+Influence on purchasing part delivery time？对采购件交货时间的影响？
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/否□yes/是
+Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额 □decrease/降低，金额 no change/不变
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA文件 | 0e)阳
+无opL
+8. Influence on LPN manufacturing&assembly process?
+Feedback from manufacturing engineer？生产制造装配是否影响，反馈？ | m
+nfuencprojectprct elve 对产时间影响三量CT 850S
+Influence on manufacturing cost /对产成本的影响？□increase/增加，金额 □decrease/降低，金额 no change/不变
+9.PM aignment? (Influence on project Timeline? Cost?)是否同意对项目时间和成本的影响 需求样品订单数量 | PM/签名_
+10.如果涉及以下情况需TCR3审核确认。 不涉及则 NA.: RB□库存报废，金额□民购成本增加，金额生□成本增加，金额 | CW/TCR3
+Design Team Leader | ENG-CV1 | PUR 2 | TCR3 2025400-0222
+signature个 | Signature/签名么 | Signature | 名 | Signature/签名友福
+8
+
+[image] 
+
+PDECR 25-032
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 Ipropeny nghes
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EA-03 | DOC+SDPF UNIT | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOCDPF主要变更点如下：1.进气法兰加厚2mm2.进气端锥进气口直径增大4mm，长度减短4mm3.DOC-canning不共用493，筒体不同G 4.喷嘴座缺口位置调整6 5.混合器保温共用4936.新开DOC模具件保温7.新开DPF模具件保温8.新开尾管模具件保温08
+变更原因 | 零件更改后后处理总成随之更改，混合器保温可以共493，其余6保温需要新开模具，样件使包;
+风险点 (影响） | 无
+验证方法 | 无
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EA-03 | DOC+SDPF UNIT | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | 26 1.由手工保温，改为开模保温2.定义保温增加铝箔胶带3.铭牌内容更新3 4.生产日期刻印在尾管上5.焊丝改为439Ti，同量产493 6.定义电阻焊焊点数量详细更改见图纸45 明
+变更原因 | 零件更改后后处理总成随之更改，混合器保温可以共用493，其余6保温需要新开模具，样件使用工包;无无
+风险点（影响）
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 expiotatoi.reprocuclon for incusunial propery nghts
+
+Lid 2023 Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 All tghts resenved.alscregarding any disposal. exploitanon,reproducton, edring, distibuticn as well as in the event ot applicanons for industrial propery nghts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017P5-05 | BRACKET | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5017P5-010 | 20M10X1.5-6H F0175017P5-05A-A100.5MA BOSH PN O 74754121(USOMR P/ xx.xx-xx口 MANENTE5JE2501480A客户料号更新08-20a1和供应商确认最终可行性OK 更新图纸，螺母增加点焊， 1.F01Z51025V架孔直径13±0.2收严至12.5±0.2;孔径及位置度更新增加刻字区域 M10X1.5-6H 2.F01Z5017P5螺母孔垂同时后续单独供货 00.5 BC 直度1收严至0.5;位置度1收严至0.5
+变更原因 | 供应商反馈B样件成型困难，需要优化数模
+风险点（影响） | 机械强度不足
+验证方法 | FEA仿真结果可以满要求，见附件
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NN-03 | MIXER UNIT | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+O• | ?WELCEL8-1.处焊缝由50mm增长为115mm08-20
+变更原因 | 增加焊缝长度，避免结晶掉落
+风险点（影响） | 无
+验证方法 | 无
+
+Ld2023 Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 Al dghts reseved. aisoregartingany disposai,expiotaton, reproducton, editng, istibuton,as wel as in the event of aplicadons torindustial propery nghs
+
+PDECR 25-032
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段
+F01Z5017NL-03 | DOC+SDPF WELDING | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更后
+支架改为量产493料号，（F01Z5017X1）模型不变C零件变更后，焊接组件随之更改;图纸更改见下页
+变更原因 | 零件变更后，焊接组件随之更改;
+风险点（影响） | 无
+验证方法 | 无
+
+BOSCH
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NL-03 | DOC+SDPFWELDING | JIE-4JJ | C | BOSCH/Customer
+变更前 | 变更后
+变更原因 | 零件变更后，焊接组件随之更改;无无Solutions | RBCW/ENG-ATS2 | 2023-09-22
+风险点（影响）
+验证方法
+Internal | Powerrain
+
+PDECR 25-032
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 mal propery ignts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+BOSCH/Customer
+变更描述 | 变更后
+变更原因 | 弗吉亚工厂评估，传感器座不好焊接，需要调整焊接顺序，端锥和法兰需要内焊，需要增厚法兰厚度，方便焊接
+风险点（影响） | 法兰增重，焊缝强度不足
+验证方法 | FEA仿真更改后结果数据，优于更改前数据(报告见附件)
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017P4-03 | FLANGE | JIE-4JJ1 | BOSCH/Customer变更后② SEALIND AFA日0 2 0□0A 口 00LOINO-01.增加点焊2.平面度更改-同493
+变更描述 | 变更前
+弗吉亚工厂评估，螺母不好焊接，需要增加点焊才可以满足脱落要求。平面度更改-同493无无
+风险点(影响)
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 1el propery ng
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z510259-03 | CONE | JIE-4JJ1 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 1.弗吉亚评估，传感器座不好焊接，需要调整焊接顺序，端锥和法兰需要内焊，需要进直线段减短。2.客户要求进直径增
+风险点（影响） | 1.法兰增重，焊缝强度不。2.进增影响流
+验证方法 | 1.FEA仿真更改后结果数据，优于更改前数据（报告见附件）评估险较。2.进直径增王笛评估影响
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102TD-00 | DM flange | JIe-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+增加工艺定位孔防止和493混料
+变更原因 | C样件新开保温
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 ial oropery nghts
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NN-03 | MIXER UNIT | JIE-4JJ | C | BOSCH/Customer
+变更前 PLATE:F01Z5101BP | 变更后 PLATE:F01Z51027K 数模一样，使用弗吉亚 自己的料号 …
+变更描述 | DM flange:F01Z5101BR O 调整DP座焊接顺序 2 | 依据焊接顺序，
+在总成上焊接 2.喷嘴座定位缺口位置更改 3.同时增加工艺定位孔
+变更原因 | 1.共用弗吉亚零件。2.依据客户要求调整喷嘴角度
+风险点（影响） | 无
+
+BOSCH
+
+All rights Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reserved. also edrting, distibuton well
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017P5-05 | BRACKET | Jle-4JJ C
+变更前 F01Z5017P5-01 | 变更后 | BOSCH/Customer
+变更描述 | M10X1.5-6H A-A 00.5A 口 △ □1 和供应商确认最终可行性OK 更新图纸，螺母增加点焊， 孔径及位置度更新 增加刻字区域 M10X1.5-6H 供应商反馈B样件成型困难，需要优化数模 | 305CH PN US OMR PN MANENTE 1.F01Z51025V支架孔直 径13±0.2收严至12.5±0.2; 2.F01Z5017P5螺母孔垂 | F01Z5017P5-05 747514121 Xx-XX-XX 5JE2501480 客户料号更新 08-20
+变更原因 | 同时后续单独供货 | 00.5 BMCM | 1收严至0.5 | 直度1收严至0.5;位置度
+风险点（影响） 验证方法 | 机械强度不足
+FEA仿真结果可以满要求，见附件
+
+PDECR 25-032
+
+零件号 | 零件名称
+F01Z5017NN-03 | MIXER UNIT | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+0©0 | ®⊕量下A951.处焊缝由50mm增长为115mm08-20
+增加焊缝长度，避免结晶掉落无验证方法 无
+风险点(影响)
+验证方法
+
+All rignts Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reproduction editing, distibution event of applicarions ior industmal property ighes.
+
+All righs Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reseved. laion reproduciion, editing, distibuton. as wel as in the event or aplicatons tor industmal oropery nghe.
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018E4-00 | DOC CANNING | JIE-4JJ1 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 前期共493，为同个料号，493后期增加筒体长度，4J筒体需增加，需要新取个料号
+风险点（影响） | 无/493项目已经验证OK
+验证方法 | 无
+
+PDECR 25-032 
+LG 2023 Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 dlsoregarding any disposal,explonaton, reproducton, eding, dismbuion as wellas in the eventor applicadons rorindusmal propeny nghs
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018DR-00 | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | 0INSULATIONWITHMAT:F01Z5018DR-00FOIL：F01Z5017RM-01MAT:F01Z5102VJ-00 暂定不开模具
+变更原因 | C样件新开保温/
+风险点（影响） | 无
+验证方法 | 无
+
+PDECR 25-032
+
+2026 Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reproaucilon, editing, distribution torindustal propery nghts.
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018DS-00 | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | 2INSULATIONWITHMAT:F01Z5018DS-00FOIL：F01Z5017RN-01MAT:F01Z5102VK-00暂定不开模具
+变更原因 | C样件新开保温
+风险点（影响) | 无
+验证方法 | 无
+
+PDECR 25-032
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 itaticn ror ncustial propery nghs
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018DT-00 | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | INSULATIONWITHMAT:F01Z5018DT-00FOIL:F01Z5017RP-01MAT:F01Z5102VL-00MAT:F01Z5102VU-00MAT:F01Z5102VW-00和供应商确认最终可行性OKMAT:F01Z5102VV-00更新棉，保温壳图纸MAT:F01Z5102VS-00
+变更原因 | C样件新开保温无无
+风险点（影响）
+验证方法
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 eserved. alsc expionauon. mo indusmal propery nghes
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+BOSCH/Customer
+变更描述 | 变更后
+INSULATIONWITHMAT:F01Z5018DU-00FOIL:F01Z5017RR-01MAT:F01Z5102VM-00MAT:F01Z5102VT-00 和供应商确认最终可行性OK更新棉，保温壳图纸，增加刻字压平区域
+变更原因 | C样件新开保温
+风险点（影响) | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018DV-00 | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | INSULATIONWITHMAT：F01Z5018DV-00FOIL:F01Z5017RS-01MAT:F01Z5102VN-00和供应商确认最终可行性OK更新棉，保温壳图纸
+变更原因 | C样件新开保温
+风险点（影响） | 无
+验证方法 | 无
+
+PDECR 25-032
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 of applicadons forindusmel propery ngats
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018DW-00 | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | aINSULATIONWITHMAT:F01Z5018DW-00FOIL：F01Z5017RT-01MAT:F01Z5102VP-00和供应商确认最终可行性OK更新棉，保温壳图纸，增加刻字压平区域
+变更原因 | C样件新开保温
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 nal propery igh
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025D-00 | PIPE | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 依据工厂工艺要求，增加工艺定位孔
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 esei cismibuticn foridusmal propeny fgns
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025U-02 | BOLT | JIe-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+取消
+变更原因 | 侧支架单独供货，取消2个连接螺栓
+风险点(影响) | 无无
+验证方法
+
+PDECR 25-032
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 eonng inausmai propery ngnts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017P2-06 | OUTLET PIPE | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+PIPE-ASSEMBLY:F01Z5017P2-01PIN:F01Z51025K-01PIN:F01Z51025L-01PIN:F01Z51025M-01 | PIPE-ASSEMBLY:F01Z5017P2-06PIN:F01Z51025K-06PIN:F01Z51025L-06最终状态取消一个小吊钩只有2组吊钩
+变更原因 | 进端锥旋转，便客户拆T6。进管位置微调，吊钩需要新设计
+风险点（影响） | 机械强度不足
+验证方法 | FEA仿真后，评估无影响，报告见附件
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018AX | INSULATION | JIe-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | INSULATIONWITHMAT：F01Z5018AXFOIL:F01Z5017NZ-MAT:F01Z5102RKMAT:F01Z5102RL
+变更原因 | C样件新开保温-493已量产
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 piopery nght
+
+PDECR 25-032
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 rorindusmal propengy nghe
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018AY | INSULATION | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+手工保温 | INSULATIONWITHMAT:F01Z5018AYFOIL：F01Z5017NUMAT：F01Z5102RMMAT:F01Z5102RN
+变更原因 | C样件新开保温-493已量产
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 propengy ights
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EA-03 | 铭牌 | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 弗吉亚厂，铭牌为保温壳供应商打刻，位置需要更新，铭牌内容需要更新铭牌位置更改客户不同意
+风险点（影响）
+验证方法 | 已沟通客户，客户认可。同493项
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 ror incustia propery ghts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EB-05 | SCR UNIT | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 封装筒体不需要预留寸，canning同493。进端锥旋转，便客户拆T6。保温壳飞机边在整车上最低点需要压平
+风险点（影响） | 零件变更，机械强度无法满足要求
+验证方法 | FEA仿真后，结果均于更改前数据，评估影响
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z510262-05 | OUTLET PIPE | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后 | 0:
+□ 193.9) 甲 □ o □ OAB 1 □ PKT1_00- PT1_00 -1 -PKT1.03
+封装缩短后，尾管需要增长
+变更原因 | 封装筒体不需要预留寸，canning同493，尾管需要增长连接
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017WA | SCR CANNING | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5017P1-02 | SCR CANNING:F01Z5017WA
+变更原因 | 封装筒体不需要预留寸，canning 同493
+风险点（影响） | 无/493已经验证OK
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 ndusmal propery ngat
+
+PDECR 25-032
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018D8-00F01Z5018D9-00 | INSULATION | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+飞机边保温需要使用工装敲平
+变更原因 | T6位置旋转后，保温飞机边在整车最低点，客户要求把飞机边敲平
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 explonauon.
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z510261-05 | OUTLET PIPE | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 进气端锥旋转，方便客户拆T6。进气管位置尺寸微调,同时增加工艺定位孔机械强度不足FEA仿真后，结果均于更改前数据，评估影响
+风险点（影响）
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z510260-05 | OUTLET PIPE | JIE-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 进端锥旋转，方便客户拆T6。进管位置微调，同时增加艺定位孔机械强度不足FEA仿真后，结果均于更改前数据，评估无影响
+风险点（影响）
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 edung. rorincusutal sropeny nghe
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 openynghts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EB-05 | 铭牌 | JIE-4JJ | BOSCH/Customer
+变更描述 | 变更前 | C 变更后 BOSCH
+BOSCH 05C XX-XX-XX JEXXXX SCR（含ASC）封装：博世汽车系统（无锡）有限公司 SCR（含ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万丰（上海）化工有限公司 E415 897436905 F01ZH003EB-02 Made in China | SCR（合ASC） SCR（合ASC）涂层：庄信万丰（上海）化工有限公司 E415 747514122 FO1ZHOO3EB-05 Made in China | 05C SCR（含ASC）封装：博世汽车系统（无锡）有限公司 载体：NGK（苏州）环保陶瓷有限公司
+变更原因 | 弗吉亚工厂，铭牌为保温壳供应商打刻，位置需要更新，铭牌内容需要更新
+风险点（影响） 验证方法 | 铭牌位置更改客户不同意
+
+C Sample Drawing Release Pre-condition Checklist | Result/Report | Status | Resp. | Date
+Design | 1.C Sample 3D model confirmed by customer?
+2.C Sample ofer drawing check with manufacturing drawing?
+3.C Sample Nameplate confirmed by customer?Email or drawing confirm?
+4.D-FMEA first version finished? | 30c | 甲阳 | 20158.76
+5.I-FMEA first version finished?
+6. Installation guideline finished?
+7.PSC/cCC list finished for CMK summary?
+PUR/MOE | 1.C Sample Make and Buy confirmed? | pole | 295.8.0
+2.C sample DFMA welding process confirmed with MOE?Flow chart? | cd:) | 1523
+3.P-FMEA first version plan?
+DVValidation | 1.Canning validation finished?report? | 0k | Done | Xu Ren | 20250506
+2.ATSDV validation finished? report? | 0K | Done | XuRnn | wv30506
+System | 1.TCD status? | CK | preliminay T done
+2.POC result & report? | ok | o comple tel
+—
+
+C Sample Drawing initial Release Checklist ATS C Sample initial release precondition

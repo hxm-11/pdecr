@@ -1,0 +1,3399 @@
+[
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9032,
+                "bbox": [
+                    46,
+                    95,
+                    1586,
+                    2249
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=4>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effectivedate:2025-05-10th</td></tr><tr><td rowspan=1 colspan=1>25_032</td></tr><tr><td rowspan=1 colspan=6>Customer project Name/客户项目名称：            JIM-4JJ          MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=6>Sample status /样件状态：          A Sample    ]B Sample  C Sample   □D Sample</td></tr><tr><td rowspan=1 colspan=6>Change part&amp;product Name/更改零部件产品的名称(简要描述)</td></tr><tr><td rowspan=1 colspan=6>DOC+SDPF新鲜件(不可拆)：F01ZH003EA-03                         07SSCR新鲜件：F01ZH003EB-05</td></tr><tr><td rowspan=1 colspan=6>Reason of changes/更改理由(简要描述)：</td></tr><tr><td rowspan=1 colspan=6>依据客户需求，提供JIE-4JJC样OTS件；</td></tr><tr><td rowspan=1 colspan=2>Change from/变更来源：</td><td rowspan=1 colspan=4></td></tr><tr><td rowspan=1 colspan=2>Customer request/客户要求√</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>Supplier request /供应商请求                  Design optimization/设计优化</td></tr><tr><td rowspan=1 colspan=2>Correction/更正(错误)       □</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>Other/其他  □(）</td></tr><tr><td rowspan=1 colspan=2>Change inform to/变更通知人：</td><td rowspan=1 colspan=4>Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=6>Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong,Xie Youfu</td></tr><tr><td rowspan=1 colspan=6>Whether this change impact others component or product 此变更是否影响到其他部件和产品：      yes/是   no/否</td></tr><tr><td rowspan=1 colspan=6>If impact others product， Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=6></td></tr><tr><td rowspan=1 colspan=2>Design/设计工程师</td><td rowspan=2 colspan=2>阳</td><td rowspan=2 colspan=1>Date/日期：</td><td rowspan=2 colspan=1>2015.08.05</td></tr><tr><td rowspan=1 colspan=2>Signature/签名：</td></tr><tr><td rowspan=1 colspan=2>Check/校对工程师</td><td rowspan=2 colspan=2>杨广拓</td><td rowspan=2 colspan=1>Date /日期:</td><td rowspan=2 colspan=1>2025.08.27</td></tr><tr><td rowspan=1 colspan=2>Signature/签名：</td></tr><tr><td rowspan=1 colspan=6>Description of Change/更改描述：(下面空白处请列出详细的变更前后对比)</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 0,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9871,
+                "bbox": [
+                    94,
+                    82,
+                    1429,
+                    2286
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=8>Design Change Review Sheet设计变更评审表</td><td rowspan=1 colspan=3>Version 13Effectivedate:2025-05-10th</td></tr><tr><td rowspan=1 colspan=3>Design ChangeRequest No.</td></tr><tr><td rowspan=1 colspan=12>1.Function&amp;Performance wil be influenced?/系统性能影响？      yes/是no/否</td></tr><tr><td rowspan=1 colspan=3>If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的）</td><td rowspan=1 colspan=7>ATSPOCE完成.</td><td rowspan=2 colspan=2>rse </td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=7>NA</td></tr><tr><td rowspan=1 colspan=3>Whether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC）</td><td rowspan=1 colspan=7>同493催化剂</td><td rowspan=1 colspan=2>Ccatays</td></tr><tr><td rowspan=1 colspan=3>2.Interface&amp;boundary (internal and custome</td><td rowspan=1 colspan=7>r) willbe influenced?/接口&amp;边界(内部和客户)影响？       yes/是</td><td rowspan=1 colspan=2>no/香</td></tr><tr><td rowspan=1 colspan=3>If impact custmer,whether get confirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=7>客户确认</td><td rowspan=1 colspan=2>Desisn1阳</td></tr><tr><td rowspan=1 colspan=3>3. Mechanical strength&amp;Durability will be in</td><td rowspan=1 colspan=7>fluenced?/机械强度&amp;可靠性影响？                       yes/是</td><td rowspan=1 colspan=2>no/否</td></tr><tr><td rowspan=1 colspan=3>If Yes,How to evaluate？Plan?如果是，请说明影响和如何评估,计划？（例如：仿真分析等）</td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=2>aldtin/签名XRm</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=7>Dv finiohed veru(t6 possed</td></tr><tr><td rowspan=1 colspan=3>4.Product document influenced?</td><td rowspan=1 colspan=7></td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>4.1 Interface FMEA-relevant /IFMEA:</td><td rowspan=1 colspan=7>no/否     yes/是   Note_</td><td rowspan=6 colspan=2>Design /签名</td></tr><tr><td rowspan=1 colspan=3>4.2.Product FMEA-relevant /DFMEA:</td><td rowspan=1 colspan=7>no/否    yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC:(针对C Sample)</td><td rowspan=1 colspan=7>no/否     yes/是   Note_</td></tr><tr><td rowspan=1 colspan=3>4.4.IMDS relevant：(针对C Sample)</td><td rowspan=1 colspan=7>no/否     yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.5Offer drawing relevant:(针对C Sample)</td><td rowspan=1 colspan=7>no/否    yes/是   Note_</td></tr><tr><td rowspan=1 colspan=3>4.6.TCD relevant:</td><td rowspan=1 colspan=7>no/否     yes/是    Note_</td></tr><tr><td rowspan=1 colspan=3>5.Changed parts Stock&amp; treatment/需（只针对涉及到已经生产过的零件变更，新</td><td rowspan=1 colspan=9>要变更零件的库存统计和处理？                         ]NA.(新零件放行,不涉及库存)放行零件和本条不相关）                              涉及到已经生产过的零件变更</td></tr><tr><td rowspan=1 colspan=3>RBCW RDC(外库)和RBCW仓库，是否有库存，</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=6>无库存     □有库存，库存数量</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>供应商处(已做好，未发货）是否有库存，</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=6>无库    □有库存，库存数量</td><td rowspan=3 colspan=2>PUE 本岑</td></tr><tr><td rowspan=1 colspan=3>LPN工厂是否有库存，</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=6>无库存        有库存，库存数量</td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=1>□</td><td rowspan=1 colspan=6>无库存     □有库存，库存数量</td></tr><tr><td rowspan=2 colspan=3>被影响到的实物库存处理指示：(设计工程师组织会议讨论)</td><td rowspan=1 colspan=1>□可以继续</td><td rowspan=1 colspan=6>使用完      □改制后使用   □报废</td><td rowspan=1 colspan=2>Design/签名</td></tr><tr><td rowspan=1 colspan=7>□改制费用                        报废成本</td><td rowspan=1 colspan=2>PUE 本y</td></tr><tr><td rowspan=1 colspan=3>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论）</td><td rowspan=1 colspan=7>□改制            更换其他（单独说明）；</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>6. Infiuence on supplier part?</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>Was this change confirmed with Purchasing (Supplier) for feasibiity? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？</td><td rowspan=5 colspan=2></td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>Influence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=10>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.    no/否□yes/是</td></tr><tr><td rowspan=1 colspan=10>Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额                        □decrease/降低，金额                  no change/不变</td></tr><tr><td rowspan=1 colspan=10>7. DFMA &amp; Sample prodcution OPL?</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>必要时附加DFMA文件</td><td rowspan=2 colspan=2>0e)阳</td></tr><tr><td rowspan=1 colspan=10>无opL</td></tr><tr><td rowspan=1 colspan=10>8. Influence on LPN manufacturing&amp;assembly process?</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=10>Feedback from manufacturing engineer？生产制造装配是否影响，反馈？</td><td rowspan=4 colspan=2>m</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>nfuencprojectprct elve 对产时间影响三量CT 850S</td></tr><tr><td rowspan=1 colspan=10>Influence on manufacturing cost /对产成本的影响？□increase/增加，金额                       □decrease/降低，金额                    no change/不变</td></tr><tr><td rowspan=1 colspan=10>9.PM aignment? (Influence on project Timeline? Cost?)是否同意对项目时间和成本的影响              需求样品订单数量</td><td rowspan=1 colspan=1>PM/签名_</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=10>10.如果涉及以下情况需TCR3审核确认。 不涉及则 NA.:                                            RB□库存报废，金额□民购成本增加，金额生□成本增加，金额</td><td rowspan=1 colspan=2>CW/TCR3</td></tr><tr><td rowspan=1 colspan=2>Design Team Leader</td><td rowspan=1 colspan=3>ENG-CV1</td><td rowspan=1 colspan=4>PUR       2</td><td rowspan=1 colspan=3>TCR3    2025400-0222</td></tr><tr><td rowspan=1 colspan=2>signature个</td><td rowspan=1 colspan=3>Signature/签名么</td><td rowspan=1 colspan=2>Signature</td><td rowspan=1 colspan=2>名       </td><td rowspan=1 colspan=3>Signature/签名友福</td></tr><tr><td rowspan=1 colspan=6></td><td rowspan=1 colspan=2>8</td><td rowspan=1 colspan=4></td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 1,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 2,
+                "label": "aside_text",
+                "score": 0.4602,
+                "bbox": [
+                    628,
+                    138,
+                    754,
+                    1585
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 3,
+                "label": "chart",
+                "score": 0.5197,
+                "bbox": [
+                    1048,
+                    15,
+                    1488,
+                    2339
+                ],
+                "index": 2
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    621,
+                    141,
+                    768,
+                    1608
+                ],
+                "score": 0.988,
+                "text": "PDECR25-032（4JJ1-C样件）"
+            }
+        ],
+        "page_info": {
+            "page_no": 2,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.4578,
+                "bbox": [
+                    1358,
+                    83,
+                    1439,
+                    563
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4575,
+                "bbox": [
+                    245,
+                    2071,
+                    300,
+                    2287
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6101,
+                "bbox": [
+                    252,
+                    148,
+                    310,
+                    1663
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9866,
+                "bbox": [
+                    326,
+                    90,
+                    1331,
+                    2178
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003EA-03</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3></td><td rowspan=1 colspan=3>DOCDPF主要变更点如下：1.进气法兰加厚2mm2.进气端锥进气口直径增大4mm，长度减短4mm3.DOC-canning不共用493，筒体不同G     4.喷嘴座缺口位置调整6                            5.混合器保温共用4936.新开DOC模具件保温7.新开DPF模具件保温8.新开尾管模具件保温08</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>零件更改后后处理总成随之更改，混合器保温可以共493，其余6保温需要新开模具，样件使包;</td></tr><tr><td rowspan=1 colspan=1>风险点 (影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1350,
+                    75,
+                    1449,
+                    573
+                ],
+                "score": 0.991,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    247,
+                    2136,
+                    300,
+                    2288
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    284,
+                    146,
+                    316,
+                    618
+                ],
+                "score": 0.967,
+                "text": "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    1547,
+                    280,
+                    1658
+                ],
+                "score": 0.838,
+                "text": "Ipropeny nghes"
+            }
+        ],
+        "page_info": {
+            "page_no": 3,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4738,
+                "bbox": [
+                    249,
+                    2077,
+                    302,
+                    2294
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5309,
+                "bbox": [
+                    1352,
+                    82,
+                    1429,
+                    563
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9847,
+                "bbox": [
+                    341,
+                    81,
+                    1340,
+                    2167
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003EA-03</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=1>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=2>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=2>手工保温</td><td rowspan=1 colspan=3>26                1.由手工保温，改为开模保温2.定义保温增加铝箔胶带3.铭牌内容更新3            4.生产日期刻印在尾管上5.焊丝改为439Ti，同量产493                                                   6.定义电阻焊焊点数量详细更改见图纸45                                         明</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=5>零件更改后后处理总成随之更改，混合器保温可以共用493，其余6保温需要新开模具，样件使用工包;无无</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5766,
+                "bbox": [
+                    253,
+                    138,
+                    306,
+                    1675
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1341,
+                    76,
+                    1437,
+                    574
+                ],
+                "score": 0.962,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    248,
+                    2141,
+                    304,
+                    2296
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    157,
+                    307,
+                    622
+                ],
+                "score": 0.962,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    875,
+                    277,
+                    1059
+                ],
+                "score": 0.787,
+                "text": "expiotatoi.reprocuclon"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    255,
+                    1464,
+                    281,
+                    1667
+                ],
+                "score": 0.79,
+                "text": "for incusunial propery nghts"
+            }
+        ],
+        "page_info": {
+            "page_no": 4,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6153,
+                "bbox": [
+                    254,
+                    154,
+                    309,
+                    1683
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9845,
+                "bbox": [
+                    323,
+                    102,
+                    1330,
+                    2312
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017P5-05</td><td rowspan=1 colspan=1>BRACKET</td><td rowspan=1 colspan=1>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=2>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=2>F01Z5017P5-010</td><td rowspan=1 colspan=3>20M10X1.5-6H                                           F0175017P5-05A-A100.5MA          BOSH PN    O  74754121(USOMR P/            xx.xx-xx口                   MANENTE5JE2501480A客户料号更新08-20a1和供应商确认最终可行性OK                           更新图纸，螺母增加点焊，                                            1.F01Z51025V架孔直径13±0.2收严至12.5±0.2；孔径及位置度更新增加刻字区域                      M10X1.5-6H                      2.F01Z5017P5螺母孔垂同时后续单独供货                  00.5 BC          直度1收严至0.5；位置度1收严至0.5</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=5>供应商反馈B样件成型困难，需要优化数模</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=5>机械强度不足</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=5>FEA仿真结果可以满要求，见附件</td></tr><tr><td rowspan=1 colspan=6></td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    282,
+                    161,
+                    314,
+                    633
+                ],
+                "score": 0.949,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    262,
+                    473,
+                    282,
+                    539
+                ],
+                "score": 0.904,
+                "text": "Lid 2023"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    258,
+                    537,
+                    284,
+                    1208
+                ],
+                "score": 0.88,
+                "text": "All tghts resenved.alscregarding any disposal. exploitanon,reproducton, edring, distibuticn"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1206,
+                    282,
+                    1676
+                ],
+                "score": 0.918,
+                "text": "as well as in the event ot applicanons for industrial propery nghts"
+            }
+        ],
+        "page_info": {
+            "page_no": 5,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6464,
+                "bbox": [
+                    1358,
+                    85,
+                    1437,
+                    565
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9853,
+                "bbox": [
+                    326,
+                    96,
+                    1331,
+                    2182
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017NN-03</td><td rowspan=1 colspan=1>MIXER UNIT</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>O•</td><td rowspan=1 colspan=3>?WELCEL8-1.处焊缝由50mm增长为115mm08-20</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>增加焊缝长度，避免结晶掉落</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6397,
+                "bbox": [
+                    256,
+                    147,
+                    312,
+                    1672
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1351,
+                    79,
+                    1447,
+                    576
+                ],
+                "score": 0.958,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    284,
+                    156,
+                    316,
+                    627
+                ],
+                "score": 0.956,
+                "text": "Internal|Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    268,
+                    464,
+                    282,
+                    536
+                ],
+                "score": 0.948,
+                "text": "Ld2023"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    260,
+                    529,
+                    286,
+                    678
+                ],
+                "score": 0.797,
+                "text": "Al dghts reseved."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    664,
+                    288,
+                    1671
+                ],
+                "score": 0.827,
+                "text": "aisoregartingany disposai,expiotaton, reproducton, editng, istibuton,as wel as in the event of aplicadons torindustial propery nghs"
+            }
+        ],
+        "page_info": {
+            "page_no": 6,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4873,
+                "bbox": [
+                    274,
+                    86,
+                    311,
+                    131
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4904,
+                "bbox": [
+                    243,
+                    2076,
+                    299,
+                    2293
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6137,
+                "bbox": [
+                    1353,
+                    88,
+                    1434,
+                    569
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5825,
+                "bbox": [
+                    251,
+                    154,
+                    310,
+                    1668
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9845,
+                "bbox": [
+                    321,
+                    95,
+                    1328,
+                    2183
+                ],
+                "index": 5,
+                "html": "<table><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>F01Z5017NL-03</td><td rowspan=1 colspan=1>DOC+SDPF WELDING</td><td rowspan=1 colspan=1>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=8>变更后</td></tr><tr><td></td><td></td><td></td><td rowspan=1 colspan=8>支架改为量产493料号，（F01Z5017X1）模型不变C零件变更后，焊接组件随之更改；图纸更改见下页</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=11>零件变更后，焊接组件随之更改;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=11>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=11>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1351,
+                    80,
+                    1447,
+                    579
+                ],
+                "score": 0.969,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    246,
+                    2142,
+                    296,
+                    2292
+                ],
+                "score": 0.99,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    156,
+                    313,
+                    626
+                ],
+                "score": 0.936,
+                "text": "Internal|Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    275,
+                    101,
+                    311,
+                    128
+                ],
+                "score": 0.592,
+                "text": "C1"
+            }
+        ],
+        "page_info": {
+            "page_no": 7,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4691,
+                "bbox": [
+                    245,
+                    2074,
+                    299,
+                    2291
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.4792,
+                "bbox": [
+                    1355,
+                    83,
+                    1434,
+                    564
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.973,
+                "bbox": [
+                    282,
+                    94,
+                    1328,
+                    2183
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017NL-03</td><td rowspan=1 colspan=1>DOC+SDPFWELDING</td><td rowspan=1 colspan=1>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td></td><td rowspan=1 colspan=2>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=4 colspan=5>零件变更后，焊接组件随之更改;无无Solutions |RBCW/ENG-ATS2 |2023-09-22</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr><tr><td rowspan=1 colspan=1>Internal | Powerrain</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5654,
+                "bbox": [
+                    251,
+                    151,
+                    284,
+                    1666
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1347,
+                    76,
+                    1446,
+                    576
+                ],
+                "score": 0.988,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    247,
+                    2138,
+                    300,
+                    2291
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            }
+        ],
+        "page_info": {
+            "page_no": 8,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.4646,
+                "bbox": [
+                    1353,
+                    86,
+                    1434,
+                    567
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5846,
+                "bbox": [
+                    251,
+                    148,
+                    308,
+                    1674
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9828,
+                "bbox": [
+                    316,
+                    96,
+                    1327,
+                    2180
+                ],
+                "index": 4,
+                "html": "<table><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=9>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>弗吉亚工厂评估，传感器座不好焊接，需要调整焊接顺序，端锥和法兰需要内焊，需要增厚法兰厚度，方便焊接</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>法兰增重，焊缝强度不足</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>FEA仿真更改后结果数据，优于更改前数据(报告见附件)</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1348,
+                    79,
+                    1444,
+                    576
+                ],
+                "score": 0.971,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    155,
+                    313,
+                    623
+                ],
+                "score": 0.947,
+                "text": "Internal|Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    253,
+                    1530,
+                    279,
+                    1665
+                ],
+                "score": 0.846,
+                "text": "mal propery ignts"
+            }
+        ],
+        "page_info": {
+            "page_no": 9,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5055,
+                "bbox": [
+                    1356,
+                    87,
+                    1435,
+                    566
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9849,
+                "bbox": [
+                    317,
+                    98,
+                    1329,
+                    2182
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017P4-03</td><td rowspan=1 colspan=1>FLANGE</td><td rowspan=1 colspan=2>JIE-4JJ1</td><td rowspan=3 colspan=3>BOSCH/Customer变更后②                    SEALIND AFA日0                                   2     0□0A                                      口                             00LOINO-01.增加点焊2.平面度更改-同493</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td></tr><tr><td rowspan=1 colspan=3></td></tr><tr><td rowspan=3 colspan=7>弗吉亚工厂评估，螺母不好焊接，需要增加点焊才可以满足脱落要求。平面度更改-同493无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6303,
+                "bbox": [
+                    254,
+                    150,
+                    309,
+                    1673
+                ],
+                "index": 3
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1347,
+                    79,
+                    1443,
+                    576
+                ],
+                "score": 0.963,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    282,
+                    157,
+                    314,
+                    625
+                ],
+                "score": 0.937,
+                "text": "Internal|Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    258,
+                    1540,
+                    278,
+                    1662
+                ],
+                "score": 0.645,
+                "text": "1el propery ng"
+            }
+        ],
+        "page_info": {
+            "page_no": 10,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4544,
+                "bbox": [
+                    254,
+                    151,
+                    305,
+                    1688
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 2,
+                "label": "aside_text",
+                "score": 0.5128,
+                "bbox": [
+                    251,
+                    2081,
+                    303,
+                    2293
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9805,
+                "bbox": [
+                    322,
+                    100,
+                    1326,
+                    2179
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z510259-03</td><td rowspan=1 colspan=1>CONE</td><td rowspan=1 colspan=2>JIE-4JJ1</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>1.弗吉亚评估，传感器座不好焊接，需要调整焊接顺序，端锥和法兰需要内焊，需要进直线段减短。2.客户要求进直径增</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>1.法兰增重，焊缝强度不。2.进增影响流</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>1.FEA仿真更改后结果数据，优于更改前数据（报告见附件）评估险较。2.进直径增王笛评估影响</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    252,
+                    2144,
+                    305,
+                    2296
+                ],
+                "score": 0.992,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    276,
+                    156,
+                    308,
+                    626
+                ],
+                "score": 0.963,
+                "text": "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            }
+        ],
+        "page_info": {
+            "page_no": 11,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.582,
+                "bbox": [
+                    1350,
+                    83,
+                    1428,
+                    560
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9846,
+                "bbox": [
+                    323,
+                    95,
+                    1325,
+                    2185
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5102TD-00</td><td rowspan=1 colspan=1>DM flange</td><td rowspan=1 colspan=2>JIe-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3></td><td rowspan=1 colspan=3>增加工艺定位孔防止和493混料</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6852,
+                "bbox": [
+                    253,
+                    152,
+                    302,
+                    1674
+                ],
+                "index": 3
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1339,
+                    75,
+                    1435,
+                    572
+                ],
+                "score": 0.961,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    273,
+                    158,
+                    305,
+                    629
+                ],
+                "score": 0.927,
+                "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    1544,
+                    283,
+                    1669
+                ],
+                "score": 0.739,
+                "text": "ial oropery nghts"
+            }
+        ],
+        "page_info": {
+            "page_no": 12,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6533,
+                "bbox": [
+                    252,
+                    146,
+                    304,
+                    1677
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9835,
+                "bbox": [
+                    321,
+                    96,
+                    1324,
+                    2181
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td>Project</td><td></td><td>样件阶段</td><td>变更来源</td></tr><tr><td>F01Z5017NN-03</td><td>MIXER UNIT</td><td>JIE-4JJ</td><td colspan=\"2\">C</td><td>BOSCH/Customer</td></tr><tr><td></td><td colspan=\"3\">变更前 PLATE:F01Z5101BP</td><td colspan=\"3\">变更后 PLATE:F01Z51027K 数模一样，使用弗吉亚 自己的料号 …</td></tr><tr><td>变更描述</td><td colspan=\"3\">DM flange:F01Z5101BR O 调整DP座焊接顺序 2</td><td colspan=\"2\">依据焊接顺序，</td></tr><tr><td></td><td colspan=\"5\">在总成上焊接 2.喷嘴座定位缺口位置更改 3.同时增加工艺定位孔</td></tr><tr><td>变更原因</td><td colspan=\"5\">1.共用弗吉亚零件。2.依据客户要求调整喷嘴角度</td></tr><tr><td>风险点（影响）</td><td colspan=\"5\">无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    276,
+                    157,
+                    308,
+                    625
+                ],
+                "score": 0.936,
+                "text": "Internal|Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            }
+        ],
+        "page_info": {
+            "page_no": 13,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4563,
+                "bbox": [
+                    243,
+                    2081,
+                    301,
+                    2297
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.621,
+                "bbox": [
+                    248,
+                    151,
+                    303,
+                    1682
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9841,
+                "bbox": [
+                    320,
+                    98,
+                    1325,
+                    2308
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td>Project</td><td>样件阶段</td><td rowspan=\"2\"></td><td rowspan=\"2\">变更来源</td></tr><tr><td>F01Z5017P5-05</td><td>BRACKET</td><td colspan=\"3\">Jle-4JJ C</td></tr><tr><td rowspan=\"2\"></td><td colspan=\"2\">变更前 F01Z5017P5-01</td><td colspan=\"3\">变更后</td><td>BOSCH/Customer</td></tr><tr><td>变更描述</td><td colspan=\"2\"></td><td>M10X1.5-6H A-A 00.5A 口 △ □1 和供应商确认最终可行性OK 更新图纸，螺母增加点焊， 孔径及位置度更新 增加刻字区域 M10X1.5-6H 供应商反馈B样件成型困难，需要优化数模</td><td>305CH PN US OMR PN MANENTE 1.F01Z51025V支架孔直 径13±0.2收严至12.5±0.2； 2.F01Z5017P5螺母孔垂</td><td>F01Z5017P5-05 747514121 Xx-XX-XX 5JE2501480 客户料号更新 08-20</td></tr><tr><td>变更原因</td><td colspan=\"2\"></td><td>同时后续单独供货</td><td>00.5 BMCM</td><td>1收严至0.5</td><td>直度1收严至0.5；位置度</td></tr><tr><td>风险点（影响） 验证方法</td><td colspan=\"7\">机械强度不足</td></tr><tr><td></td><td colspan=\"7\">FEA仿真结果可以满要求，见附件</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    246,
+                    2147,
+                    299,
+                    2298
+                ],
+                "score": 0.991,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    276,
+                    158,
+                    308,
+                    630
+                ],
+                "score": 0.941,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    536,
+                    276,
+                    598
+                ],
+                "score": 0.769,
+                "text": "All rights"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    604,
+                    276,
+                    673
+                ],
+                "score": 0.956,
+                "text": "reserved."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    676,
+                    276,
+                    708
+                ],
+                "score": 0.961,
+                "text": "also"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1064,
+                    275,
+                    1124
+                ],
+                "score": 0.758,
+                "text": "edrting,"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    1117,
+                    274,
+                    1200
+                ],
+                "score": 0.982,
+                "text": "distibuton"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    1229,
+                    274,
+                    1259
+                ],
+                "score": 0.98,
+                "text": "well"
+            }
+        ],
+        "page_info": {
+            "page_no": 14,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6187,
+                "bbox": [
+                    1357,
+                    90,
+                    1437,
+                    571
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.987,
+                "bbox": [
+                    317,
+                    98,
+                    1328,
+                    2184
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td></td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1>零件名称</td></tr><tr><td rowspan=1 colspan=1>F01Z5017NN-03</td><td></td><td></td><td rowspan=1 colspan=1>MIXER UNIT</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=5>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=5>0©0</td><td rowspan=1 colspan=3>®⊕量下A951.处焊缝由50mm增长为115mm08-20</td></tr><tr><td rowspan=4 colspan=9>增加焊缝长度，避免结晶掉落无验证方法                                                                                               无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6549,
+                "bbox": [
+                    248,
+                    156,
+                    310,
+                    1672
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1351,
+                    85,
+                    1447,
+                    582
+                ],
+                "score": 0.963,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    282,
+                    154,
+                    314,
+                    628
+                ],
+                "score": 0.923,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    260,
+                    539,
+                    280,
+                    603
+                ],
+                "score": 0.917,
+                "text": "All rignts"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    966,
+                    276,
+                    1056
+                ],
+                "score": 0.996,
+                "text": "reproduction"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1063,
+                    276,
+                    1118
+                ],
+                "score": 0.973,
+                "text": "editing,"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1120,
+                    276,
+                    1198
+                ],
+                "score": 0.947,
+                "text": "distibution"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    250,
+                    1319,
+                    276,
+                    1669
+                ],
+                "score": 0.886,
+                "text": "event of applicarions ior industmal property ighes."
+            }
+        ],
+        "page_info": {
+            "page_no": 15,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5603,
+                "bbox": [
+                    251,
+                    151,
+                    309,
+                    1677
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9847,
+                "bbox": [
+                    323,
+                    95,
+                    1327,
+                    2184
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018E4-00</td><td rowspan=1 colspan=1>DOC CANNING</td><td rowspan=1 colspan=2>JIE-4JJ1</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>前期共493，为同个料号，493后期增加筒体长度，4J筒体需增加，需要新取个料号</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无/493项目已经验证OK</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6834,
+                "bbox": [
+                    245,
+                    2080,
+                    302,
+                    2295
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    248,
+                    2143,
+                    301,
+                    2297
+                ],
+                "score": 0.992,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    277,
+                    158,
+                    309,
+                    624
+                ],
+                "score": 0.924,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    536,
+                    279,
+                    605
+                ],
+                "score": 0.805,
+                "text": "All righs"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    604,
+                    279,
+                    670
+                ],
+                "score": 0.882,
+                "text": "reseved."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    261,
+                    914,
+                    275,
+                    959
+                ],
+                "score": 0.724,
+                "text": "laion"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    966,
+                    277,
+                    1066
+                ],
+                "score": 0.936,
+                "text": "reproduciion,"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    1060,
+                    277,
+                    1203
+                ],
+                "score": 0.883,
+                "text": "editing, distibuton."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    251,
+                    1198,
+                    283,
+                    1671
+                ],
+                "score": 0.792,
+                "text": "as wel as in the event or aplicatons tor industmal oropery nghe."
+            }
+        ],
+        "page_info": {
+            "page_no": 16,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.594,
+                "bbox": [
+                    271,
+                    88,
+                    308,
+                    115
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5004,
+                "bbox": [
+                    1354,
+                    88,
+                    1432,
+                    566
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5841,
+                "bbox": [
+                    252,
+                    156,
+                    308,
+                    1674
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.986,
+                "bbox": [
+                    323,
+                    97,
+                    1326,
+                    2187
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018DR-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>0INSULATIONWITHMAT:F01Z5018DR-00FOIL：F01Z5017RM-01MAT:F01Z5102VJ-00                      暂定不开模具</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温/</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1348,
+                    78,
+                    1446,
+                    579
+                ],
+                "score": 0.972,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    280,
+                    158,
+                    312,
+                    628
+                ],
+                "score": 0.949,
+                "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    264,
+                    470,
+                    278,
+                    532
+                ],
+                "score": 0.844,
+                "text": "LG 2023"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    252,
+                    668,
+                    284,
+                    1669
+                ],
+                "score": 0.826,
+                "text": "dlsoregarding any disposal,explonaton, reproducton, eding, dismbuion as wellas in the eventor applicadons rorindusmal propeny nghs"
+            }
+        ],
+        "page_info": {
+            "page_no": 17,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.5522,
+                "bbox": [
+                    279,
+                    77,
+                    314,
+                    105
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6082,
+                "bbox": [
+                    1358,
+                    84,
+                    1439,
+                    563
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6092,
+                "bbox": [
+                    251,
+                    145,
+                    309,
+                    1665
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9865,
+                "bbox": [
+                    321,
+                    92,
+                    1330,
+                    2179
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018DS-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>2INSULATIONWITHMAT:F01Z5018DS-00FOIL：F01Z5017RN-01MAT:F01Z5102VK-00暂定不开模具</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温</td></tr><tr><td rowspan=1 colspan=1>风险点（影响)</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1355,
+                    76,
+                    1451,
+                    575
+                ],
+                "score": 0.972,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    283,
+                    147,
+                    315,
+                    619
+                ],
+                "score": 0.931,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    269,
+                    485,
+                    283,
+                    521
+                ],
+                "score": 0.825,
+                "text": "2026"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    958,
+                    279,
+                    1052
+                ],
+                "score": 0.847,
+                "text": "reproaucilon,"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    258,
+                    1051,
+                    284,
+                    1118
+                ],
+                "score": 0.795,
+                "text": "editing,"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    1112,
+                    279,
+                    1190
+                ],
+                "score": 0.955,
+                "text": "distribution"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    253,
+                    1463,
+                    279,
+                    1662
+                ],
+                "score": 0.852,
+                "text": "torindustal propery nghts."
+            }
+        ],
+        "page_info": {
+            "page_no": 18,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5132,
+                "bbox": [
+                    1350,
+                    87,
+                    1431,
+                    567
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.62,
+                "bbox": [
+                    250,
+                    151,
+                    305,
+                    1675
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9864,
+                "bbox": [
+                    321,
+                    95,
+                    1325,
+                    2183
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018DT-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>INSULATIONWITHMAT:F01Z5018DT-00FOIL:F01Z5017RP-01MAT:F01Z5102VL-00MAT:F01Z5102VU-00MAT:F01Z5102VW-00和供应商确认最终可行性OKMAT:F01Z5102VV-00更新棉，保温壳图纸MAT:F01Z5102VS-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>C样件新开保温无无</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6615,
+                "bbox": [
+                    245,
+                    2080,
+                    301,
+                    2297
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1343,
+                    81,
+                    1439,
+                    577
+                ],
+                "score": 0.965,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    245,
+                    2144,
+                    301,
+                    2299
+                ],
+                "score": 0.995,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    278,
+                    158,
+                    310,
+                    628
+                ],
+                "score": 0.931,
+                "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    912,
+                    279,
+                    961
+                ],
+                "score": 0.728,
+                "text": "itaticn"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    252,
+                    1470,
+                    278,
+                    1671
+                ],
+                "score": 0.791,
+                "text": "ror ncustial propery nghs"
+            }
+        ],
+        "page_info": {
+            "page_no": 19,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.4754,
+                "bbox": [
+                    1352,
+                    88,
+                    1433,
+                    567
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.5945,
+                "bbox": [
+                    272,
+                    86,
+                    308,
+                    113
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.47,
+                "bbox": [
+                    243,
+                    2078,
+                    299,
+                    2293
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6266,
+                "bbox": [
+                    249,
+                    151,
+                    308,
+                    1675
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9869,
+                "bbox": [
+                    322,
+                    95,
+                    1325,
+                    2183
+                ],
+                "index": 5,
+                "html": "<table><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=9>变更后</td></tr><tr><td></td><td></td><td></td><td rowspan=1 colspan=9>INSULATIONWITHMAT:F01Z5018DU-00FOIL:F01Z5017RR-01MAT:F01Z5102VM-00MAT:F01Z5102VT-00                          和供应商确认最终可行性OK更新棉，保温壳图纸，增加刻字压平区域</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>C样件新开保温</td></tr><tr><td rowspan=1 colspan=1>风险点（影响)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=5>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1343,
+                    80,
+                    1443,
+                    578
+                ],
+                "score": 0.991,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    246,
+                    2142,
+                    299,
+                    2296
+                ],
+                "score": 0.992,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    279,
+                    156,
+                    311,
+                    624
+                ],
+                "score": 0.942,
+                "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    605,
+                    277,
+                    670
+                ],
+                "score": 0.874,
+                "text": "eserved."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    261,
+                    675,
+                    275,
+                    701
+                ],
+                "score": 0.604,
+                "text": "alsc"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    878,
+                    277,
+                    968
+                ],
+                "score": 0.804,
+                "text": "expionauon."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    251,
+                    1470,
+                    277,
+                    1666
+                ],
+                "score": 0.813,
+                "text": "mo indusmal propery nghes"
+            }
+        ],
+        "page_info": {
+            "page_no": 20,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4626,
+                "bbox": [
+                    246,
+                    2078,
+                    301,
+                    2294
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.5867,
+                "bbox": [
+                    274,
+                    87,
+                    309,
+                    114
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5391,
+                "bbox": [
+                    253,
+                    152,
+                    309,
+                    1676
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9867,
+                "bbox": [
+                    321,
+                    96,
+                    1327,
+                    2184
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018DV-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>INSULATIONWITHMAT：F01Z5018DV-00FOIL:F01Z5017RS-01MAT:F01Z5102VN-00和供应商确认最终可行性OK更新棉，保温壳图纸</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    246,
+                    2143,
+                    302,
+                    2298
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    156,
+                    313,
+                    625
+                ],
+                "score": 0.947,
+                "text": "Internal |Powertrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            }
+        ],
+        "page_info": {
+            "page_no": 21,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.508,
+                "bbox": [
+                    1352,
+                    86,
+                    1433,
+                    567
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6468,
+                "bbox": [
+                    254,
+                    155,
+                    306,
+                    1681
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9857,
+                "bbox": [
+                    323,
+                    98,
+                    1327,
+                    2186
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018DW-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>aINSULATIONWITHMAT:F01Z5018DW-00FOIL：F01Z5017RT-01MAT:F01Z5102VP-00和供应商确认最终可行性OK更新棉，保温壳图纸，增加刻字压平区域</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.577,
+                "bbox": [
+                    250,
+                    2082,
+                    305,
+                    2299
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1342,
+                    80,
+                    1442,
+                    578
+                ],
+                "score": 0.99,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    250,
+                    2148,
+                    306,
+                    2301
+                ],
+                "score": 0.994,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    276,
+                    157,
+                    308,
+                    628
+                ],
+                "score": 0.952,
+                "text": "Internal|Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1363,
+                    282,
+                    1672
+                ],
+                "score": 0.842,
+                "text": "of applicadons forindusmel propery ngats"
+            }
+        ],
+        "page_info": {
+            "page_no": 22,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.5122,
+                "bbox": [
+                    272,
+                    82,
+                    308,
+                    110
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5989,
+                "bbox": [
+                    252,
+                    153,
+                    308,
+                    1669
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.6328,
+                "bbox": [
+                    1352,
+                    82,
+                    1433,
+                    562
+                ],
+                "index": 5
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9845,
+                "bbox": [
+                    322,
+                    91,
+                    1327,
+                    2178
+                ],
+                "index": 6,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z51025D-00</td><td rowspan=1 colspan=1>PIPE</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>依据工厂工艺要求，增加工艺定位孔</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1343,
+                    74,
+                    1442,
+                    572
+                ],
+                "score": 0.989,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    280,
+                    152,
+                    312,
+                    623
+                ],
+                "score": 0.949,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    252,
+                    1528,
+                    278,
+                    1658
+                ],
+                "score": 0.682,
+                "text": "nal propery igh"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    275,
+                    84,
+                    308,
+                    107
+                ],
+                "score": 0.559,
+                "text": "00"
+            }
+        ],
+        "page_info": {
+            "page_no": 23,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6225,
+                "bbox": [
+                    274,
+                    87,
+                    308,
+                    115
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.5015,
+                "bbox": [
+                    1353,
+                    88,
+                    1433,
+                    568
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6655,
+                "bbox": [
+                    253,
+                    156,
+                    308,
+                    1673
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9871,
+                "bbox": [
+                    322,
+                    96,
+                    1328,
+                    2184
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z51025U-02</td><td rowspan=1 colspan=1>BOLT</td><td rowspan=1 colspan=2>JIe-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3></td><td rowspan=1 colspan=3>取消</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>侧支架单独供货，取消2个连接螺栓</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1346,
+                    80,
+                    1442,
+                    577
+                ],
+                "score": 0.97,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    158,
+                    313,
+                    626
+                ],
+                "score": 0.946,
+                "text": "Internal |Powerrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    263,
+                    607,
+                    277,
+                    643
+                ],
+                "score": 0.921,
+                "text": "esei"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    1117,
+                    277,
+                    1200
+                ],
+                "score": 0.839,
+                "text": "cismibuticn"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    255,
+                    1468,
+                    281,
+                    1671
+                ],
+                "score": 0.825,
+                "text": "foridusmal propeny fgns"
+            }
+        ],
+        "page_info": {
+            "page_no": 24,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.4801,
+                "bbox": [
+                    1355,
+                    79,
+                    1437,
+                    561
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6277,
+                "bbox": [
+                    249,
+                    134,
+                    311,
+                    1666
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9861,
+                "bbox": [
+                    320,
+                    87,
+                    1328,
+                    2173
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017P2-06</td><td rowspan=1 colspan=1>OUTLET PIPE</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>PIPE-ASSEMBLY:F01Z5017P2-01PIN:F01Z51025K-01PIN:F01Z51025L-01PIN:F01Z51025M-01</td><td rowspan=1 colspan=3>PIPE-ASSEMBLY:F01Z5017P2-06PIN:F01Z51025K-06PIN:F01Z51025L-06最终状态取消一个小吊钩只有2组吊钩</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>进端锥旋转，便客户拆T6。进管位置微调，吊钩需要新设计</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>机械强度不足</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>FEA仿真后，评估无影响，报告见附件</td></tr></table>"
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.5008,
+                "bbox": [
+                    242,
+                    2068,
+                    297,
+                    2284
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1349,
+                    71,
+                    1448,
+                    571
+                ],
+                "score": 0.985,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    244,
+                    2132,
+                    298,
+                    2287
+                ],
+                "score": 0.989,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    279,
+                    146,
+                    311,
+                    614
+                ],
+                "score": 0.934,
+                "text": "Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    1056,
+                    273,
+                    1101
+                ],
+                "score": 0.514,
+                "text": "eonng"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    251,
+                    1481,
+                    277,
+                    1658
+                ],
+                "score": 0.814,
+                "text": "inausmai propery ngnts"
+            }
+        ],
+        "page_info": {
+            "page_no": 25,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4731,
+                "bbox": [
+                    247,
+                    2078,
+                    302,
+                    2294
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5793,
+                "bbox": [
+                    1354,
+                    87,
+                    1432,
+                    566
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9879,
+                "bbox": [
+                    321,
+                    94,
+                    1326,
+                    2184
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018AX</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>JIe-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>INSULATIONWITHMAT：F01Z5018AXFOIL:F01Z5017NZ-MAT:F01Z5102RKMAT:F01Z5102RL</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温-493已量产</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6068,
+                "bbox": [
+                    253,
+                    152,
+                    309,
+                    1673
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1345,
+                    78,
+                    1441,
+                    576
+                ],
+                "score": 0.968,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    247,
+                    2142,
+                    303,
+                    2297
+                ],
+                "score": 0.994,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    156,
+                    313,
+                    624
+                ],
+                "score": 0.946,
+                "text": "Internal |Powerrain Solutions|RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    255,
+                    1561,
+                    275,
+                    1660
+                ],
+                "score": 0.74,
+                "text": "piopery nght"
+            }
+        ],
+        "page_info": {
+            "page_no": 26,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5906,
+                "bbox": [
+                    1354,
+                    85,
+                    1433,
+                    565
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6159,
+                "bbox": [
+                    255,
+                    150,
+                    308,
+                    1672
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9856,
+                "bbox": [
+                    324,
+                    95,
+                    1327,
+                    2186
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018AY</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>手工保温</td><td rowspan=1 colspan=3>INSULATIONWITHMAT:F01Z5018AYFOIL：F01Z5017NUMAT：F01Z5102RMMAT:F01Z5102RN</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>C样件新开保温-493已量产</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.606,
+                "bbox": [
+                    252,
+                    2081,
+                    308,
+                    2296
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1345,
+                    78,
+                    1441,
+                    575
+                ],
+                "score": 0.96,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    2145,
+                    306,
+                    2298
+                ],
+                "score": 0.992,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    283,
+                    159,
+                    309,
+                    625
+                ],
+                "score": 0.965,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    1475,
+                    283,
+                    1669
+                ],
+                "score": 0.783,
+                "text": "rorindusmal propengy nghe"
+            }
+        ],
+        "page_info": {
+            "page_no": 27,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5808,
+                "bbox": [
+                    255,
+                    150,
+                    307,
+                    1671
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9847,
+                "bbox": [
+                    321,
+                    96,
+                    1325,
+                    2184
+                ],
+                "index": 3,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003EA-03</td><td rowspan=1 colspan=1>铭牌</td><td rowspan=1 colspan=2>Jle-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=2 colspan=6>弗吉亚厂，铭牌为保温壳供应商打刻，位置需要更新，铭牌内容需要更新铭牌位置更改客户不同意</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>已沟通客户，客户认可。同493项</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    277,
+                    152,
+                    309,
+                    622
+                ],
+                "score": 0.919,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    255,
+                    1558,
+                    281,
+                    1665
+                ],
+                "score": 0.725,
+                "text": "propengy ights"
+            }
+        ],
+        "page_info": {
+            "page_no": 28,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.4923,
+                "bbox": [
+                    1350,
+                    85,
+                    1431,
+                    564
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 2,
+                "label": "aside_text",
+                "score": 0.4986,
+                "bbox": [
+                    249,
+                    2081,
+                    303,
+                    2296
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4974,
+                "bbox": [
+                    252,
+                    152,
+                    306,
+                    1680
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9829,
+                "bbox": [
+                    319,
+                    97,
+                    1324,
+                    2183
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003EB-05</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>封装筒体不需要预留寸，canning同493。进端锥旋转，便客户拆T6。保温壳飞机边在整车上最低点需要压平</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>零件变更，机械强度无法满足要求</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>FEA仿真后，结果均于更改前数据，评估影响</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1340,
+                    79,
+                    1439,
+                    576
+                ],
+                "score": 0.99,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    248,
+                    2142,
+                    304,
+                    2298
+                ],
+                "score": 0.991,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    280,
+                    159,
+                    306,
+                    624
+                ],
+                "score": 0.944,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    1471,
+                    280,
+                    1667
+                ],
+                "score": 0.724,
+                "text": "ror incustia propery ghts"
+            }
+        ],
+        "page_info": {
+            "page_no": 29,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.5654,
+                "bbox": [
+                    1352,
+                    81,
+                    1429,
+                    561
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9871,
+                "bbox": [
+                    321,
+                    91,
+                    1323,
+                    2179
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td colspan=\"2\">Project</td><td>样件阶段</td><td colspan=\"2\">变更来源</td></tr><tr><td>F01Z510262-05</td><td>OUTLET PIPE</td><td colspan=\"2\">JIE-4JJ</td><td>C</td><td colspan=\"2\">BOSCH/Customer</td></tr><tr><td>变更描述</td><td colspan=\"5\">变更前</td><td>变更后</td><td>0:</td></tr><tr><td></td><td colspan=\"5\">□ 193.9) 甲 □ o □ OAB 1 □ PKT1_00- PT1_00 -1 -PKT1.03</td></tr><tr><td></td><td colspan=\"3\"></td><td colspan=\"3\">封装缩短后，尾管需要增长</td></tr><tr><td>变更原因</td><td colspan=\"6\">封装筒体不需要预留寸，canning同493，尾管需要增长连接</td></tr><tr><td>风险点（影响）</td><td colspan=\"7\">无</td></tr><tr><td>验证方法</td><td colspan=\"7\">无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6858,
+                "bbox": [
+                    253,
+                    144,
+                    305,
+                    1671
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1343,
+                    74,
+                    1439,
+                    572
+                ],
+                "score": 0.958,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    277,
+                    151,
+                    309,
+                    623
+                ],
+                "score": 0.964,
+                "text": "Internal|Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            }
+        ],
+        "page_info": {
+            "page_no": 30,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.607,
+                "bbox": [
+                    1351,
+                    79,
+                    1431,
+                    560
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9864,
+                "bbox": [
+                    319,
+                    91,
+                    1324,
+                    2179
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017WA</td><td rowspan=1 colspan=1>SCR CANNING</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>F01Z5017P1-02</td><td rowspan=1 colspan=3>SCR CANNING:F01Z5017WA</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>封装筒体不需要预留寸，canning 同493</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无/493已经验证OK</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6291,
+                "bbox": [
+                    252,
+                    134,
+                    305,
+                    1670
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.509,
+                "bbox": [
+                    249,
+                    2075,
+                    303,
+                    2290
+                ],
+                "index": 6
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1342,
+                    74,
+                    1438,
+                    569
+                ],
+                "score": 0.971,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    249,
+                    2139,
+                    305,
+                    2293
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    280,
+                    153,
+                    306,
+                    618
+                ],
+                "score": 0.965,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    1488,
+                    280,
+                    1663
+                ],
+                "score": 0.732,
+                "text": "ndusmal propery ngat"
+            }
+        ],
+        "page_info": {
+            "page_no": 31,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.7102,
+                "bbox": [
+                    1352,
+                    82,
+                    1430,
+                    559
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9863,
+                "bbox": [
+                    340,
+                    93,
+                    1325,
+                    2177
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5018D8-00F01Z5018D9-00</td><td rowspan=1 colspan=1>INSULATION</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3></td><td rowspan=1 colspan=3>飞机边保温需要使用工装敲平</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>T6位置旋转后，保温飞机边在整车最低点，客户要求把飞机边敲平</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6608,
+                "bbox": [
+                    253,
+                    142,
+                    306,
+                    1668
+                ],
+                "index": 3
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1343,
+                    73,
+                    1439,
+                    570
+                ],
+                "score": 0.971,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    281,
+                    154,
+                    307,
+                    621
+                ],
+                "score": 0.945,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    259,
+                    870,
+                    277,
+                    957
+                ],
+                "score": 0.832,
+                "text": "explonauon."
+            }
+        ],
+        "page_info": {
+            "page_no": 32,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9806,
+                "bbox": [
+                    322,
+                    90,
+                    1325,
+                    2179
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z510261-05</td><td rowspan=1 colspan=1>OUTLET PIPE</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>进气端锥旋转，方便客户拆T6。进气管位置尺寸微调,同时增加工艺定位孔机械强度不足FEA仿真后，结果均于更改前数据，评估影响</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6299,
+                "bbox": [
+                    253,
+                    140,
+                    304,
+                    1672
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.5338,
+                "bbox": [
+                    1350,
+                    77,
+                    1431,
+                    559
+                ],
+                "index": 7
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1340,
+                    72,
+                    1439,
+                    568
+                ],
+                "score": 0.99,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    275,
+                    151,
+                    307,
+                    620
+                ],
+                "score": 0.949,
+                "text": "Internal |Powertrain Solutions |RBCW/ENG-ATS2|2023-09-22"
+            }
+        ],
+        "page_info": {
+            "page_no": 33,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4613,
+                "bbox": [
+                    251,
+                    2074,
+                    305,
+                    2289
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.6099,
+                "bbox": [
+                    1349,
+                    76,
+                    1429,
+                    559
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9828,
+                "bbox": [
+                    321,
+                    88,
+                    1324,
+                    2177
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z510260-05</td><td rowspan=1 colspan=1>OUTLET PIPE</td><td rowspan=1 colspan=2>JIE-4JJ</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>进端锥旋转，方便客户拆T6。进管位置微调，同时增加艺定位孔机械强度不足FEA仿真后，结果均于更改前数据，评估无影响</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>"
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.6277,
+                "bbox": [
+                    252,
+                    141,
+                    303,
+                    1672
+                ],
+                "index": 6
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1340,
+                    71,
+                    1436,
+                    566
+                ],
+                "score": 0.971,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    251,
+                    2138,
+                    307,
+                    2293
+                ],
+                "score": 0.993,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    276,
+                    152,
+                    302,
+                    616
+                ],
+                "score": 0.965,
+                "text": "Internal | Powertrain Solutions | RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    260,
+                    1060,
+                    274,
+                    1112
+                ],
+                "score": 0.751,
+                "text": "edung."
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    256,
+                    1467,
+                    282,
+                    1663
+                ],
+                "score": 0.794,
+                "text": "rorincusutal sropeny nghe"
+            }
+        ],
+        "page_info": {
+            "page_no": 34,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.4798,
+                "bbox": [
+                    251,
+                    2074,
+                    306,
+                    2291
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.5548,
+                "bbox": [
+                    1348,
+                    78,
+                    1431,
+                    559
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.5789,
+                "bbox": [
+                    252,
+                    139,
+                    304,
+                    1672
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9829,
+                "bbox": [
+                    320,
+                    89,
+                    1325,
+                    2175
+                ],
+                "index": 4,
+                "html": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td colspan=\"2\">Project</td><td>样件阶段</td><td colspan=\"2\">变更来源</td></tr><tr><td>F01ZH003EB-05</td><td colspan=\"2\">铭牌</td><td colspan=\"2\">JIE-4JJ</td><td></td><td>BOSCH/Customer</td></tr><tr><td rowspan=\"2\">变更描述</td><td colspan=\"3\">变更前</td><td colspan=\"4\">C 变更后 BOSCH</td></tr><tr><td colspan=\"2\">BOSCH 05C XX-XX-XX JEXXXX SCR（含ASC）封装：博世汽车系统（无锡）有限公司 SCR（含ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万丰（上海）化工有限公司 E415 897436905 F01ZH003EB-02 Made in China</td><td></td><td colspan=\"2\">SCR（合ASC） SCR（合ASC）涂层：庄信万丰（上海）化工有限公司 E415 747514122 FO1ZHOO3EB-05 Made in China</td><td>05C SCR（含ASC）封装：博世汽车系统（无锡）有限公司 载体：NGK（苏州）环保陶瓷有限公司</td></tr><tr><td></td><td colspan=\"2\"></td><td colspan=\"4\"></td></tr><tr><td>变更原因</td><td colspan=\"6\">弗吉亚工厂，铭牌为保温壳供应商打刻，位置需要更新，铭牌内容需要更新</td></tr><tr><td>风险点（影响） 验证方法</td><td colspan=\"6\">铭牌位置更改客户不同意</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1340,
+                    70,
+                    1439,
+                    568
+                ],
+                "score": 0.988,
+                "text": "PDECR 25-032"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    254,
+                    2141,
+                    304,
+                    2291
+                ],
+                "score": 0.994,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    274,
+                    150,
+                    306,
+                    621
+                ],
+                "score": 0.933,
+                "text": "Internal | Powertrain Solutions |RBCW/ENG-ATS2 |2023-09-22"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    258,
+                    1564,
+                    278,
+                    1661
+                ],
+                "score": 0.631,
+                "text": "openynghts"
+            }
+        ],
+        "page_info": {
+            "page_no": 35,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9863,
+                "bbox": [
+                    376,
+                    72,
+                    1252,
+                    2224
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=1 colspan=2>C Sample Drawing Release Pre-condition Checklist</td><td rowspan=1 colspan=2>Result/Report</td><td rowspan=1 colspan=3>Status</td><td rowspan=1 colspan=1>Resp.</td><td rowspan=1 colspan=1>Date</td></tr><tr><td rowspan=7 colspan=1>Design</td><td rowspan=1 colspan=1>1.C Sample 3D model confirmed by customer?</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>2.C Sample ofer drawing check with manufacturing drawing?</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>3.C Sample Nameplate confirmed by customer?Email or drawing confirm?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>4.D-FMEA first version finished?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td></td><td rowspan=1 colspan=1>30c</td><td rowspan=1 colspan=1>甲阳</td><td rowspan=1 colspan=1>20158.76</td></tr><tr><td rowspan=1 colspan=1>5.I-FMEA first version finished?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>6. Installation guideline finished?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>7.PSC/cCC list finished for CMK summary?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=3 colspan=1>PUR/MOE</td><td rowspan=1 colspan=1>1.C Sample Make and Buy confirmed?</td><td rowspan=1 colspan=2>pole</td><td rowspan=1 colspan=3></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>295.8.0</td></tr><tr><td rowspan=1 colspan=1>2.C sample DFMA welding process confirmed with MOE?Flow chart?</td><td rowspan=1 colspan=1>cd:)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3></td><td rowspan=1 colspan=1>1523</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>3.P-FMEA first version plan?</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>DVValidation</td><td rowspan=1 colspan=1>1.Canning validation finished?report?</td><td rowspan=1 colspan=2>0k</td><td rowspan=1 colspan=3>Done</td><td rowspan=1 colspan=1>Xu Ren</td><td rowspan=1 colspan=1>20250506</td></tr><tr><td rowspan=1 colspan=1>2.ATSDV validation finished? report?</td><td rowspan=1 colspan=2>0K</td><td rowspan=1 colspan=3>Done</td><td rowspan=1 colspan=1>XuRnn</td><td rowspan=1 colspan=1>wv30506</td></tr><tr><td rowspan=2 colspan=1>System</td><td rowspan=1 colspan=1>1.TCD status?</td><td rowspan=1 colspan=2>CK</td><td rowspan=1 colspan=3>preliminay T done</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>2.POC result &amp; report?</td><td rowspan=1 colspan=2>ok</td><td rowspan=1 colspan=3>o comple tel</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>—</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1></td></tr></table>"
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.9413,
+                "bbox": [
+                    1274,
+                    79,
+                    1438,
+                    1466
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.6025,
+                "bbox": [
+                    261,
+                    2083,
+                    317,
+                    2283
+                ],
+                "index": 3
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    266,
+                    2144,
+                    315,
+                    2284
+                ],
+                "score": 0.991,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1341,
+                    70,
+                    1451,
+                    1481
+                ],
+                "score": 0.97,
+                "text": "ATS C Sample initial release precondition"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1274,
+                    78,
+                    1364,
+                    1333
+                ],
+                "score": 0.973,
+                "text": "C Sample Drawing initial Release Checklist"
+            }
+        ],
+        "page_info": {
+            "page_no": 36,
+            "width": 1653,
+            "height": 2339
+        }
+    }
+]

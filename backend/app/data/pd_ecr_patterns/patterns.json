@@ -1,0 +1,797 @@
+{
+  "version": "1.0.0",
+  "description": "PD-ECR structured engineering change patterns extracted from 20 historical JIE/JIM cases. Patterns are reusable process knowledge independent of specific products, projects, or people.",
+
+  "patterns": [
+    {
+      "category": "first_sample_release",
+      "label_cn": "首次样件放行",
+      "label_en": "First Sample Release",
+      "description": "First-time release of samples for a customer project milestone. Typically A-Sample stage, covering new part introduction with pre-condition checklist verification.",
+      "typical_triggers": [
+        "首次释放", "初次释放", "首次放行", "first release", "initial release",
+        "新零件放行", "A样放行", "A-Sample release", "A sample release",
+        "样件首次释放", "样件放行", "空管件放行", "空管件样件",
+        "新鲜件", "老化件", "可拆", "不可拆", "一体"
+      ],
+      "sample_stages": ["A"],
+      "checklist_template": {
+        "Design": [
+          "A Sample 3D model confirmed by customer",
+          "A Sample Nameplate confirmed by customer (email or drawing)",
+          "A Sample Single part manufacturing feasibility study and drawing confirmed by supplier",
+          "A Sample MAT design fixed"
+        ],
+        "PUR_MOE": [
+          "A Sample Make and Buy confirmed",
+          "A Sample DFMA welding process finished with MOE",
+          "A Sample Canning process confirmed"
+        ],
+        "Validation": [
+          "A Sample CFD report"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "初次样件放行需说明样件目的（标定测试/OTS/PPAP等），系统影响评估需由System签字",
+        "interface_boundary": "客户已校核完成状态需确认，接口变更需Design确认",
+        "mechanical_strength": "A样通常无需FEA仿真，B样放行前需完成",
+        "product_documents": "A样阶段通常不涉及FMEA/IMDS变更，仅涉及图纸和BOM",
+        "stock_treatment": "新零件放行不涉及库存处理（NA）"
+      },
+      "required_verifications": [
+        "CFD仿真（如有几何变更）",
+        "客户确认（3D模型、铭牌）",
+        "供应商制造可行性确认",
+        "DFMA焊接工艺确认",
+        "Canning工艺确认"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "Check Engineer / 校对工程师",
+        "System / 系统工程师",
+        "Catalyst / 催化剂工程师"
+      ],
+      "affected_documents": [
+        "Drawing / 图纸",
+        "BOM / 物料清单"
+      ],
+      "reference_case_ids": [
+        "PDECR24_093",
+        "PDECR24_102",
+        "PDECR24_123",
+        "PDECR26_002"
+      ],
+      "common_mistakes": [
+        "漏填样件目的说明",
+        "未确认客户对3D模型和铭牌的批准",
+        "遗漏DFMA焊接工艺确认",
+        "新鲜件和老化件零件号混淆"
+      ],
+      "implementation_guidance": "A样首次释放需要完整走Pre-condition Checklist（Design/PUR-MOE/Validation），确保每个部门签字确认。样件目的需明确说明（标定/测试/OTS）。新零件放行不涉及库存处理，但需确保采购（PR）已发出。"
+    },
+    {
+      "category": "test_sample_release",
+      "label_cn": "测试样件放行",
+      "label_en": "Test Sample Release",
+      "description": "Release of samples specifically for system engineer testing, calibration, or catalyst validation. Often involves coated/uncoated variants and aged/fresh variants.",
+      "typical_triggers": [
+        "测试样件", "标定样件", "老化件", "验证样件", "系统测试",
+        "test sample", "calibration sample", "aging sample", "validation sample",
+        "催化剂测试", "涂敷测试", "OBD样件", "低涂敷", "背压",
+        "新鲜件", "老化件", "白载体", "极限件"
+      ],
+      "sample_stages": ["A"],
+      "checklist_template": {
+        "Design": [
+          "确认测试样件配置（催化剂规格/涂敷量/载体类型）",
+          "确认样件数量与测试计划匹配",
+          "样件标识和追溯方式确认"
+        ],
+        "PUR_MOE": [
+          "特殊催化剂/载体采购确认",
+          "涂敷工艺参数确认"
+        ],
+        "Validation": [
+          "测试计划确认",
+          "测试台架/车辆分配确认"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "测试样件目的需明确（催化剂选型验证/OBD标定/背压测试等），系统工程师需签字",
+        "interface_boundary": "通常不涉及接口变更",
+        "mechanical_strength": "通常不涉及机械强度评估",
+        "product_documents": "测试件不涉及正式文档变更，但需记录测试配置",
+        "stock_treatment": "测试件不涉及量产库存"
+      },
+      "required_verifications": [
+        "催化剂规格确认（贵金属含量/涂敷量/载体规格）",
+        "样件标识和追溯性确认",
+        "测试计划与样件数量匹配"
+      ],
+      "required_approvals": [
+        "System Engineer / 系统工程师",
+        "Design Engineer / 设计工程师",
+        "Catalyst Engineer / 催化剂工程师"
+      ],
+      "affected_documents": [
+        "测试计划",
+        "样件清单"
+      ],
+      "reference_case_ids": [
+        "PDECR24_102",
+        "PDECR24_113",
+        "PDECR24_128",
+        "PDECR24_132",
+        "PDECR25_006",
+        "PDECR25_009",
+        "PDECR25_049"
+      ],
+      "common_mistakes": [
+        "测试样件的催化剂规格（贵金属含量/涂敷量）与量产件混淆",
+        "新鲜件和老化件编号标记不清楚",
+        "测试完成后未及时关闭PDECR"
+      ],
+      "implementation_guidance": "测试样件放行重点是确认样件配置（催化剂规格、载体类型、涂敷参数）与测试计划的匹配。需要系统工程师明确测试目的。多个变体的测试样件（如不同涂敷量）需要确保每个变体有唯一的零件号标识。"
+    },
+    {
+      "category": "customer_boundary_adjustment",
+      "label_cn": "客户边界调整",
+      "label_en": "Customer Boundary Adjustment",
+      "description": "Design changes triggered by customer boundary condition updates, requiring repositioning or redesign of aftertreatment system components and their interfaces.",
+      "typical_triggers": [
+        "客户边界", "边界调整", "边界变更", "后处理位置",
+        "customer boundary", "boundary adjustment", "repositioning", "relocate",
+        "根据客户边界", "根据客户增压器", "重新设计"
+      ],
+      "sample_stages": ["A", "B"],
+      "checklist_template": {
+        "Design": [
+          "确认客户新边界条件的图纸/数模",
+          "评估对后处理系统所有接口的影响",
+          "更新3D模型和2D图纸"
+        ],
+        "PUR_MOE": [
+          "供应商新零件的制造可行性确认",
+          "工装变更评估"
+        ],
+        "Validation": [
+          "CFD仿真（如有流道变更）",
+          "FEA仿真（如有结构变更，B样阶段）",
+          "客户装车确认"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "位置和接口变更可能影响气流均匀性和背压，需CFD评估",
+        "interface_boundary": "所有客户接口和内部接口需重新确认，客户需书面确认",
+        "mechanical_strength": "支架和连接件变更需FEA评估（B样放行前完成）",
+        "product_documents": "图纸、BOM、安装说明需更新",
+        "stock_treatment": "在制品和库存件需评估是否可以改制/继续使用"
+      },
+      "required_verifications": [
+        "CFD仿真（流道和位置变更）",
+        "FEA仿真（支架和结构件，B样阶段）",
+        "客户装车验证",
+        "供应商焊接/装配可行性确认"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "System Engineer / 系统工程师",
+        "Customer / 客户（书面确认）",
+        "PUE / 采购工程师",
+        "Manufacturing Engineer / 制造工程师"
+      ],
+      "affected_documents": [
+        "3D Model / 3D模型",
+        "2D Drawing / 2D图纸",
+        "BOM / 物料清单",
+        "Interface FMEA / IFMEA",
+        "Installation Guide / 安装指导"
+      ],
+      "reference_case_ids": [
+        "PDECR24_130"
+      ],
+      "common_mistakes": [
+        "未取得客户书面确认就进行变更",
+        "忽略对上游/下游接口的连锁影响",
+        "FEA仿真延迟到C样阶段才做"
+      ],
+      "implementation_guidance": "客户边界调整需要全系统视角评估——不仅是变更的单个零件，还包括所有与之接口的零件。CFD/FEA仿真应在B样放行前完成。客户的书面确认是必须的审批环节。"
+    },
+    {
+      "category": "cost_reduction_component",
+      "label_cn": "降本更换材料/供应商",
+      "label_en": "Cost Reduction — Material/Supplier Change",
+      "description": "Cost-driven changes involving catalyst replacement, gasket/substrate material change, or supplier localization. Requires validation to ensure performance equivalence.",
+      "typical_triggers": [
+        "降本", "国产化", "更换催化剂", "更换衬垫", "更换材料",
+        "cost reduction", "localization", "catalyst replacement", "gasket replacement",
+        "国产衬垫", "开元", "贵金属", "PGM", "金属催化剂"
+      ],
+      "sample_stages": ["B", "C", "D"],
+      "checklist_template": {
+        "Design": [
+          "确认替代材料/催化剂的技术规格等效性",
+          "替代供应商的资质审核",
+          "DV/PV实验计划制定"
+        ],
+        "PUR_MOE": [
+          "替代供应商报价和交期确认",
+          "采购成本变更核算",
+          "供应商生产可行性评估"
+        ],
+        "Validation": [
+          "Canning DV实验",
+          "催化剂性能对比测试（背压/转化效率/耐久）",
+          "系统级性能验证"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "更换催化剂/衬垫可能影响催化效率和背压，催化剂有吹出风险",
+        "interface_boundary": "替代材料尺寸公差需与原设计兼容",
+        "mechanical_strength": "替代衬垫的压缩回弹和耐久性需验证",
+        "product_documents": "材料规范、催化剂规范、采购规范需更新",
+        "stock_treatment": "需评估旧材料库存的处理（继续使用完/改制/报废）和成本影响"
+      },
+      "required_verifications": [
+        "Canning DV实验（催化剂固定可靠性）",
+        "催化剂性能对比测试",
+        "衬垫耐久性测试",
+        "系统背压和转化效率验证"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "PUE / 采购工程师",
+        "Quality / 质量工程师",
+        "Catalyst Engineer / 催化剂工程师",
+        "TCR3（如涉及库存报废或成本增加）"
+      ],
+      "affected_documents": [
+        "Catalyst Specification / 催化剂规范",
+        "Material Specification / 材料规范",
+        "Purchasing Specification / 采购规范",
+        "BOM / 物料清单",
+        "DFMEA / PFMEA（如工艺变更）"
+      ],
+      "reference_case_ids": [
+        "PDECR24_093",
+        "PDECR24_113"
+      ],
+      "common_mistakes": [
+        "仅关注单价降低，忽略库存报废和改制成本",
+        "催化剂/衬垫更换后未做充分的耐久验证",
+        "替代材料规格与原设计不兼容导致装配问题"
+      ],
+      "implementation_guidance": "降本变更需要综合评估总成本（材料成本 + 库存报废/改制成本 + 验证成本），而非仅看单价。催化剂和衬垫属于安全件，更换供应商或材料规格需要DV/PV实验充分验证。涉及库存报废或成本增加时需要TCR3审核。"
+    },
+    {
+      "category": "design_optimization",
+      "label_cn": "设计优化",
+      "label_en": "Design Optimization",
+      "description": "Design improvements for manufacturability, assembly, or performance optimization. Includes DFMA optimizations, tooling adjustments, and quality improvements.",
+      "typical_triggers": [
+        "数模优化", "设计优化", "结构优化", "刻字位置",
+        "design optimization", "model optimization", "DFMA",
+        "生产可行性", "工装更改", "供应商请求优化"
+      ],
+      "sample_stages": ["A", "B", "C", "D"],
+      "checklist_template": {
+        "Design": [
+          "优化方案技术评估",
+          "3D数模和2D图纸更新",
+          "DFMA评审"
+        ],
+        "PUR_MOE": [
+          "供应商基于新数模的生产可行性确认",
+          "工装/模具变更评估"
+        ],
+        "Validation": [
+          "如涉及功能变更：性能验证",
+          "如仅涉及工艺优化：首件确认"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "数模优化如不涉及功能尺寸变更，通常无性能影响",
+        "interface_boundary": "需确认优化不影响内部和外部接口",
+        "mechanical_strength": "结构优化需评估强度影响",
+        "product_documents": "图纸和数模需更新",
+        "stock_treatment": "评估在制品是否可继续使用或需改制"
+      },
+      "required_verifications": [
+        "DFMA评审",
+        "首件确认",
+        "如有功能变更：相关性能验证"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "Manufacturing Engineer / 制造工程师",
+        "PUE / 采购工程师（如涉及供应商）"
+      ],
+      "affected_documents": [
+        "3D Model / 3D数模",
+        "2D Drawing / 2D图纸",
+        "DFMA Report / DFMA报告"
+      ],
+      "reference_case_ids": [
+        "PDECR25_017",
+        "PDECR24_146"
+      ],
+      "common_mistakes": [
+        "优化后未进行DFMA评审导致供应商无法生产",
+        "数模更新后未同步更新图纸",
+        "忽略对其他装配工序的连锁影响"
+      ],
+      "implementation_guidance": "设计优化需要区分'功能优化'和'工艺优化'——前者需要性能验证，后者主要靠DFMA评审和首件确认。优化方案应与供应商充分沟通确认生产可行性。数模和图纸必须同步更新。"
+    },
+    {
+      "category": "supplier_process_change",
+      "label_cn": "供应商工艺变更",
+      "label_en": "Supplier Process Change",
+      "description": "Changes initiated by suppliers to improve manufacturing process feasibility, tooling optimization, or assembly sequence adjustments.",
+      "typical_triggers": [
+        "供应商", "生产可行性", "工装更改", "焊接评估",
+        "supplier", "manufacturing feasibility", "tooling change",
+        "供应商请求", "供应商反馈", "装配优化"
+      ],
+      "sample_stages": ["B", "C"],
+      "checklist_template": {
+        "Design": [
+          "评估供应商工艺变更对设计意图的影响",
+          "确认变更不降低产品性能"
+        ],
+        "PUR_MOE": [
+          "供应商新工艺方案评审",
+          "工装/模具变更费用评估",
+          "交期影响评估"
+        ],
+        "Validation": [
+          "新工艺首件验证",
+          "如有焊接变更：焊接强度测试",
+          "装配验证"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "工艺变更不应影响产品功能，如有影响需升级变更类型",
+        "interface_boundary": "工艺变更通常不影响接口",
+        "mechanical_strength": "焊接工艺变更需验证焊接强度",
+        "product_documents": "工艺文件和控制计划需更新",
+        "stock_treatment": "新工艺实施前已生产的零件需评估"
+      },
+      "required_verifications": [
+        "新工艺首件验证",
+        "焊接强度测试（如有焊接变更）",
+        "装配验证",
+        "供应商PPAP（如适用）"
+      ],
+      "required_approvals": [
+        "Manufacturing Engineer / 制造工程师",
+        "Design Engineer / 设计工程师",
+        "Quality / 质量工程师",
+        "PUE / 采购工程师"
+      ],
+      "affected_documents": [
+        "Process Flow / 工艺流程",
+        "Control Plan / 控制计划",
+        "PFMEA",
+        "Work Instruction / 作业指导书"
+      ],
+      "reference_case_ids": [
+        "PDECR25_017"
+      ],
+      "common_mistakes": [
+        "供应商工艺变更未经博世制造工程师评审就直接实施",
+        "忽略工艺变更对产品一致性的影响",
+        "未更新控制计划和PFMEA"
+      ],
+      "implementation_guidance": "供应商工艺变更需要博世制造工程师和设计工程师共同评审。重点是确认变更不影响产品设计意图和性能。焊接工艺变更是高风险项，需要焊接强度验证。控制计划和PFMEA必须同步更新。"
+    },
+    {
+      "category": "production_spec_release",
+      "label_cn": "量产规范放行",
+      "label_en": "Production Specification Release",
+      "description": "Release of mass production specifications, typically for catalyst or component PPAP preparation. Defines the final specification to be used for production part approval.",
+      "typical_triggers": [
+        "量产规范", "量产催化剂", "规范放行", "PPAP",
+        "production spec", "production catalyst", "specification release",
+        "催化剂规范", "量产放行"
+      ],
+      "sample_stages": ["C", "D"],
+      "checklist_template": {
+        "Design": [
+          "催化剂规范最终版确认（贵金属含量/涂敷量/载体规格/涂层技术）",
+          "与客户规范的符合性确认"
+        ],
+        "PUR_MOE": [
+          "供应商PPAP准备状态确认",
+          "量产采购合同确认"
+        ],
+        "Validation": [
+          "PPAP验证计划",
+          "过程能力研究"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "量产规范确定后变更成本极高，需确保规范经过充分验证",
+        "interface_boundary": "量产规范需与客户OTS批准状态一致",
+        "mechanical_strength": "量产件的机械性能需满足PPAP要求",
+        "product_documents": "PPAP文件包（PSW/DFMEA/PFMEA/控制计划/MSA/过程能力）",
+        "stock_treatment": "量产规范变更前的在制品处理"
+      },
+      "required_verifications": [
+        "PPAP验证",
+        "过程能力研究（Cpk/Ppk）",
+        "客户OTS批准确认"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "Quality / 质量工程师",
+        "PUE / 采购工程师",
+        "PM / 项目经理",
+        "Customer / 客户（PPAP批准）"
+      ],
+      "affected_documents": [
+        "PPAP Package / PPAP文件包",
+        "Production Specification / 量产规范",
+        "Control Plan / 控制计划",
+        "DFMEA / PFMEA"
+      ],
+      "reference_case_ids": [
+        "PDECR25_035"
+      ],
+      "common_mistakes": [
+        "量产规范发布前未取得客户OTS批准",
+        "PPAP文件包不完整",
+        "催化剂规范和图纸中的规格不一致"
+      ],
+      "implementation_guidance": "量产规范放行是D样阶段的关键里程碑，标志着设计冻结。需要确保规范经过充分的DV/PV验证，并与客户OTS批准的规格一致。PPAP文件包需质量工程师审核完整性。"
+    },
+    {
+      "category": "production_sample_release",
+      "label_cn": "生产样件放行（C/D样）",
+      "label_en": "Production Sample Release (C/D-Sample)",
+      "description": "Release of C-Sample or D-Sample for OTS/PPAP submission. Uses production tooling and processes, represents the final design intent.",
+      "typical_triggers": [
+        "C样放行", "D样放行", "C-Sample", "D-Sample",
+        "C-sample release", "D-sample release", "OTS",
+        "按客户要求释放", "C样件放行"
+      ],
+      "sample_stages": ["C", "D"],
+      "checklist_template": {
+        "Design": [
+          "确认设计冻结状态",
+          "确认客户OTS/DV要求",
+          "图纸和数模最终版确认"
+        ],
+        "PUR_MOE": [
+          "量产供应商和工装确认",
+          "量产工艺路线确认"
+        ],
+        "Validation": [
+          "DV/PV测试计划确认",
+          "OTS样件提交计划"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "C/D样需满足OTS性能要求，所有DV测试需通过",
+        "interface_boundary": "量产接口需与客户OTS状态完全一致",
+        "mechanical_strength": "量产件的机械性能需满足OTS要求",
+        "product_documents": "FMEA/IMDS/TCD/Offer Drawing等C样文件需完成",
+        "stock_treatment": "C/D样件放行后B样库存的处理方案"
+      },
+      "required_verifications": [
+        "OTS测试（客户要求的所有DV项目）",
+        "过程能力确认",
+        "IMDS提交",
+        "FMEA更新（如适用）"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "Quality / 质量工程师",
+        "PM / 项目经理",
+        "Customer / 客户（OTS审批）"
+      ],
+      "affected_documents": [
+        "OTS Report / OTS报告",
+        "DFMEA / PFMEA（C样是针对C样的，D样是针对D样的）",
+        "IMDS（C样）",
+        "Offer Drawing（C样）",
+        "TCD",
+        "Control Plan / 控制计划"
+      ],
+      "reference_case_ids": [
+        "PDECR24_146",
+        "PDECR25_045",
+        "PDECR25_084",
+        "PDECR26_001"
+      ],
+      "common_mistakes": [
+        "C样阶段遗漏FMEA/C特性/IMDS/Offer Drawing的评估",
+        "D样放行时OTS测试未全部通过",
+        "B样和C样的库存混用"
+      ],
+      "implementation_guidance": "C/D样放行标志着产品从开发阶段进入生产阶段。C样需要关注FMEA/C特性/IMDS/Offer Drawing等文档的完成。D样是PPAP前的最后阶段，需要所有OTS测试通过。注意不同样品阶段的文件要求不同——A/B样不要求FMEA和IMDS，C样开始需要。"
+    },
+    {
+      "category": "component_modification",
+      "label_cn": "零部件修改/取消",
+      "label_en": "Component Modification/Removal",
+      "description": "Modification or removal of existing components in a mature design, often at C/D sample stage. Includes bracket removal, clamp elimination, or part consolidation.",
+      "typical_triggers": [
+        "取消", "删除", "不再安装", "去除",
+        "remove", "delete", "cancel", "eliminate",
+        "修改零部件", "更改零部件"
+      ],
+      "sample_stages": ["C", "D"],
+      "checklist_template": {
+        "Design": [
+          "评估零件取消对系统功能的影响",
+          "确认取消后接口兼容性"
+        ],
+        "PUR_MOE": [
+          "取消零件的库存处理",
+          "采购订单取消"
+        ],
+        "Validation": [
+          "取消后的系统验证（如影响功能）",
+          "装配验证（如影响装配）"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "取消零部件可能影响系统固定/防护/散热等功能",
+        "interface_boundary": "取消零件后相关接口需重新确认",
+        "mechanical_strength": "取消支架/卡夹等可能影响系统固定强度",
+        "product_documents": "图纸、BOM、装配指导需更新",
+        "stock_treatment": "已生产零件和采购订单的处理（报废/改制/继续使用）"
+      },
+      "required_verifications": [
+        "系统功能确认（取消功能件时）",
+        "装配验证（取消装配相关件时）",
+        "FEA仿真（取消结构件时）"
+      ],
+      "required_approvals": [
+        "Design Engineer / 设计工程师",
+        "System Engineer / 系统工程师",
+        "PUE / 采购工程师",
+        "PM / 项目经理"
+      ],
+      "affected_documents": [
+        "BOM / 物料清单",
+        "Drawing / 图纸",
+        "Assembly Instruction / 装配指导"
+      ],
+      "reference_case_ids": [
+        "PDECR25_084"
+      ],
+      "common_mistakes": [
+        "未评估取消零件对周边零件的连锁影响",
+        "库存和采购订单未及时处理",
+        "BOM更新遗漏"
+      ],
+      "implementation_guidance": "零部件取消/修改在D样阶段较常见，通常是客户要求或设计优化的结果。重点是评估连锁影响——一个零件的取消可能影响多个装配工序。库存处理和采购订单取消需要PUE协调。"
+    },
+    {
+      "category": "inspection_label_change",
+      "label_cn": "检测方法/标签变更",
+      "label_en": "Inspection Method / Label Change",
+      "description": "Changes to inspection methods, detection criteria, labeling requirements, or customer-specific documentation. Often at D-Sample stage.",
+      "typical_triggers": [
+        "检测方法", "标签", "吊牌", "螺母检测", "QR码",
+        "inspection method", "label", "tag", "QR code", "detection method",
+        "纸质标签", "二维码", "检测方法定义"
+      ],
+      "sample_stages": ["C", "D"],
+      "checklist_template": {
+        "Design": [
+          "确认客户对标签/检测方法的具体要求",
+          "标签设计和位置确认",
+          "检测方法标准确认"
+        ],
+        "PUR_MOE": [
+          "标签供应商确认",
+          "检测设备和工具确认"
+        ],
+        "Validation": [
+          "标签耐久性测试（如适用）",
+          "检测方法GR&R（如适用）"
+        ]
+      },
+      "risk_profile": {
+        "function_performance": "通常不影响产品功能",
+        "interface_boundary": "标签和吊牌不涉及物理接口",
+        "mechanical_strength": "通常无影响",
+        "product_documents": "检测规范、标签规范、控制计划需更新",
+        "stock_treatment": "通常不涉及库存处理（标签可在现场加贴）"
+      },
+      "required_verifications": [
+        "检测方法验证（如新检测方法）",
+        "标签位置和内容客户确认",
+        "标签耐久性（如适用）"
+      ],
+      "required_approvals": [
+        "Quality / 质量工程师",
+        "Design Engineer / 设计工程师",
+        "Customer / 客户（标签/检测方法确认）"
+      ],
+      "affected_documents": [
+        "Inspection Standard / 检测标准",
+        "Control Plan / 控制计划",
+        "Label Specification / 标签规范",
+        "Work Instruction / 作业指导书"
+      ],
+      "reference_case_ids": [
+        "PDECR25_128"
+      ],
+      "common_mistakes": [
+        "标签内容和位置未经客户确认",
+        "检测方法变更后未更新控制计划",
+        "新检测方法未做MSA/GR&R"
+      ],
+      "implementation_guidance": "检测方法和标签变更虽然不直接影响产品性能，但涉及客户合规性和质量管理体系。标签内容和位置必须经客户书面确认。新检测方法需要做测量系统分析（MSA/GR&R）。控制计划和作业指导书必须同步更新。"
+    }
+  ],
+
+  "review_sheet_template": {
+    "description": "Standard 5-section Design Change Review Sheet used across all PD-ECR cases",
+    "sections": {
+      "1_function_performance": {
+        "title_cn": "系统性能影响",
+        "title_en": "Function & Performance",
+        "questions": [
+          "System impaction evaluation? 系统影响评估？",
+          "Whether need sample to test? Plan? 是否需要样件验证？计划？",
+          "Whether the catalyst information is confirmed? 催化剂信息是否确认？"
+        ]
+      },
+      "2_interface_boundary": {
+        "title_cn": "接口&边界影响",
+        "title_en": "Interface & Boundary",
+        "questions": [
+          "Interface & boundary (internal and customer) will be influenced? 接口&边界是否影响？",
+          "If impact customer, whether get confirm from customer side? 是否得到客户确认？"
+        ]
+      },
+      "3_mechanical_strength": {
+        "title_cn": "机械强度&可靠性影响",
+        "title_en": "Mechanical Strength & Durability",
+        "questions": [
+          "How to evaluate? Plan? 如何评估？计划？",
+          "Whether need sample to test? Plan? 是否需要样件验证？"
+        ]
+      },
+      "4_product_documents": {
+        "title_cn": "产品文档影响",
+        "title_en": "Product Documents",
+        "questions": [
+          "Interface FMEA-relevant / IFMEA",
+          "Product FMEA-relevant / DFMEA",
+          "Special Characteristics / PSC (for C Sample)",
+          "IMDS relevant (for C Sample)",
+          "Offer drawing relevant (for C Sample)",
+          "TCD relevant"
+        ]
+      },
+      "5_stock_treatment": {
+        "title_cn": "库存统计和处理",
+        "title_en": "Changed Parts Stock & Treatment",
+        "questions": [
+          "RBCW RDC（外库）和RBCW仓库库存",
+          "供应商处库存（已做好，未发货）",
+          "LPN工厂库存",
+          "在途/运输中库存",
+          "被影响到的实物库存处理指示",
+          "已装车件处理方法"
+        ]
+      }
+    }
+  },
+
+  "sample_stage_checklists": {
+    "A": {
+      "description": "A Sample — Prototype/DV sample, may use prototype tooling",
+      "pre_condition_checks": [
+        "A Sample 3D model confirmed by customer?",
+        "A Sample Nameplate confirmed by customer?",
+        "A Sample Single part manufacturing feasibility study and drawing confirmed by supplier?",
+        "A Sample MAT design fixed?",
+        "A Sample Make and Buy confirmed?",
+        "A Sample DFMA welding process finished with MOE?",
+        "A Sample Canning process confirmed?",
+        "A Sample CFD report?"
+      ],
+      "document_requirements": "Drawing and BOM only. FMEA/IMDS not required for A Sample.",
+      "approval_chain": ["Design Engineer", "Check Engineer", "System Engineer"]
+    },
+    "B": {
+      "description": "B Sample — Production-intent sample with production tooling",
+      "pre_condition_checks": [
+        "Production tooling ready?",
+        "B Sample FEA simulation completed?",
+        "Customer B-sample requirements confirmed?",
+        "Supplier production feasibility confirmed?"
+      ],
+      "document_requirements": "Drawing, BOM, and FEA report. FMEA/IMDS may be required depending on customer.",
+      "approval_chain": ["Design Engineer", "Check Engineer", "System Engineer", "Manufacturing Engineer"]
+    },
+    "C": {
+      "description": "C Sample — OTS sample from production line",
+      "pre_condition_checks": [
+        "OTS testing plan confirmed with customer?",
+        "Production tooling and process finalized?",
+        "IMDS submission ready?",
+        "FMEA updated?",
+        "Special Characteristics (PSC) defined?",
+        "Offer drawing confirmed?",
+        "TCD updated?"
+      ],
+      "document_requirements": "Full document package: Drawing, BOM, DFMEA, IFMEA, PSC, IMDS, Offer Drawing, TCD, Control Plan.",
+      "approval_chain": ["Design Engineer", "System Engineer", "Quality Engineer", "PM", "Customer (OTS)"]
+    },
+    "D": {
+      "description": "D Sample — PPAP sample from production line under series conditions",
+      "pre_condition_checks": [
+        "All OTS tests passed?",
+        "PPAP documentation complete?",
+        "Process capability study (Cpk/Ppk) completed?",
+        "MSA completed?",
+        "Customer PPAP approval obtained?",
+        "Series production readiness confirmed?"
+      ],
+      "document_requirements": "Full PPAP package: PSW, DFMEA, PFMEA, Control Plan, MSA, Process Capability, IMDS, Appearance Approval.",
+      "approval_chain": ["Design Engineer", "Quality Engineer", "PM", "Customer (PPAP)", "Plant Manager"]
+    }
+  },
+
+  "approval_flow_template": {
+    "roles": {
+      "design_engineer": {
+        "label_cn": "设计工程师",
+        "label_en": "Design Engineer",
+        "responsibility": "确认设计变更的技术方案、图纸和BOM的正确性"
+      },
+      "check_engineer": {
+        "label_cn": "校对工程师",
+        "label_en": "Check Engineer",
+        "responsibility": "校核设计变更的技术内容"
+      },
+      "system_engineer": {
+        "label_cn": "系统工程师",
+        "label_en": "System Engineer",
+        "responsibility": "评估系统性能和功能影响"
+      },
+      "catalyst_engineer": {
+        "label_cn": "催化剂工程师",
+        "label_en": "Catalyst Engineer",
+        "responsibility": "确认催化剂信息和规格"
+      },
+      "pue": {
+        "label_cn": "采购工程师",
+        "label_en": "Purchasing Engineer (PUE)",
+        "responsibility": "确认供应商可行性、采购成本和交期影响"
+      },
+      "manufacturing_engineer": {
+        "label_cn": "制造工程师",
+        "label_en": "Manufacturing Engineer (MOE)",
+        "responsibility": "确认制造和装配可行性、工艺影响和成本"
+      },
+      "quality_engineer": {
+        "label_cn": "质量工程师",
+        "label_en": "Quality Engineer",
+        "responsibility": "确认质量影响、FMEA/控制计划更新"
+      },
+      "pm": {
+        "label_cn": "项目经理",
+        "label_en": "Project Manager (PM)",
+        "responsibility": "确认对项目时间和成本的影响"
+      },
+      "tcr3": {
+        "label_cn": "TCR3",
+        "label_en": "TCR3",
+        "responsibility": "审核涉及库存报废（金额≥阈值）或成本增加的变更"
+      },
+      "customer": {
+        "label_cn": "客户",
+        "label_en": "Customer",
+        "responsibility": "确认接口变更、OTS/PPAP批准"
+      }
+    }
+  }
+}

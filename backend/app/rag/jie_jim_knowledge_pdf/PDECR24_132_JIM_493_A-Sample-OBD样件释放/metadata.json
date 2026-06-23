@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR24_132",
+  "source_file": "PDECR24_132_JIM_493_A-Sample-OBD样件释放_origin.pdf",
+  "metadata": {
+    "dc_no": "24_132",
+    "date": "2024-11-23",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC可拆65g新鲜件：F01Z50181Y-00; DOC可拆65g老化件：F01Z50181Y-51; DOC可拆白载体：F01Z5017X9-25; DOC可拆1/6涂敷：F01Z5017X9-31; DOC可拆1/8涂敷：F01Z5017X9-32; DPF可拆白载体：F01Z5017XC-25; SCR 1/9涂敷：F01ZH003FV-36; SCR 1/10涂敷：F01ZH003FV-37; SCR 1/12涂敷：F01ZH003FV-38; SCR 1/15涂敷：F01ZH003FV-39",
+    "reason_for_change": "工程师测试样件放行。",
+    "change_source": [
+      "Other"
+    ]
+  }
+}

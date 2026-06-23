@@ -1,0 +1,117 @@
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-05-22th
+25049
+Customer project Name/客户项目名称： JIM-493 MCR No./ MCR号:
+Sample status / 样件状态： A Sample B Sample C Sample D Sample
+Change part&product Name/更改零部件产品的名称(简要描述)
+DOC可拆件（JM50g化件）：F01Z5018U4-51 DOC可拆件（BASF50g化件）：F01Z5018U7-51DOC可拆件（JM65g化件）：F01Z5018UA-51 DOC可拆件（BASF65g老化件）：F01Z5018UD-51DOC+SDPF白载体件（混合器加隔板）：F01ZH003R3-01
+Reason of changes/更改理由(简要描述):
+系统工程师催化剂测试样件放行;
+Change from/变更来源：
+Customer reguest/客户要求 | Supplier request /供应商请求 Design optimization /设计优化
+Correction/更正(错误) | Other /其他 （系统测试样件
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Ge Jilong
+Yang Guangtuo,Luo jing， Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是no/否
+If impact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design/设计工程师 | 卢情松 | Date /日期: | 2025.5.22
+Signature/签名：
+Check/校对工程师 | 杨拓 | Date /日期： | 2005.05.22
+Signature/签名：
+Description of Change/更改描述：(下面空白处请列出详细的变更前后对比）
+
+BOSCH博世Confidential | Design Change Review Sheet设计变更评审表∠ | Version 13Effectivedate:2025-05-22th
+Design Change 25049Request No.
+1.Function&Performance will be influenced?/系统性能影响？ yes/是no/否
+If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 内部验证的C信化剂新技术 | Ssrstem签名权佛坡
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | NA
+Whether the catalyst information is confirmed?催化剂信息是否确认？(物料号、图纸、SPEC) | cas2
+2.Interface&boundary (internal and custom | er) wil be influenced?/接口&边界(内部和客户)影响？ yes/是 | no/否
+if impact custmer,whether getconfirm fromcustomer side?请说明影响和是否得到客户的确认？ | Do2
+3. Mechanical strength&Durability willbe influenced？/机械强度&可靠性影响？ yes/是 | no/否
+If Yes, How to evaluate? Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等） | va
+Whether need sample to test? Plan?是否需要样件进行验证？计划？
+4.Product document influenced?
+4.1 Interface FMEA-relevant/IFMEA: | no/否 yes/是 Note
+4.2.Product FMEA-relevant/DFMEA: | n0/否 yes/是 Note
+4.3.Special Charecteristics /PSC: (针对C Sample) | n0否 yes/是 Note
+4.4.IMDSrelevant： (针对C Sample) | n0/否 yes/是 Note
+4.5 Offer drawing relevant(针对C Sample) | no/否 yes/是 Note
+4.6.TCD relevant: | no/否 yes/是 Note
+5. Changed parts Stock& treatment/需要变更零件的库存统计和处理？ NA.(新零件放行,不涉及库存）（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） 涉及到已经生产过的零件变更
+RBCWRDC（外库)和RBCW仓库，是否有库存， | 无库存 □有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | □ 无库存 □有库存，库存数量 | PUE /签名
+LPN工厂是否有库存， | 无库存 □有库存，库存数量
+在途，运输中是否有库存 | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名
+改制费用报成本 □ | PUE /签名
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换其他（单独说明）：
+6. Infuence on supplier part?
+Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？
+Influence on purchasing part delivery time？对采购件交货时间的影响？
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. □no/查yes/是
+Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额 □ decrease/降低，金额 no change/不变
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA文件 | D
+只更改催化剂，无需DFMA
+8. Influence on LPN manufacturing&assembly process?
+Feedback from manufacturing engineer？生产制造装配是否影响，反馈？ | PE本岑
+infuenceonproject&product deliver ime？对项目&产品交货时间的影响？一次性样为、无量产你Influence on manufacturing cost /对生产成本的影响？increase/增加n，金额 decrease/降低，金额 no change/不变
+9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 需求样品订单数量 | PM/签名
+10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.: RB□库存报废，金额 平购成本增加，金额 牛产成本增加，金额 | TCR3CW
+Design Team Leader | ENG-CV1 | PUR 3 | TCR32025-070
+Signature/签名3 | Signaure/签名：n | Signature / | Signature /签名： 友福
+
+[image] 
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018U4-51 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOC+SDPFUNIT:F01ZH003FU-06DOC+SDPFWELDING:F01Z5017W5-04DOCCANNING:F01Z5017NM-03DOCCATALYST:F01Z50178N | 0DOCUNIT:F01Z5018U4-51DOCWELDING:F01Z5018U5-51DOCCANNING:F01Z5018U6-51DOCCATALYST:F01Z50178T-00
+变更原因 | 系统工程师要求释放JM50g老化可拆DOC样件;
+风险点 （影响） | 无
+验证方法 | 无
+
+53480A
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018U7-51 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOC+SDPFUNIT:F01ZH003FU-06DOC+SDPFWELDING:F01Z5017W5-04DOCCANNING:F01Z5017NM-03DOCCATALYST:F01Z50178N | 0DOCUNIT:F01Z5018U7-51DOCWELDING:F01Z5018U8-51DOCCANNING:F01Z5018U9-51DOCCATALYST:F01Z5018MA-51
+变更原因 | 系统工程师要求释放BASF50g化可拆DOC样件;
+风险点 （影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018UA-51 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOC+SDPFUNIT:F01ZH003FU-06DOC+SDPFWELDING:F01Z5017W5-04DOCCANNING:F01Z5017NM-03DOCCATALYST:F01Z50178N | 0DOCUNIT:F01Z5018UA-51DOCWELDING:F01Z5018UB-51DOC CANNING:F01Z5018UC-51DOCCATALYST:F01Z5018U3-51
+变更原因 | 系统工程师要求释放JM65g化可拆DOC样件;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018UD-51 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOC+SDPFUNIT：F01ZH003FU-06DOC+SDPFWELDING:F01Z5017W5-04DOCCANNING:F01Z5017NM-03DOCCATALYST:F01Z50178N | 0DOCUNIT:F01Z5018UD-51DOCWELDING:F01Z5018UE-51DOCCANNING: F01Z5018UF-51DOCCATALYST:F01Z5018MT-51
+变更原因 | 系统工程师要求释放BASF65g化可拆DOC样件;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018UJ-00 | MIXER UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 混合器新增隔板优化抗尿素腐蚀;
+风险点（影响） | 无
+验证方法 | 无
+
+406080
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003R3-01 | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+中酒DOC+SDPFUNIT:F01ZH003FU-06DOC+SDPFWELDING：F01Z5017W5-04DOCCANNING: F01Z5017NM-03DOCCATALYST:F01Z50178NDPFCANNING:F01Z5017NP-02DPFCATALYST:F01Z5017WM-00 | DOC+SDPFUNIT:F01ZH003R3-01DOC+SDPFWELDING:F01Z5018UG-00DOCCANNING:F01Z5018UH-00DOCSUBSTRATE:F01Z501887DPFCANNING:F01Z5018UK-00DPFSUBSTRATE:F01Z5102DF-00
+变更原因 | 制作混合器加隔板的白载体样件用于优化混合器的抗尿素腐蚀;
+风险点（影响） | 无
+验证方法 | 无

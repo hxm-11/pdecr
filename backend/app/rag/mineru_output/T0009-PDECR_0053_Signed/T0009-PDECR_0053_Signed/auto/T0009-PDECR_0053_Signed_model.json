@@ -1,0 +1,806 @@
+[
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9871,
+                "bbox": [
+                    92,
+                    37,
+                    1535,
+                    2294
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=1 colspan=18>BOSCH           Development Changes in PD-Phase                               Edition 06Doc. Approval RBCD/EIS产品开发更改Confidential                             Effective date: 20250714DC No./开发更改编号：PDECR_0053Date/日期:20251105</td></tr><tr><td rowspan=1 colspan=18>Step 1: Change request &amp; Basic information</td></tr><tr><td rowspan=1 colspan=5>Customer project Name/客户项目名称：</td><td rowspan=1 colspan=5>57cc e-compressor</td><td rowspan=1 colspan=8>MCR No./ MCR号:     NA</td></tr><tr><td rowspan=1 colspan=5>Affect Product No./产品</td><td rowspan=1 colspan=5></td><td rowspan=1 colspan=8>Component No./零部件号：</td></tr><tr><td rowspan=1 colspan=10>57cc e-compressor F01Z7P0 013-04CNHTC57cc e-compressor F01Z 7P0 00H-01 XCMG57cc e-compressor F01Z 7P0 012-04 Geely FD57cc e-compressor F01Z 7P0 012 Geely SOP57cc e-compressor F01Z 7P0014-02 Qingling H4745cc e-compressor F01Z 7P0 01E-01 Qingling 4.5T BEV</td><td rowspan=1 colspan=8>Offerdrawing:           EOL function PMB:F01Z7D0013-01         F01Z7S0003F01Z7D000H-01         F01Z7S0003-01F01Z7D0012-01F01Z7D0012F01Z7D0014-01F01Z7D001E-01</td></tr><tr><td rowspan=1 colspan=10>Sample type/样品类型：         □A □B□C   FD</td><td rowspan=1 colspan=8>Initiator/发起人： ZHU Qiangmin(RBCD/EIS3)</td></tr><tr><td rowspan=1 colspan=18>Reason of changes /更改理由：</td></tr><tr><td rowspan=1 colspan=18>1.改善拔出时保护帽冲击。2.PMB符合生产实际。</td></tr><tr><td rowspan=1 colspan=5>Customer request /客户要求</td><td rowspan=1 colspan=8>Supplier request/供应商请求□</td><td rowspan=1 colspan=5>Design optimization /设计优化□</td></tr><tr><td rowspan=1 colspan=5>Correction/更正(错误)      □         P</td><td rowspan=1 colspan=5>rocess /工艺</td><td rowspan=1 colspan=5>Other/其它回</td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=18>Step 2: Change proposal &amp; Change discription</td></tr><tr><td rowspan=1 colspan=18>Before Change                                                 After Change1.更改Offerdrawing中关于压缩机出厂时内部充氮压力，从0.15MPaA~0.25MPaA更改为0.13MPaA~0.19MPaA.</td></tr><tr><td rowspan=1 colspan=18>When the compressor leaves the factory it is internally sealed withit is discovered that the compressor has no positive pressure andand use压缩机出厂时内部划入O.13MPaA~0.19MPaA的干燥氮气，开启使用时发现压缩机没有正压力，应道知博世公司质量部门确认后使用After removing theinletandoutlet protective caps.it shouldbe             Afton nomnvinn tho intot and nutlot nnntartivo rane it chould ho2.更改功能检测规范3.1.4测试点中关于进口温度变更，从24.0±3℃改为25.0±6℃。3.1.4Test points/测试点                                                   3.1.4 Test points/测试点</td></tr><tr><td rowspan=2 colspan=1>Test</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2>Setting value</td><td rowspan=1 colspan=2>Re</td><td rowspan=1 colspan=1>sult speificatio</td><td rowspan=1 colspan=1>n</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Seting value</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1>Result specificatio</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Set Speed设定转速[pm]</td><td rowspan=1 colspan=1>Inlet pressure进口压力[barg]</td><td rowspan=1 colspan=1>Inlettemperature进口温度{c}</td><td rowspan=1 colspan=2>outtet出[barg]</td><td rowspan=1 colspan=1>DC Power[A}</td><td rowspan=1 colspan=1>Rise time升压时间</td><td rowspan=1 colspan=1>→</td><td rowspan=1 colspan=2>Test</td><td rowspan=1 colspan=1>SAS[rpm]</td><td rowspan=1 colspan=1>S[barg]</td><td rowspan=1 colspan=1>Inlettemperature进口温度pc</td><td rowspan=1 colspan=2>Outetpressure出口压力[bare]</td><td rowspan=1 colspan=1>DC Powercurent直流电流[A]</td><td rowspan=1 colspan=1>Ag</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1>(1000150)</td><td rowspan=1 colspan=1>(1.0±0.2)</td><td rowspan=1 colspan=1>(25.0±6)</td><td rowspan=1 colspan=2>(8.3±1.5)</td><td rowspan=1 colspan=1>(0.9±0.2)</td><td rowspan=1 colspan=1>Record</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>（1000±150)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>(24.0±3)</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1>(0.9±0.2)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=10></td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 0,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9866,
+                "bbox": [
+                    24,
+                    48,
+                    1520,
+                    2247
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=1 colspan=6>BOSCH         Development Changes in PD-PhaseDoc. Approval: RBCD/EISConfidential                               产品开发更改                          Effectivedate:20250610DC No./开发更改编号:PDECR_0053Date/日期：20251105Step 3.1 Impact analysis /影响分析</td></tr><tr><td rowspan=1 colspan=6>1.Function&amp;Performance wil beinfuenced?/产品功能性能影响？      yes/是        no/否</td></tr><tr><td rowspan=1 colspan=5>If Yes, product impaction evaluation?如果是，产品影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=2 colspan=1>Trom米强敏</td></tr><tr><td rowspan=1 colspan=5>Whether need sample to test? Plan?                                    不需要是否需要样件进行验证？计划？</td></tr><tr><td rowspan=1 colspan=5>2.1 Interface&amp;boundary to customer wil be influenced?/接口&amp;边界是否影响客户？                      yes/是  □no/香</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>Please explain the impact and whether it has been confirmed by the customer?请说offrrawing充压变需告知客明影响和是否得到客户的确认？</td><td rowspan=1 colspan=1>customerPM名</td></tr><tr><td rowspan=1 colspan=5>2.2 Interface&amp;boundary to intermal wil be infuenced?/接口&amp;边界是否影响内部？                          yes/是   □no/否</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>If Yes, internal impaction evaluation?                                 1.测试线需要更改设定如果是，内部影响是否评估？(例如：测试接头，噪音测试夹具等)           .改不向压力下保护帽弹出状态试验，见附件。</td><td rowspan=1 colspan=1>rostm 朱强</td></tr><tr><td rowspan=1 colspan=5>3. Mechanical srengthDurability wil b infuenced?/产品可靠性、鲁棒性影响？                         yes/是  no/否</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>IfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？         NA（例如：仿真分析等）</td><td rowspan=2 colspan=1>Validation/签名</td></tr><tr><td rowspan=1 colspan=5>Whether need new sample or fixture to test? Plan?是否需要样件以及定制/改制夹具进行验证？计划？</td></tr><tr><td rowspan=1 colspan=6>4.Others component wil be infuenced?/影响其它零部件？   不影响</td></tr><tr><td rowspan=1 colspan=6>Ifyes， Which componentswillchange in parallel?？如果影响，哪些零部件也需要同时变更？</td></tr><tr><td rowspan=1 colspan=6>5.Manufactory/assemblytesting wilbe infuenced?/加工，装配，测试是否影响？</td></tr><tr><td rowspan=1 colspan=5>Feedback from manufacturing engineer?生产制造装配是否影响，反馈？</td><td rowspan=6 colspan=1>lheProduction/签名_</td></tr><tr><td rowspan=1 colspan=5>测试线需要更改设定参数，1.功能测试PMB进温度判断标准更改；2.充氮压设置需要更改。</td></tr><tr><td rowspan=1 colspan=5>infuence on project&amp;product delivery time？对项目&amp;产品交货时间的影响？</td></tr><tr><td rowspan=1 colspan=5>无</td></tr><tr><td rowspan=1 colspan=5>Infuence on manufacturing cost/对生产成本的影响？</td></tr><tr><td rowspan=1 colspan=5>Increase/增加，金额                     □Decrease/降低，金额                        No change/不变</td></tr><tr><td rowspan=1 colspan=5>6.Influence on supplier par?Feedback from SupplierPurchasing?              NA.(新零件放行，不涉及库存)</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>Was thisheonfitrhasingpierforfeaibilityafSpp变更后的零件，生产可行性供应商是否确认？反馈？</td><td rowspan=7 colspan=1>PPS forpurchase parts/签名(Belowonly for DCAC)DCAC Mech.签名DCAC软/硬件签名Quality：签名</td></tr><tr><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=5>Influence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=5>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.           no/否□yes/是</td></tr><tr><td rowspan=1 colspan=5>7：Does the change influence on purchasing cost？变更对采购成本的影响？</td></tr><tr><td rowspan=1 colspan=5>□Increase/增加，金额_                      □Decrease/降低，金额_                       no change/不变</td></tr><tr><td rowspan=1 colspan=6>8.Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）                                     □涉及到已经生产过的零件变更</td></tr><tr><td rowspan=1 colspan=2>RBCW仓库和RBCD仓库，是否有库存，</td><td rowspan=1 colspan=3> 无库存            有库存，库存数量  允许混合发货_</td><td rowspan=1 colspan=1>cos/签名inAafn</td></tr><tr><td rowspan=1 colspan=2>供应商处是否有库存，</td><td rowspan=1 colspan=3> 无库存           □有库存，库存数量</td><td rowspan=2 colspan=1> erg cmilbogPP /签名</td></tr><tr><td rowspan=1 colspan=2>在途，运输中是否有库存</td><td rowspan=1 colspan=3> 无库存           □有库存，库存数量_</td></tr><tr><td rowspan=2 colspan=2>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=3>可以继续使用完      □改制后使用     □报废</td><td rowspan=2 colspan=1>pps for purchase parts/签名Quality for DCAC:/签名</td></tr><tr><td rowspan=1 colspan=3>□改制费用          □报废成本</td></tr><tr><td rowspan=1 colspan=5>9. DFMA &amp; Sample prodcution OPL?                                                     no/否yes/是</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>DFMA会议纪要，请附件说明；如果变更无需DFMA或前期PDECR已经做过DFMA，请说明并列出之前的PD_ECR号AnyOPLnotclosedfromlast time sample production?上次样件生产是否仍有OPL没有完成？请说明或者附件说明</td><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=5>10.PMalimentnueerojetTieint是否同意对项目时间和成本的影响        ：需求样品订单数量</td><td rowspan=1 colspan=1>名11.6.</td></tr><tr><td rowspan=1 colspan=5>11.如果涉及以下情况需TCR3 审核确认。不涉及则     N.A□库存报废，金额_               □采购成本增加，金额                  □生产成本增加，金额</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=4>Step 3.2Quality Assurance Items/检价项                               1</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Validations 验证</td><td rowspan=1 colspan=2>Plan fnish date 划完成日期</td><td rowspan=1 colspan=1>Resp.person负责人</td><td rowspan=1 colspan=1>Comments备注</td><td rowspan=8 colspan=1>ammu</td></tr><tr><td rowspan=1 colspan=1>Capability Studies_CMK</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>□Capability Studies_ MSA</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1> MAE release</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td><td rowspan=1 colspan=1>QMN</td></tr><tr><td rowspan=1 colspan=1>Cleanness test</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1> QZ test</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>□200hPDL</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>Test program or fixture etc.</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>功能台架进气温度范围需要更新</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=2>1 Interface FMEA-relevant/IFMEA:</td><td rowspan=1 colspan=4>□no/否yes/是      Resp.person:                                   Due date 2025.11.07</td></tr><tr><td rowspan=1 colspan=2>2.Product FMEA-relevant /DFMEA:</td><td rowspan=1 colspan=4>no/否 yes/是      Resp.person:                                    Due date:</td></tr><tr><td rowspan=1 colspan=2>3. Special Charecteristics relevantPSC:</td><td rowspan=1 colspan=3>no/否 yes/是      Resp.person:</td><td rowspan=1 colspan=1>Due date:</td></tr><tr><td></td><td></td><td rowspan=1 colspan=3>no/否 yes/是     Resp.person:</td><td rowspan=1 colspan=1>4. IMDS relevant:</td><td rowspan=1 colspan=1>Due date:</td></tr><tr><td rowspan=1 colspan=2>5 Offer drawing relevant:</td><td rowspan=1 colspan=3>no/否 yes/是     Resp.person:Fan ChangeLi PingzhengWang Xiaolong</td><td rowspan=1 colspan=1>Due date 2025.11.07</td></tr><tr><td rowspan=1 colspan=2>6.TCD relevant:</td><td rowspan=1 colspan=4>□no/否 yes/是                  Qian Jiong/Sun Xudong               Due date 2025.11.15</td></tr><tr><td rowspan=1 colspan=2>7. Norm, WB, HF...relevant:</td><td rowspan=1 colspan=4>□no/否yes/是      Resp.person:  Wu Zhaohui                        Due date 2025.11.10</td></tr><tr><td rowspan=1 colspan=6>Step4 Technical feasilility &amp;Validation plan aproval/技术可行性验证计划批准</td></tr><tr><td rowspan=1 colspan=1>Design team leader</td><td rowspan=1 colspan=3>Development SM</td><td rowspan=1 colspan=1>SMP-TMS         RB</td><td rowspan=1 colspan=1>CW/TCRR3</td></tr><tr><td rowspan=1 colspan=1>Signature/签名：本你06.1.</td><td rowspan=1 colspan=3>Signature /签名：0   2005.1126</td><td rowspan=1 colspan=1>Signature /签名</td><td rowspan=1 colspan=1>225发福Signature/签名：</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 1,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.711,
+                "bbox": [
+                    416,
+                    80,
+                    1173,
+                    199
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9829,
+                "bbox": [
+                    119,
+                    165,
+                    1518,
+                    1956
+                ],
+                "index": 2,
+                "html": "<table><tr><td rowspan=1 colspan=6>Confidential                                  产品升发更改                         Effective date:20250610DC No./开发更改编号: PDECR_0053Date /日期： 20251105Step5 Documents release/文档发布</td></tr><tr><td rowspan=1 colspan=6>1. Documents release (drawing,ofer drawing， Bom, Spec.)/文档发布(图纸，客户图纸，…)</td></tr><tr><td rowspan=1 colspan=6>Development confirmation/研发确认：</td></tr><tr><td rowspan=1 colspan=6>Date /日期：</td></tr><tr><td rowspan=1 colspan=6>Step 6.1 Implementation check list/导入清单</td></tr><tr><td rowspan=1 colspan=2>Departments</td><td rowspan=1 colspan=1>YIN</td><td rowspan=1 colspan=1>Description</td><td rowspan=1 colspan=1>Responsible</td><td rowspan=1 colspan=1>Due date</td></tr><tr><td rowspan=5 colspan=2>Development</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Change BOMs &amp; Drawings &amp; Documents in POE system</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Inform documents update (check work-on can met requirements)</td><td rowspan=1 colspan=1>All designe</td><td rowspan=1 colspan=1>2025.11.0</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Update Offer drawing, TCD, D-FMEA</td><td rowspan=1 colspan=1>All design</td><td rowspan=1 colspan=1>e2025.11.0</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Norm, WB, HF.</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>MoC, IMDS.</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=12 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Related (Production/Testing) equipement be ready on site</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Related (Production/Testing) program be ready</td><td rowspan=1 colspan=1>Wu Zhaohui</td><td rowspan=1 colspan=1>2025.11.1</td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Related (Production/Testing) tooling / cutting /fixture etc. be ready</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Old tooling / cutting / fixture disposal</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Old materials disposal</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Planner update the planning sheet</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Update FMEA</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Update CP/FC (Control Plan/Flow Chart)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Update WI/PDS(Include attachments.)》测试记录表</td><td rowspan=1 colspan=1>Wu Zhaohui</td><td rowspan=1 colspan=1>2025.11.1</td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>First batch Mark, Special Mark (Inside Package)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>First batch Mark, Special Mark (Outside Package)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td></td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Training</td><td rowspan=1 colspan=1>Wu Zhaohui</td><td rowspan=1 colspan=1>2025.11.10</td></tr><tr><td rowspan=16 colspan=1></td><td rowspan=6 colspan=1>cOS</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Confirm the storage of old parts and coordinate the introductiondate for new part (RM)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Confirm the delivery date of old parts and first delivery of new parts (FG)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Check sample orders which affected:material order of CKD</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Confirm production scheduling according to the alignment, anychanges share the information to MOEx,MFE</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Confirm the old stock/ do prioritize delivery and inventory handling</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Inform the first delivery to PMO</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=3 colspan=1>PPS(PPS-&gt;PMQ/PQA)</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Check sample orders which afected: material order of purchasing</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Inform internal related departments(COS, MFE, MOEx)with</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Update incoming inspection plan</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>QMM1</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Update testing programe on testing equipment</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Update inspection plan for CKD parts</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>EIS4</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>Distribute the Offer drawing, TCD to customer</td><td rowspan=1 colspan=1>Qian Jiong</td><td rowspan=1 colspan=1>2025.11.07</td></tr><tr><td rowspan=1 colspan=1>LOP</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Check 10 digit material order</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>PMO</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Check sample orders which affected: Customer order</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=1>Inform Customer the first delivery information</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=5>Step6.2 Implementation date /执行日期Planned implementation date:变更计划执行日期       _2025.11.07_</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    416,
+                    87,
+                    1178,
+                    139
+                ],
+                "score": 0.996,
+                "text": "Development Changes in PD-Phase"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    653,
+                    141,
+                    938,
+                    205
+                ],
+                "score": 1.0,
+                "text": "产品开发更改"
+            }
+        ],
+        "page_info": {
+            "page_no": 2,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.4907,
+                "bbox": [
+                    903,
+                    1341,
+                    972,
+                    1426
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.491,
+                "bbox": [
+                    652,
+                    181,
+                    722,
+                    260
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4591,
+                "bbox": [
+                    237,
+                    90,
+                    351,
+                    360
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.4778,
+                "bbox": [
+                    348,
+                    184,
+                    409,
+                    265
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4997,
+                "bbox": [
+                    604,
+                    1276,
+                    727,
+                    1467
+                ],
+                "index": 5
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.457,
+                "bbox": [
+                    261,
+                    2080,
+                    320,
+                    2299
+                ],
+                "index": 6
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.518,
+                "bbox": [
+                    796,
+                    84,
+                    889,
+                    339
+                ],
+                "index": 7
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.4611,
+                "bbox": [
+                    727,
+                    133,
+                    773,
+                    326
+                ],
+                "index": 8
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9699,
+                "bbox": [
+                    815,
+                    349,
+                    1077,
+                    957
+                ],
+                "index": 9
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5535,
+                "bbox": [
+                    578,
+                    88,
+                    647,
+                    343
+                ],
+                "index": 10
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9724,
+                "bbox": [
+                    556,
+                    351,
+                    816,
+                    960
+                ],
+                "index": 11
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9557,
+                "bbox": [
+                    210,
+                    354,
+                    547,
+                    608
+                ],
+                "index": 12
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.4892,
+                "bbox": [
+                    1110,
+                    78,
+                    1246,
+                    2010
+                ],
+                "index": 13
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5396,
+                "bbox": [
+                    311,
+                    797,
+                    435,
+                    1999
+                ],
+                "index": 14
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6068,
+                "bbox": [
+                    1282,
+                    1428,
+                    1377,
+                    2173
+                ],
+                "index": 15
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.496,
+                "bbox": [
+                    242,
+                    610,
+                    287,
+                    1628
+                ],
+                "index": 16
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.513,
+                "bbox": [
+                    833,
+                    1221,
+                    902,
+                    1475
+                ],
+                "index": 17
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9705,
+                "bbox": [
+                    479,
+                    1485,
+                    810,
+                    1919
+                ],
+                "index": 18
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9637,
+                "bbox": [
+                    825,
+                    1480,
+                    1086,
+                    1938
+                ],
+                "index": 19
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    315,
+                    97,
+                    346,
+                    347
+                ],
+                "score": 0.999,
+                "text": "拆保护帽时能听到压力"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    287,
+                    109,
+                    319,
+                    343
+                ],
+                "score": 0.999,
+                "text": "释放声，冲击力不大"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    238,
+                    159,
+                    261,
+                    361
+                ],
+                "score": 0.944,
+                "text": "© Bosch Powertrain System"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    261,
+                    159,
+                    284,
+                    362
+                ],
+                "score": 0.953,
+                "text": "Internal C-SC1 | RBCD/EIS"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    849,
+                    86,
+                    884,
+                    337
+                ],
+                "score": 0.998,
+                "text": "拆保护帽时无明显压力"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    820,
+                    87,
+                    855,
+                    337
+                ],
+                "score": 0.998,
+                "text": "释放声，只在拔出时有"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    796,
+                    174,
+                    829,
+                    253
+                ],
+                "score": 0.981,
+                "text": "“叭”声"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    673,
+                    1274,
+                    726,
+                    1467
+                ],
+                "score": 0.998,
+                "text": "0.25MPaA"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    264,
+                    2144,
+                    317,
+                    2297
+                ],
+                "score": 0.995,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    724,
+                    130,
+                    773,
+                    323
+                ],
+                "score": 0.998,
+                "text": "0.13MPaA"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    579,
+                    91,
+                    614,
+                    342
+                ],
+                "score": 0.999,
+                "text": "释放声，且冲击力很小"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    607,
+                    91,
+                    642,
+                    341
+                ],
+                "score": 0.998,
+                "text": "拆保护帽时能听到压力"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    864,
+                    1226,
+                    895,
+                    1471
+                ],
+                "score": 0.999,
+                "text": "拆保护帽时能听到压力"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    836,
+                    1238,
+                    868,
+                    1463
+                ],
+                "score": 0.999,
+                "text": "释放声，冲击力不大"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1102,
+                    86,
+                    1166,
+                    2009
+                ],
+                "score": 0.987,
+                "text": "基于不同压力下的试验结果，决定降低充氮压力：0.15MPaA~0.25MPaA→0.13MPaA~0.19MPaA。"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1164,
+                    91,
+                    1228,
+                    1834
+                ],
+                "score": 0.985,
+                "text": "Background：产线和质量部反馈当前设定压力过高，在拆保护帽时，保护帽冲击力较入。"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    307,
+                    799,
+                    371,
+                    1774
+                ],
+                "score": 0.999,
+                "text": "程中感受到压缩机内正压力，并且其冲击力也不大。"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    358,
+                    799,
+                    421,
+                    1998
+                ],
+                "score": 0.988,
+                "text": "结果：压力在0.13MPaA~0.19MPaA之间，能够在拧松保护帽过"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1318,
+                    1428,
+                    1368,
+                    2173
+                ],
+                "score": 0.948,
+                "text": "重要备注：Offer drawing中要求压缩机拧松保护帽开"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1281,
+                    1430,
+                    1326,
+                    1938
+                ],
+                "score": 0.986,
+                "text": "启使用时需要能感受到内部正压力。"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    242,
+                    602,
+                    269,
+                    1618
+                ],
+                "score": 0.851,
+                "text": ", also regarding any disposal, exploitation, reproduction, editing, distibutin, as Wel as in he event or appncauons tor mnnsakr picpony wgn"
+            }
+        ],
+        "page_info": {
+            "page_no": 3,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 24,
+                "label": "vision_footnote",
+                "score": 0.4556,
+                "bbox": [
+                    950,
+                    408,
+                    1003,
+                    936
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 3,
+                "label": "chart",
+                "score": 0.6675,
+                "bbox": [
+                    444,
+                    160,
+                    934,
+                    1197
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 3,
+                "label": "chart",
+                "score": 0.5543,
+                "bbox": [
+                    455,
+                    1303,
+                    929,
+                    2216
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5237,
+                "bbox": [
+                    1031,
+                    62,
+                    1244,
+                    2245
+                ],
+                "index": 4
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    954,
+                    412,
+                    992,
+                    929
+                ],
+                "score": 0.998,
+                "text": "12月份进气温度监控187组测试数据@57CC"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1153,
+                    89,
+                    1216,
+                    2234
+                ],
+                "score": 0.916,
+                "text": " 下线气测PMB中进气温度定义范围：24.0±3℃。由规范定义初期为数不多的儿台压缩机数据J仞始值工过"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1091,
+                    135,
+                    1153,
+                    2234
+                ],
+                "score": 0.963,
+                "text": "压缩空气由FCM集中供气，空气温度受季节影响较大，当前气测台架只有气体干燥作用，无控温作用。基了过去"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1031,
+                    145,
+                    1091,
+                    1843
+                ],
+                "score": 0.979,
+                "text": "将近一年的实际生产数据，调整进气温度设定至25.0±6℃，对压缩机下线功能检查无影响。"
+            }
+        ],
+        "page_info": {
+            "page_no": 4,
+            "width": 1653,
+            "height": 2339
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.4646,
+                "bbox": [
+                    368,
+                    136,
+                    467,
+                    1553
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 16,
+                "label": "number",
+                "score": 0.7975,
+                "bbox": [
+                    255,
+                    39,
+                    293,
+                    67
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 3,
+                "label": "chart",
+                "score": 0.9353,
+                "bbox": [
+                    504,
+                    148,
+                    1203,
+                    1330
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.672,
+                "bbox": [
+                    1245,
+                    43,
+                    1419,
+                    872
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 9,
+                "label": "footer_image",
+                "score": 0.6004,
+                "bbox": [
+                    219,
+                    2032,
+                    279,
+                    2247
+                ],
+                "index": 5
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    224,
+                    2096,
+                    274,
+                    2249
+                ],
+                "score": 0.994,
+                "text": "BOSCH"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    414,
+                    135,
+                    465,
+                    1552
+                ],
+                "score": 0.998,
+                "text": "结果：压缩机内部2.5bar压力下半个月内几乎无泄露，说明当前保护帽装配状态下内部"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    371,
+                    137,
+                    417,
+                    477
+                ],
+                "score": 1.0,
+                "text": "压力保压能力良好。"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    257,
+                    40,
+                    292,
+                    66
+                ],
+                "score": 0.605,
+                "text": "N"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1245,
+                    46,
+                    1340,
+                    876
+                ],
+                "score": 0.993,
+                "text": "压缩机内部压力泄露试验"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1326,
+                    46,
+                    1423,
+                    508
+                ],
+                "score": 1.0,
+                "text": "充氮压力试验"
+            }
+        ],
+        "page_info": {
+            "page_no": 5,
+            "width": 1653,
+            "height": 2339
+        }
+    }
+]

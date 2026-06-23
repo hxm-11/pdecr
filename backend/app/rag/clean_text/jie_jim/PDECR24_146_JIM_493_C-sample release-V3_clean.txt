@@ -1,0 +1,504 @@
+C Sample Drawing Release Pre-condition Checkist
+Result/Report | Status | Resp. | Date
+Design | 1.C Sample 3D model confirmed by customer? | ok | 卢青坛 | 2024.1.8
+2.C Sample offer drawing check with manufacturing drawing? | ongoingD:2025.0..10 | 情松 | 20281.8
+3.C Sample Nameplate confirmed by customer? Email or drawing confirm? | ok | 卢青松 | 2025.1.8
+4.D-FMEA first version finished? | 已完成.比准中7：2075.01.24
+5.I-FMEAfirst version finished? | ongoing 0:2075.01.24 | 7)
+6.Installation uidelinefinished? | onyoins D：2025.01.24
+7.PSC/CC list finished for CMK summary? | 已有初版
+PUR/MOE | 1.C Sample Make and Buy confirmed? | ok.only cakls+ATS=B | 李。 | 2025.18
+2.C sample DFMA welding process confirmed with MOE?Flow char? | ou goy | . | 18
+3.P-FMEA first version plan? | ongoiy | 品 | 1.8
+DVValidation | 1.Canning validatio finished?report | Gveved Dy patform | 162.5 | 2025.18
+2.ATSDVvalidation finished?report? | Test result: pays
+System | 1.TCD status? | 0K | 2020÷1.9
+2.POC result & report? | On qoing
+
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2024-1-09th
+24_146
+Customer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:
+Sample status / 样件状态： A Sample ]B Sample C Sample D Sample
+Change part&product Name/更改零部件产品的名称(简要描述)
+DOC-DPF:F01ZH003FU-05SCR:F01ZH003FV-05
+Reason of changes/更改理由(简要描述):
+C样件放行
+Change from/变更来源：
+Customer request/客户要求□ | Supplier request/供应商请求 Design optimization /设计优化
+Correction/更正(错误) | Other /其他
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+Ifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design /设计工程师 | 卢青松 | Date /日期： | 2025.1.7
+Signature /签名：
+Check/校对工程师 | is | 对$ | Date /日期： | 205.1.8
+Signature/签名：
+Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）
+
+BOSCH博世Confidential | Design Change Review Sheet设计变更评审表 | Version 13Effective date: 2024-11-09th
+Design Change 24_146Request No.
+1.Function&Performance wil be influenced?/系统性能影响？ yes/是no/否
+If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 俗化方来可的有变更，封装无影 | Ssystem/签名坡
+Whether need sample to test? Plan?是否需要样件进行验证？计划？
+Whether the catalyst informationisconfirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | 催化察可能有变更，经系统测试确认 | catalst/签名张汉泉
+2.Interface&boundary (internal and custom | er) wil be infuenced?/接口&边界(内部和客户)影响？ yes/是 | no/否
+if impact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？ | 客户已核类完成边界 | Desien/然名卢青松
+3. Mechanical strength&Durability wil be in | fluenced?/机械强度&可靠性影响？ yes/是 | □n0/否
+IfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等) | D验证过、架和吊约评化结构强 | 诗年$variati
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | DU马金江通过(发动在而、总成热振动)
+4.Product document infuenced?
+4.1 Interface FMEA-relevant/IFMEA: | no/否 yes/是 Note_ | 0
+4.2.Product FMEA-relevant /DFMEA: | no/否 yes/是 Note
+4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note
+4.4.IMDS relevant：(针对C Sample) | no/否 yes是 Note
+4.5 Offer drawing relevant(针对C Sample) | no/否 yes是 Note
+4.6.TCD relevant: | no/否 yes/是 Note
+5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） NA.(新零件放行，不涉及库存）涉及到已经生产过的零件变更
+RBCWRDC（外库)和RBCW仓库，是否有库存， | □无库存 □有库存，库存数量
+供应商处（已做好，未发货）是否有库存， | □无库存 □有库存，库存数量 | PUE/签名
+LPN工厂是否有库存， | □无库存 □有库存，库存数量
+在途，运输中是否有库存 | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名
+改制费用 报废成□ | PUE /签名
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换其（单独说明)：
+6. Influence on supplier part?
+Was this change confirmed with Purchasing (Su变更后的零件，生产可行性供应商是否确认？ | pplier) for feasibility? Feedback from Supplier?反馈？
+Influence on purchasing part delivery time？对采购件交货时间的影响？
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. □no/查yes/是
+保過，5)increase/增加，金额 decrease/降低，金额nd change/不变
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA文件 | Desien 松
+已开 DFMA 会议纪要详见付件
+8. Influence on LPN manufacturing&assembly process?
+Feedback from manufacturing engineer?产制造装配是否影响，反馈？ | PE
+Infuence on project&product deliver time？对项&产品交货时间的影响？
+低，金其也Dincrease/增加金额
+9. PM alignment? (influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 ;需求样品订单数量
+PM/签名
+10.如果涉及以下情况需TCR3审核确认。不涉及则NA. RBCW□库存报废，金额 采购成本增加，金额 牛产成本增加，金额
+7TCR3
+Design Team Leader | ENG-CV1 | PUR | TCR3025-03X7
+Signature/签名：杨抓
+Sgnature签 | Signature | Signature/签名：友庙
+
+[image] 
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102CZ-02 | INLET FLANGE | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+1+ 四0.24. .2习F01Z5102CZ-02 | A-A20002002+ 因5.020.5.0210÷0.5F01Z5102CZ-02
+变更原因 | 供应商请求放宽法兰厚度公差，由公差±0.2改为±0.5;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102D0-03 | CONE | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5102D0-02 | F01Z5102D0-03
+变更原因 | 供应商反馈原端锥成型困难，报废率，端锥整体减短15mm;
+风险点（影响） | 1.端锥形状改变后，体流速均匀性及传感器位置不合格;2.结构强度变，差有断裂风险;
+验证方法 | FEA及CFD仿真合格，仿真报告如附件;
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5101V1 | TEMP-SENSOR BOSS | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 端锥更改后，为保证T4位置不变座改用JP560量产传感器座;无无
+风险点(影响)
+验证方法
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102DH-04 | DP TUBE BRACKET | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 1.为便安装，线束架与筒体安装外扩0.3mm;2.为防卡安装困难，客户要求去除传感器架倒圆;3.供应商请求更改架安装位置，便焊接;
+风险点(影响) | 无无
+验证方法
+
+8
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X1-04 | DP TUBE BRACKET | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 根据客户边界及仿真分析结果，更改压差支架形状;
+风险点（影响） | 强度不足，有断裂风险;
+验证方法 | 进行FEA仿真，仿真报告详见附件
+
+[image] 
+
+[image] 
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51026F-01 | DP TUBE BRACKET | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z51026F-00 1.压差侧架按压差架更 | 改后随之更改; F01Z51026F-01
+变更原因 | 压差侧架按压差支架更改后随之更改;
+风险点(影响) | 强度不足，有断裂风险;进行FEA仿真，仿真报告详见附件
+验证方法
+变更描述 | 变更前 | 变更后
+$0102F0IZ5017NM-0x××××xx×DOCCANNING:F01Z5017NM-01DOCCANNINGSLEEVE:F01Z5102ED-001．DOC筒增加箭头及DOCCATALYST:F01Z50178N-00DOCMAT：F01Z5102E9-00 2.DOC筒子随端锥减短3.DOC canning随之更 | F01Z5017NM-08$xx-xx-xx-xx×××××××xx×××xx×DOCCANNING:F01Z5017NM-03DOCCANNINGSLEEVE:F01Z5102ED-02防错维码;DOCCATALYST:F01Z50178N-00后随之加长13mm; DOCMAT:F01Z5102E9-00改;
+变更原因 | 供应商请求在筒子上增加放错二维码及箭头及加长13mm;
+风险点(影响) | 无无
+验证方法
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NP-02 | DPF CANNING | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5017NP-01$xxxxxxxDPFCANNING:F01Z5017NP-01DPFCANNINGSLEEVE:F01Z5102EE-00DPFCATALYST：F01Z5017WM-00 1．衬垫按照背压结果DPFMAT:F01Z5102EA-00 2.DPF筒增加箭头 | F01Z5017NP-02IXXXEXXDPFCANNING:F01Z5017NP-02DPFCANNINGSLEEVE: F01Z5102EE-01重新设计; DPFCATALYST：F01Z5017WM-00及防错维码 DPFMAT:F01Z5102EA-01
+变更原因 | 衬垫按背压重新设计，图纸升级，canning根据衬垫更改后随之更改;供应商请求在筒上增加放错维码及箭头;
+风险点（影响） | 衬垫预紧力不，载体有吹出风险;
+验证方法 | 验证方法 已进行canning DV实验;
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025W-02 | DPF OUTLET CONE | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+为防DPF出端锥碰碎载体，供应商请求DPF出端锥由内插改为外套;外径变大，边界不满足;验证方法 客户校核满足需求
+风险点(影响)
+验证方法
+
+020
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025X-01 | DP SENSOR BOSS | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+1.压差座高度更改;F01Z51025X-00 | F01Z51025X-01
+压差座在端锥更改后随之更改;无验证方法 无
+风险点(影响)
+验证方法
+
+2
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W5-04 | DOC+SDPF WELDING | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+日
+1.上述变更后焊接组件随之更改;2.按供应商工艺要求修改图纸;无无
+风险点(影响)
+验证方法
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W8-02 | DP tube inlet | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+at do9DPtubeinlet：F01Z5017W8-01DPtubeinlet:F01Z5017YK-01RUBBERHOSEINLET：F01Z5101CB 1.压差软管增长;DPTUBECLAMP：F01Z501598 2.压差管组件随之 | 9 4DPtubeinlet:F01Z5017W8-02DPtubeinlet:F01Z5017YK-01RUBBERHOSEINLET:F01Z5102SV-00更改; DPTUBECLAMP：F01Z501598
+变更原因 | 压差架更改后，压差软管随之增长，压差软管更新后，压差管组件随之更改;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段
+F01Z5017W7-02 | DP tube OUTlet | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更后
+oa9DPtubeOUTIet:F01Z5017W7-01DPtubeOUTIet:F01Z5017YJ-01RUBBERHOSEINLET:F01Z5101CA1.压差软管增长;DPTUBECLAMP:F01Z501603DPTUBECLAMP:F01Z501598 2.压差管组件随之 | 9 DPtubeOUTlet:F01Z5017W7-02DPtubeOUTlet:F01Z5017YJ-01RUBBERHOSEINLET:F01Z5102SW-00DPTUBECLAMP:F01Z501603更改; DPTUBECLAMP:F01Z501598
+变更原因 | 压差架更改后，压差软管随之增长，压差软管更新后，压差管组件随之更改;
+风险点(影响） | 无
+验证方法 | 无
+——
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+INSULATION | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 保温壳按照开模模型细化;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FU-04 | DOC+SDPF UNIT | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+X×X×-X×0
+变更原因 | 1.上述变更后DOC+DPF总成随之更改;2.按供应商艺要求修改图纸;3.在出法兰上打刻产期及批次;4.取消尾管上的两保温
+风险点 （影响） | 取消尾管两片保温，温损加大，标定有误;
+验证方法 | 实验验证温损可接受，实验结果见附件;
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017WA-02 | SCR CANNING | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+行SCR CANNING:F01Z5017WA-01SCRCANNING SLEEVE: F01Z5101P3SCRCATALYST:F01Z501891SCRMAT:F01Z5102EB-00 | SCRCANNING:F01Z5017WA-02SCRCANNINGSLEEVE:F01Z5101P3SCRCATALYST：F01Z5018CM-00SCRMAT:F01Z5102EB-00
+催化剂将本，系统工程师要求催化剂改用新方案催化剂;无验证方法 无
+风险点(影响)
+验证方法
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017WB-02 | PIPE FOR PIN 01 | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+011.15PA11.04 中FA11.07fT1_PIPEFORPIN01：F01Z5017WB-011．吊钩墩头直径减PIPEFORPIN01：F01Z5102D6-012．吊钩组件图纸增加 | -11.07大Fh; PIPEFORPIN01：F01Z5017WB-02焊缝长度; PIPEFORPIN01：F01Z5102D6-02
+变更原因 | 1.供应商反馈原墩头直径16制作困难，请求把吊钩墩头直径改为14;2.供应商请求在吊钩组件图纸上增加焊缝度;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段
+F01Z5017WC-01 | PIPE FOR PIN 01 | JIM-493 | C | 变更来源 BOSCH/Customer
+变更描述 | 变更前 | 20=01$ PKT1_00- y | 变更后
+因 回 回 广 110@ A 户 PKT1.02- | 回 11A 中 PKT1.02-
+PIPEFORPIN02：F01Z5017WC-01 吊钩组件图纸增加焊缝长度; PIPEFORPIN02：F01Z5017WC-0
+变更原因 | 供应商请求在吊钩组件图纸上增加焊缝长度;
+风险点（影响）
+验证方法 | 无
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段
+C | BOSCH/Customer
+变更描述 | 变更后
+变更原因 | 1.上述更改后SCR组件随之更改;2.按供应商艺要求修改图纸;
+风险点（影响） | 无
+验证方法 | 无
+
+03 2
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018BZ-00 | SCR UNIT | JIM-493 | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 按客户要求，保温壳铭牌信息位置更改到车架下方;无无
+风险点(影响)
+验证方法
+
+2
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5018C0-00 | INSULATION WITH MAT 变更前 | JIM-493 | C
+变更描述 | 变更后 BOSCH CSO SCR（含ASC1期：汽事（城）公 SCRLASC)件:NGK（苏N]公司 SCR(会ASC）业：（上）先工 E415 CA100271870 F012ZH003FV-05 Mode in Chins
+INSULATIONWITHMAT：F01Z5016EK INSULATIONWITHMAT:F01Z5018C0-01 INSULATIONFOIL：F01Z5102T8-00 INSULATIONFOIL：F01Z51018C INSUALTIONMAT：F01Z51018D INSUALTIONMAT：F01Z51018D 变更原因 1.按客户要求，保温壳铭牌信息位置更改到架下;2.供应商请求把产期和产批次号改到法兰上;
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-04 | SCR UNIT | JIM-493 | C | BOSCH/Customer
+变更前 | 变更后
+变更原因 | 1.上述变更后SCR总成随之更改;2.按供应商艺要求修改图纸;3.供应商请求把SCR的产批次号和产期改到法兰上;
+风险点(影响) | 无无
+验证方法
+
+[image] 
+
+[image] 
+
+L696T 00+3L9E+ = T = anTeA :IEA N
+
+[image] 
+
+[image] 
+pueas/snbeay 1998T =antEA epnatubey :T
+
+[image] 
+
+[image] 
+
+[image] 
+-（（）
+
+[image] 
+
+28 72 6 3 3 \$ STT 00 8 5 4 30 OTT 2 30 dual 0 00 00 0
+
+##
+
+(X) ()
+
+()292 ()08
+
+(Z) (X)29981928 (Z)
+
+(Z)99
+
+pueas/enbea TT'S6T 0O+0TOEB+ =anteA apnatubew IEA KIEUTI
+
+[image] 
+
+[image] 
+pueas/enbeay 00+35992+ apnatubew U
+
+[image] 
+
+[image] 
+
+[image] 
+
+[image] 
+
+28 72 6 33 SZT 8 30 60 OTT 2 30 dual 0 0 000
+
+##
+
+() (X)Z88
+
+() (Z)
+
+() (Z)6 (Z)
+
+## -（）
+
+[image] 
+
+##
+
+[image] 
+
+(Z) (
+
+2
+
+[image] 
+
+Hook Responsibility | RB Hooks | Customer Hooks
+Point | 1 | 2 | 3 | 4 | 5 | 6
+Reaction force [N]-Z | 16.4 | 39.9 | 12.8 | 19.1 | 35.7 | 13.0 | OK
+Displacement [mm] | 1.23 | 3.00 | 0.96 | 1.43 | 2.68 | 0.97 | OK
+
+[image] 
+apow
+
+[image] 
+apnubew'n 
+apow
+
+[image] 
+apnubew'n
+
+L
+
+Mode | Freq. (Hz) | Mode | Freq. (Hz) | Engine Info1 | 2nd order
+1 | 9.6 | Y向摆动 | 10 | 43.0 | x向一阶扭摆 | Engine | 4 cylinders
+2 | 10.2 | x向摆动 | 11 | 53.8 | z向三阶扭摆 | ldle | 750±50 rpm | 25.5±1.7Hz
+3 | 13.1 | Y向一阶扭摆 | 12 | 77.9 | Z向四阶扭摆+前吊钩局 部模态
+4 | 14.0 | Z向弯曲 | 13 | 82.8 | 波纹管局部模态
+5 | 16.4 | z向一阶扭摆 | 14 | 84.6 | 波纹管局部模态
+6 | 19.2 | Y向弯曲 | 15 | 108.7 | 前吊钩局部模态 | 3
+7 | 20.6 | Z向弯曲+尾管局部模态 | 16 | 123.9 | 波纹管局部模态 | 01
+8 | 34.2 | z向二阶扭摆 | 17 | 124.5 | SCR前吊钩+波纹管局 部模态
+9 | 35.7 | Y向二阶扭摆 | 18 | 125.6 | SCR前吊钩+波纹管局 部模态 | 5
+
+[image] 
+
+[image] 
+
+Hook location | Conclusion
+Model | Hook#1 Hook#3Hook#4光Hook#2 Hook#6Hook#5 | 经分析，吊钩位置分布较合理;另外，SCR出气端锥处有1处适合布置吊钩的位置。
+Modal nodes(20~150Hz) | Modes: Modes:Modes: Modes: Modes:3,81,2,3Modes:5,7,8 4,11 5,7 1,2,7Modes: Modes: Modes:4,5,7,11 1,2,3,8 Modes: 3,7,8,113,8,11
+
+[image] 
+
+PEEQ
+Step2 | 1.39%
+Step4 | 2.24%
+Delta PEEQ | 0.425%
+
+PEEQ
+Step2 | 1.34%
+Step4 | 1.35%
+Delta PEEQ | 0.005%
+
+[image] 
+
+[image] 
+
+[image] 
+
+[image] 
+
+[image] 
+
+[image] 
+
+## EXTERNAL Lu Qingsong (WABT, RBCW/ENG-CV2)
+
+From: | zhu.xiangyu@jiangxi-isuzu.cn
+Sent: | 2025年18星期三9:57
+To: | EXTERNALLu Qingsong (WABT, RBCW/ENG-CV2);liu.yu
+CC: | dai.shiqing; ZHANG Shengchang (RBCW/SMP-ATS1);YANG Guangtuo (RBCW/ENG- CV1)
+Subject: | Re:PA506项目后处理数据优化
+
+卢工：
+
+经布置校核，保温壳28工况的间隙及压差支架抬高校核已经ok，铭牌位置也在可视范围内，可以按此版数据冻结;
+
+祝您工作愉快
+
+江西五十铃汽车有限公司
+
+产品开发技术中心动力传动科 朱祥禹
+
+地址：江西省南昌市望城新区江铃大道666号
+
+TEL：15720942977
+
+E-mail:zhu.xiangyu@jiangxi-isuzu.cn
+
+发件人：EXTERNALLu Qingsong (WABT，RBCW/ENG-CV2)
+
+发送时间：2025-01-0613:16
+
+收件人：zhu.xiangyu@jiangxi-isuzu.cn;liu.yu
+
+抄送：ZHANG Shengchang (RBCW/SMP-ATS1);YANG Guangtuo (RBCW/ENG-CV1)
+
+主题：PA506项目后处理数据优化
+
+Hello朱工，
+
+JIM493根据要求调整了保温壳数模，铭牌的位置也做了更新，压差架做了优化，请评估下此版数模能否符合边界要求，谢谢！
+
+数模下封邮件单独发送;
+
+Basic intormation基本信息 | JIM493 | Meeting ntormation会议信息 | DFMA
+Project name项目名称 | Sample phase样件阶段 | PlanVSupplier工厂/供应商 | Meeting time会议时间
+JIM493 | C-sample | 弗吉亚 | 2024.12.2615:00-16:15 | in Wei; LiYicenLuQingong;RongYiingYangGuangtuo; Yin KangZhuang: Fang Jiayan
+Check point检查项
+Welding feasibiliy焊接可行性 | Assembly feasibiity装配可行性 | Measure feasibility测量可行性
+Open Topic会议讨论点
+Description文字描述 | $P$ | $下_计 | Responsibility责任人 | Due date节点 | 类别 | 状态 | note
+压差支架增加一道焊缝; | 弗吉亚参考威孚RZ4E设计焊接工艺，评估生产可行性; | Jin Wei | 1月3 | 焊接可行性 | ongoing
+尿素喷嘴座不好焊接; | 弗吉亚参考威孚RZ4E设计焊接工艺，评估生产可行性; | Jin Wei | 1月3 | 焊接可行性 | ongoing
+支架减短到一半 | 仿真评估下支架减短到一半的强度;仿真分析结果显示有风险，不修改保持原设计： | 卢青松 | 1月3 | 生产可行性 | done
+保温壳翻边焊接留10-12mm | 卢青松 | 1月3 | 焊接可行性 | done
+吊钩焊接直线段太短 | 弗吉亚参考威孚RZ4E设计焊接工艺，评估生产可行性; | Jin wei | 1月3 | 焊接可行性 | ongoing
+端维拍平后.零件直线段失国 | 弗吉亚找供应商评估下端维零件的生产可行性; | Rong Yiping | 1月3 | 零件生产可行性 | ongoing
+
+# 零部件状态说明 JIM 493 C样件状态
+
+[image] 
+
+# 焊接和测量说明 JIM 493 C样件状态
+
+[image] 
+将来量产采用模具件，机器人焊接工艺更稳定，此轮耐久可以覆盖将来量产状态 基于以往项目经验，弗吉亚手工焊接有较丰富经验，前期手工焊接件台架耐久未出现焊缝失效，此轮整车耐久风险较低 由于量产工装检具未及时到位，此次OTS期望用手工焊接+部分机器人焊接支持整车耐久
+
+[image] 
+
+# DOC端锥变更FEA评估 JIM 493 C样件状态
+
+1阶模态频率170.12Hz， 变更前为169.2Hz
+
+U, Magnitude
+
+Scale Factor: +0.00
+
+[image] 
+
+ODB:ANALYSIS\_JIM\_493\_HEND\_HMA\_20250306\_C.odt Ytep:MA Mode 1:Value=1.14260E+06Freq=170.12 Prmary Var: U, Magnitude Daformed\lar. Meformation Crale Fartor. IA Menn
+
+[image] 
+
+[image] 
+（变更前：42.3Mpa) 41MPa@150Hz(X)
+
+[image] 
+
+[image] 
+（变更前：34.5Mpa） 32.7MPa@ 150Hz(X)
+
+[image] 
+
+[image] 
+
+[image] 
+
+[image] 
+
+T6温度及温损验证\_RDE95 JIE 493 ATS POC test 
+[image] 
+
+[image]

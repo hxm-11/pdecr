@@ -1,0 +1,50 @@
+{
+  "Customer_project_Name": "JIM-493",
+  "source_file": "PDECR25_032_JIE-4JJ1_C_Sample_首次释放-2025-0820-V4.pdf",
+  "metadata": {
+    "dc_no": "24_093",
+    "date": "2024-09-03",
+    "customer_project": ["JIM-493"],
+    "mcr_no": "",
+    "sample_status": ["A Sample"]
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF新鲜件(不可拆): F01ZH003FU-01; DOC+SDPF老化件(不可拆): F01ZH003FU-51; SCR新鲜件: F01ZH003FV-01; DOC+SDPF新鲜件(可拆): F01ZH003G1-00; DOC+SDPF老化件(可拆): F01ZH003G1-51; SCR老化件: F01ZH003FV-51",
+    "reason_for_change": "JIM493 新鲜件老化件（可拆+不可拆）样件首次释放",
+    "change_source": ["Customer request", "Design optimization"]
+  },
+  "responsibility": {
+    "change_inform_to": [
+      "Zhang Shengchang",
+      "Zhang Hanquan",
+      "Shen Weibo",
+      "Li Yicen",
+      "Fang Jiayan",
+      "Yin Kangzhuang",
+      "Yang Guangtuo",
+      "Jia Kebin",
+      "Luo Jing",
+      "Lu Qingsong"
+    ],
+    "design_engineer": "卢青松",
+    "check_engineer": "杨广拓"
+  },
+  "impact": {
+    "impact_other_product": "no"
+  },
+  "description_of_change": {
+    "raw_text": "",
+    "affected_parts": []
+  },
+  "source_trace": {
+    "pdf_page": [1],
+    "raw_md_path": "raw_md/PDECR25_032.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "mcr_no",
+      "sample_status",
+      "signature_names",
+      "description_table"
+    ]
+  }
+}

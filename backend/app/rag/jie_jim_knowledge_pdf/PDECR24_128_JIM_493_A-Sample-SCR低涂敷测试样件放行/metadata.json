@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR24_128",
+  "source_file": "PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "24_128",
+    "date": "2024-10-30",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "1.7g/in3 WCL SCR涂敷+3g/cft ASC老化件：F01ZH003GL-53; 2.0g/in3 WCL SCR涂敷+1.5g/cft ASC老化件：F01ZH003GL-54; 1.7g/in3 WCL SCR涂敷+1.5g/cft ASC老化件：F01ZH003GL-55; 系统工程师测试样件放行。",
+    "reason_for_change": "系统工程师测试样件放行。",
+    "change_source": [
+      "Other"
+    ]
+  }
+}

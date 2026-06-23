@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR26_002",
+  "source_file": "PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2_origin.pdf",
+  "metadata": {
+    "dc_no": "26_002",
+    "date": "2026-01-14",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Customer request / 客户要求；Design optimization / 设计优化。",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF UNIT: F01ZH003VK-00; SCR UNIT: F01ZH003VL-00",
+    "reason_for_change": "按客户要求释放JIE PT611B样件。",
+    "change_source": [
+      "Customer request"
+    ]
+  }
+}

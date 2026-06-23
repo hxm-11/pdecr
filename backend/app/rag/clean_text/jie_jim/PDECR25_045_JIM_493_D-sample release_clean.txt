@@ -1,0 +1,280 @@
+Release Points | Result/Status | Deadline | Resp.
+sa | 1.Final 3D model and ffer drawing officiall confirmed by customer? | done | 2025.5.14 | 卢商松
+2. Final nameplate confirmed by customer? | clone | 2025.5.14 | 卢青坛
+3.IMDS or CAMDS finished? | dne.
+4. D-FMEA closed and signed? Sign? | done | -7+3
+5. I-FMEA signed with customer? Sign? | dbone | 14U
+6. Installation instruction finished? | done
+7. Finial SC/CC finished by EGT5/MOE/QMM/PUR? Sign? | done | 2025.S.14 | 卢青松
+8. Catalyst spec,offer drawing，PSC, TCD allavailable in BOM? | done | 2025.5.14 | 卢青松
+30W | 1. Final welding process flow chart finished by MOE?
+2. Welding and assembly trial run finished? | 225.6.24 | 3
+3.P-FMEA signed?
+Validation | 1.9000 Km bad road Vehicle validation status? | 已做51%，预计6月1日完成
+2.PV report? | Covored by DU | 2025.5.14 | 余词
+a | 1. Customer validation report?(Ifcustomer take responsible the calibration, take as reference) | done
+2.TCD is available? | dore | 2o.5.1x
+3. PD is available? | elene
+Flow | 1. QG0 and QG1 passed? QGC2 plan? | dore | 11 | 3
+
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-05-13th
+25_045
+Customer project Name/客户项目名称： JIM-493 MCR No./ MCR号:
+Sample status / 样件状态： A Sample ]B Sample C Sample D Sample
+Change part&productName/更改零部件产品的名称(简要描述)
+DOC-DPF:F01ZH003FU-00 SCR:F01ZH003FV-00BRACKET:F01Z5102EU-02
+Reason of changes/更改理由(简要描述)：
+C样件放行
+Change from/变更来源：
+Customer request/客户要求 √ | Supplier request /供应商请求 Design optimization /设计优化
+Correction/更正(错误) | Other/其他
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, Li Yicen, Ge Jilong
+Yang Guangtuo, Luo jing, Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+ifimpact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design /设计工程师 | 古青松 | Date/日期： | 2025.5.14
+Signature/签名
+Check/校对工程师 | Date/日期： | 205.5.1
+Signature /签名:
+Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）
+
+BOSCH博世Confidential | Design Change Review Sheet设计变更评审表 | Design Change变0RBCW/TCR32025-864.29Signature 签名
+25_045
+1. Function&Performance wil be infuenced?/系统性能影响？ yes/是no/否
+如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | ASPOC已
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | NA
+Whether the catalystinformationis confrmed?催化剂信息是否确认？(物料号、图纸、SPEC) | Catalyst/签名_
+2.Interface&boundary (internal and custom | er) wil be infuenced?/接口&边界(内部和客户)影响？ | no/香
+ifimpactcustmer,whether getconfirm fromcustomer side?请说明影响和是否得到客户的确认？
+3. Mechanical strengthDurability wil be infl | uenced?/机械强度&可靠性影响？
+If Yes, How to evaluate?Plan?如果是，请说明影响和如何评估，计划？(例如：仿真分析等) | 结构强度风险的.
+Whether need sample to test?Plan?是否需要样件进行验证？计划？
+4. Product document infuenced?
+4.1Interface FMEA-relevant/IFMEA: | no/否 yes/是 Note
+4.2.Product FMEA-relevant/DFMEA: | □ | no/否 √yes/是 Note_
+4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note_
+4.4.IMDS relevant： (针对C Sample) | no/否 yes/是 Note
+4.5 Offer drawing relevant(针对C Sample) | no/否 yes/是 Note
+4.6. TCD relevant: | no/否 yes/是 Note
+5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）
+RBCW RDC(外库)和RBCW仓库，是否有库存， | 无库存 □有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | □ 无库存 □有库存，库存数量
+LPN工厂是否有库存， | 无库存 □有库存，库存数量
+在途，运输中是否有库存 | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名_
+报本 改制费用 | PUE /签名_
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换
+6. Influence on supplier part?
+变更后的零件，生产可行性供应商是否确认 | ？反馈？
+设计调琶
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.
+increase/增加，金额 △decrease/降低，金额 ho change/不
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA 文件
+8. Influence on LPN manufacturing&assembly process?
+Feedback fommanufaturin enginer？造装配是否影响，反馈
+D样量产成体
+Inffuence on manufacturing cost /对产成本的影响？increase/增加n，金额 decrease/降低，金额
+是否同意对项目时间和成本的影响 ;需求样品订单数量
+10.如果涉及以下情况需TCR3审核确认。 不涉及则 NA.:库存报废，金额 平购成本增加，金额 牛产成本增加，金额
+Design Team Leader | ENG-CV1 | PUR | TCR32025-8642.0
+Dosin | sinature名 | Signatu9 | Signature签名
+755.6.
+
+[image] 
+
+##
+
+s suaisA
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NM-04 | DOC CANNING | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F0IZ5017NM-03 xx-xx-xx-× $x××××××× ×××××××× | F01Z5017NM-03 x×××x×xx x×xxxxxx JR CODE- | F01Z5017NM xx-xx-xx-x ××××x×x ATA1 xx×××x×x 135 | VIEWX (40) B03CH PART F0I25017NM XX=XK-32-x YA! ORCUE-
+DOCCANNING: F01Z5017NM-03 | DOCCANNING: F01Z5017NM-04
+DOC CANNING SLEEVE: F01Z5102ED-02 DOC CANNING SLEEVE: F01Z5102ED-03
+变更原因 | DOC筒体刻字离焊缝太近，加15mm据焊缝的距离;
+
+##
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102E0-01 | DM flange | JIM-493 | D
+变更描述
+BOSCH/Customer
+变更前
+变更后
+0F01Z5102E0-00
+0F01Z5102E0-01
+变更原因 | 供应商反馈JIM493与4J尿素喷嘴座只有槽的度不同，因此加上防错缺;
+无无
+验证方法
+
+00
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51027K | PLATE | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+0F01Z5101BP | 0F01Z51027K
+变更原因 | 供应商请求混合器内隔板换成JP560量产内隔板;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W6-02 | MIXER UNIT | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前
+变更后
+1.根据供应商实际产状态，把压差座转到焊接总成上;2.根据供应商检具，把混合器组件图纸上的部分尺寸转移到焊接组件上;无无
+风险点(影响)
+验证方法
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X1-04 | DP TUBE BRACKET | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 1.客户反馈线束固定架超温，取消线束固定支架;2.更新压差架零件和组件的图纸，把压差架的凸点直径和位置标注上;
+风险点（影响) | 无
+验证方法 | 无
+
+##
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NP-03 | DPF CANNING
+incti
+catalyst weignt | kg
+k a$
+Acceleralion Load
+Suostrate material | Sic
+Substrate strengih | Npa
+Mat gap | imm
+Gap tolerance | mm | ±0.5
+Lanning Fress | Non-GBO
+Sleeve material | 441
+变更原因 | 1.采购确认量产衬垫为奇耐，DPF衬垫在原基础上减短5mm，避免露棉;2.衬垫改为居中放置;
+风险点(影响) | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025W-03 | DPF OUTLET CONE | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z51025W-02 | F01Z51025W-03
+供应商请求在DPF出气端锥上增加定位缺口;无无
+
+ose
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017XR-02 | DPF BRACKET3 JIM-493 | D | BOSCH/Customer
+变更后
+变更描述 | ② E^ +SS | 变更前 (97) A2 ① 回 2 A | ② {055 | 197) 23 6 | ② 0 回
+F01Z5017XR-02 F01Z5017XR-02
+变更原因 | DPF出尾管架图纸上增加电阻焊;
+风险点（影响) 验证方法 | 无 无
+
+零件号
+变更来源
+F01Z5017W5-05 | DOC+SDPF WELDING
+变更描述
+JIM-493
+变更前
+BOSCH/Customer
+日 AVIEWFla F-F□口-PKT1_10 <T1_10F01Z5017W5-04
+变更后
+B0日 回F01Z5017W5-05
+变更原因 | 更新焊接组件图纸，尿素喷嘴度改为位置度方便检具检测;
+无无Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+验证方法
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W8-02 | DP tube inlet | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+×个PKTF01Z5017W8-02 | PKT1-03F01Z5017W8-02
+变更原因 | 新增进气压产管刻字;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W7-02 | DP tube inlet | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+—刻字内容：FO1Z5017W7-01+生产日B位数）3:5(3)F01Z5017W7-02 | 一封字内容：F01Z5017W7+生产日期8位数）3.5(3)F01Z5017W7-02
+更改出气压产管刻字;无无Internal | Powertrain Soluti
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NU-02 | FOIL | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 供应商反馈保温壳开裂，报废率，请求把430材质更改为304;
+风险点（影响） | 无
+验证方法 | 无
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+See Below | MAT | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5102RG-02F01Z5102RJ-02F01Z5102RK-01F01Z5102RL-01F01Z5102RM-01F01Z5102RN-01F01Z5102RP-00F01Z5102RR-01F01Z5102RT-01F01Z5102RU-00F01Z5102RZ-01 | F01Z5102RG-02F01Z5102RJ-02F01Z5102RK-01F01Z5102RL-01F01Z5102RM-01F01Z5102RN-01F01Z5102RP-00F01Z5102RR-01F01Z5102RT-01F01Z5102RU-00F01Z5102RZ-01
+变更原因 | 保温棉图纸按照最终适配更新图纸;
+风险点（影响） | 无
+验证方法 | 无
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+零件号 | 零件名称 | Project | 样件阶段
+See Below | INSULATION | JIM-493 | D | 变更来源 BOSCH/Customer
+变更描述 | 变更前 | 变更后
+-D BOSCH 05O ED BOSCH 05C DOC封装：博世汽车系统（无锡）有限公司 SDPF封装：博世汽车系统（无锡）有限公司 DOC载体：NGK（苏州）环保陶瓷有限公司 SDPF载体：NGK（苏州）环保陶瓷有限公司 OC涂层：庄信万丰（上海）化工有限公司 E415 SDPF涂层：庄信万丰（上海）化工有限公司 CA100271850 E415 CA100271850 | BOSCH 05C DOC 【无锅】 DoC 载体
+F01ZH003FU-06 Made in China F01ZH003FU-06 Made in China
+F01Z5018AW-02 F01Z5018AZ-02 | F01Z5018AW-03 F01Z5018AZ-03
+变更原因 风险点（影响) | 样件图号更新后，保温刻字信息随之更改;
+验证方法 | 无
+无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FU-00 | DOC+SDPF UNIT | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01ZH003FU-06 | F01ZH003FU-00
+上述更新后，DOC+SDPF总成随之更改;无无
+风险点(影响)
+
+s adod es sodde o e se se ongnsp p onoode de
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017WA-03 | SCR CANNING | BOSCH/Customer
+Substrate type | SCR
+Substrate size | inch | 6.77×5
+catalyst weight | kg | 1.59
+Dack pressure | kPa | 5
+Acceleration Load | 9 | 20
+Substrate material | Cordierite
+Substrate Strengih | Moa | 1
+Mat gap | mm | 3.5
+Gap tolerance | mm | ±0.5
+Canning Process | Non-GBD
+Sleeve material | 441
+变更原因
+风险点（影响）
+验证方法
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W9-04 | SCR WELDING | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 上述更改后，SCR焊接总成随之更改;
+风险点（影响） | 无
+验证方法 | 无
+
+OXOM SWEISAS SANOUON
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-00 | SCR UNIT | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前
+变更原因 | 上述更改后，SCR总成随之更改;
+风险点(影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段
+F01Z5018C0-03 | INSULATION 变更前 | JIM-493 | D | 变更来源 BOSCH/Customer
+变更描述
+BOSCH 05C SCR（含ASC）封装：博世汽车系统（无锡）有限公司 SCR（含ASC）载体：NGK（苏州）环保陶瓷有限公司 SCR（含ASC）涂层：庄信万丰（上海）化工有限公司 E415 CA100271870 | 变更后 BOSCH 05O SCR（含AS 封装：博世汽车系统（无锡）有限公司 SCR（AASC） ）载体：NGK（苏州）环保陶瓷有限公司 ）涂层：庄信万丰（上海）化工有限公司 三415
+F01ZH003FV-06 Made in China F01Z5018C0-02
+F01Z5018C0-03
+变更原因 | 样件图号更新后，保温刻字信息随之更改;
+风险点（影响） 验证方法 | 无 无
+
+d0.d

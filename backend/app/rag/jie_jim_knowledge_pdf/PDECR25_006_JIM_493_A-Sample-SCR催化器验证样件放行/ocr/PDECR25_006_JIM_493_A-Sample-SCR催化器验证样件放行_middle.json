@@ -1,0 +1,1118 @@
+{
+    "pdf_info": [
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        15,
+                        35,
+                        562,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.6156,
+                            "bbox": [
+                                15,
+                                35,
+                                562,
+                                807
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        15,
+                                        35,
+                                        562,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                15,
+                                                35,
+                                                562,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=2>BOSCH博世Confidential</td><td rowspan=2 colspan=9>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effective date:2025-02-07th</td></tr><tr><td rowspan=1 colspan=1>25_006</td></tr><tr><td rowspan=1 colspan=8>Customer project Name/客户项目名称：              JIM-493</td><td rowspan=1 colspan=4>MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=12>Sample status /样件状态：    A Sample     ]B Sample    C Sample   D Sample</td></tr><tr><td rowspan=1 colspan=12>Change part&amp;product Name/更改零部件产品的名称（简要描述)</td></tr><tr><td rowspan=1 colspan=12>1_2ASC&amp;3g/cf（新鲜件）：F01ZH003JV-01     技术1_2&quot;ASC&amp;3g/cft（老化件）：F01ZH003JV-51技术2_2.5ASC&amp;3g/cft（新鲜件）：F01ZH003JW-01  技术2_2.5&quot;ASC&amp;3g/cft（新鲜件）：F01ZH003JW-51</td></tr><tr><td rowspan=1 colspan=12>Reason of changes/更改理由（简要描述)：</td></tr><tr><td rowspan=1 colspan=12>系统工程师催化剂测试样件放行；</td></tr><tr><td rowspan=1 colspan=4>Change from/变更来源：</td><td rowspan=1 colspan=8></td></tr><tr><td rowspan=1 colspan=4>Customer request /客户要求</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=7>Supplier request/供应商请求                      Design optimization /设计优化</td></tr><tr><td rowspan=1 colspan=5>Correction/更正(错误)</td><td rowspan=1 colspan=7>Other/其他  （系统测试样件</td></tr><tr><td rowspan=1 colspan=4>Change inform to/变更通知人：</td><td rowspan=1 colspan=8>Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=12>Yang Guangtuo,Jia Kebin, Luo jing， Lu Qingsong</td></tr><tr><td rowspan=1 colspan=12>Whether this change impact others component or product 此变更是否影响到其他部件和产品：       yes/是   no/否</td></tr><tr><td rowspan=1 colspan=12>ifimpact others product，Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=12></td></tr><tr><td rowspan=1 colspan=4>Design/设计工程师</td><td rowspan=2 colspan=5>卢青松</td><td rowspan=2 colspan=2>Date/日期：</td><td rowspan=2 colspan=1>2025.2.8</td></tr><tr><td rowspan=1 colspan=4>Signature/签名：</td></tr><tr><td rowspan=1 colspan=1>Check/校</td><td rowspan=1 colspan=3>对工程师</td><td rowspan=2 colspan=5>杨扣</td><td rowspan=2 colspan=2>Date/日期：</td><td rowspan=2 colspan=1>2025.02.08</td></tr><tr><td rowspan=1 colspan=1>Signature/</td><td rowspan=1 colspan=3>签名：</td></tr><tr><td rowspan=1 colspan=1>Descriptio</td><td rowspan=1 colspan=11>n of Change/更改描述：（下面空白处请列出详细的变更前后对比）</td></tr><tr><td></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=4>技术1_2&quot;ASC&amp;3g/cft（新鲜件）</td><td rowspan=1 colspan=4>技术1_2&quot;ASC&amp;3g/cft（老化件）</td><td></td></tr><tr><td></td><td rowspan=2 colspan=2>SCR/ASC</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td></td></tr><tr><td></td><td rowspan=1 colspan=3>F01ZH003JV-01</td><td rowspan=1 colspan=1>F01Z5018CM-00</td><td rowspan=1 colspan=3>F01ZH003JV-51</td><td rowspan=1 colspan=1>F01Z5018CM-51</td><td></td></tr><tr><td></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=4>技术2_2.5&quot;ASC&amp;3g/cft（新鲜件）</td><td rowspan=1 colspan=4>技术2_2.5&quot;ASC&amp;3g/cft（老化件）</td><td></td></tr><tr><td></td><td rowspan=2 colspan=2>SCR/ASC</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td></td></tr><tr><td></td><td rowspan=1 colspan=3>F01ZH003JW-01</td><td rowspan=1 colspan=1>F01Z5018CR-00</td><td rowspan=1 colspan=3>F01ZH003JW-51</td><td rowspan=1 colspan=1>F01Z5018CR-51</td><td></td></tr></table>",
+                                            "image_path": "1d7e464161dfd3ea7fbacabcace7e445d4bada77a7d6cdbc06dd227c07d9ac10.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.6156
+                }
+            ],
+            "page_idx": 0,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        15,
+                        35,
+                        562,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.6156,
+                            "bbox": [
+                                15,
+                                35,
+                                562,
+                                807
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        15,
+                                        35,
+                                        562,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                15,
+                                                35,
+                                                562,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=2>BOSCH博世Confidential</td><td rowspan=2 colspan=9>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effective date:2025-02-07th</td></tr><tr><td rowspan=1 colspan=1>25_006</td></tr><tr><td rowspan=1 colspan=8>Customer project Name/客户项目名称：              JIM-493</td><td rowspan=1 colspan=4>MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=12>Sample status /样件状态：    A Sample     ]B Sample    C Sample   D Sample</td></tr><tr><td rowspan=1 colspan=12>Change part&amp;product Name/更改零部件产品的名称（简要描述)</td></tr><tr><td rowspan=1 colspan=12>1_2ASC&amp;3g/cf（新鲜件）：F01ZH003JV-01     技术1_2&quot;ASC&amp;3g/cft（老化件）：F01ZH003JV-51技术2_2.5ASC&amp;3g/cft（新鲜件）：F01ZH003JW-01  技术2_2.5&quot;ASC&amp;3g/cft（新鲜件）：F01ZH003JW-51</td></tr><tr><td rowspan=1 colspan=12>Reason of changes/更改理由（简要描述)：</td></tr><tr><td rowspan=1 colspan=12>系统工程师催化剂测试样件放行；</td></tr><tr><td rowspan=1 colspan=4>Change from/变更来源：</td><td rowspan=1 colspan=8></td></tr><tr><td rowspan=1 colspan=4>Customer request /客户要求</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=7>Supplier request/供应商请求                      Design optimization /设计优化</td></tr><tr><td rowspan=1 colspan=5>Correction/更正(错误)</td><td rowspan=1 colspan=7>Other/其他  （系统测试样件</td></tr><tr><td rowspan=1 colspan=4>Change inform to/变更通知人：</td><td rowspan=1 colspan=8>Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=12>Yang Guangtuo,Jia Kebin, Luo jing， Lu Qingsong</td></tr><tr><td rowspan=1 colspan=12>Whether this change impact others component or product 此变更是否影响到其他部件和产品：       yes/是   no/否</td></tr><tr><td rowspan=1 colspan=12>ifimpact others product，Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=12></td></tr><tr><td rowspan=1 colspan=4>Design/设计工程师</td><td rowspan=2 colspan=5>卢青松</td><td rowspan=2 colspan=2>Date/日期：</td><td rowspan=2 colspan=1>2025.2.8</td></tr><tr><td rowspan=1 colspan=4>Signature/签名：</td></tr><tr><td rowspan=1 colspan=1>Check/校</td><td rowspan=1 colspan=3>对工程师</td><td rowspan=2 colspan=5>杨扣</td><td rowspan=2 colspan=2>Date/日期：</td><td rowspan=2 colspan=1>2025.02.08</td></tr><tr><td rowspan=1 colspan=1>Signature/</td><td rowspan=1 colspan=3>签名：</td></tr><tr><td rowspan=1 colspan=1>Descriptio</td><td rowspan=1 colspan=11>n of Change/更改描述：（下面空白处请列出详细的变更前后对比）</td></tr><tr><td></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=4>技术1_2&quot;ASC&amp;3g/cft（新鲜件）</td><td rowspan=1 colspan=4>技术1_2&quot;ASC&amp;3g/cft（老化件）</td><td></td></tr><tr><td></td><td rowspan=2 colspan=2>SCR/ASC</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td></td></tr><tr><td></td><td rowspan=1 colspan=3>F01ZH003JV-01</td><td rowspan=1 colspan=1>F01Z5018CM-00</td><td rowspan=1 colspan=3>F01ZH003JV-51</td><td rowspan=1 colspan=1>F01Z5018CM-51</td><td></td></tr><tr><td></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=4>技术2_2.5&quot;ASC&amp;3g/cft（新鲜件）</td><td rowspan=1 colspan=4>技术2_2.5&quot;ASC&amp;3g/cft（老化件）</td><td></td></tr><tr><td></td><td rowspan=2 colspan=2>SCR/ASC</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td rowspan=1 colspan=3>总成号</td><td rowspan=1 colspan=1>催化剂号</td><td></td></tr><tr><td></td><td rowspan=1 colspan=3>F01ZH003JW-01</td><td rowspan=1 colspan=1>F01Z5018CR-00</td><td rowspan=1 colspan=3>F01ZH003JW-51</td><td rowspan=1 colspan=1>F01Z5018CR-51</td><td></td></tr></table>",
+                                            "image_path": "1d7e464161dfd3ea7fbacabcace7e445d4bada77a7d6cdbc06dd227c07d9ac10.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.6156
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        44,
+                        32,
+                        537,
+                        817
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9875,
+                            "bbox": [
+                                44,
+                                32,
+                                537,
+                                817
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        44,
+                                        32,
+                                        537,
+                                        817
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                44,
+                                                32,
+                                                537,
+                                                817
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td colspan=\"2\" rowspan=\"2\">BOSCH 博世 Confidential</td><td rowspan=\"2\">Design Change Review Sheet 设计变更评审表</td><td rowspan=\"2\"></td><td colspan=\"3\">Version 13</td></tr><tr><td>Design Change</td><td colspan=\"2\">Effetive date: 2025-02-07h 25_006</td></tr><tr><td colspan=\"2\" rowspan=\"2\">1.Function&amp;Performance wil be influenced?/系统性能影响？ If Yes, System impaction evaluation? 如果是，系统影响评估？</td><td colspan=\"3\">yes/是 no/否</td><td colspan=\"2\">Request No.</td></tr><tr><td colspan=\"3\">相定试样件，高性能僧化剂</td><td colspan=\"2\"></td></tr><tr><td colspan=\"2\" rowspan=\"2\">(如果是初次样件放行，空白处请说明样件目的) Whether need sample to test? Plan? 是否需要样件进行验证？计划？</td><td rowspan=\"2\">NA</td><td colspan=\"4\"></td></tr><tr><td colspan=\"2\">Ssrse皮</td></tr><tr><td colspan=\"2\">Whether thecatalyst information isconfirmed? 催化剂信息是否确认？(物料号、图纸、SPEC)</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">Catalyt/签名_</td></tr><tr><td colspan=\"2\">2.Interface&amp;boundary (internal and customer) wil be influenced?/接口&amp;边界（内部和客户）影响？ ifimpact custmer,whethergetconfirmfrom</td><td colspan=\"2\"></td><td>yes/是</td><td colspan=\"2\">no/否</td></tr><tr><td colspan=\"2\">customer side? 请说明影响和是否得到客户的确认？</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">Desgn/%青松</td></tr><tr><td colspan=\"2\">3.Mechanical strength&amp;Durability will be influenced？/机械强度&amp;可靠性影响？ If Yes,， How to evaluate?Plan?如果是，请说明影</td><td colspan=\"2\"></td><td>yes/是</td><td colspan=\"2\">no/否</td></tr><tr><td colspan=\"2\">响和如何评估，计划？ （例如：仿真分析等）</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">valdat</td></tr><tr><td colspan=\"2\">Whether need sample to test? Plan? 是否需要样件进行验证？计划？</td><td colspan=\"2\"></td><td></td><td colspan=\"2\" rowspan=\"6\"></td></tr><tr><td colspan=\"2\">4.Product document influenced?</td><td>no/香</td><td>yes/是</td><td></td></tr><tr><td>4.1 Interface FMEA-relevant /IFMEA:</td><td></td><td></td><td>Note_</td><td rowspan=\"4\"></td></tr><tr><td>4.2.Product FMEA-relevant/DFMEA:</td><td></td><td>no否</td><td>yes/是 Note_</td><td></td></tr><tr><td></td><td>4.3.Special Charecteristics /PSC: (针对C Sample)</td><td>no/否</td><td>yes/是 Note</td><td></td></tr><tr><td colspan=\"2\">4.4.IMDS relevant： (针对C Sample)</td><td>no/香</td><td>yes/是</td><td>Note</td></tr><tr><td colspan=\"2\">4.5 Offer drawing relevant(针对C Sample) 4.6. TCD relevant:</td><td>no否 no/否</td><td>yes/是 yes/是</td><td>Note Note</td><td>0esie012商去么</td></tr><tr><td colspan=\"2\">5. Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？</td><td></td><td></td><td></td><td rowspan=\"4\">NA.(新零件放行,不涉及库存） 涉及到已经生产过的零件变更</td></tr><tr><td>（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） RBCW RDC（外库）和RBCW仓库，是否有库存，</td><td></td><td>未库存 □</td><td>□有库存，库存数量</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>供应商处（已做好，未发货）是否有库存，</td><td></td><td>存 开库存</td><td>□有库存，库存数量 □有库存，库存数量</td><td></td></tr><tr><td colspan=\"2\">否有库存，</td><td></td><td>库存</td><td>有库存，库存数量</td><td rowspan=\"2\">PUE 本</td></tr><tr><td colspan=\"2\">在途，运输中是否有库存 被影响到的实物库存处理指示：</td><td></td><td>□可以继续使用完</td><td>□改制后使用 □报废</td></tr><tr><td colspan=\"2\">（设计工程师组织会议讨论)</td><td></td><td>改制费用</td><td>3个需要取眉重故 报发成</td><td rowspan=\"4\">PUE/签名本岑</td></tr><tr><td rowspan=\"3\">已装车件处理方法（发客户或标定车等） (SMP组织会议讨论) 6. Influence on supplier part?</td><td></td><td>改制 其他（单独说明）：</td><td>按样件型</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td rowspan=\"8\"></td></tr><tr><td colspan=\"4\">Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier? 变更后的零件，生产可行性供应商是否确认？反馈？</td></tr><tr><td colspan=\"2\"></td><td>石 Infuence on purchasing part delivery time?对采购件交货时间的影响？</td><td>无</td><td></td></tr><tr><td colspan=\"2\">涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.</td><td></td><td></td><td>□no/否yes是</td><td rowspan=\"4\">PUE/名李岑</td></tr><tr><td colspan=\"2\">Does the change influence on purchasing cost？变更对采购成本的影响？</td><td></td><td></td><td></td></tr><tr><td colspan=\"2\">□increase/增加，金额</td><td>□ decrease/降低，金额</td><td></td><td> no change不变</td></tr><tr><td colspan=\"2\">7. DFMA &amp; Sample prodcution OPL?</td><td></td><td></td><td></td></tr><tr><td colspan=\"2\">必要时附加DFMA文件</td><td></td><td></td><td></td><td rowspan=\"2\"></td></tr><tr><td colspan=\"7\">只更换催化剂，无需DFMA</td></tr><tr><td colspan=\"2\">8.Influence on LPN manufacturing&amp;assembly process?</td><td></td><td></td><td></td><td rowspan=\"4\"></td></tr><tr><td colspan=\"6\">Feedback from manufacturing engineer？生产制造装配是否影响，反馈？</td></tr><tr><td colspan=\"2\">infuence onproject&amp;product deliver ime？对项目&amp;产品交货时间的影响？</td><td></td><td>无</td><td rowspan=\"2\"></td></tr><tr><td colspan=\"2\">influenceon manufacturing cost/对产成本的影响？</td><td></td><td>无 此轮只是样测</td></tr><tr><td colspan=\"2\">increase/增加金额</td><td>decrease/降低，金额</td><td>是有单独到 更</td><td rowspan=\"2\">DU名</td><td rowspan=\"2\">PM/签名ke</td></tr><tr><td colspan=\"2\">9.PM alignment? (influence on project Timeline? Cost?); 是否同意对项目时间和成本的影响</td><td>需求样品订单数量</td><td></td></tr><tr><td colspan=\"2\">10.如果涉及以下情况需TCR3审核确认。不涉及则 □库存报废，金额</td><td>NA. 平购成本增加，金额</td><td>牛产成本增加，金额</td><td>RBCW/</td><td rowspan=\"3\">TCR3 3 谢友福</td></tr><tr><td colspan=\"2\">Design Team Leader</td><td></td><td>PUR</td><td rowspan=\"2\">TCR3 20252 Signature/签名：</td></tr><tr><td>Signaure</td><td>ENGcre签名 ENG-CV1</td><td></td><td>Signature △</td></tr></table>",
+                                            "image_path": "642ac4a2d8ef5ffed7f03617789de3ac4338ee8de182fb01988b15509aeb58f9.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9875
+                }
+            ],
+            "page_idx": 1,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        44,
+                        32,
+                        537,
+                        817
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9875,
+                            "bbox": [
+                                44,
+                                32,
+                                537,
+                                817
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        44,
+                                        32,
+                                        537,
+                                        817
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                44,
+                                                32,
+                                                537,
+                                                817
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td colspan=\"2\" rowspan=\"2\">BOSCH 博世 Confidential</td><td rowspan=\"2\">Design Change Review Sheet 设计变更评审表</td><td rowspan=\"2\"></td><td colspan=\"3\">Version 13</td></tr><tr><td>Design Change</td><td colspan=\"2\">Effetive date: 2025-02-07h 25_006</td></tr><tr><td colspan=\"2\" rowspan=\"2\">1.Function&amp;Performance wil be influenced?/系统性能影响？ If Yes, System impaction evaluation? 如果是，系统影响评估？</td><td colspan=\"3\">yes/是 no/否</td><td colspan=\"2\">Request No.</td></tr><tr><td colspan=\"3\">相定试样件，高性能僧化剂</td><td colspan=\"2\"></td></tr><tr><td colspan=\"2\" rowspan=\"2\">(如果是初次样件放行，空白处请说明样件目的) Whether need sample to test? Plan? 是否需要样件进行验证？计划？</td><td rowspan=\"2\">NA</td><td colspan=\"4\"></td></tr><tr><td colspan=\"2\">Ssrse皮</td></tr><tr><td colspan=\"2\">Whether thecatalyst information isconfirmed? 催化剂信息是否确认？(物料号、图纸、SPEC)</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">Catalyt/签名_</td></tr><tr><td colspan=\"2\">2.Interface&amp;boundary (internal and customer) wil be influenced?/接口&amp;边界（内部和客户）影响？ ifimpact custmer,whethergetconfirmfrom</td><td colspan=\"2\"></td><td>yes/是</td><td colspan=\"2\">no/否</td></tr><tr><td colspan=\"2\">customer side? 请说明影响和是否得到客户的确认？</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">Desgn/%青松</td></tr><tr><td colspan=\"2\">3.Mechanical strength&amp;Durability will be influenced？/机械强度&amp;可靠性影响？ If Yes,， How to evaluate?Plan?如果是，请说明影</td><td colspan=\"2\"></td><td>yes/是</td><td colspan=\"2\">no/否</td></tr><tr><td colspan=\"2\">响和如何评估，计划？ （例如：仿真分析等）</td><td colspan=\"2\"></td><td></td><td colspan=\"2\">valdat</td></tr><tr><td colspan=\"2\">Whether need sample to test? Plan? 是否需要样件进行验证？计划？</td><td colspan=\"2\"></td><td></td><td colspan=\"2\" rowspan=\"6\"></td></tr><tr><td colspan=\"2\">4.Product document influenced?</td><td>no/香</td><td>yes/是</td><td></td></tr><tr><td>4.1 Interface FMEA-relevant /IFMEA:</td><td></td><td></td><td>Note_</td><td rowspan=\"4\"></td></tr><tr><td>4.2.Product FMEA-relevant/DFMEA:</td><td></td><td>no否</td><td>yes/是 Note_</td><td></td></tr><tr><td></td><td>4.3.Special Charecteristics /PSC: (针对C Sample)</td><td>no/否</td><td>yes/是 Note</td><td></td></tr><tr><td colspan=\"2\">4.4.IMDS relevant： (针对C Sample)</td><td>no/香</td><td>yes/是</td><td>Note</td></tr><tr><td colspan=\"2\">4.5 Offer drawing relevant(针对C Sample) 4.6. TCD relevant:</td><td>no否 no/否</td><td>yes/是 yes/是</td><td>Note Note</td><td>0esie012商去么</td></tr><tr><td colspan=\"2\">5. Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？</td><td></td><td></td><td></td><td rowspan=\"4\">NA.(新零件放行,不涉及库存） 涉及到已经生产过的零件变更</td></tr><tr><td>（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） RBCW RDC（外库）和RBCW仓库，是否有库存，</td><td></td><td>未库存 □</td><td>□有库存，库存数量</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td>供应商处（已做好，未发货）是否有库存，</td><td></td><td>存 开库存</td><td>□有库存，库存数量 □有库存，库存数量</td><td></td></tr><tr><td colspan=\"2\">否有库存，</td><td></td><td>库存</td><td>有库存，库存数量</td><td rowspan=\"2\">PUE 本</td></tr><tr><td colspan=\"2\">在途，运输中是否有库存 被影响到的实物库存处理指示：</td><td></td><td>□可以继续使用完</td><td>□改制后使用 □报废</td></tr><tr><td colspan=\"2\">（设计工程师组织会议讨论)</td><td></td><td>改制费用</td><td>3个需要取眉重故 报发成</td><td rowspan=\"4\">PUE/签名本岑</td></tr><tr><td rowspan=\"3\">已装车件处理方法（发客户或标定车等） (SMP组织会议讨论) 6. Influence on supplier part?</td><td></td><td>改制 其他（单独说明）：</td><td>按样件型</td><td></td></tr><tr><td></td><td></td><td></td><td></td><td rowspan=\"8\"></td></tr><tr><td colspan=\"4\">Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier? 变更后的零件，生产可行性供应商是否确认？反馈？</td></tr><tr><td colspan=\"2\"></td><td>石 Infuence on purchasing part delivery time?对采购件交货时间的影响？</td><td>无</td><td></td></tr><tr><td colspan=\"2\">涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.</td><td></td><td></td><td>□no/否yes是</td><td rowspan=\"4\">PUE/名李岑</td></tr><tr><td colspan=\"2\">Does the change influence on purchasing cost？变更对采购成本的影响？</td><td></td><td></td><td></td></tr><tr><td colspan=\"2\">□increase/增加，金额</td><td>□ decrease/降低，金额</td><td></td><td> no change不变</td></tr><tr><td colspan=\"2\">7. DFMA &amp; Sample prodcution OPL?</td><td></td><td></td><td></td></tr><tr><td colspan=\"2\">必要时附加DFMA文件</td><td></td><td></td><td></td><td rowspan=\"2\"></td></tr><tr><td colspan=\"7\">只更换催化剂，无需DFMA</td></tr><tr><td colspan=\"2\">8.Influence on LPN manufacturing&amp;assembly process?</td><td></td><td></td><td></td><td rowspan=\"4\"></td></tr><tr><td colspan=\"6\">Feedback from manufacturing engineer？生产制造装配是否影响，反馈？</td></tr><tr><td colspan=\"2\">infuence onproject&amp;product deliver ime？对项目&amp;产品交货时间的影响？</td><td></td><td>无</td><td rowspan=\"2\"></td></tr><tr><td colspan=\"2\">influenceon manufacturing cost/对产成本的影响？</td><td></td><td>无 此轮只是样测</td></tr><tr><td colspan=\"2\">increase/增加金额</td><td>decrease/降低，金额</td><td>是有单独到 更</td><td rowspan=\"2\">DU名</td><td rowspan=\"2\">PM/签名ke</td></tr><tr><td colspan=\"2\">9.PM alignment? (influence on project Timeline? Cost?); 是否同意对项目时间和成本的影响</td><td>需求样品订单数量</td><td></td></tr><tr><td colspan=\"2\">10.如果涉及以下情况需TCR3审核确认。不涉及则 □库存报废，金额</td><td>NA. 平购成本增加，金额</td><td>牛产成本增加，金额</td><td>RBCW/</td><td rowspan=\"3\">TCR3 3 谢友福</td></tr><tr><td colspan=\"2\">Design Team Leader</td><td></td><td>PUR</td><td rowspan=\"2\">TCR3 20252 Signature/签名：</td></tr><tr><td>Signaure</td><td>ENGcre签名 ENG-CV1</td><td></td><td>Signature △</td></tr></table>",
+                                            "image_path": "642ac4a2d8ef5ffed7f03617789de3ac4338ee8de182fb01988b15509aeb58f9.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9875
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "image",
+                    "bbox": [
+                        59,
+                        0,
+                        216,
+                        830
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.661,
+                            "bbox": [
+                                59,
+                                0,
+                                216,
+                                830
+                            ],
+                            "index": 1,
+                            "type": "image_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        59,
+                                        0,
+                                        216,
+                                        830
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                59,
+                                                0,
+                                                216,
+                                                830
+                                            ],
+                                            "type": "image",
+                                            "image_path": "b5a46e5825ee19bd1f8b9cf56b715510b97dbdd8200d26e5cbea5d74fba549ed.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.661
+                },
+                {
+                    "score": 0.5083,
+                    "bbox": [
+                        324,
+                        531,
+                        405,
+                        795
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                }
+            ],
+            "page_idx": 2,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "image",
+                    "bbox": [
+                        59,
+                        0,
+                        216,
+                        830
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.661,
+                            "bbox": [
+                                59,
+                                0,
+                                216,
+                                830
+                            ],
+                            "index": 1,
+                            "type": "image_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        59,
+                                        0,
+                                        216,
+                                        830
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                59,
+                                                0,
+                                                216,
+                                                830
+                                            ],
+                                            "type": "image",
+                                            "image_path": "b5a46e5825ee19bd1f8b9cf56b715510b97dbdd8200d26e5cbea5d74fba549ed.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.661
+                },
+                {
+                    "score": 0.5083,
+                    "bbox": [
+                        324,
+                        531,
+                        405,
+                        795
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        60,
+                        478,
+                        808
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9824,
+                            "bbox": [
+                                115,
+                                60,
+                                478,
+                                808
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        60,
+                                        478,
+                                        808
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                60,
+                                                478,
+                                                808
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JV-01</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=1>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=5>变更前                                                                                   变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=5>系统工程师要求释放技术1_2&quot;ASC&amp;3g/cft SCR新鲜件催化剂样件做排放实验;风险点（影响）                                                                                            无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "a0081382fcb9d70680cdabaf9521092aa02573c2cec0573c7addc79bd294e411.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9824
+                },
+                {
+                    "score": 0.7029,
+                    "bbox": [
+                        77,
+                        640,
+                        106,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.607,
+                    "bbox": [
+                        484,
+                        244,
+                        505,
+                        798
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": []
+                }
+            ],
+            "page_idx": 3,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        60,
+                        478,
+                        808
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9824,
+                            "bbox": [
+                                115,
+                                60,
+                                478,
+                                808
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        60,
+                                        478,
+                                        808
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                60,
+                                                478,
+                                                808
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JV-01</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=1>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=5>变更前                                                                                   变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=5>系统工程师要求释放技术1_2&quot;ASC&amp;3g/cft SCR新鲜件催化剂样件做排放实验;风险点（影响）                                                                                            无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "a0081382fcb9d70680cdabaf9521092aa02573c2cec0573c7addc79bd294e411.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9824
+                },
+                {
+                    "score": 0.7029,
+                    "bbox": [
+                        77,
+                        640,
+                        106,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.607,
+                    "bbox": [
+                        484,
+                        244,
+                        505,
+                        798
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": [],
+                    "bbox_fs": [
+                        484,
+                        244,
+                        505,
+                        798
+                    ]
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        59,
+                        478,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.6605,
+                            "bbox": [
+                                484,
+                                243,
+                                505,
+                                806
+                            ],
+                            "index": 1,
+                            "type": "table_caption",
+                            "lines": []
+                        },
+                        {
+                            "score": 0.9827,
+                            "bbox": [
+                                115,
+                                59,
+                                478,
+                                807
+                            ],
+                            "index": 2,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        59,
+                                        478,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                59,
+                                                478,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JV-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放技术1_2&quot;ASC&amp;3g/cftSCR化件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "b2a87c21a5cf014f4968959ab2d931b571502e3d1aa50ae34f549b7de3048982.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 2,
+                    "score": 0.9827
+                },
+                {
+                    "score": 0.7176,
+                    "bbox": [
+                        77,
+                        639,
+                        106,
+                        812
+                    ],
+                    "index": 3,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                }
+            ],
+            "page_idx": 4,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        59,
+                        478,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.6605,
+                            "bbox": [
+                                484,
+                                243,
+                                505,
+                                806
+                            ],
+                            "index": 1,
+                            "type": "table_caption",
+                            "lines": []
+                        },
+                        {
+                            "score": 0.9827,
+                            "bbox": [
+                                115,
+                                59,
+                                478,
+                                807
+                            ],
+                            "index": 2,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        59,
+                                        478,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                59,
+                                                478,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JV-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放技术1_2&quot;ASC&amp;3g/cftSCR化件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "b2a87c21a5cf014f4968959ab2d931b571502e3d1aa50ae34f549b7de3048982.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 2,
+                    "score": 0.9827
+                },
+                {
+                    "score": 0.7176,
+                    "bbox": [
+                        77,
+                        639,
+                        106,
+                        812
+                    ],
+                    "index": 3,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        60,
+                        478,
+                        808
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9831,
+                            "bbox": [
+                                115,
+                                60,
+                                478,
+                                808
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        60,
+                                        478,
+                                        808
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                60,
+                                                478,
+                                                808
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JW-01</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放技术技术2_2.5&quot;ASC&amp;3g/cftSCR新鲜件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>风险点（影响）                                                                                             无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "42b8ad28cb64213f26324f6ade6ecb21b2c00c02389d80e7be18de583d35a335.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9831
+                },
+                {
+                    "score": 0.6782,
+                    "bbox": [
+                        77,
+                        640,
+                        105,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.6953,
+                    "bbox": [
+                        483,
+                        244,
+                        504,
+                        811
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": [
+                        {
+                            "bbox": [
+                                493,
+                                418,
+                                501,
+                                448
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        493,
+                                        418,
+                                        501,
+                                        448
+                                    ],
+                                    "type": "text",
+                                    "content": "uonnqusp",
+                                    "score": 0.553
+                                }
+                            ]
+                        },
+                        {
+                            "bbox": [
+                                495,
+                                470,
+                                501,
+                                503
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        495,
+                                        470,
+                                        501,
+                                        503
+                                    ],
+                                    "type": "text",
+                                    "content": "uononpode",
+                                    "score": 0.53
+                                }
+                            ]
+                        },
+                        {
+                            "bbox": [
+                                495,
+                                610,
+                                500,
+                                620
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        495,
+                                        610,
+                                        500,
+                                        620
+                                    ],
+                                    "type": "text",
+                                    "content": "PaA",
+                                    "score": 0.619
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "page_idx": 5,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        115,
+                        60,
+                        478,
+                        808
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9831,
+                            "bbox": [
+                                115,
+                                60,
+                                478,
+                                808
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        115,
+                                        60,
+                                        478,
+                                        808
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                115,
+                                                60,
+                                                478,
+                                                808
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JW-01</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放技术技术2_2.5&quot;ASC&amp;3g/cftSCR新鲜件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>风险点（影响）                                                                                             无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                                            "image_path": "42b8ad28cb64213f26324f6ade6ecb21b2c00c02389d80e7be18de583d35a335.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9831
+                },
+                {
+                    "score": 0.6782,
+                    "bbox": [
+                        77,
+                        640,
+                        105,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.6953,
+                    "bbox": [
+                        483,
+                        244,
+                        504,
+                        811
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": [
+                        {
+                            "bbox": [
+                                493,
+                                418,
+                                501,
+                                448
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        493,
+                                        418,
+                                        501,
+                                        448
+                                    ],
+                                    "type": "text",
+                                    "content": "uonnqusp",
+                                    "score": 0.553
+                                }
+                            ]
+                        },
+                        {
+                            "bbox": [
+                                495,
+                                470,
+                                501,
+                                503
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        495,
+                                        470,
+                                        501,
+                                        503
+                                    ],
+                                    "type": "text",
+                                    "content": "uononpode",
+                                    "score": 0.53
+                                }
+                            ]
+                        },
+                        {
+                            "bbox": [
+                                495,
+                                610,
+                                500,
+                                620
+                            ],
+                            "spans": [
+                                {
+                                    "bbox": [
+                                        495,
+                                        610,
+                                        500,
+                                        620
+                                    ],
+                                    "type": "text",
+                                    "content": "PaA",
+                                    "score": 0.619
+                                }
+                            ]
+                        }
+                    ],
+                    "bbox_fs": [
+                        493,
+                        418,
+                        501,
+                        620
+                    ]
+                }
+            ]
+        },
+        {
+            "preproc_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        114,
+                        60,
+                        477,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9814,
+                            "bbox": [
+                                114,
+                                60,
+                                477,
+                                807
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        114,
+                                        60,
+                                        477,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                114,
+                                                60,
+                                                477,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JW-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统程师要求释放技术技术2_2.5&quot;ASC&amp;3g/cftSCR化件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+                                            "image_path": "0119db189a4057539bcc7da8e3dcb7d70a6f80203a10a61d45bfdfb4a6bb83c7.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9814
+                },
+                {
+                    "score": 0.6938,
+                    "bbox": [
+                        77,
+                        640,
+                        105,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.6932,
+                    "bbox": [
+                        483,
+                        243,
+                        504,
+                        801
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": []
+                }
+            ],
+            "page_idx": 6,
+            "page_size": [
+                595,
+                842
+            ],
+            "discarded_blocks": [],
+            "para_blocks": [
+                {
+                    "type": "table",
+                    "bbox": [
+                        114,
+                        60,
+                        477,
+                        807
+                    ],
+                    "blocks": [
+                        {
+                            "score": 0.9814,
+                            "bbox": [
+                                114,
+                                60,
+                                477,
+                                807
+                            ],
+                            "index": 1,
+                            "type": "table_body",
+                            "lines": [
+                                {
+                                    "bbox": [
+                                        114,
+                                        60,
+                                        477,
+                                        807
+                                    ],
+                                    "spans": [
+                                        {
+                                            "bbox": [
+                                                114,
+                                                60,
+                                                477,
+                                                807
+                                            ],
+                                            "type": "table",
+                                            "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003JW-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统程师要求释放技术技术2_2.5&quot;ASC&amp;3g/cftSCR化件催化剂样件做排放实验;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+                                            "image_path": "0119db189a4057539bcc7da8e3dcb7d70a6f80203a10a61d45bfdfb4a6bb83c7.jpg"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "index": 1,
+                    "score": 0.9814
+                },
+                {
+                    "score": 0.6938,
+                    "bbox": [
+                        77,
+                        640,
+                        105,
+                        813
+                    ],
+                    "index": 2,
+                    "type": "title",
+                    "lines": [],
+                    "level": 2
+                },
+                {
+                    "score": 0.6932,
+                    "bbox": [
+                        483,
+                        243,
+                        504,
+                        801
+                    ],
+                    "index": 3,
+                    "type": "text",
+                    "lines": [],
+                    "bbox_fs": [
+                        483,
+                        243,
+                        504,
+                        801
+                    ]
+                }
+            ]
+        }
+    ],
+    "_backend": "pipeline",
+    "_version_name": "3.2.2"
+}

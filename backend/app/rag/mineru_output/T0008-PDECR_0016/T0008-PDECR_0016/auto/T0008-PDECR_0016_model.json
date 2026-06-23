@@ -1,0 +1,1750 @@
+[
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.7385,
+                "bbox": [
+                    167,
+                    42,
+                    1545,
+                    2133
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=1 colspan=7> BOSCH          Development Changes in PD-Phase                              Edition 05Doc. Approval: RBCD/EISConfidential                                   产品开发更改                            Effective date: 20250610DC No./开发更改编号:PDECR_0016Date /日期：6/19/2025</td></tr><tr><td rowspan=1 colspan=7>Step 1: Change request &amp; Basic information</td></tr><tr><td rowspan=1 colspan=3>Customer project Name/客户项目名称:        57cc e-compressor</td><td rowspan=1 colspan=4>MCR No./ MCR号:      BM-00095101_003</td></tr><tr><td rowspan=1 colspan=3>Affect Product No./产品号：</td><td rowspan=1 colspan=4>Component No./零部件号：</td></tr><tr><td rowspan=1 colspan=3>所有57cc e-compressor成品</td><td rowspan=1 colspan=4>F01Z7A008T-01&amp;见如下：</td></tr><tr><td rowspan=1 colspan=3>Sample type /样品类型：         □A □B C   FD</td><td rowspan=1 colspan=4>Initiator/发起人： Fan Change (RBCD/EIS4)</td></tr><tr><td rowspan=1 colspan=7>Reason of changes /更改理由:</td></tr><tr><td rowspan=1 colspan=7>1.将POE(RL68H)冰熊冷冻油加入BOM,纳入直采范围 (详细见：2025/5/6 e-Compressor SEC core meeting)2.统一相关文件中的冷冻油的名称和相关铭牌定义形式3:BOM中data sheet位置号删除，统一装配图纸和优化BOM形式。4：更新Qinaling F01Z7P0014-02的注油量</td></tr><tr><td rowspan=1 colspan=2>Customer request /客户要求</td><td rowspan=1 colspan=3>Supplier request /供应商请求□</td><td rowspan=1 colspan=2>Design optimization /设计优化□</td></tr><tr><td rowspan=1 colspan=2>Correction /更正(错误)      □</td><td rowspan=1 colspan=1>Process /工艺□</td><td rowspan=1 colspan=4>Other /其它           BOM优化 </td></tr><tr><td rowspan=1 colspan=7>Step 2: Change proposal &amp; Change discription</td></tr><tr><td rowspan=1 colspan=7>Before Change                                                          After Change1:BOM                                                                 更新后：Bom 中增加冷冻油物料，及其对应的加注量。冷冻油加注量将与BOM一致最终体现在铭牌上。无冷冻油物料直采要求。                                                                 LESDDF0127A002601</td></tr><tr><td rowspan=1 colspan=7>如下内容为文档更新</td></tr><tr><td rowspan=1 colspan=1>Initiator/发起人：</td><td rowspan=2 colspan=3></td><td rowspan=2 colspan=2>Date / 日期:</td><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Signature/签名：</td></tr><tr><td rowspan=1 colspan=1>Check/校对工程师</td><td rowspan=2 colspan=3></td><td rowspan=2 colspan=2>Date /日期：</td><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Signature /签名：</td></tr><tr><td rowspan=1 colspan=1>EPQ</td><td rowspan=2 colspan=3></td><td rowspan=2 colspan=2>Date /日期:</td><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Signature/签名：</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 0,
+            "width": 1700,
+            "height": 2200
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 13,
+                "label": "header_image",
+                "score": 0.8522,
+                "bbox": [
+                    119,
+                    103,
+                    338,
+                    154
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 6,
+                "label": "doc_title",
+                "score": 0.6553,
+                "bbox": [
+                    453,
+                    106,
+                    1135,
+                    211
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.757,
+                "bbox": [
+                    117,
+                    176,
+                    282,
+                    214
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5388,
+                "bbox": [
+                    1228,
+                    144,
+                    1522,
+                    178
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6475,
+                "bbox": [
+                    1228,
+                    180,
+                    1513,
+                    213
+                ],
+                "index": 5
+            },
+            {
+                "cls_id": 12,
+                "label": "header",
+                "score": 0.7002,
+                "bbox": [
+                    1464,
+                    107,
+                    1581,
+                    137
+                ],
+                "index": 6
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5253,
+                "bbox": [
+                    1057,
+                    242,
+                    1524,
+                    307
+                ],
+                "index": 7
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.8676,
+                "bbox": [
+                    113,
+                    309,
+                    669,
+                    342
+                ],
+                "index": 8
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.5295,
+                "bbox": [
+                    204,
+                    346,
+                    493,
+                    390
+                ],
+                "index": 9
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9188,
+                "bbox": [
+                    126,
+                    430,
+                    811,
+                    594
+                ],
+                "index": 10
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9489,
+                "bbox": [
+                    115,
+                    645,
+                    493,
+                    681
+                ],
+                "index": 11
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6544,
+                "bbox": [
+                    134,
+                    696,
+                    364,
+                    721
+                ],
+                "index": 12
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8445,
+                "bbox": [
+                    139,
+                    719,
+                    420,
+                    742
+                ],
+                "index": 13
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7941,
+                "bbox": [
+                    139,
+                    736,
+                    645,
+                    761
+                ],
+                "index": 14
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7611,
+                "bbox": [
+                    140,
+                    750,
+                    645,
+                    775
+                ],
+                "index": 15
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8506,
+                "bbox": [
+                    141,
+                    772,
+                    592,
+                    794
+                ],
+                "index": 16
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8644,
+                "bbox": [
+                    140,
+                    788,
+                    661,
+                    811
+                ],
+                "index": 17
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8412,
+                "bbox": [
+                    141,
+                    805,
+                    505,
+                    825
+                ],
+                "index": 18
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7495,
+                "bbox": [
+                    142,
+                    824,
+                    501,
+                    846
+                ],
+                "index": 19
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8463,
+                "bbox": [
+                    141,
+                    839,
+                    530,
+                    862
+                ],
+                "index": 20
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8543,
+                "bbox": [
+                    140,
+                    857,
+                    560,
+                    880
+                ],
+                "index": 21
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.949,
+                "bbox": [
+                    752,
+                    713,
+                    849,
+                    813
+                ],
+                "index": 22
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.8946,
+                "bbox": [
+                    1078,
+                    343,
+                    1337,
+                    387
+                ],
+                "index": 23
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9619,
+                "bbox": [
+                    916,
+                    415,
+                    1510,
+                    582
+                ],
+                "index": 24
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9458,
+                "bbox": [
+                    926,
+                    645,
+                    1486,
+                    682
+                ],
+                "index": 25
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.6076,
+                "bbox": [
+                    919,
+                    685,
+                    1166,
+                    712
+                ],
+                "index": 26
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.4926,
+                "bbox": [
+                    923,
+                    710,
+                    1221,
+                    732
+                ],
+                "index": 27
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8155,
+                "bbox": [
+                    924,
+                    729,
+                    1469,
+                    788
+                ],
+                "index": 28
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7797,
+                "bbox": [
+                    924,
+                    782,
+                    1396,
+                    804
+                ],
+                "index": 29
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8569,
+                "bbox": [
+                    925,
+                    799,
+                    1471,
+                    823
+                ],
+                "index": 30
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8205,
+                "bbox": [
+                    926,
+                    817,
+                    1308,
+                    840
+                ],
+                "index": 31
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8227,
+                "bbox": [
+                    926,
+                    834,
+                    1299,
+                    857
+                ],
+                "index": 32
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6507,
+                "bbox": [
+                    924,
+                    854,
+                    1330,
+                    876
+                ],
+                "index": 33
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8331,
+                "bbox": [
+                    925,
+                    872,
+                    1475,
+                    914
+                ],
+                "index": 34
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9288,
+                "bbox": [
+                    114,
+                    936,
+                    408,
+                    970
+                ],
+                "index": 35
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9051,
+                "bbox": [
+                    115,
+                    983,
+                    681,
+                    1020
+                ],
+                "index": 36
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.8811,
+                "bbox": [
+                    134,
+                    1045,
+                    415,
+                    1078
+                ],
+                "index": 37
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9474,
+                "bbox": [
+                    732,
+                    931,
+                    824,
+                    1032
+                ],
+                "index": 38
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6055,
+                "bbox": [
+                    120,
+                    1084,
+                    777,
+                    1131
+                ],
+                "index": 39
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9111,
+                "bbox": [
+                    114,
+                    1137,
+                    576,
+                    1172
+                ],
+                "index": 40
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9268,
+                "bbox": [
+                    929,
+                    937,
+                    1413,
+                    971
+                ],
+                "index": 41
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8753,
+                "bbox": [
+                    928,
+                    984,
+                    1409,
+                    1019
+                ],
+                "index": 42
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8685,
+                "bbox": [
+                    929,
+                    1018,
+                    1330,
+                    1049
+                ],
+                "index": 43
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5258,
+                "bbox": [
+                    843,
+                    1093,
+                    911,
+                    1120
+                ],
+                "index": 44
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8741,
+                "bbox": [
+                    929,
+                    1047,
+                    1276,
+                    1080
+                ],
+                "index": 45
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7302,
+                "bbox": [
+                    1112,
+                    1094,
+                    1274,
+                    1120
+                ],
+                "index": 46
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.4543,
+                "bbox": [
+                    1323,
+                    1095,
+                    1572,
+                    1140
+                ],
+                "index": 47
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8506,
+                "bbox": [
+                    155,
+                    1179,
+                    677,
+                    1210
+                ],
+                "index": 48
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8799,
+                "bbox": [
+                    153,
+                    1207,
+                    1421,
+                    1294
+                ],
+                "index": 49
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.6177,
+                "bbox": [
+                    129,
+                    1299,
+                    492,
+                    1335
+                ],
+                "index": 50
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9548,
+                "bbox": [
+                    205,
+                    1356,
+                    522,
+                    1576
+                ],
+                "index": 51
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9398,
+                "bbox": [
+                    708,
+                    1385,
+                    801,
+                    1490
+                ],
+                "index": 52
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9199,
+                "bbox": [
+                    114,
+                    1605,
+                    569,
+                    1643
+                ],
+                "index": 53
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8308,
+                "bbox": [
+                    125,
+                    1673,
+                    607,
+                    1710
+                ],
+                "index": 54
+            },
+            {
+                "cls_id": 17,
+                "label": "paragraph_title",
+                "score": 0.9146,
+                "bbox": [
+                    116,
+                    1730,
+                    851,
+                    1769
+                ],
+                "index": 55
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6715,
+                "bbox": [
+                    1071,
+                    1305,
+                    1275,
+                    1342
+                ],
+                "index": 56
+            },
+            {
+                "cls_id": 14,
+                "label": "image",
+                "score": 0.9593,
+                "bbox": [
+                    984,
+                    1348,
+                    1182,
+                    1600
+                ],
+                "index": 57
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.7901,
+                "bbox": [
+                    1190,
+                    1346,
+                    1440,
+                    1634
+                ],
+                "index": 58,
+                "html": "<table><tr><td>Pin position </td><td>Function 功能</td></tr><tr><td>1</td><td>GND _CS</td></tr><tr><td>2</td><td>-</td></tr><tr><td>]</td><td>-</td></tr><tr><td>4</td><td>KL30</td></tr><tr><td>5</td><td>KL31</td></tr><tr><td>6</td><td>CAN+</td></tr><tr><td>7</td><td>CAN-</td></tr><tr><td>8</td><td>KL15 W ake up electricity KL15电</td></tr><tr><td colspan=\"2\">This E-compressor only supports active HVIL detection, please do not connect pin 2and pin3.Waterproof plugs should be installed at corresponding positions of mating connectors.&quot; 这压缩机仅支持高压互锁自检，请勿连接2.3Pin针的牌位，对配</td></tr></table>"
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.7431,
+                "bbox": [
+                    1266,
+                    1677,
+                    1518,
+                    1712
+                ],
+                "index": 59
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8186,
+                "bbox": [
+                    121,
+                    1777,
+                    891,
+                    1811
+                ],
+                "index": 60
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.9065,
+                "bbox": [
+                    115,
+                    1823,
+                    1022,
+                    1863
+                ],
+                "index": 61
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    179,
+                    101,
+                    341,
+                    153
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    117,
+                    176,
+                    282,
+                    212
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1074,
+                    1306,
+                    1277,
+                    1327
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1070,
+                    1321,
+                    1203,
+                    1342
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    453,
+                    108,
+                    1137,
+                    159
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    666,
+                    157,
+                    921,
+                    212
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1230,
+                    146,
+                    1520,
+                    178
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1231,
+                    180,
+                    1509,
+                    212
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    200,
+                    338,
+                    496,
+                    392
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    109,
+                    934,
+                    409,
+                    972
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    931,
+                    1046,
+                    1272,
+                    1079
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1462,
+                    100,
+                    1586,
+                    142
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1054,
+                    239,
+                    1527,
+                    280
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1192,
+                    271,
+                    1451,
+                    310
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    108,
+                    1135,
+                    577,
+                    1176
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    109,
+                    1604,
+                    568,
+                    1645
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    112,
+                    309,
+                    671,
+                    344
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    932,
+                    648,
+                    1484,
+                    682
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    929,
+                    731,
+                    1463,
+                    750
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    951,
+                    747,
+                    1465,
+                    769
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    952,
+                    765,
+                    1240,
+                    787
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    925,
+                    872,
+                    1475,
+                    894
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    951,
+                    890,
+                    1445,
+                    912
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    111,
+                    983,
+                    680,
+                    1021
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    112,
+                    646,
+                    491,
+                    681
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    930,
+                    1014,
+                    1326,
+                    1051
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    132,
+                    1302,
+                    489,
+                    1334
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    136,
+                    698,
+                    359,
+                    720
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    145,
+                    722,
+                    415,
+                    741
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    921,
+                    688,
+                    1158,
+                    710
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    144,
+                    737,
+                    641,
+                    759
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    169,
+                    745,
+                    214,
+                    758
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    230,
+                    742,
+                    638,
+                    759
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    164,
+                    752,
+                    644,
+                    778
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    141,
+                    784,
+                    660,
+                    812
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    141,
+                    771,
+                    587,
+                    793
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    144,
+                    857,
+                    558,
+                    879
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    927,
+                    784,
+                    1394,
+                    802
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    142,
+                    804,
+                    503,
+                    829
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    143,
+                    822,
+                    489,
+                    844
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    146,
+                    841,
+                    525,
+                    860
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    928,
+                    818,
+                    1306,
+                    840
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    928,
+                    836,
+                    1293,
+                    858
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    939,
+                    855,
+                    1119,
+                    874
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1072,
+                    336,
+                    1342,
+                    390
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    137,
+                    1047,
+                    412,
+                    1079
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1349,
+                    1098,
+                    1509,
+                    1117
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1346,
+                    1115,
+                    1566,
+                    1140
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1266,
+                    1676,
+                    1520,
+                    1714
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    929,
+                    711,
+                    1218,
+                    733
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    929,
+                    800,
+                    1467,
+                    822
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    127,
+                    1084,
+                    195,
+                    1110
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    392,
+                    1086,
+                    545,
+                    1108
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    620,
+                    1085,
+                    778,
+                    1111
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    124,
+                    1108,
+                    195,
+                    1128
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    393,
+                    1109,
+                    542,
+                    1128
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    619,
+                    1107,
+                    665,
+                    1130
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    931,
+                    936,
+                    1411,
+                    973
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    930,
+                    984,
+                    1409,
+                    1020
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    160,
+                    1181,
+                    675,
+                    1212
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    125,
+                    1672,
+                    214,
+                    1709
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    268,
+                    1667,
+                    609,
+                    1711
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    843,
+                    1093,
+                    912,
+                    1120
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1115,
+                    1096,
+                    1273,
+                    1118
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    160,
+                    1211,
+                    1401,
+                    1239
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    156,
+                    1235,
+                    1420,
+                    1266
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    159,
+                    1262,
+                    951,
+                    1295
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    114,
+                    1731,
+                    846,
+                    1769
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    121,
+                    1775,
+                    200,
+                    1815
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    388,
+                    1775,
+                    555,
+                    1813
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    621,
+                    1781,
+                    890,
+                    1810
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    112,
+                    1824,
+                    1020,
+                    1862
+                ],
+                "score": 1.0,
+                "text": ""
+            }
+        ],
+        "page_info": {
+            "page_no": 1,
+            "width": 1700,
+            "height": 2200
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.985,
+                "bbox": [
+                    169,
+                    23,
+                    1526,
+                    2146
+                ],
+                "index": 1,
+                "html": "<table><tr><td rowspan=1 colspan=11>BOSCH        Development Changes in PD-Phase                                                    Edition 05产品开发更改                       Doc. Approval: RBCD/EISConfidentialEffective date: 20250610DC No./开发更改编号：PDECR_ 016Date/日期：6/19/2025</td></tr><tr><td rowspan=1 colspan=11>Step 3.1 Impact analysis /影响分析</td></tr><tr><td rowspan=1 colspan=11>1.Function&amp;Perfomance ilbe infuenced?/产品功能性能影响？      yes/是       no/否</td></tr><tr><td rowspan=1 colspan=6>ifYesprut actialati如果是，产品影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=1 colspan=4>目前仅放行冰熊品牌POE(RL68H)冷冻油， 功能验证已完成</td><td rowspan=2 colspan=1>esting/签名</td></tr><tr><td rowspan=1 colspan=6>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=4>如需放行其他品牌，验证试验需定义。                T</td></tr><tr><td rowspan=1 colspan=6>2.1 Interface&amp;boundary to customer wil be influenced?/接口&amp;边界是否影响客户？</td><td rowspan=1 colspan=4> yes/是   no/否</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=6>Pleae    customer?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=4>对客户接口无影响，对客户铭牌和图纸有影响，需通知客户</td><td rowspan=1 colspan=1>Customer PM/签名</td></tr><tr><td rowspan=1 colspan=6>2.2 Interfaceboundary to internal il e infuenced？/接口&amp;边界是否影响内部？</td><td rowspan=1 colspan=4> yes/是   no/否</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=6>If Yes, internal imaction evaluation?如果是，内部影响是否评估？(例如：测试接头，噪音测试夹具等)</td><td rowspan=1 colspan=4>对内部接口无影响                            Te</td><td rowspan=1 colspan=1>sting/签名</td></tr><tr><td rowspan=1 colspan=6>3. Mechanical strength&amp;Durabilitywilbe infuenced?？ /产品可靠性、鲁棒性影响？</td><td rowspan=1 colspan=4> yes/是  no/否</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=6>If Yes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？(例如：仿真分析等)</td><td rowspan=1 colspan=4>使用冰熊品牌POE(RL68H)冷冻油的耐久试验进行中，暂无问题反馈。</td><td rowspan=2 colspan=1>Validation/签名</td></tr><tr><td rowspan=1 colspan=6>Whether need new sampleor fixture to test Plan?是否需要样件以及定制/改制夹具进行验证？计划？</td><td rowspan=1 colspan=4>如需放行其他品牌，耐久验证需定义。</td></tr><tr><td rowspan=1 colspan=11>4. Others component wil e influenced?/影响其它零部件？  不影响其他零部件</td></tr><tr><td rowspan=1 colspan=11>f yes，Which components il change in parallel？ 如果影响，哪些零部件也需要同时变更？</td></tr><tr><td rowspan=1 colspan=10>5. Manufactory/assembly/testing ilbe infuenced？/加工，装配，测试是否影响？</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=10>Feedback from manufacturing engineer?产制造装配是否影响，反馈？</td><td rowspan=6 colspan=1>Production/签名</td></tr><tr><td rowspan=1 colspan=5>对加工装配无影响</td><td rowspan=1 colspan=1></td><td></td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=5>Influence on project&amp;product delivery time？对项目&amp;产品交货时间的影响？</td><td rowspan=1 colspan=1></td><td></td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=5>物料到位前生产下订单临时采购</td><td rowspan=1 colspan=1>D</td><td></td><td rowspan=1 colspan=3></td></tr><tr><td rowspan=1 colspan=10>Influence on manufacturing cost /对生产成本的影响？（生产临时采购：8桶.每桶5L去共计4500RMB，纳入直采)</td></tr><tr><td rowspan=1 colspan=10>Increase/增加，金额                    Decrease/降低，金额                      No change/不变</td></tr><tr><td rowspan=1 colspan=10>6.Infuence on supplie pat?Feeback from Suplir/Purchasing?            NA.(新零件放行，不涉及库存)</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=10>asisai 变更后的零件，生产可行性供应商是否确认？反馈？</td><td rowspan=7 colspan=1>经确认，无需签字LOP /签名(Below onlyfor DCAC)DCAC Mech.签名DCAC软/硬件签名Quality$签名</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>Influence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.          no/否 yes/是</td></tr><tr><td rowspan=1 colspan=10>7： Does the change influence on purchasing cost？变更对采购成本的影响？</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=10>Increase/增加，金额                   □Decrease/降低，金额                    no change/不变</td></tr><tr><td rowspan=1 colspan=10>8.Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）                                  □涉裂   过的零件变更</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>RBCW仓库和RBCD仓库，是否有库存，</td><td rowspan=1 colspan=7> 无库存          有库存，库存数量零公里(180L)</td><td rowspan=1 colspan=1>cos /签名</td></tr><tr><td rowspan=1 colspan=3>供应商处是否有库存，</td><td rowspan=1 colspan=7> 无库存          □有库存，库存数量</td><td rowspan=2 colspan=1>PPS /签名</td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=7> 无库存          □有库存，库存数量</td></tr><tr><td rowspan=2 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=7>可以继续使用完     □改制后使用    □报废</td><td rowspan=1 colspan=1>Design /签名</td></tr><tr><td rowspan=1 colspan=7>□改制费用         □报废成本</td><td rowspan=1 colspan=1>pps for purchase parsQulityfor CAC:/名</td></tr><tr><td rowspan=1 colspan=10>9. DFMA &amp; Sample prodcution OPL?                                               no/否 yes/是</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=10>DFMA会议纪要，请附件说明；如果变更无需DFMA或前期PDECR已经做过DFMA，请说明并列出之前的PD_ECR号Any OPL not closed from lasttime sample production?上次样件生产是否仍有OPL没有完成？请说明或者附件说明</td><td rowspan=2 colspan=1>Design /签名</td></tr><tr><td rowspan=1 colspan=10>无DFMA</td></tr><tr><td rowspan=1 colspan=10>10. PM alignment?(Influence on project Timeline? Cost);是否同意对项目时间和成本的影响         ；需求样品订单数量                                                    P</td><td rowspan=1 colspan=1>M/签名</td></tr><tr><td rowspan=1 colspan=10>11.如果涉及以下情况需TCR3 审核确认。不涉及则 □N.A□库存报废，金额             □采购成本增加，金额                生产成本增加，金额                         T</td><td rowspan=1 colspan=1>CR/签名</td></tr><tr><td rowspan=1 colspan=8>Step 3.2 Quality Assurance Items/检查项目</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=2>Validtions 验证</td><td rowspan=1 colspan=2>Plan finish date 计划完成日期</td><td rowspan=1 colspan=4>Resp.person负责人</td><td rowspan=1 colspan=2>Comments 备注</td><td rowspan=8 colspan=1>QMM/签名_</td></tr><tr><td rowspan=1 colspan=2> Capabit Studies_CMK</td><td rowspan=1 colspan=2>NA</td><td rowspan=1 colspan=4>NA</td><td rowspan=1 colspan=2>NA</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=2>Capability Studies_ MSA</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=4>N/A</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=2> MAE release</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=4>N/A</td><td rowspan=1 colspan=2>N/A</td></tr><tr><td rowspan=1 colspan=2> Cleanness test</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=4>NA</td><td rowspan=1 colspan=2>NA</td></tr><tr><td rowspan=1 colspan=2>QZ tes</td><td rowspan=1 colspan=2>NA</td><td rowspan=1 colspan=4>NA</td><td rowspan=1 colspan=2>NA</td></tr><tr><td rowspan=1 colspan=2>200h PDL</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=4>N/A</td><td rowspan=1 colspan=2>N/A</td></tr><tr><td rowspan=1 colspan=2> Test program or fixture etc.</td><td rowspan=1 colspan=2>N/A</td><td rowspan=1 colspan=4>N/A</td><td rowspan=1 colspan=2>N/A</td></tr><tr><td rowspan=1 colspan=2>Step 3.3 Affected documents</td><td rowspan=1 colspan=1>check/影响文档</td><td rowspan=1 colspan=1>查</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>1 InterfaceFMEA-relevant/FMEA:</td><td rowspan=1 colspan=1>n0/香</td><td rowspan=1 colspan=7>yes/是    Resp.person:                                Due date:</td></tr><tr><td rowspan=1 colspan=3>2.ProductFMEA-relevant/DFMEA</td><td rowspan=1 colspan=1>no/否</td><td rowspan=1 colspan=7>Resp.person:      Fan Change               Due date D-FMEA 更新已完成</td></tr><tr><td rowspan=1 colspan=3>3. Special Charecteristics relevant/PSC:</td><td rowspan=1 colspan=1>n0/香</td><td rowspan=1 colspan=7>yes/是     Resp.person:                                 Due date:</td></tr><tr><td rowspan=1 colspan=3>4.IMDS rlevant:</td><td rowspan=1 colspan=1>no/否</td><td rowspan=1 colspan=7>yes/是     Resp.person:                                Due date:</td></tr><tr><td rowspan=1 colspan=3>5 Offer drawing relevant:</td><td rowspan=1 colspan=8>no/香yes/是                       Al desiner              Due date 7/15/2025</td></tr><tr><td rowspan=1 colspan=3>6. TCD relevant:</td><td rowspan=1 colspan=8>no/香yes/是    Resp.person:       QianJiong/ Sun Xudong      Due date 7/15/2025</td></tr><tr><td rowspan=1 colspan=3>7. Norm, WB, HF. relevant: WI</td><td rowspan=1 colspan=8>no/香yes/是    Resp.perso        LI bing/LiKe             Due date 7/15/2025</td></tr><tr><td rowspan=1 colspan=3>Step 4 Technical feasibility & Validation plan ap</td><td rowspan=1 colspan=8></td></tr><tr><td rowspan=1 colspan=1>Project Mangere-</td><td rowspan=1 colspan=2>Motor/DCAC Design SM</td><td rowspan=1 colspan=3>Function testing SM</td><td rowspan=1 colspan=3>Endurance testing SM</td><td rowspan=1 colspan=1>Quality SM</td><td rowspan=1 colspan=1>Maunfacture SM(Scroll)</td></tr><tr><td rowspan=1 colspan=1>Signature /签名：</td><td rowspan=1 colspan=2>Signature /签名：NA</td><td rowspan=1 colspan=3>Signature /签名：</td><td rowspan=1 colspan=3>Signature /签名</td><td rowspan=1 colspan=1>Signature /签名：</td><td rowspan=1 colspan=1>Signature /签名：N/A</td></tr><tr><td rowspan=1 colspan=1>COS SM</td><td rowspan=1 colspan=2>Purchasing SM</td><td rowspan=1 colspan=3>Sales SM</td><td rowspan=1 colspan=3>LOP SM</td><td rowspan=1 colspan=1>EIS Department Manger</td><td rowspan=1 colspan=1>Assembly/Testing Manger</td></tr><tr><td rowspan=1 colspan=1>Signature /签名：</td><td rowspan=1 colspan=2>Signature /签名：</td><td rowspan=1 colspan=3>Signature /签名：</td><td rowspan=1 colspan=3>Signature /签名：</td><td rowspan=1 colspan=1>Signature /签名：</td><td rowspan=1 colspan=1>Signature /签名：</td></tr><tr><td rowspan=2 colspan=10></td><td rowspan=1 colspan=1>TCR3</td></tr><tr><td rowspan=1 colspan=1>Signature/签名：</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 2,
+            "width": 1700,
+            "height": 2200
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.5257,
+                "bbox": [
+                    156,
+                    212,
+                    337,
+                    252
+                ],
+                "index": 1
+            },
+            {
+                "cls_id": 7,
+                "label": "figure_title",
+                "score": 0.879,
+                "bbox": [
+                    448,
+                    133,
+                    1203,
+                    248
+                ],
+                "index": 2
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.6833,
+                "bbox": [
+                    1233,
+                    120,
+                    1364,
+                    156
+                ],
+                "index": 3
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.8677,
+                "bbox": [
+                    1233,
+                    164,
+                    1560,
+                    202
+                ],
+                "index": 4
+            },
+            {
+                "cls_id": 22,
+                "label": "text",
+                "score": 0.9139,
+                "bbox": [
+                    1232,
+                    214,
+                    1547,
+                    251
+                ],
+                "index": 5
+            },
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.987,
+                "bbox": [
+                    148,
+                    228,
+                    1597,
+                    2110
+                ],
+                "index": 6,
+                "html": "<table><tr><td rowspan=1 colspan=8>Cohfidehtlal                                       HH1发                                     Effective date: 20250610DC No./开发更改编号:PDECR_0016Date /日期:6/19/2025</td></tr><tr><td rowspan=1 colspan=3>Step 5 Documents release／文档发布</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=8>1. Documents release (drawing, offer drawing， Bom, Spec.，)/文档发布(图纸，客户图纸，…)</td></tr><tr><td rowspan=1 colspan=5></td><td rowspan=1 colspan=3>Development confirmation/研发确认：</td></tr><tr><td rowspan=1 colspan=5></td><td rowspan=1 colspan=1>Date /日期：</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=2>Step 6.1 Implementati</td><td rowspan=1 colspan=2>on check list /导入清单</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=1>Departments</td><td rowspan=1 colspan=1>YIN</td><td rowspan=1 colspan=4>Description</td><td rowspan=1 colspan=1>Responsible  Due</td><td rowspan=1 colspan=1>date</td></tr><tr><td rowspan=5 colspan=1>Development</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Change BOMs &amp; Drawings &amp; Documents in POE system            Fan</td><td rowspan=3 colspan=1>Li PingzhengChangeWang Xiaolongian Jiong/Sunxudong</td><td rowspan=1 colspan=1>7/15/2025</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Inform documents update (check work-on can met requirements)</td><td rowspan=1 colspan=1>7/15/2025</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=4>Update Offer drawing, TCD, D-FMEA                                    Q</td><td rowspan=1 colspan=1>7/15/2025</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Norm, WB, HF.. MB                                                      L</td><td rowspan=1 colspan=1>i bing/ Li ke</td><td rowspan=1 colspan=1>7/15/2025</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>MoC, IMDS.</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=12 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Related (Production/Testing) equipement be ready on site</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Related (Production/Testing) program be ready</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Related (Production/Testing) tooling / cutting / fixture etc. be ready</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Old tooling / cting /fixture disposal</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Old materials disposal</td><td rowspan=1 colspan=1>NA</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Planner update the planning sheet</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Update FMEA</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Update CP/FC (Control Plan/Flow Chart)</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Update WI/PDS (Include attachments.)</td><td rowspan=1 colspan=1>LiKe</td><td rowspan=1 colspan=1>6/30/2025</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>First batch Mark, Special Mark (Inside Package)</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>NA</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>First batch Mark, Special Mark (Outside Package)</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Training</td><td rowspan=1 colspan=1>LiKe</td><td rowspan=1 colspan=1>6/30/2025</td></tr><tr><td rowspan=6 colspan=1>COS</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Confirm the storage of old parts and coordinate the introduction datefor new part (RM)</td><td rowspan=2 colspan=1>MengFanlong</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Confirm the delivery date of old parts and first delivery of new parts (FG)</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Check sample orders which affected:material order of CKD</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Confirm prduction scheduling according to the alignment, nychanges share the information to MOEx,MFE</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Confirm the old stock/ do prioritize delivery and inventory handling</td><td rowspan=1 colspan=1>NA</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Inform the first delivery to PMO</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=3 colspan=1>PPS(PPS-&gt;PMQ/PQA)</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Check sample orders which affected: material order of purchasing</td><td rowspan=1 colspan=1>Zheng Xuan</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Inform internal related departments(COS,MFE, MOEx)with following</td><td rowspan=1 colspan=1>Zheng Xuan</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Update incoming inspection plan</td><td rowspan=1 colspan=1>Zheng Xuan</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>QMM1</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Update testing programe on testing equipment</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Update inspection plan for CKD parts</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>EIS4</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Distribute the Offer drawing, TCD to customer</td><td rowspan=1 colspan=1>All esigner</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>LOP</td><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=4>Check 10 digit material order</td><td rowspan=1 colspan=1>Ding Yating</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=2 colspan=1>PMO</td><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Check sample orders which affected: Customer order</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>N</td><td rowspan=1 colspan=4>Inform Customer the first delivery information</td><td rowspan=1 colspan=1>N/A</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=2>Step 6.2 Implementat</td><td rowspan=1 colspan=1>ion date /执行日期</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=8>Planned implementation date:变更计划执行日期</td></tr><tr><td rowspan=1 colspan=8>Step 6.3 Implementation approval/导入清单</td></tr><tr><td rowspan=1 colspan=2>Development/ 研发</td><td rowspan=1 colspan=1>Production/生产</td><td rowspan=1 colspan=2>COS/样品</td><td rowspan=1 colspan=1>Purchasing/采购</td><td rowspan=1 colspan=1>Quality/质量</td><td rowspan=1 colspan=1>LOP/物流</td></tr><tr><td rowspan=1 colspan=2>Signature /签名：</td><td rowspan=1 colspan=1>Signature /签名:</td><td rowspan=1 colspan=2>Signature /签名:</td><td rowspan=1 colspan=1>Signature /签名:</td><td rowspan=1 colspan=1>Signature /签名:</td><td rowspan=1 colspan=1>Signature /签名：</td></tr></table>"
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    153,
+                    211,
+                    340,
+                    253
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1233,
+                    166,
+                    1560,
+                    202
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1236,
+                    218,
+                    1544,
+                    250
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    1233,
+                    120,
+                    1365,
+                    156
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    448,
+                    134,
+                    1207,
+                    191
+                ],
+                "score": 1.0,
+                "text": ""
+            },
+            {
+                "label": "ocr_text",
+                "bbox": [
+                    682,
+                    188,
+                    969,
+                    255
+                ],
+                "score": 1.0,
+                "text": ""
+            }
+        ],
+        "page_info": {
+            "page_no": 3,
+            "width": 1700,
+            "height": 2200
+        }
+    },
+    {
+        "layout_dets": [
+            {
+                "cls_id": 21,
+                "label": "table",
+                "score": 0.9884,
+                "bbox": [
+                    137,
+                    147,
+                    1047,
+                    720
+                ],
+                "index": 1,
+                "html": "<table><tr><td colspan=\"3\">Usage list</td></tr><tr><td colspan=\"3\">Part No.</td></tr><tr><td rowspan=\"3\">1: 2:</td><td>冷冻油加注</td><td>Status</td></tr><tr><td>F01Z7A008T-01 Geely offer drawing 更新 F01Z7D0012-01</td><td>Ongoing 7/15/2025</td></tr><tr><td>F01Z7P0026-01</td><td>7/15/2025</td></tr><tr><td rowspan=\"3\">3: Bom 更新</td><td>铭牌更新</td><td>F01Z7P008T-01 7/15/2025</td></tr><tr><td>F01Z7P0065-01</td><td>7/15/2025</td></tr><tr><td>All e-compressor</td><td>7/15/2025</td></tr><tr><td rowspan=\"2\">4</td><td>装配图纸更新</td><td>F01Z7P0012-01 7/15/2025</td></tr><tr><td>F01Z7P0014-02</td><td>7/15/2025</td></tr><tr><td>56</td><td>功能规范更新 F01Z7S0003-01</td><td>7/15/2025</td></tr><tr><td></td><td>TCD 更新 AIITCD</td><td>7/15/2025</td></tr><tr><td>7</td><td>Bom 更新 All e-compressor</td><td>7/15/2025</td></tr><tr><td rowspan=\"2\">9 Offer drawing 更新</td><td>F01Z7D0012-01</td><td>7/15/2025</td></tr><tr><td>F01Z7D0014-02</td><td>7/15/2025</td></tr><tr><td>9</td><td>注油量更新BOM F01Z7P0014-02</td><td>Done</td></tr></table>"
+            }
+        ],
+        "page_info": {
+            "page_no": 4,
+            "width": 1700,
+            "height": 2200
+        }
+    }
+]

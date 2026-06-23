@@ -1,0 +1,25 @@
+{
+  "case_id": "PDECR25_128",
+  "source_file": "PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌_origin.pdf",
+  "metadata": {
+    "dc_no": "25_128",
+    "date": "2025-12-01",
+    "customer_project": [
+      "JIM-4JJ"
+    ],
+    "mcr_no": "",
+    "sample_status": [  
+      "D Sample"
+    ],
+    "change_type": "Customer request / 客户要求",
+    "sample_type": "D Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "SCR: F01ZH003EB-00; DPF BRACKET: F01Z5017P5-05; DOC+SDPF WELDING: F01Z5017NL-05; DOC+SDPF UNIT: F01ZH003EA-00",
+    "reason_for_change": "1. DPF出气法兰，客户装上双头螺柱后，有密封垫片，安装不上的风险，需要增加对出气法兰螺母位置检测方法。; 2. SCR客户要求在尾管处增加纸质标签（QR二维码吊牌）。; 3. 侧支架客户要求更改客户料号。",
+    "change_source": [
+      "Customer request",
+      "Design optimization"
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-07-02th
+25081
+Customer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:
+Sample status / 样件状态： A Sample B Sample C Sample D Sample
+Change part&product Name/更改零部件产品的名称(简要描述)
+DOC-DPF:F01ZH003FU-00
+Reason of changes/更改理由（简要描述)
+客户要求压差支架取消卡夹
+Change from/变更来源：
+Customer request /客户要求√ | Supplier request /供应商请求 Design optimization /设计优化
+Correction/更正(错误) | Other/其他
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, LYicen, Ge Jilong
+Yang Guangtuo, Luo jing， Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+ifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design /设计工程师 | 卢松 | Date/日期： | 2025.7.2
+Signature/签名：
+Check/校对工程师 | 杨广抓 | Date /日期： | 2025.07.03
+Signature/签名：
+Description of Change/更改描述：(下面空白处请列出详细的变更前后对比）
+
+BOSCH 博世 Confidential | Design Change Review Sheet | 设计变更评审表 | Version 13 Effective date:2025-07-02th
+Design Change Request No. | 2508
+IfYes,System impaction evaluation? | 1.Function&Performance wil be influenced?/系统性能影响？
+如果是，系统影响评估？ (如果是初次样件放行，空白处请说明样件目的)
+Whether need sample to test?Plan? | sem%
+是否需要样件进行验证？计划？ Whether the catalyst information is confirmed? | catalst
+催化剂信息是否确认？（物料号、图纸、SPEC) | 2.Interface&boundary (internal and customer) wil be infuenced?/接口&边界(内部和客户)影响？ | yes/是 | no/否
+If impact custmer,whetherget confirm from customer side?
+请说明影响和是否得到客户的确认？
+3. Mechanical strength&Durability wil be infuenced?/机械强度&可靠性影响？ If Yes, How to evaluate? Plan? | yes/是 | no/香
+如果是，请说明影响和如何评估，计划？ (例如：仿真分析等) | $varati
+Whether need sample to test?Plan? 是否需要样件进行验证？计划？
+4. Product document infuenced? 4.1 Interface FMEA-relevant/IFMEA: | no/否 | yes/是 Note_
+4.2.Product FMEA-relevant/DFMEA: | n0/否 yes/是 Note
+4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note
+4.4.IMDS relevant: (针对C Sample) | no/否 yes/是 Note_
+4.5 Offer drawing relevant(针对c Sample) | no/否 yes/是 Note
+4.6. TCD relevant: | no/否 yes/是 Note | 030声
+5. Changed parts Stock& treatment/需要变更零件的库存统计和处理？ （只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） | NA.(新零件放行，不涉及库存） 涉及到已经生产过的零件变更
+RBCWRDC（外库）和RBCW仓库，是否有库存， | 无库存 有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | ]有库存，库存数量
+LPN工厂是否有库存， | □ 无库存 无库存 | □有库存，库存数量
+在途，运输中是否有库存 | □ 无库存 | ]有库存，库存数量 | PUE /签名
+被影响到的实物库存处理指示： | 可以继续使用完 | □改制后使用 □报废 | Design/签名
+（设计工程师组织会议讨论） | 改制费用 报万成本 | PUE /签名
+(SMP组织会议讨论） | 已装车件处理方法（发客户或标定车等） | 改制 其他（单独说明） | 更换
+6. Influence on supplier part? | Was this change confrmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?
+变更后的零件，生产可行性供应商是否确认？反馈？
+Influence on purchasing part delivery time？对采购件交货时间的影响？
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. Does the change infuence on purchasing cost？变更对采购成本的影响？ | □no/否yes/是
+increase/增加,金额 | □decrease/降低，金额 | no change/不变 | PUE/签名
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA文件
+支架+隔热罩.娘废1W. | 改制6000 | 卢松 Design /签名
+8.Influence on LPN manufacturing&assembly process?
+Feedback from manufacturing engineer?生产制造装配是否影响，反馈？
+Infuenceonproject&product deliver time？对项目&产品交货时间的影
+Influence on manufacturing cost /对产成本的影响？ increase/增加，金额 | decrease/降低，金额 | no change/不变 | 李岑 PUE/签名
+9.PM alignment? (Influence on project Timeline? Cost?); 是否同意对项目时间和成本的影响 需求样品订单数量
+10.如果涉及以下情况需TCR3审核确认。 库存报废，金额 | 不涉及则 平购成本增加，金额 | na. | RB 牛产成本增加，金额
+Design Team Leader | ENG-CV1 | PUR | TCR3
+Signature/签名 | Signature | Signature /签名: | 谢友待
+
+[image] 
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X1-05 | DP TUBE BRACKET | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 线束固定支架取消后，线束固定卡箍随之取消;
+风险点（影响） | 无
+验证方法 | 无
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+See blow | INSULATION | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+MAMELAE BOSCH 05C) BOSCH WORD MARX /B0SC - MARK DOC封装：博世汽车系统（无锡）有限公司
+BOSCH O5 -DOC载体：NGK（苏州）环保陶瓷有限公司 DOC涂层：庄信万丰（上海）化工有限公司 SDPF封装：博世汽车系统（无锡）有限公司 NG- 2ATE- -SDPF载体：NGK（苏州）环保陶资有限公司 -E415 _IN5 SDPF涂层：庄信万丰（上海）化工有限公司 CA100271850 -E415 JOE- ECA100271850 FO1ZH0O3FU Made in China (16) | BOSCH (059) DOC封装：博世汽专系统（无锡）有限公司 SDPF封装：博世汽车系统（无锡）有限公司 一00载体：日G区（苏归）环保阳党有限公司 -SDPF载体：NGK（苏）环保陶资和限公司 一DOC涂层：主信为丰（上海）化工存限公司 -SDF泰层：注省发丰（上海）化工有限公司 E415 CA10027185D ECA100271851
+F01ZH003FU N- Made in China 1 (10.4) | F01ZH003FU F01ZH003FU Mede in Chine Made in China OR COOE
+DOCINSULATION02:F01Z5018AW-03 DPFINSULATION01: F01Z5018AZ-03 | DOCINSULATION02:F01Z5018AW-03 DPFINSULATION01:F01Z5018AZ-03
+变更原因 线束固定支架取消后，客户图纸号随之更改;
+风险点 （影响) 验证方法 | 无
+无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FU-00 | DOC+SDPF UNIT | JIM-493 | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+HEMTUEER05C2.1ESTA7E -0OC DOc ：RHEE E415CA100271850F01Z-003FUMade in ChinaETE ATELATFHHAEtSXFCA1002/1850F01Z1003F0Mgde in | (05cDOC ：A5手修有系5TATC- -DOC数公：1：)4事，-DOC：公E E415CA100271851F01ZH003FUMede in ChineFNAEHLATE050-SDPF 第A保公-SOPTE415-CA100271851-F01ZH003FUMade in Chine
+变更原因 | 上述铭牌更改后，总成图纸随之更改;
+风险点(影响) | 无
+验证方法 | 无

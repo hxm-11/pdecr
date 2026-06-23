@@ -1,0 +1,306 @@
+[
+    {
+        "type": "table",
+        "img_path": "images/34a33c3bc2fc5a65686e82b9b6f75bf6f954baa35c1278b95b631a4e335a7201.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>BOSCH 博世</td><td colspan=\"6\">Product Development Design Change Request 产品开发设计变更请求</td><td colspan=\"3\">Version 15 Effective date:2024-11-23th Design Change</td></tr><tr><td>Confidential</td><td>Customer project Name/客户项目名称：</td><td colspan=\"4\">JIM-493</td><td>RauestNo.</td><td colspan=\"2\">24_132</td></tr><tr><td colspan=\"9\">MCR No./ MCR号: Sample status/ 样件状态： A Sample B Sample ]C Sample</td></tr><tr><td colspan=\"4\">Change part&amp;product Name/更改零部件产品的名称（简要描述) DOC可拆65g新鲜件：F01Z50181Y-00 DOC可拆65g化件：F01Z50181Y-51</td><td colspan=\"6\">D Sample</td></tr><tr><td colspan=\"9\">DOC可拆白载体：F01Z5017X9-25 DOC可拆1/6涂敷：F01Z5017X9-31 DOC可拆1/8涂敷：F01Z5017X9-32 DPF可拆白载体：F01Z5017XC-25 SCR1/9涂敷：F01ZH003FV-36 SCR1/10涂敷：F01ZH003FV-37</td></tr><tr><td colspan=\"9\">SCR1/12涂敷：F01ZH003FV-38 SCR1/15涂敷：F01ZH003FV-39 Reason of changes/更改理由（简要描述)：</td></tr><tr><td colspan=\"9\">程师测试样件放行；</td></tr><tr><td colspan=\"9\"></td></tr><tr><td colspan=\"2\">Change from/变更来源： Customer request /客户要求</td><td></td><td colspan=\"2\"></td><td colspan=\"2\"></td><td colspan=\"2\"></td></tr><tr><td colspan=\"2\">Correction/更正(错误)</td><td>Other/其他</td><td colspan=\"2\">Supplier request /供应商请求 （ 系统测试样件</td><td colspan=\"2\"></td><td colspan=\"2\">Design optimization/设计优化</td></tr><tr><td colspan=\"2\">Change inform to/变更通知人：</td><td colspan=\"9\"></td></tr><tr><td colspan=\"9\">Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td colspan=\"9\">Yang Guangtuo,Jia Kebin, Luo jing，Lu Qingsong Whether this change impact others component or product 此变更是否影响到其他部件和产品：</td></tr><tr><td colspan=\"9\">yes/是 no/否 If impact others product，Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td colspan=\"9\"></td></tr><tr><td colspan=\"2\">Design/设计工程师</td><td colspan=\"3\">卢青松</td><td>Date /日期：</td><td colspan=\"2\">2024.12.2</td><td></td></tr><tr><td colspan=\"2\">Signature /签名： Check/校对工程师</td><td colspan=\"3\"></td><td>Date/日期:</td><td colspan=\"2\"></td><td></td></tr><tr><td colspan=\"9\">杨抗 Signature/签名：</td></tr><tr><td colspan=\"9\">2024.12.23 Description of Change/更改描述：(下面空白处请列出详细的变更前后对比)</td></tr><tr><td colspan=\"9\">具体变更详见附件PPT</td></tr><tr><td></td><td></td><td>B样分体式 50g/cft DOC催化剂涂敷极值件</td><td></td><td rowspan=\"10\" colspan=\"2\"></td><td></td><td colspan=\"2\" rowspan=\"4\"></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>DOC65g新鲜件</td><td>总成号</td><td>分总成号 F01Z50181Y-00</td><td>催化剂号</td></tr><tr><td>DOC 65g老化件</td><td>&quot;</td><td>F01Z50181Y-51</td><td>F01Z50178L F01Z50178R-00</td></tr><tr><td rowspan=\"2\">DOc白载体</td><td rowspan=\"2\">--</td><td rowspan=\"2\">F01Z5017X9-25</td><td></td><td>F01Z501887 白载体</td><td rowspan=\"3\"></td><td colspan=\"2\" rowspan=\"6\"></td></tr><tr><td>-</td><td>F01Z5017X9-31 F01Z50178N-31</td></tr><tr><td rowspan=\"2\">DOC1/8涂敷</td><td>--</td><td>F01Z5017X9-32</td><td></td><td>F01Z50178N-32</td><td rowspan=\"2\"></td><td rowspan=\"2\"></td></tr><tr><td>DPF新鲜件</td><td>--</td><td>F01Z5017XC-01</td><td>F01Z5017WM-00</td></tr><tr><td>DPF白载体</td><td colspan=\"2\">-</td><td>F01Z5017XC-25</td><td colspan=\"2\">F01Z5102DF-00</td><td colspan=\"2\"></td><td colspan=\"2\"></td></tr><tr><td>B样波纹管170mm</td><td colspan=\"2\">1/9涂敷</td><td>白载体</td><td colspan=\"2\">1/10涂敷</td><td colspan=\"2\">1/12涂敷</td><td colspan=\"2\">1/15涂敷</td></tr><tr><td></td><td>总成号</td><td>催化剂号</td><td>总成号</td><td>催化剂号</td><td colspan=\"2\">总成号</td><td>催化剂号</td><td colspan=\"2\">催化剂号</td></tr><tr><td>SCRIASC</td><td>F01ZH003FV-36</td><td>F01Z50180N-36</td><td>F01ZH003FV-37</td><td>F01Z50180N-37</td><td colspan=\"2\">F01ZH003EV-38</td><td>总成号</td><td colspan=\"2\"></td></tr></table>",
+        "bbox": [
+            43,
+            38,
+            947,
+            697
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/4b7b62609526859d7402e6a1f5b0368ebf1771f26d202f23331969b7859d1dcc.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            77,
+            712,
+            305,
+            851
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/775e06b123934bb2d188fdaf721b3e991d7b359313508ed0842f533ae80fe3e3.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            400,
+            709,
+            626,
+            825
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/37b32056e7606a48e97273308e90382352718f48f83c78ae7fe1d77318eab94a.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            408,
+            844,
+            850,
+            931
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "table",
+        "img_path": "images/22b058a09670c7909c321295ea788749fbb3a2a75c52d104876179573d6cfa7d.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=49 colspan=1>(4.4</td><td rowspan=3 colspan=1>BOSCH博世Confidential</td><td rowspan=3 colspan=8>Design Change Review Sheet设计变更评审表</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Version 13Effective date: 2024-11-23th</td></tr><tr><td rowspan=1 colspan=1>24132</td></tr><tr><td rowspan=1 colspan=10>1.Function&amp;Performance will be influenced?/系统性能影响？      yes/是no/否</td></tr><tr><td rowspan=2 colspan=3>如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=2 colspan=6></td><td></td></tr><tr><td rowspan=2 colspan=1>System/签名_</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=6></td></tr><tr><td rowspan=1 colspan=3>Whetherthe catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC)</td><td rowspan=1 colspan=6>10.2减涂覆ec.特定，考和试catay</td><td rowspan=1 colspan=1>s签名张汉泉</td></tr><tr><td rowspan=2 colspan=3>2.Interface&amp;boundary (internal and custom</td><td rowspan=2 colspan=6>er) wil be infulenced?/接口&amp;边界(内部和客户)影响？     yes/是</td><td></td></tr><tr><td rowspan=2 colspan=1>no/否</td></tr><tr><td rowspan=2 colspan=3>if impact custmerwhether get confirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=2 colspan=6></td></tr><tr><td rowspan=2 colspan=1>Desi801%</td></tr><tr><td rowspan=2 colspan=3>3. Mechanical strength&amp;Durability wil be in</td><td rowspan=2 colspan=6>fluenced?/机械强度&amp;可靠性影响？                       yes/是</td></tr><tr><td rowspan=2 colspan=1>no/香</td></tr><tr><td rowspan=2 colspan=3>If Yes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？例如：仿真分析等)</td><td rowspan=2 colspan=6></td></tr><tr><td rowspan=3 colspan=1>vaidai</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test?Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=6></td></tr><tr><td rowspan=2 colspan=3>4. Product document infuenced?</td><td rowspan=2 colspan=6></td></tr><tr><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=3>4.1Interface FMEA-relevant/IFMEA:</td><td rowspan=1 colspan=2>√no/否</td><td rowspan=1 colspan=4>yes/是   Note_</td></tr><tr><td rowspan=3 colspan=3>4.2.Product FMEA-relevant/DFMEA:</td><td rowspan=3 colspan=2>n0否</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td rowspan=6 colspan=1>Deslen12么</td></tr><tr><td rowspan=1 colspan=4>yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC:(针对C Sample)</td><td rowspan=1 colspan=2>no香</td><td rowspan=1 colspan=4>yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.IMDSrelevant: (针对C Sample)</td><td rowspan=1 colspan=2>n0否</td><td rowspan=1 colspan=4>yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.5 Offer drawing relevant：(针对C Sample)</td><td rowspan=2 colspan=6>n0香     yes/是  Noteno/否     yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>.6. TCD relevant:</td></tr><tr><td rowspan=1 colspan=3>5. Changed parts Stock&amp; treatment/需（只针对涉及到已经生产过的零件变更，新</td><td rowspan=1 colspan=7>要变更零件的库存统计和处理？放行零件和本条不相关）                         NA.(新零件放行,不涉及库存）涉及到已经生产过的零件变更</td></tr><tr><td rowspan=2 colspan=3>RBCW RDC（外库)和RBCW仓库，是否有库存，</td><td rowspan=2 colspan=6>无库存        有库存，库存数量</td><td></td></tr><tr><td rowspan=4 colspan=1></td></tr><tr><td rowspan=4 colspan=3>供应商处（已做好，未发货）是否有库存，</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=41 colspan=1></td></tr><tr><td rowspan=2 colspan=1></td><td rowspan=2 colspan=5>无库       □有库存，库存数量</td></tr><tr><td rowspan=4 colspan=1>PUE 2</td></tr><tr><td rowspan=1 colspan=3>LPN工厂是否有库存，</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=5>无库存     □有库存，库存数量</td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=5>无库存      □有库存，库存数量</td></tr><tr><td rowspan=4 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=2 colspan=6>□可以继续使用完      □改制后使用   □报废</td></tr><tr><td rowspan=2 colspan=1>Design /签名</td></tr><tr><td rowspan=2 colspan=6>□        元 报废成</td></tr><tr><td rowspan=2 colspan=1>PUE1本</td></tr><tr><td rowspan=2 colspan=4>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论）</td><td rowspan=2 colspan=6>改制                       更换其他(单独说明）</td></tr><tr><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=10>6. Influence on supplier part?</td></tr><tr><td rowspan=3 colspan=10>变更后的零件，生产可行性供应商是否确认？反馈？</td></tr><tr><td rowspan=1 colspan=1></td></tr><tr><td rowspan=6 colspan=1>PUE签%</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.    no/查yes/是</td></tr><tr><td rowspan=1 colspan=10>Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额                        decrease/降低，金额                   □]no change/不变</td></tr><tr><td rowspan=2 colspan=10>7. DFMA &amp; Sample prodcution OPL?</td></tr><tr><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=2 colspan=10>只更快催化剂，无需DFMA</td></tr><tr><td rowspan=2 colspan=1>oes</td></tr><tr><td rowspan=2 colspan=10>8. Influence on LPN manufacturing&amp;assembly process?</td></tr><tr><td rowspan=2 colspan=1></td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=2 colspan=10></td></tr><tr><td rowspan=4 colspan=1>方P</td></tr><tr><td rowspan=1 colspan=10></td></tr><tr><td rowspan=1 colspan=10>□increase/增加，金额                           decrease/降低，金额                        no change/不变</td></tr><tr><td rowspan=2 colspan=10>9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响               需求样品订单数量</td></tr><tr><td rowspan=2 colspan=1>PM/名2</td></tr><tr><td rowspan=2 colspan=10>10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.                                           RB□库存报废，金额平购成本增加，金额牛产成本增加，金额</td></tr><tr><td rowspan=2 colspan=1>CW7TCR3</td></tr><tr><td rowspan=1 colspan=3>DesignTeam Leader</td><td rowspan=1 colspan=4>ENG-CV1</td><td rowspan=1 colspan=2>PUR</td><td></td></tr><tr><td rowspan=3 colspan=3>Signare</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=3 colspan=2>TCR3Signature/签名：</td></tr><tr><td rowspan=1 colspan=4>Signature/签名5</td><td rowspan=1 colspan=1>Signature/签名:</td><td rowspan=1 colspan=1>8\\$</td></tr><tr><td rowspan=2 colspan=8></td><td></td></tr><tr><td rowspan=1 colspan=3></td></tr></table>",
+        "bbox": [
+            72,
+            34,
+            904,
+            969
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/2bb01407dc20c382408c83392c94ae09ec9efc3fe3c6bd2b606ec05748a020f8.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            97,
+            0,
+            363,
+            980
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 2,
+        "bbox": [
+            541,
+            625,
+            675,
+            938
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "table",
+        "img_path": "images/f4378a9d101d8455454ea15bc71b4601ad209cf23a8f89af05fd6de11a677663.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z50181Y-00</td><td rowspan=1 colspan=1>DOC UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00</td><td rowspan=1 colspan=3>0DOCUNIT：F01Z50181Y-00DOCWELDING:F01Z50181Z-00DOCCANNING:F01Z50182A-00DOCCATALYST:F01Z50178L</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放DOC65g新鲜样件做实验;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>",
+        "bbox": [
+            193,
+            65,
+            806,
+            954
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/fad66c62a2d602302b6d9a65cc5bc9d7dfa1f6f54d06575dcb63791b863a9cde.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z50181Y-51</td><td rowspan=1 colspan=1>DOC UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>2ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00</td><td rowspan=1 colspan=3>®DOCUNIT:F01Z50181Y-51DOCWELDING:F01Z50181Z-51DOCCANNING:F01Z50182A-51DOCCATALYST:F01Z50178R-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放DOC65g老化样件做实验;</td></tr><tr><td rowspan=1 colspan=1>风险点（影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            189,
+            66,
+            808,
+            956
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/dc2e018a950f472e3f64d4f15e014195aaca4f794fbf31389e9eecb2dd1ba430.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017X9-25</td><td rowspan=1 colspan=1>DOC UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>d     ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00</td><td rowspan=1 colspan=3>DOCUNIT:F01Z5017X9-25DOCWELDING:F01Z5017XA-25DOCCANNING: F01Z5017NM-25DOCSUBSTRATE: F01Z501887</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放DOC可拆白载体样件做标定实验;</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=2 colspan=6>无无</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            191,
+            66,
+            806,
+            954
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/9496ee3964ef66a6f7975cbd1edf39ab509d122cf2f9258312b956215d3a2951.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=3 colspan=2></td><td rowspan=2 colspan=1>零件号</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017X9-31</td><td rowspan=1 colspan=1>DOC UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=3 colspan=2>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=2 colspan=3>TDOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00</td><td></td><td></td><td></td></tr><tr><td rowspan=1 colspan=3>deDOCUNIT：F01Z5017X9-31DOCWELDING:F01Z5017XA-31DOC CANNING:F01Z5017NM-31DOCCATALYST: F01Z50178N-31</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=7>系统工程师要求释放DOC可拆1/6涂敷样件做标定实验;</td></tr><tr><td rowspan=2 colspan=8>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            189,
+            66,
+            805,
+            954
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/3299ad00f30d71a19300b0ec667c2bc463bca8996a04dfafb8ffee16f0f93732.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td></td><td rowspan=1 colspan=8></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td></tr><tr><td></td><td></td><td></td><td rowspan=1 colspan=6>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=7>DOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00</td><td rowspan=1 colspan=3>d文DOCUNIT：F01Z5017X9-32DOCWELDING:F01Z5017XA-32DOCCANNING:F01Z5017NM-32DOCCATALYST:F01Z50178N-32</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=10>系统工程师要求释放DOC可拆1/8涂敷样件做标定实验;</td></tr><tr><td rowspan=2 colspan=11>无无</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            191,
+            66,
+            806,
+            954
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/39f0bb9c5e5cd55d71005d34e63d926082a7b47387ae3b61b6175cb3c119611a.jpg",
+        "table_caption": [
+            "suBu Auedoid",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01Z5017XC-25</td><td rowspan=1 colspan=1>DOC UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>laldSDPFUNIT:F01Z5017XC-01SDPFWELDING: F01Z5017XD-01SDPFCANNING:F01Z5017NP-01SDPFCATALYST:F01Z5017WM-00</td><td rowspan=1 colspan=3>laldSDPFUNIT:F01Z5017XC-25SDPFWELDING:F01Z5017XD-25SDPFCANNING:F01Z5017NP-25SDPFSUBSTRATE:F01Z5102DF-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放DPF可拆白载体样件做标定实验;</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响)</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=7></td></tr></table>",
+        "bbox": [
+            193,
+            66,
+            806,
+            954
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "table",
+        "img_path": "images/d32f37fd65f9393a6456acab5eb0862d784b54fdcc08eb4aafc6b5cb8f9f1672.jpg",
+        "table_caption": [
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=3 colspan=2></td><td rowspan=2 colspan=1>零件号</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003FV-36</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=2>变更描述</td><td rowspan=1 colspan=3>变更前</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=7>系统工程师要求释放SCR1/9涂敷样件做标定实验;</td></tr><tr><td rowspan=2 colspan=8>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            193,
+            66,
+            811,
+            953
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 2,
+        "bbox": [
+            129,
+            723,
+            178,
+            956
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "table",
+        "img_path": "images/5bcd8e177384360f0ddc7c91bf694c44a3dc1da7c06258ca768d4624f0bc0b48.jpg",
+        "table_caption": [
+            "suBu Auedoid",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=\"2\"></td><td>零件号</td><td>零件名称</td><td colspan=\"2\">Project</td><td>样件阶段</td><td colspan=\"2\">变更来源</td></tr><tr><td>F01ZH003FV-37</td><td>SCR UNIT</td><td colspan=\"2\">JIM-493</td><td colspan=\"2\">A</td><td>BOSCH/Customer</td></tr><tr><td rowspan=\"2\">变更描述</td><td colspan=\"3\">变更前</td><td colspan=\"3\">变更后</td></tr><tr><td colspan=\"3\">SCRUNIT:F01ZH003FV-02 SCRWELDING:F01Z5017W9-01 SCRCANNING: F01Z5017WA-01</td><td colspan=\"2\">SCRUNIT:F01ZH003FV-37 SCRWELDING:F01Z5017W9-37</td></tr><tr><td></td><td colspan=\"5\">SCR CANNING: F01Z5017WA-37 SCRCATALYST:F01Z501891 SCRCATALYST:F01Z50180N-37</td></tr><tr><td>变更原因</td><td colspan=\"5\">系统工程师要求释放SCR1/10涂敷样件做标定实验;</td></tr><tr><td>风险点（影响） 验证方法</td><td colspan=\"5\">无 无</td></tr></table>",
+        "bbox": [
+            193,
+            66,
+            806,
+            953
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "table",
+        "img_path": "images/dbfa568188e0dac6135903d78777a8b2b2b90e04ca0ffe148c33eec8dde3498f.jpg",
+        "table_caption": [
+            "sau Auedoid"
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003FV-38</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放SCR1/12涂敷样件做标定实验;</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=2 colspan=6>无无</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            193,
+            66,
+            810,
+            954
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 2,
+        "bbox": [
+            126,
+            714,
+            176,
+            957
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "table",
+        "img_path": "images/f957e04c3fc6f4f8457702b068fd853007fdf7924e49b2b603c0ca7197ce42c4.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=3 colspan=2></td><td rowspan=2 colspan=1>零件号</td><td rowspan=1 colspan=5></td></tr><tr><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003FV-39</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td></td><td></td></tr><tr><td rowspan=5 colspan=2>变更描述</td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td rowspan=3 colspan=1>A</td><td></td></tr><tr><td rowspan=2 colspan=3>变更前</td><td></td><td></td></tr><tr><td></td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td></td><td></td><td></td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=2>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放SCR1/15涂敷样件做标定实验;</td></tr><tr><td rowspan=2 colspan=2>风险点(影响)</td><td rowspan=2 colspan=6>无</td></tr><tr><td rowspan=2 colspan=1></td></tr><tr><td rowspan=2 colspan=8>无</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            189,
+            66,
+            810,
+            954
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 2,
+        "bbox": [
+            122,
+            723,
+            173,
+            956
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "",
+        "bbox": [
+            803,
+            290,
+            850,
+            942
+        ],
+        "page_idx": 12
+    }
+]

@@ -1,0 +1,144 @@
+[
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/4aece03967833d4d5a95fd3a339d191e0efb05e09c3d4ac12b4ee7ea1ea5bb30.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=4>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effective date:2024-09-29th</td></tr><tr><td rowspan=1 colspan=1>24_113</td></tr><tr><td rowspan=1 colspan=6>Customer project Name/客户项目名称：               JIM-493           MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=6>Sample status / 样件状态：    A Sample     B Sample      ]C Sample      ]D Sample</td></tr><tr><td rowspan=1 colspan=6>Change part&amp;product Name/更改零部件产品的名称(简要描述)</td></tr><tr><td rowspan=1 colspan=6>JP560SCR老化件:F01ZH003G6-51（1.5g/cftPGM)493 SCR老化件：F01ZH003G7-51(1.5g/cftPGM）</td></tr><tr><td rowspan=1 colspan=6>Reason ofchanges/更改理由（简要描述)：</td></tr><tr><td rowspan=1 colspan=6>系统工程师要求释放JP560及4931.5g/cftPGMSCR催化剂做验证；</td></tr><tr><td rowspan=1 colspan=2>Change from/变更来源：</td><td rowspan=1 colspan=4></td></tr><tr><td rowspan=1 colspan=2>Customer request /客户要求</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2>Supplier request /供应商请求</td><td rowspan=1 colspan=1>Design optimization /设计优化</td></tr><tr><td rowspan=1 colspan=2>Correction /更正(错误)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>Other/其他（系统工程师</td></tr><tr><td rowspan=1 colspan=2>Change inform to/变更通知人：</td><td rowspan=1 colspan=4>Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=6>Yang Guangtuo,Jia Kebin, Luo jing，Lu Qingsong</td></tr><tr><td rowspan=1 colspan=6>Whether this change impact others component or product 此变更是否影响到其他部件和产品：       yes/是no/否</td></tr><tr><td rowspan=1 colspan=6>If impact others product， Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=6></td></tr><tr><td rowspan=1 colspan=2>Design/设计工程师</td><td rowspan=2 colspan=2>卢青松</td><td rowspan=2 colspan=1>Date/日期：</td><td rowspan=2 colspan=1>2024.9.30</td></tr><tr><td rowspan=1 colspan=2>Signature /签名:</td></tr><tr><td rowspan=1 colspan=2>Check/校对工程师</td><td rowspan=2 colspan=2>杨拓</td><td rowspan=2 colspan=1>Date /日期：</td><td rowspan=2 colspan=1>2024.09.30</td></tr><tr><td rowspan=1 colspan=2>Signature /签名:</td></tr><tr><td rowspan=1 colspan=6>Description of Change/更改描述：(下面空白处请列出详细的变更前后对比)</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                11,
+                42,
+                959,
+                954
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/d03133fd363f24621eb974cd6a7c82682a68ee3d6fc4968d6931d003949be22d.jpg"
+                },
+                "table_caption": [],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=5>Design Change Review Sheet设计变更评审表</td><td rowspan=1 colspan=2>Version 13Effective date: 2024-09-29th</td></tr><tr><td rowspan=1 colspan=1>Design ChangeRequest No.</td><td rowspan=1 colspan=1>24_113</td></tr><tr><td rowspan=1 colspan=8>1.Function&amp;Performance wil be influenced?/系统性能影响？      yes/是no/否</td></tr><tr><td rowspan=1 colspan=3>If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=1 colspan=4>否，标定样件</td><td rowspan=2 colspan=1>srstemst地传波</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=4>否，标定样件</td></tr><tr><td rowspan=1 colspan=3>Whether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC）</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=1>Catalst/签名长汉泉</td></tr><tr><td rowspan=1 colspan=3>2.Interface&amp;boundary (internal and custome</td><td rowspan=1 colspan=4>r) wil be influenced?/接口&amp;边界(内部和客户)影响？     yes/是</td><td rowspan=1 colspan=1>no否</td></tr><tr><td rowspan=1 colspan=3>If impactcustmer,whetherget confirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=1>Doee2</td></tr><tr><td rowspan=1 colspan=3>3. Mechanical strength&amp;Durability il be inf</td><td rowspan=1 colspan=4>luenced?/机械强度&amp;可靠性影响？                      yes/是</td><td rowspan=1 colspan=1>no/否</td></tr><tr><td rowspan=1 colspan=3>If Yes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等）</td><td rowspan=1 colspan=4>A样无需FEA</td><td rowspan=2 colspan=1>valdai</td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=4></td></tr><tr><td rowspan=1 colspan=3>4.Product document influenced?</td><td rowspan=1 colspan=4></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>4.1 Interface FMEA-relevant /IFMEA:</td><td rowspan=1 colspan=4>no/否    yes/是  Note</td><td rowspan=6 colspan=1>Dele</td></tr><tr><td rowspan=1 colspan=3>4.2.Product FMEA-relevant/DFMEA:</td><td rowspan=1 colspan=4>n0否    yes/是   Note_</td></tr><tr><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC：(针对C Sample)</td><td rowspan=1 colspan=4>no/否     yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.4.IMDS relevant： (针对C Sample)</td><td rowspan=1 colspan=4>no/否    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.5 Offer drawing relevant:(针对C Sample)</td><td rowspan=1 colspan=4>n/否    yes/是  Note</td></tr><tr><td rowspan=1 colspan=3>4.6.TCD relevant:</td><td rowspan=1 colspan=4>no/否    yes/是  Note_</td></tr><tr><td rowspan=1 colspan=8>5.Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？                       NA.(新零件放行,不涉及库存）（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）                              涉及到已经生产过的零件变更</td></tr><tr><td rowspan=1 colspan=3>RBCW RDC（外库）和RBCW仓库，是否有库存，</td><td rowspan=1 colspan=2>□ 无库存     □有库存，库存数量</td><td rowspan=1 colspan=2></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>供应商处（已做好，未发货）是否有库存，</td><td rowspan=1 colspan=2>□无库存     □有库存，库存数量</td><td rowspan=1 colspan=2></td><td rowspan=3 colspan=1>01</td></tr><tr><td rowspan=1 colspan=3>LPN工厂是否有库存，</td><td rowspan=1 colspan=2>□ 无库存      □有库存，库存数量</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=2>□无库存      □有库存，库存数量</td><td rowspan=1 colspan=2></td></tr><tr><td rowspan=2 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=4>可以继续使用完      □改制后使用   □报废</td><td rowspan=1 colspan=1>Design /签名</td></tr><tr><td rowspan=1 colspan=4>改制费用           □                 报废成</td><td rowspan=1 colspan=1>PUE /签名_</td></tr><tr><td rowspan=1 colspan=3>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论）</td><td rowspan=1 colspan=4>改制                       更换</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=7>6. Influence on supplier part?</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=7>Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？</td><td rowspan=5 colspan=1>方李参PUE/签名</td></tr><tr><td rowspan=1 colspan=7></td></tr><tr><td rowspan=1 colspan=7>Influence on purchasing part delivery time？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=7>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.    □no/否yes/是</td></tr><tr><td rowspan=1 colspan=7>Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额                         □decrease/降低，金额                   7no change/不变</td></tr><tr><td rowspan=1 colspan=7>7. DFMA &amp; Sample prodcution OPL?</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=7>必要时附加DFMA文件</td><td rowspan=2 colspan=1>0e82</td></tr><tr><td rowspan=1 colspan=7>只更换催化剂，无需DFMA</td></tr><tr><td rowspan=1 colspan=7>8. Influence on LPN manufacturing&amp;assembly process?</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=7>Feedback from manufacturing engineer？生产制造装配是否影响，反馈？</td><td rowspan=4 colspan=1>本出PUE/签名</td></tr><tr><td rowspan=1 colspan=7></td></tr><tr><td rowspan=1 colspan=7>Influence on project&amp;product delivery time？对项目&amp;产品交货时间的影响？</td></tr><tr><td rowspan=1 colspan=7>Influence on manufacturing cost /对产成本的影响？increase/增加n金额                           decrease/降低，金额                        no change/不变</td></tr><tr><td rowspan=1 colspan=7>9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响             ；需求样品订单数量</td><td rowspan=1 colspan=1>PM/签名_</td></tr><tr><td rowspan=1 colspan=7>10.如果涉及以下情况需TCR3审核确认。不涉及则Na.:                                              R□库存报废，金额平购成本增加，金额牛产成本增加，金额</td><td rowspan=1 colspan=1>BCW/TCR</td></tr><tr><td rowspan=1 colspan=2>Design Team Leader</td><td rowspan=1 colspan=2>ENG-CV1</td><td rowspan=1 colspan=2>PUR</td><td rowspan=2 colspan=2>TCR3     2024ignature /签名：</td></tr><tr><td rowspan=1 colspan=2>Dosin </td><td rowspan=1 colspan=2>Signature/签名：Bw</td><td rowspan=1 colspan=2>Signature/签名                S</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                72,
+                40,
+                902,
+                966
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": {
+                "paragraph_content": [
+                    {
+                        "type": "text",
+                        "content": "2n9.10.99"
+                    }
+                ]
+            },
+            "bbox": [
+                539,
+                967,
+                662,
+                996
+            ]
+        }
+    ],
+    [
+        {
+            "type": "image",
+            "content": {
+                "image_source": {
+                    "path": "images/c3db476ca28b3e4ee692a74af72d503577789ba9c8c70d88974f482c88ebc22a.jpg"
+                },
+                "image_caption": [],
+                "image_footnote": []
+            },
+            "bbox": [
+                95,
+                0,
+                359,
+                988
+            ]
+        },
+        {
+            "type": "title",
+            "content": {
+                "title_content": [],
+                "level": 2
+            },
+            "bbox": [
+                544,
+                630,
+                678,
+                941
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/e0467f5ad73e39290e0539e9c275fc410311684eb37f847f9e8179d1d34955bf.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "peA SUUeISA"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003G6-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=3 colspan=7>系统工程师要求释放新技术的SCR催化剂做验证;风险点（影响）                                                                                             无无</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                193,
+                72,
+                803,
+                959
+            ]
+        }
+    ],
+    [
+        {
+            "type": "table",
+            "content": {
+                "image_source": {
+                    "path": "images/eb54e361c7e88255efac5da37f17372e39c1f8444a3b9b5f01c2b7a67a9f2c7b.jpg"
+                },
+                "table_caption": [
+                    {
+                        "type": "text",
+                        "content": "sau8u Auadond M uonnqsipumpe eS Dsle peA 2707"
+                    }
+                ],
+                "table_footnote": [],
+                "html": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>F01ZH003G7-51</td><td rowspan=1 colspan=1>SCR UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=3 colspan=6>系统工程师要求释放新技术的SCR催化剂做验证;无无</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响）</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+                "table_type": "complex_table",
+                "table_nest_level": 1
+            },
+            "bbox": [
+                193,
+                72,
+                803,
+                959
+            ]
+        }
+    ]
+]

@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/.venv/
+.venv/
+
+# Build and test output
+dist/
+frontend/dist/
+coverage/
+htmlcov/
+test-results/
+playwright-report/
+blob-report/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local state, generated reports, and uploads
+backend/app/app.db
+backend/app/uploads/
+backend/app/reports/
+backend/app/static/uploads/
+backend/app/static/reports/
+backend/app/rag/generated_reports/
+backend/app/rag/uploaded_images/
+backend/app/rag/vector_store/
+backend/app/rag/models/
+
+# VCS and local configuration
+.git/
+.env
+.env.*
+!.env.example
+*.log
+*.zip

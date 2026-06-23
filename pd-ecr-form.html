@@ -1,0 +1,5 @@
+if (typeof result === "object" && result.url) {
+  const reportUrl = "http://127.0.0.1:8000" + result.url;
+  window.location.href = reportUrl;
+  return;
+}

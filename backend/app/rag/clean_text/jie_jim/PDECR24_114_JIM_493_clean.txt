@@ -1,0 +1,341 @@
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2024-09-29th
+24_114
+Customer project Name/客户项目名称： JIM-493 MCR No./ MCR号:
+Sample status / 样件状态： A Sample B Sample C Sample D Sample
+Change part&product Name/更改零部件产品的名称（简要描述)
+DOC+SDPF新鲜件：F01ZH003FU-02 SCR新鲜件：F01ZH003FV-02
+Reason of changes/更改理由（简要描述)：
+JIM493新鲜件化件（可拆+不可拆）样件次释放;
+Change from/变更来源：
+Customer request /客户要求√ | Supplier request /供应商请求 Design optimization /设计优化
+Correction /更正(错误) | Other/其他 （
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan,Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+If impact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design /设计工程师 | 卢青松 | Date /日期: | 2024.10.9
+Signature /签名：
+Check/校对工程师 | 杨抓 | Date /日期： | 2024.10.09
+Signature/签名：
+Description of Change/更改描述：(下面空白处请列出详细的变更前后对比）
+新鲜件
+Catalyst | 总成号 | 催化剂号
+DOC | F01ZH003FU-02 | F01Z50178N-00
+DPF | F01Z501890
+SCR/ASC | F01ZH003FV-02 | F01Z501891
+
+BOSCH博世Confidential | Design Change Review Sheet设计变更评审表 | Version 13Effectivedate:2024-09-29th
+Design ChangeRequest No. 24_114
+1.Function&Performance will be influence | d?/系统性能影响？ yes/是√no/否
+If Yes, System impaction evaluation?如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 否. | Ssrtem波
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | 否.标定样件
+Whether te catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | DOC新方案.SDPF.SUR/ASC都是量产 | catals张
+2.Interface&boundary(internal and custome | r) wil be influenced?/接口&边界(内部和客户)影响？ yes/是 | no/否
+Ifimpact custmerwhether get confirm fromcustomer side?请说明影响和是否得到客户的确认？ | 客户已确认边界无间题 | Des2
+3.Mechanical srength&Durabilit wil be inf | luenced?/机械强度&可靠性影响？ yes/是 | no/否
+IfYes， How to evaluate？Plan？如果是，请说明影响和如何评估，计划？（例如：仿真分析等） | 除支禁外结构强的用险件. | 年Validation/签名
+Whether need samle to test?Plan?是否需要样件进行验证？计划？
+4.Product document influenced?
+4.1 Interface FMEA-relevant / FMEA: | yes/是 Note | Desien%，
+4.2.Product FMEA-relevant /DFMEA: | n0否 yes/是 Note
+4.3.Special Charecteristics /PSC:(+对c Sample) | n0否 yes/是 Note
+4.4.IMDS relevant： (针对C Sample) | n0否 yes/是 Note
+4.5Offer drawing relevant：(针对C Sample) | √n0/否 yes/是 Note
+4.6.TCD relevant: | no/香 yes/是 Note
+5.Changed parts Stock& treatment/需（只针对涉及到已经生产过的零件变更，新 | 要变更零件的库存统计和处理？ ]NA.(新零件放行，不涉及库存)放行零件和本条不相关) 涉及到已经生产过的零件变更
+RBCWRDC（外库)和RBCW仓库，是否有库存， | □无库存 □有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | □未 | 库存 □有库存，库存数量 | 李琴PUE /签名
+LPN工厂是否有库存， | □无 | 库存 □有库存，库存数量
+在途，运输中是否有库存 | □无 | 库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续 | 使用完 □改制后使用 □报废 | Design/签名
+改制费用 □ 报废成 | PUE/签名本
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换其他（单独说明）;
+6. Influence on supplier part?
+Was this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?变更后的零件，生产可行性供应商是否确认？反馈？
+Infuence on purchasing part delivery time？对采购件交货时间的影响？
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. □no/否yes/是
+□increase/增加，金额 decrease/降低，金额 ho change/不变
+7. DFMA & Sample prodcution OPL?
+必要时附加DFMA文件 | oe
+已开DFMA，参考附件
+8. Influence on LPN manufacturing&assembly process?
+Feedback from manufacturing engineer?产制造装配是否影响，反馈？ | 印心方PUE/签名_
+Influence on project&productdelivery time？对项&产品交货时间的影响？
+increase/增加，金额 decrease/降低，金额 no change/不变
+9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 需求样品订单数量
+w张家区
+10.如果涉及以下情况需TCR3审核确认。 不涉及则NA.: RBC□库存报废，金额 平购成本增加，金额 牛产成本增加，金额 | W/TCR3
+Design Team Leader | ENG-CV1 | PUR | 0 | TCR32024
+Signature/签名个 | Signature/签名： | Signat | ure | 2.12.10 | Signature/签名：友 | 3
+2024.12.19 | 2
+
+B Sample Drawing initial Release Checklist ATS B Sample initial release precondition
+
+Pre-condition Checklist | Resul/Report | Date | Resp.
+Design | 1. B Sample 3D model confirmed by customer? (除支架)本欢支架不放行 | ok | 2024.10.9 | 情松
+2. B Sample Nameplate confirmed by customer? Email or drawing confirm? | 0k | 2024.10.9 | 卢青松
+3. B Sample ingle part manufacturing feasibity study and drawing confirmed by supplier? | oK | 2024.10.9 | 卢松
+4.B Sample MAT design fixed? | ok | 2024.10.9 | 卢松
+PUR/MOE | 1. B Sample Make and Buy confirmed? | ok | 2024.10.9 | 李兵岑
+2.B Sample DFMA welding process finished with MOE? | 0K | 2024.10.10
+3. B Sample Canning process confirmed? | 自动球装改社ange' | 2024.10.0
+Validation | 1.B Sample CFD report?
+2.B Sample FEA report? 支架尊不放行， | 一
+POC | 1.POC statusreult(DO/DPF/SCR caliration status)PC不涉及没计 | 2024.10.1 | 0大件波
+2.lnsertion loss test status/result?
+
+## ENG-CV PDECR24-114
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102CZ-02 | FLANGE | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+a法兰螺栓孔直径由9m | Dm增大到10mm;
+为装车时便客户调整DOCSDPF位置，增法兰螺栓孔直径;无无
+风险点(影响)
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 surtal propery nghts
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102D0-02 | CONE | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+客户要求，端锥增加螺 | 母避让缺口;
+变更原因 | 客户要求，为方便装配螺母，端锥增加螺母避让缺口;
+风险点（影响） | 无
+验证方法 | 无
+
+Ltd Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 allrighe
+
+## PDECR 24-114
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 indusmal propery nghs
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NM-01 | DOC CANNING | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOCCANNING:F01Z5017NM-00DOCSLEEVE:F01Z5101BGDOCCATALYST：F01Z50178N-00F01Z5017NM-00 DOCMAT:F01Z5101PSxx-xx-xx-x$x×××xxxxxxx×xxxx1.采购要求衬垫更换2.封装筒体增加倒角 | DOCCANNING:F01Z5017NM-01DOCSLEEVE:F01Z5102ED-00DOCCATALYST：F01Z50178N-00DOCMAT:F01Z5102E9-00F01Z5017NM-0xx-xx-xx-xxXXXx×xX为CCMAX衬垫;，方便硬填;
+变更原因 | 1.降本采CCMAX衬垫，2.弗吉亚采硬填艺，供应商要求增加筒体倒;
+风险点 （影响） | 更换衬垫催化剂有吹出风险;
+验证方法 | 进行Canning DV实验;
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X1-01 | DP TUBE BRACKET WITH NUT | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DPTUBEBRACKE:F01Z5017X1-00DPTUBEBRACKET:F01Z5101BTDPTUBEBRACKET:F01Z5102D2-00根据客户边界调整压WELDINGNUT:F01Z500068 | DPTUBEBRACKE:F01Z5017X1-01DPTUBEBRACKET:F01Z51026E-00DPTUBEBRACKET:F01Z5102D2-00差支架大小及位置WELDINGNUT:F01Z500068
+变更原因 | 根据客户边界调整压差支架大小及位置;
+风险点（影响） | 支架强度不足
+验证方法 | FEA仿真报告详见附件
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 ndusuial propeny nghts
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51026F-00 | DP TUBE BRACKET | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F01Z5101BU上述压差架变更后，压差 | 附属架随之变更
+变更原因 | 根据客户边界调整压差支架大小及位置;支架强度不足FEA仿真报告详见附件
+风险点（影响）
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 ediing. even o
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102DH-01 | SENSOR BRACKET | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 根据仿真结果增加支架厚度支架强度不足FEA仿真报告详见附件
+风险点（影响）
+验证方法
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reserved, regarding any explonadon,reproduction, editing, distibuton. as wellas in the event of applcatons forindusttal propery nghts
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017NP-01 | DPF CANNING | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+F0125017NP-06DPFCANNING: F01Z5017NP-00DPFSLEEVE:F01Z5101BYDPFCATALYST：F01Z501890 1.采购要求衬垫更换DPFMAT:F01Z5101VW-00 2.封装筒体增加倒角 | DPFCANNING:F01Z5017NP-01DPFSLEEVE:F01Z5102EE-00为CCMAX衬垫; DPFCATALYST:F01Z501890，方便硬填; DPFMAT：F01Z5102EA-00
+变更原因 | 1.降本采CCMAX衬垫，2.弗吉亚采硬填艺，供应商要求增加筒体倒;
+更换衬垫催化剂有吹出风险;进行Canning DV实验;
+验证方法
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 piopery nghes
+
+PDECR 24-114 stem Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 eseived ediing, disui naustmal property nahts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5016MU | DPF BRACKET1 | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DPFBRACKET1:F01Z5017XR-00DPFBRACKET:F01Z5102DJ-00DPFBRACKET:F01Z5102DK-00根据仿真结果重新使用 | DPFBRACKET1:F01Z5016MUDPFBRACKET:F01Z5101C0RZ4E量产支架;WELDINGNUT:F01Z500753
+变更原因 | 根据客户边界重新设计DPF安装支架;
+风险点 （影响） | 支架更改强度不满足设计要求;
+验证方法 | FEA仿真报告详见附件;
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017XR-01 | DPF BRACKET1 | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DPFBRACKET1:F01Z5016MVDPFBRACKET:F01Z5101C1DPFBRACKET:F01Z5101C2根据仿真结果重新设计 | DPFBRACKET1:F01Z5017XR-01DPFBRACKET:F01Z5102DJ-01WELDINGNUT:F01Z500753支架; DPFBRACKET:F01Z5102DJ-01
+变更原因 | 根据客户边界重新设计DPF安装支架;
+风险点（影响） | 支架更改强度不满足设计要求;
+验证方法 | FEA仿真报告详见附件;
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 Inausural propeny nghts
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017XS-01 | CONNECTION PIPE | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+O1.根据仿真结果使R2.法兰孔根据焊接螺母 | OFLANGE:F01Z5017XS-01Z4ESCR法兰， FLANGE:F01Z5102ET-00扩成013孔; WELDINGNUT:F01Z500753
+变更原因 | 根据仿真结果减轻法兰重量
+风险点（影响） | 无
+验证方法 | 无
+
+all nights i Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reseved.
+
+PDECR 24-114 all nights Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 industrtal propery ngne
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z51025W-01 | DPF OUTLET CONE | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+1.缩短出端锥进直2.与4JJ统一，增加客户 | 线段长度;螺栓避让口;
+变更原因 | 1.端锥内插与筒体装配，为避免与衬垫干涉，缩短进直线段长度;2.与4JJ共DPF出端锥，增加4JJ客户变速箱安装螺栓避让凹槽;
+风险点（影响） | 无
+验证方法 | 无
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W5-01 | DOC+SDPF WELDING | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+CRoo98
+变更原因 | 上述变更后，焊接组件随之更改;
+风险点 （影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+PDECR 24-114
+
+零件号 | 零件名称 | project | 样件阶段 | 变更来源
+See below | DP tube inlet | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+oのDPtubeinlet:F01Z5017W8-00DPtubeinlet:F01Z5102D5-00DPTUBECLAMP:F01Z51021B-00 | -0mDPtubeinlet:F01Z5017W8-01DPtubeinlet：F01Z5102D5-01DPTUBECLAMP:F01Z501598
+变更原因 | 根据客户边界更改压差管向;
+风险点（影响） | 无
+验证方法 | 无
+
+Allrights Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 /ec editing, tor industal propeny nighes
+
+PDECR 24-114
+
+Ltd Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 somal propeny nghts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+See below | DP tube OUTlet | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+9DPtubeOUTIet:F01Z5017W7-00DPtubeOUTIet:F01Z5102D4-00DPTUBECLAMP:F01Z51021B-00 | 0DPtubeOUTIet:F01Z5017W7-01DPtubeOUTlet:F01Z5102D4-01DPTUBECLAMP:F01Z501598
+变更原因 | 根据客户边界更改压差管向;
+风险点（影响） | 无
+验证方法 | 无
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FU-02 | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 上述更改后后处理总成随之更改，保温用手工保温;
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 exploitaton, edting. as as in the event of applicanons tor ndusutal propeny nghes.
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+See below | BRACKET | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+BRACKET:F01Z5017XS-001.根据客户边界更DPFBRACKET2:F01Z51025B-00NUT:F01Z560017 2.铸件和冲压支架 | F01Z51025B-01 F01Z5102EU-00新支架;量产时二选一;
+变更原因 | 1.根据客户边界重新设计转接支架;2.开铸件和冲压两个软模架于耐久验证;
+风险点（影响） | 支架强度不，有断裂风险
+验证方法 | 根据路谱采集及仿真结果评估
+
+Ltd Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 All rgnts reserved. egarding any disposal. exploitaton. ias in the event of applicatons tor industal propery nghts
+
+PDECR 24-114
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 trial propery nghts
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5102D1-01 | DPF BRACKET2 | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+BRACKET:F01Z5017XT-00DPFBRACKET2:F01Z5102D1-00NUT:F01Z500753 根据客户边界支架 | 改为拼焊支架;
+变更原因 | 根据客户边界支架改为拼焊支架;
+风险点（影响） | 支架强度不足，有断裂风险
+验证方法 | 根据路谱采集及仿真结果评估
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+See below | SCR CANNING | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 降本更换催化剂衬垫;
+风险点(影响） | 更换衬垫催化剂有吹出风险;
+验证方法 | CanningDV实验已通过;
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 propeny nshs
+
+PDECR 24-114
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 reproducicn,
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5101V1-01 | TEMP-SENSOR BOSS | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+-T6温度传感器座借用 | OJP560传感器座;
+变更原因 | 借用供应商现有温度传感器座;
+风险点（影响） | 无
+验证方法 | 无
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z560280 | FLEX ELEMENT | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 采购要求波纹管选用BOA量产波纹管;
+风险点（影响） | 波纹管强度不足，有断裂风险;
+验证方法 | C样放行前进行DV实验;
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017W9-01 | SCR UNIT | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 上述更改后SCR焊接总成随之更改;
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 expl epi editing, indusmial propenty nghts
+
+PDECR 24-114
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-02 | SCR UNIT | JIM-493 | B | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 上述更改后SCR总成随之更改;
+风险点（影响） | 无
+验证方法 | 无
+
+Internal | Powerrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 industtal propeny ngnts

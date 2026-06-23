@@ -1,0 +1,25 @@
+{
+  "case_id": "PDECR25_006",
+  "source_file": "PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "25_006",
+    "date": "2025-02-07",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "技术1_2\"ASC&3g/cft（新鲜件）：F01ZH003JV-01; 技术1_2\"ASC&3g/cft（老化件）：F01ZH003JV-51; 技术2_2.5\"ASC&3g/cft（新鲜件）：F01ZH003JW-01; 技术2_2.5\"ASC&3g/cft（老化件）：F01ZH003JW-51",
+    "reason_for_change": "系统工程师催化剂测试样件放行。",
+    "change_source": [
+      "Customer request",
+      "Other"
+    ]
+  }
+}

@@ -1,0 +1,405 @@
+[
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_093_JIM_493_A_Sample_可拆+一体首次释放/ocr/PDECR24_093_Change.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_093_Change_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_093_Change.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_093_Change.json",
+    "case_id": "PDECR24_093",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_093_JIM_493_A_Sample_可拆+一体首次释放/ocr/PDECR24_093_JIM_493.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_093_JIM_493_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_093_JIM_493.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_093_JIM_493.json",
+    "case_id": "PDECR24_093",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行/ocr/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.json",
+    "case_id": "PDECR24_102",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行/ocr/PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_113_JIM_493_PGM的新ASC技术SCR老化件放行.json",
+    "case_id": "PDECR24_113",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_114_JIM_493.pdf/PDECR24_114_JIM_493/ocr/PDECR24_114_JIM_493.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_114_JIM_493_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_114_JIM_493.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_114_JIM_493.json",
+    "case_id": "PDECR24_114",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_123_JIM_493_A-Sample-样件放行/ocr/PDECR24_123_JIM_493_A-Sample-样件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_123_JIM_493_A-Sample-样件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_123_JIM_493_A-Sample-样件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_123_JIM_493_A-Sample-样件放行.json",
+    "case_id": "PDECR24_123",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行/ocr/PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_128_JIM_493_A-Sample-SCR低涂敷测试样件放行.json",
+    "case_id": "PDECR24_128",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": false,
+      "reason_for_change": false
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names",
+      "change_part_product_name",
+      "reason_for_change"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置/ocr/PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置.json",
+    "case_id": "PDECR24_130",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_132_JIM_493_A-Sample-OBD样件释放/ocr/PDECR24_132_JIM_493_A-Sample-OBD样件释放.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_132_JIM_493_A-Sample-OBD样件释放_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_132_JIM_493_A-Sample-OBD样件释放.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_132_JIM_493_A-Sample-OBD样件释放.json",
+    "case_id": "PDECR24_132",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": false,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR24_146_JIM_493_C-sample release-V3/ocr/PDECR24_146_JIM_493_C-sample release-V3.md",
+    "clean_text": "clean_text/jie_jim/PDECR24_146_JIM_493_C-sample release-V3_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR24_146_JIM_493_C-sample release-V3.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR24_146_JIM_493_C-sample release-V3.json",
+    "case_id": "PDECR24_146",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行/ocr/PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_006_JIM_493_A-Sample-SCR催化器验证样件放行.json",
+    "case_id": "PDECR25_006",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行/ocr/PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行.json",
+    "case_id": "PDECR25_009",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改/ocr/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_017_JIM_493_C-Sample-保温壳数模优化+刻字位置更改.json",
+    "case_id": "PDECR25_017",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_032_JIE_4JJ1.pdf/PDECR25_032_JIE-4JJ1/ocr/PDECR25_032_JIE-4JJ1.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_032_JIE-4JJ1_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_032_JIE-4JJ1.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_032_JIE-4JJ1.json",
+    "case_id": "PDECR25_032",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_035_JIM_493_SCR量产催化剂规范放行/ocr/PDECR25_035_JIM_493_SCR量产催化剂规范放行.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_035_JIM_493_SCR量产催化剂规范放行_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_035_JIM_493_SCR量产催化剂规范放行.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_035_JIM_493_SCR量产催化剂规范放行.json",
+    "case_id": "PDECR25_035",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_045_JIM_493_D-sample release/ocr/PDECR25_045_JIM_493_D-sample release.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_045_JIM_493_D-sample release_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_045_JIM_493_D-sample release.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_045_JIM_493_D-sample release.json",
+    "case_id": "PDECR25_045",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放/ocr/PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放.json",
+    "case_id": "PDECR25_049",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹/ocr/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹.json",
+    "case_id": "PDECR25_084",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌/ocr/PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌.md",
+    "clean_text": "clean_text/jie_jim/PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR25_128_JIE-4JJ3_D_Sample_定义DPF出气法兰螺母检测方法+SCR增加吊牌.json",
+    "case_id": "PDECR25_128",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": false,
+      "reason_for_change": false
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names",
+      "change_part_product_name",
+      "reason_for_change"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR26_001_JIM_PT611_C-Sample-C样放行-v2/ocr/PDECR26_001_JIM_PT611_C-Sample-C样放行-v2.md",
+    "clean_text": "clean_text/jie_jim/PDECR26_001_JIM_PT611_C-Sample-C样放行-v2_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR26_001_JIM_PT611_C-Sample-C样放行-v2.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR26_001_JIM_PT611_C-Sample-C样放行-v2.json",
+    "case_id": "PDECR26_001",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  },
+  {
+    "source": "jie_jim_knowledge_pdf/PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2/ocr/PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2.md",
+    "clean_text": "clean_text/jie_jim/PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2_clean.txt",
+    "structured_json": "structured_cases/jie_jim/PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2.json",
+    "knowledge_json": "knowledge/parsed/json/PDECR26_002_JIM_493_A-Sample-空管件样件放行-V2.json",
+    "case_id": "PDECR26_002",
+    "field_status": {
+      "dc_no": true,
+      "customer_project": true,
+      "change_part_product_name": true,
+      "reason_for_change": true
+    },
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ]
+  }
+]

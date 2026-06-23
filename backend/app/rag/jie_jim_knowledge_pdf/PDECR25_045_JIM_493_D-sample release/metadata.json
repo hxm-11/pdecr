@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR25_045",
+  "source_file": "PDECR25_045_JIM_493_D-sample release_origin.pdf",
+  "metadata": {
+    "dc_no": "25_045",
+    "date": "2025-05-13",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "D Sample"
+    ],
+    "change_type": "Customer request / 客户要求; Supplier request / 供应商请求;Design optimization / 设计优化",
+    "sample_type": "D Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC-DPF: F01ZH003FU-00; SCR: F01ZH003FV-00; BRACKET: F01Z5102EU-02",
+    "reason_for_change": "C样件放行",
+    "change_source": [
+      "Customer request"
+    ]
+  }
+}

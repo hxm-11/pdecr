@@ -1,0 +1,104 @@
+CCC | BOSCH博世onfidential | Product Development Design Change Request产品开发设计变更请求
+Version 15Effective date:2024-10-30t
+Design ChangeRequest No. 24_128
+Customer project Name/客户项目名称： JIM-493 MCR No./ MCR号:
+Sample status / 样件状态： A Sample B Sample C Sample D Sample
+1.7g/in3WCLSCR涂敷+3g/cftASC老化件：F01ZH003GL-53 2.0gin3WCLSCR涂敷+1.5g/cftASC化件：F01ZH003GL-541.7g/in3WCLSCR涂敷+1.5g/cftASC老化件：F01ZH003GL-55
+系统工程师测试样件放行;
+Change from/变更来源：
+ustomer request/客户要求 | Design optimization /设计优化
+orrection /更正(错误) | （系统测试样件
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, LiYicen, Fang Jiayan,Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong
+Whether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否
+If impact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design/设计工程师 | 224. 卢青松
+Signature/签名：
+Date /日期： | 2024.12.2
+Check/校对工程师 | 杨广机
+Signature/签名：
+Date/日期： | 2024.12.24
+Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）具体变更详见附件PPT
+1.7g/in3 WCL SCR涂敷+3g/cft ASC老化件 | 2.0g/in3 WCL SCR涂敷+1.5g/cft ASC老化件 | 1.7g/in3 WCL SCR涂敷+1.5g/cft ASC老化件
+SCR/ASC | 总成号 | 催化剂号 | 总成号 | 催化剂号 | 总成号 | 催化剂号
+F01ZH003GL-53 | F01Z5017FJ-40 | F01ZH003GL-54 | F01Z5017YD-51 | F01ZH003GL-55 | F01Z5017FJ41
+
+BOSCH博世Confidential
+Design Change Review Sheet设计变更评审表
+Design Change 24_128Request No.
+1.Function&Performance will e influenced?/系统性能影响？ yes/是 no/否
+如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | 否，试样件 | srte
+Whether need sample to test?Plan?是否需要样件进行验证？计划？ | $\ra}$
+Whether te catalystinformation is confirme?催化剂信息是否确认？（物料号、图纸、SPEC) | Catalst/签名张汉
+2.Interface&boundary (internal and custom | er) ilbe influenced?/接口&边界(内部和客户)影响？ ■yes/是 no/香
+if impact custmer,whetherget confirm fromcustomer side?请说明影响和是否得到客户的确认？ | Design/名，情么
+3. Mechanical strength&Durability wil be in | fluenced?/机械强度&可靠性影响？yes/是 | no香
+If Yes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等） | valiai
+Whether need sample to test?Plan?是否需要样件进行验证？计划？
+4.Product document infuenced?
+4.1 Interface FMEA-relevant / IFMEA: | no/否 yes/是 Note | D00
+4.2. Product FMEA-relevant/DFMEA: | n0否 yes/是 Note
+4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note
+4.4.IMDS relevant：(针对C Sample) | no/否 yes/是 Note
+4.5Offer drawing relevant(针对C Sample) | no否 yes/是 Noteno/否 yes/是 Note
+4.6.TCD relevant:
+5. Changed parts Stock& treatment/需（只针对涉及到已经生产过的零件变更，新 | 要变更零件的库存统计和处理？放行零件和本条不相关） NA.(新零件放行,不涉及库存）涉及到已经生产过的零件变更
+RBCWRDC（外库)和RBCW仓库，是否有库存， | 无库存 □有库存，库存数量
+供应商处（已做好，未发货）是否有库存， | 无库存 □有库存，库存数量 | PUE 2
+LPN工厂是否有库存， | 无库存 □有库存，库存数量
+在途，运输中是否有库存 | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | (ci:)
+改制费用 报废成□ 天 | (cid:)
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换其他（单独说明）： | (cid:)
+6. Influence on supplier part?
+变更后的零件，生产可行性供应商是否确认？反馈？ | D
+万
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no查yes/是
+□increase/增加，金额 □decrease/降低，金额 no change/不变
+7. DFMA & Sample prodcution OPL?
+必要时附力加nDFMA 文件 | 卢松Design /签名
+只更换催化剂，无需DFMA
+8. Influence on LPN manufacturing&assembly process?
+Feedbackfom manufacturingeginer？制造配是否影响反馈？ | PUE/发
+Influenceon project&product delivery time？对项&产品交货时间的影响？
+increase/增加，金额 decrease/降低，金额
+9.PM alignment? (infuence on project Timeline? Cost);是否同意对项目时间和成本的影响 ;需求样品订单数量 | PM/签名_
+10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.:库存报废，金额平购成本增加，金额 牛产成本增加，金额 RB | CW/TCR3
+DesignTeam Leader | ENG-CV1 | PUR 曰元 | TCR3 2025-01208P7
+Signature /签名： 杨广抓 | ENGaGcre签名 | Signature /签名 | ：8子 | Signature/签名:
+.12.
+
+[image] 
+
+suBu Auedoid OSIe
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003GL-53 | SCR UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 释放1.7g/in3 WCL SCR涂敷+3g/cft ASC化件做测试;
+风险点（影响) | 无
+验证方法 | 无
+
+##
+
+se 8upe
+
+零件号 | 零件名称 | Project | 样件阶段
+F01ZH003GL-54 | SCR UNIT | JIM-493 | A | 变更来源 BOSCH/Customer
+变更描述 | 变更前 | 变更后
+SCRUNIT:F01ZH003FV-02 SCRWELDING:F01Z5017W9-01 SCRCANNING: F01Z5017WA-01 | SCRUNIT:F01ZH003GL-54 SCRWELDING: F01Z50180C-54 SCR CANNING: F01Z50180D-54
+变更原因 | SCR CATALYST:F01Z501891 SCRCATALYST:F01Z5017YD-51
+风险点（影响) | 释放2.0g/in3 WCL SCR涂敷+1.5g/cft ASC化件做测试;
+验证方法 | 无
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003GL-55 | SCR UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 释放1.7g/in3 WCL SCR涂敷+1.5g/cft ASC化件做测试;
+风险点（影响） | 无
+验证方法 | 无
+Internal I Powertrain Sol
+
+##

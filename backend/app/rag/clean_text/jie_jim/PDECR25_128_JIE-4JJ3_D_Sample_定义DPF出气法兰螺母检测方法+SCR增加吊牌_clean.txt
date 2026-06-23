@@ -1,0 +1,404 @@
+BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date: 2025-12-01th
+25128
+Customer project Name/客户项目名称： JIM-4JJ MCR No./ MCR号:
+B Sample C Sample D Sample
+SCR:F01ZH003EB-00DPFBRACKET:F01Z5017P5-05
+DPF出气法兰，客户装上双头螺柱后，有密封垫，安装不上的风险，需要增加对出法兰螺的位置检测SCR客户要求在尾管处增加纸质标签侧支架客户要求更改客户料号
+Change from/变更来源：
+Customer request/客户要求 | Design optimization /设计优化
+Correction/更正(错误)
+Change inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan, Shen Weibo,Li Yicen, Fang Jiayan, Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong,Xie Youfu
+yes/是 no/否
+ifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design/设计工程师 | 马阳 | Date /日期： | 2025.1201
+Signature/签名:
+Check/校对工程师 | 杨广扣 | Date /日期: | 2025.12.02
+Signature /签名：
+Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）
+
+BOSCH博世Confidential
+Design Change Review Sheet设计变更评审表
+1.Function&Performance wil be influenced?/系统性能影响？ yes/是no/否
+如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的） | 评对系绝无影句. | vstm伟
+Whether need sample to test Plan?是否需要样件进行验证？计划？ | NA
+Whether thecatalystinformation isconfirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | catas
+2.Interface&boundary (internal nd custome | r) wil be infuenced?/接口&边界(内部和客户)影响？ yes/是 | no/否
+ifimpact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？ | 模型无更改 | Desisn
+3. Mechanical strength&Durability wil b influenced?/机械强度&可靠性影响？ | yes/是 | no/香
+If Yes, Howto evaluate? Plan?如果是，请说明影响和如何评估，计划？（例如：仿真分析等) | ardat阅
+Whether need sample to test? Plan?是否需要样件进行验证？计划？ | 设计无变更
+4.Product document influenced?
+4.1Interface FMEA-relevant/IFMEA: | no/否 yes/是 Note_ | DS
+4.2.Product FMEA-relevant /DFMEA: | no/否 | yes/是 Note
+4.3.Special Charecteristics /PSC:(针对C Sample) | no/否 | yes/是PNote
+4.4.IMDS relevant： (针对C Sample) | no/否 | yes/是 | Note
+4.5 Offer rawing relevant:(针对c Sample) | no/否 | yes/是 | NoteNote_
+4.6. TCD relevant: | □no/否
+5. Changed parts Stock& treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） NA.(新零件放行，不涉及库存）涉及到已经生产过的零件变更
+RBCWRDC(外库)和RBCW 仓库，是否有库存， | □ 无库存 | □有库存，库存数量
+供应商处(已做好，未发货）是否有库存， | □无库存 | □有库存，库存数量 | u
+LPN工厂是否有库存， | □无库存 | □]有库存，库存数量
+在途，运输中是否有库存 | 无库存 | □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | 可以继续使用完 □改制后使用 □报废 | Design/签名阳
+□制费用 报废成□ ;
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 制 更换其他（单独说明）
+6. Influence on supplier part?
+李岑
+大及更。检则法新增术
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.
+□ increase/增加，金额□decrease/降低，金额 □ngchange/不变
+必要时附加DFMA文件
+必要时附加DFMA 文件 | D0esign1申阳
+无opL
+Feedbac fomanuacurngengner造配是否影响，？
+沿用(样技所
+□increase/增加，金额 □decrease/降低，金额 po change/不变
+是否同意对项目时间和成本的影响 ;需求样品订单数量 | PM$3RA
+10.如果涉及以下情况需TCR3审核确认。 不涉及则 NA.□库存报废，金额 购成本增加，金额 生□成本增加，金额Design Team Leader ENG-CV1 PUR TCR3 | RBCW/TCR
+PUR ② | 2026-1283
+杨广拓 | 7 | Signature/签名 | Signature/签名：友福.
+
+Release Points | Result/Status | Deadline | Resp.
+sa | 1.Final 3D model and offer drawing officially confirmed by customer?
+2.Final nameplate confirmed by customer?
+3.IMDS or CAMDS finished?
+4. D-FMEA closed and signed ? Sign?
+5. -FMEA signed with customer? Sign? | 4
+6.Installation instruction finished? | lovprePHA.
+7.Finial SC/CC finished by EGT5/MOE/QMM/PUR?Sign? | dome
+30W | 1.Final welding process flow chart finished by MOE? | 本元e
+2. Welding and assembly trial run finished?
+3. P-FMEA signed?
+Validation | 1.9000 Km bad road Vehicle validation status? | OK(见附件1
+Coveved by 9oookn | 年阅
+a | (If customer take responsible the calibration, take as reference) | OK
+2.TCD is available? | 0K
+3. PD is available? | 0k
+Flow | 1. QG0 and QG1 passed? QGC2 plan?Finished w/o open points; RACE can be proceeded. | N118
+
+[image] 
+
+零件号 | 零件名称 Project | 样件阶段 | 变更来源
+F01Z5017NL-05 | DOC+SDPF WELDING 变更前 | D | BOSCH/Customer
+变更描述 | JIE-4JJ F01Z5017NL-03 | 变更后
+M-M PKT1_18 YIN. | □ 中
+0 6 | ④ | 4A80□ 人想经石（超验长度民客户爆拉） 著100%客户片
+增加新的检测方法： 拧入螺栓后（螺栓长度同客户螺栓）， 需100%过客户垫片
+变更原因 风险点（影响) | 增加新的检测方法;
+验证方法 | 无
+Internal | Powerrain Soluions | RBCW/ENG-ATS2 | 2023-09-22 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003EA-00 | DOC+SDPF UNIT | JIE-4JJ | D | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+料号更改，模型无变更由F01ZH003EA-03改为F01ZH003EA-00O
+变更原因 | 料号更改
+风险点（影响） | 无
+验证方法 | 无
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+HOsoa
+
+零件号 | 零件名称 | Project | 样件阶段
+F01Z5017P5-05 变更前 | BRACKET | Jle-4JJ | D | 变更来源 BOSCH/Customer
+F01Z5017P5-05 | 变更后
+变更描述 | BOSCH PN- USTIOMR PAN MANGATIE OAT BCSCHP √ | 747514121 xx-×x×xX$ F0Z5017P5-05 7475142970 X | 客户料号更新为
+变更原因 | MAVFETE | 7475142970
+风险点(影响) | 客户要求
+验证方法 | 无
+Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22 | 无
+
+HOsoa
+
+零件号 | 零件名称 | Project | 样件阶段
+F01ZH003EB-00 变更前 | SCR | JIe-4JJ | D | 变更来源 BOSCH/Customer
+F01ZH003EB-05 | 变更后
+变更描述 | QR NAME PLATE PKT1_00 二维码位置置于遇明盟料装内部，正扎番图定在尾管上 PKT1-01 码期：CR 内容同标参明码一袋 CUSTOMER PN SUPPLIER CODE (24] BOSCHPN (60) CA100274701+E415 *747514122+F01ZH- VANUFACTURE DATE 003EB*XXXXXXXX- (YYVYMVDD) XX×XX SERIAL NUMBER 生产口期和序列号为派动参数 (80)
+变更原因
+风险点（影响） | SCR客户要求在尾管处增加纸质标签
+验证方法 | 无
+
+Systems(WUX) Co.Ld2023.Al ights reserved,alsoregardingany isposalexploitaton, reproduction,editing,distribution,as wellas in theevent of aplications orindustial propery ghs Bosch Automotive Internal | Powertrain Solutions | RBCW/ENG-ATS2 | 2023-09-22
+
+PDECR 25-128
+
+零件号 | 零件名称 | Project
+F01Z5102T9-00 | DPF MAT | Jle-4JJ | C | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+PatNo零件号Date日期 | UNIFRAX奇耐联合纤罐（上海）有限公司 | Catlomner Name户名称 | MateriaType材料类型(FBWV) | BBW | 膜重
+LUNIHHAX | Castomer Nane客户名称
+Part Nu零件号 | Date日期
+Material Type材料类型(FBW) | BBW | 膜重
+Bosch | CC-Max 5C 1800
+4J172XI77.5 PF 2025.9.2 Prototypeors PPAP SOP %0 Se70 C lue Seriri aa sie的mnh sie 的This side s arked withpart This side is marked withpanumber number特绿婴求Sp CDien] Bat ePat Weaed
+1800
+40J 172X17. DPF | 2025/10/23
+E[mm]F{mm] | Thicksess(mm]Basis Weightlgm]
+Nornainal标准 | 578.0 | 163.0 | 40.0 | 53.0 | 5.0 618 | 13.50 | 1800 | 169.59 | Diarasion/尺寸 | Mmm | B} | E{m} | 1mm | Ibckarm) | Bas W2) | Pat Wergae
+Toberae:公 | 2.5 | al标准 | 578.0 | 158.0 | 40.0 | 53.0 | 55.0 | 018 | 13.50 | 1800 | 164.38
+Mas最大值 | 580.5 | 164.0 | 41.0 | 54.0 | 560 | 14.9 | 1944 | 186.54 | Tokerame:公签 | 25 | 1
+i小值 | 575.5 | 162.0 | 39.0 | 52.0 | 54.0 | 12.1 | 1656 | 152.63 | Mar量大像 | 580.5 | 159.0 | 41.8 | 54.0 | 56.0 | 14.9 | 3944 | 180.
+制图：日期 | 客户确认日期 | Mi最小值 | 575.5 | 157.0 | 39.0 | 52.0 | 54.0 | 12.1 | 1656 | 147.94
+制图/日期 | 客户确认日期
+变更原因 | 反馈衬垫封装后，会超出催化剂，建议剪短5mm。经奇耐确认剪短5mm后，安全系数为1.1，评估风险较低，可以剪短无无
+风险点（影响)
+验证方法
+
+Department | Prepared by | Phone | Fax
+RBCW/ENG-CV1 | XURUN | +86-510-80550339 | +86-510-85335148
+
+Wuxi 10.13.2025
+
+Distribution: RBCW/TCR3-Xie Youfu, /ENG-CV1-Jiang Xingkai, /ENG-ATS-Luo Jin,
+
+CC:
+
+/ENG-ATS-Yang Guangtuo, /SMP-ATS1-Zhang Shengchang
+
+Page1of11
+
+Tere25\_029
+
+## Test Report Vehicle endurance test parts investigation
+
+1. General information
+Project name | JIE 4JJATS CN6 | MCR No.
+ATS concept | in-line □ Box □U-shape | Test ground | XIANGYANG
+Part number | DOC+DPF:F01ZH003EA-02SCR: F01ZH003EB-02 | ATS sample phase | B sample
+
+2. Operation condition
+Test item | Comprehensive roads endurance test
+Test description | As the design validation requirement for JIE 4JJ ATS CN6 project, 42000km com-prehensive roads endurance test was performed to the ATs parts. The test pur-pose is to verify the resistance to the rough road load for ATS mechanical parts.
+
+3. Test result
+1) Sealing check
+The leakage rate of the ATS after test (DOC+DPF:0.157L/min, SCR:0.035L/min) can fulfil the design requirement (DOC+DPF:<0.5L/min, SCR:<0.3L/min @filing pressure 30±5kpa).
+2)Visual inspection All components visual check are in acceptable condition.
+
+4. Conclusion
+Pass Pass with limitation | No pass
+
+Department RBCW/ENG-CV1
+
+Prepared by XURUN
+
+Phone +86-510-80550339
+
+Fax 0086-510-85335148
+
+Wuxi 10.13.2025
+
+Page 2of11
+
+Tere25\_029
+
+After the endurance test, the leakage test was performed to the DOC+DPF and SCR units. From the leakage test results (table 1-2), the leakage rate of the ATs after test can fulfil the design requirement.
+
+Table 1 Leakage test result for DOC+DPF
+
+T abie I Leakage test result for DOC+DpF
+Leakage rate result before and after test @ 3okPa filling pressure
+After testing | Test requiremnt
+Leakge rate (L/min) | 0.157 | <0.5
+
+Table 2 Leakage test result for SCR
+
+Leakage rate result before and after test @ 30kPa filing pressure
+After testing | Test requiremnt
+0.035 | Leakge rate(L/min)
+<0.3
+
+2) DOC+DPF investigation after test
+
+[image] 
+
+[image] 
+
+Part No. | components | No failure | Failure | Figure
+1 | DOC inlet flange | × | Fig.3
+2 | DOC inlet flange welding seam | × | Fig.4-5
+3 | ΔP sensor bracket and welding seams | × | Fig.6-7
+4 | DoC catalyst | × | Fig.9-10
+
+Department RBCW/ENG-CV1
+
+Prepared by XURUN
+
+Phone +86-510-80550339
+
+Fax 0086-510-85335148
+
+Wuxi 10.13.2025
+
+Page 3 of11 
+Tere25\_029
+
+5 | DM flange | × | Fig.21-22
+6 | Mixer plate | × | Fig.11-12
+7 | ∆P pipe bracket and welding seams | × | Fig.8
+∞ | DPF left mounting bracket 1 | × | Fig.13-14
+9 | DPF left mounting bracket 2
+10 | DPF right mounting bracket | × | Fig.15-16
+11 | DPF catalyst | × | Fig.17
+12 | DOC outlet flange welding seam | × | Fig.18-19
+13 | DOC outlet flange | × | Fig.20
+
+[image] 
+Fig.1 DOC+DPF overview
+
+[image] 
+Fig.2 DOC+DPF overview
+
+[image] 
+Fig.3 DOC inlet flange
+
+[image] 
+Fig.4 DOC inlet flange welding seam
+
+Department RBCW/ENG-CV1
+
+Prepared by XU RUN
+
+Phone +86-510-80550339
+
+[image] 
+
+Fax 0086-510-85335148
+
+## BOSCH
+
+Wuxi 10.13.2025
+
+Page 4of11 
+Tere25\_029
+
+[image] 
+
+Fig. Mixer plate | Fig.12Mixer plate
+Fig.13 DPF left mounting bracket 1 | Fig.14 DPF left mounting bracket 1
+Fig.15DPF right mounting bracket | Fig.16 DPFright mounting bracket
+
+## Powertrain Solutions
+
+[image] 
+
+## BOSCH
+
+Department Prepared by Phone RBCW/ENG-CV1 XURUN Fax +86-510-80550339 0086-510-85335148
+Page6of11 Tere25_029
+
+[image] 
+
+## BOSCH
+
+Fax 0086-510-85335148
+
+Wuxi 10.13.2025
+
+Page7of11 
+Tere25\_029
+
+## 3) SCR investigation after test
+
+[image] 
+
+Part No. | components | No failure | Failure | Figure
+1 | SCR inlet flange and welding seams | × | Fig.25-27
+2 | Flexible inlet welding seam | × | Fig.28-29
+3 | Flexible pipe | × | Fig.28-29
+4 | Flexible pipe outlet welding seam | × | Fig.28-29
+5 | Front hook and welding seam | × | Fig.30-32
+6 | SCR catalyst | × | Fig.33-34
+7 | SCR sleeve welding seam | × | Fig.23-24
+8 | SCR outlet pipe welding seam | × | Fig.35-36
+9 | Right rear hook and welding seam | × | Fig.37-38
+10 | Left rear hook and welding seam | × | Fig.39-40
+11 | SCR outletflange welding seam | × | Fig.41-42
+12 | SCR outlet flange | × | Fig.43
+
+[image] 
+Fig.23 SCR overview
+
+[image] 
+Fig.24 SCR inlet flange
+
+Department RBCW/ENG-CV1
+
+Prepared by XU RUN
+
+Phone +86-510-80550339
+
+[image] 
+
+Fax 0086-510-85335148
+
+## BOSCH
+
+Wuxi 10.13.2025
+
+Page 8 of11 
+Tere25\_029
+
+[image] 
+
+Department RBCW/ENG-CV1
+
+Prepared by XU RUN
+
+Phone +86-510-80550339
+
+[image] 
+
+Fax 0086-510-85335148
+
+## BOSCH
+
+Wuxi 10.13.2025
+
+Page 9 of11 
+Tere25\_029
+
+[image] 
+
+## Powertrain Solutions
+
+Department RBCW/ENG-CV1
+
+Prepared by XURUN
+
+Phone +86-510-80550339
+
+[image] 
+
+Fax 0086-510-85335148
+
+## BOSCH
+
+Wuxi 10.13.2025
+
+Page 10of11 
+Tere25\_029
+
+[image] 
+
+## Powertrain Solutions
+
+Department RBCW/ENG-CV1
+
+Prepared by XU RUN
+
+Phone +86-510-80550339
+
+[image] 
+
+Fax 0086-510-85335148
+
+## BOSCH
+
+Wuxi 10.13.2025
+
+[image] 
+
+Page 11 of11 
+Tere25\_029

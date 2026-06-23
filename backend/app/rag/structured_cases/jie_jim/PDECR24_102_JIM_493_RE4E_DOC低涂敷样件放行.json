@@ -1,0 +1,78 @@
+{
+  "case_id": "PDECR24_102",
+  "source_file": "jie_jim_knowledge_pdf/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行/ocr/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.md",
+  "metadata": {
+    "dc_no": "24_102",
+    "date": "2024-08-08",
+    "mcr_no": "",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "sample_type": [],
+    "sample_type_candidates": [
+      "A Sample",
+      "B Sample",
+      "C Sample",
+      "D Sample"
+    ],
+    "change_type_raw": [],
+    "change_type_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ],
+    "source_type": "mineru_markdown",
+    "language": "zh/en",
+    "requires_validation": "need_human_check"
+  },
+  "business_fields": {
+    "responsible_person": "卢青松",
+    "responsible_department": "",
+    "approval_persons": [
+      "Yang Guangtuo",
+      "Jia Kebin",
+      "Luo jing",
+      "Lu Qingsong"
+    ],
+    "approval_departments": [],
+    "affected_documents": [],
+    "check_engineer": "杨机"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF新鲜件(不可拆)：F01ZH003EC-01DOC+SDPF化件(不可拆)：F01ZH003EC-51 SCR新鲜件：F01ZH0033JDOC+SDPF新鲜件(可拆)： F01ZH003G1-00 DOC+SDPF化件(可拆)：F01ZH003G1-51 SCR化件：F01ZH003ED-51",
+    "reason_for_change": "系统程师要求释放RZ4EDOC50g催化剂新鲜件化件（可拆+不可拆）样件做测试;",
+    "change_source_selected": [],
+    "change_source_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ]
+  },
+  "modules": {
+    "change_request_description": "Product Development Design Change Request产品开发设计变更请求 | Version 15Effectivedate:2024-08-08th\nDesign ChangeRequest No. 24_102\nCustomer project Name/客户项目名称： JIM-493 MCR No./ MCR号:\nSample status / 样件状态： A Sample ]B Sample C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC+SDPF新鲜件(不可拆)：F01ZH003EC-01DOC+SDPF化件(不可拆)：F01ZH003EC-51 SCR新鲜件：F01ZH0033JDOC+SDPF新鲜件(可拆)： F01ZH003G1-00 DOC+SDPF化件(可拆)：F01ZH003G1-51 SCR化件：F01ZH003ED-51\nReason of changes/更改理由（简要描述)：\n系统程师要求释放RZ4EDOC50g催化剂新鲜件化件（可拆+不可拆）样件做测试;\nChange from/变更来源：\nCustomer request /客户要 | 求 | Supplier request /供应商请求 Design optimization/设计优化\nCorrection /更正(错误) | Other/其他 （系统工程师测试样件）\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang\nYang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nIf impact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢青松 | Date/日期： | 2024.8.9\nSignature/签名：\nCheck/校对工程师 | 杨机 | Date /日期： | 204.08.14\nSignature/签名:\nDescription of Change/更改描述：（下面空白处请列出详细的变更前后对比）具体变更详见附件\n\n[image] \n\nseal\n\nC\n\nBOSCH博世Confidential |",
+    "impact_analysis": "Design Change Review Sheet设计变更评审表C | Version 13Effective date:2024-08-08th\nDesign ChangeRequest No. 24_102\n1.Function&Performance will be influenced?/系统性能影响？ yes/是no/否\n如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | Ssrvem波\nWhether need sample to test? Plan?是否需要样件进行验证？计划？ | 首批样件，无写验证\nWhether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | Catalyst/签名\n2.Interface&boundary (internal and custome | r) wil be influenced?/接口&边界(内部和客户)影响？ yes/是 | no/否\nIfimpact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？ | oese2\n3. Mechanical strength&Durability willbe in | fuenced?/机械强度&可靠性影响？ yes/是 | no/否\nIfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划?（例如：仿真分析等） | A样件无需FEA仿真 | $valdai\nWhether need sample to test? Plan?是否需要样件进行验证？计划？\n4.Product document influenced?\n4.1 Interface FMEA-relevant /IFMEA: | no/否 | yes/是 Note_ | 0\n4.2.Product FMEA-relevant /DFMEA: | n0 | /否 | yes/是 Note\n4.3.Special Charecteristics /PSC:(针对C Sample) | no | /否 | yes/是 Note\n4.4.IMDS relevant： (针对C Sample) | no/否 | yes/是 Note\n4.5 Offer drawing relevant(针对C Sample) | no/否 | yes/是 Note\n4.6. TCD relevant: | no/否 yes/是 Note\n5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？ NA.(新零件放行,不涉及库存）（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） 涉及到已经生产过的零件变更\nRBCWRDC（外库）和RBCW仓库，是否有库存， | 无库存 有库存，库存数量 R2量改 | ()\n供应商处（已做好，未发货）是否有库存， | 无库存 □有库存，库存数量 | 催北剂择件 | PUE | 名岁\nP是否有库存， | 无库存 □有库存，库存数量 | 不涉是问题\n在途，运输中是否有库存 | 无库存 □有库存，库存数量\n被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名\n改制费用 □ 报废成本 | PUE /签名李\n已装车件处理方法（发客户或标定车等）(SMP组织会议讨论) | 改制 □ 更换其吧（单独说明)：\n6. Influence on supplier part?\nWas this change confirmed withPurchasing (Sup变更后的零件，生产可行性供应商是否确认？ | plier) for feasibility? Feedback from Supplier?反馈？ | 李岑PUE/签名\nInfuenceon purchasing part deliverytime？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/否yes/是\nDoes the change influence on purchasing cost？变更对采购成本的影响？样件诗报所□increase/增加，金额decrease/降低，金额no change/不变\n7. DFMA & Sample prodcution OPL?\nDesgn/%卢青松\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\n无\nPUE/签名_\nInfuenceon project&product delivery time？对项&产品交货时间的影响？\nInfluence on manufacturing cost/对产成本的影响？ increase/增加，金额 decrease/降低，金额 □no change/不变\n9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 ;需求样品订单数量\nPM/签名_\n10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.: RBCW/TC□库存报废，金额只购成本增加，金额产成本增加，金额\nR3\nDesign Team Leader | System SM-ENG-CV1 | Depar02t MU8age2-1TCR3\nSignaturel名杨个 | Signature/签名: | 发\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nDOC+SDPFUNIT：F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING:F01Z5016MNDOCCATALYST:F01Z501906 | QUA新鲜件DOC+SDPFUNIT:F01ZH003EC-01DOC+SDPFWELDING:F01Z5017X2-00DOCCANNING: F01Z5017X3-00DOCCATALYST: F01Z50178N-00\n变更原因 | 系统工程师要求释放体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;\n风险点 (影响) | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更后\n调DOC+SDPFUNIT:F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING: F01Z5016MNDOCCATALYST: F01Z501906 | 国老化件DOC+SDPFUNIT: F01ZH003EC-51DOC+SDPFWELDING: F01Z5017X2-51DOCCANNING:F01Z5017X3-51DOCCATALYST: F01Z50178T-00\n变更原因 | 系统工程师要求释放体式RZ4EDOC低涂敷化件催化剂样件做测试;\n风险点 （影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 系统程师要求释放RZ4ESCR化件催化剂样件做测试;\n风险点(影响) | 无验证方法 无\n验证方法\n\n零件号 | 零件名称\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n0SDOC+SDPFUNIT: 0452B311L9-00DOCUNIT：0452D552CADOCWELDING:0452D552BZDOCCANNING: F01Z501906DOC CATALYST:0452D551EM | 新鲜件DOC+SDPFUNIT:F01ZH003G0-00DOCUNIT:F01Z5017X6-00DOCWELDING: F01Z5017X7-00DOCCANNING: F01Z5017X3-00DOC CATALYST:F01Z50178N-00\n变更原因 | 系统工程师要求释放分体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;\n风险点(影响) | 无无\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nODOC+SDPFUNIT:0452B311L9-00DOCUNIT:0452D552CADOCWELDING：0452D552BZDOC CANNING: F01Z501906DOCCATALYST:0452D551EM | 老化件DOC+SDPFUNIT: F01ZH003G0-51DOCUNIT:F01Z5017X6-51DOCWELDING:F01Z5017X7-51DOCCANNING:F01Z5017X3-51DOCCATALYST:F01Z50178T-00\n变更原因 | 系统程师要求释放分体式RZ4EDOC低涂敷化件催化剂样件做测试;\n风险点(影响） | 无\n验证方法 | 无",
+    "full_clean_text": "BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effectivedate:2024-08-08th\nDesign ChangeRequest No. 24_102\nCustomer project Name/客户项目名称： JIM-493 MCR No./ MCR号:\nSample status / 样件状态： A Sample ]B Sample C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC+SDPF新鲜件(不可拆)：F01ZH003EC-01DOC+SDPF化件(不可拆)：F01ZH003EC-51 SCR新鲜件：F01ZH0033JDOC+SDPF新鲜件(可拆)： F01ZH003G1-00 DOC+SDPF化件(可拆)：F01ZH003G1-51 SCR化件：F01ZH003ED-51\nReason of changes/更改理由（简要描述)：\n系统程师要求释放RZ4EDOC50g催化剂新鲜件化件（可拆+不可拆）样件做测试;\nChange from/变更来源：\nCustomer request /客户要 | 求 | Supplier request /供应商请求 Design optimization/设计优化\nCorrection /更正(错误) | Other/其他 （系统工程师测试样件）\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang\nYang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nIf impact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢青松 | Date/日期： | 2024.8.9\nSignature/签名：\nCheck/校对工程师 | 杨机 | Date /日期： | 204.08.14\nSignature/签名:\nDescription of Change/更改描述：（下面空白处请列出详细的变更前后对比）具体变更详见附件\n\n[image] \n\nseal\n\nC\n\nBOSCH博世Confidential | Design Change Review Sheet设计变更评审表C | Version 13Effective date:2024-08-08th\nDesign ChangeRequest No. 24_102\n1.Function&Performance will be influenced?/系统性能影响？ yes/是no/否\n如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的) | Ssrvem波\nWhether need sample to test? Plan?是否需要样件进行验证？计划？ | 首批样件，无写验证\nWhether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | Catalyst/签名\n2.Interface&boundary (internal and custome | r) wil be influenced?/接口&边界(内部和客户)影响？ yes/是 | no/否\nIfimpact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？ | oese2\n3. Mechanical strength&Durability willbe in | fuenced?/机械强度&可靠性影响？ yes/是 | no/否\nIfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划?（例如：仿真分析等） | A样件无需FEA仿真 | $valdai\nWhether need sample to test? Plan?是否需要样件进行验证？计划？\n4.Product document influenced?\n4.1 Interface FMEA-relevant /IFMEA: | no/否 | yes/是 Note_ | 0\n4.2.Product FMEA-relevant /DFMEA: | n0 | /否 | yes/是 Note\n4.3.Special Charecteristics /PSC:(针对C Sample) | no | /否 | yes/是 Note\n4.4.IMDS relevant： (针对C Sample) | no/否 | yes/是 Note\n4.5 Offer drawing relevant(针对C Sample) | no/否 | yes/是 Note\n4.6. TCD relevant: | no/否 yes/是 Note\n5.Changed parts Stock& treatment/需要变更零件的库存统计和处理？ NA.(新零件放行,不涉及库存）（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） 涉及到已经生产过的零件变更\nRBCWRDC（外库）和RBCW仓库，是否有库存， | 无库存 有库存，库存数量 R2量改 | ()\n供应商处（已做好，未发货）是否有库存， | 无库存 □有库存，库存数量 | 催北剂择件 | PUE | 名岁\nP是否有库存， | 无库存 □有库存，库存数量 | 不涉是问题\n在途，运输中是否有库存 | 无库存 □有库存，库存数量\n被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废 | Design/签名\n改制费用 □ 报废成本 | PUE /签名李\n已装车件处理方法（发客户或标定车等）(SMP组织会议讨论) | 改制 □ 更换其吧（单独说明)：\n6. Influence on supplier part?\nWas this change confirmed withPurchasing (Sup变更后的零件，生产可行性供应商是否确认？ | plier) for feasibility? Feedback from Supplier?反馈？ | 李岑PUE/签名\nInfuenceon purchasing part deliverytime？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/否yes/是\nDoes the change influence on purchasing cost？变更对采购成本的影响？样件诗报所□increase/增加，金额decrease/降低，金额no change/不变\n7. DFMA & Sample prodcution OPL?\nDesgn/%卢青松\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\n无\nPUE/签名_\nInfuenceon project&product delivery time？对项&产品交货时间的影响？\nInfluence on manufacturing cost/对产成本的影响？ increase/增加，金额 decrease/降低，金额 □no change/不变\n9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 ;需求样品订单数量\nPM/签名_\n10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.: RBCW/TC□库存报废，金额只购成本增加，金额产成本增加，金额\nR3\nDesign Team Leader | System SM-ENG-CV1 | Depar02t MU8age2-1TCR3\nSignaturel名杨个 | Signature/签名: | 发\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nDOC+SDPFUNIT：F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING:F01Z5016MNDOCCATALYST:F01Z501906 | QUA新鲜件DOC+SDPFUNIT:F01ZH003EC-01DOC+SDPFWELDING:F01Z5017X2-00DOCCANNING: F01Z5017X3-00DOCCATALYST: F01Z50178N-00\n变更原因 | 系统工程师要求释放体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;\n风险点 (影响) | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更后\n调DOC+SDPFUNIT:F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING: F01Z5016MNDOCCATALYST: F01Z501906 | 国老化件DOC+SDPFUNIT: F01ZH003EC-51DOC+SDPFWELDING: F01Z5017X2-51DOCCANNING:F01Z5017X3-51DOCCATALYST: F01Z50178T-00\n变更原因 | 系统工程师要求释放体式RZ4EDOC低涂敷化件催化剂样件做测试;\n风险点 （影响） | 无\n验证方法 | 无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 系统程师要求释放RZ4ESCR化件催化剂样件做测试;\n风险点(影响) | 无验证方法 无\n验证方法\n\n零件号 | 零件名称\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n0SDOC+SDPFUNIT: 0452B311L9-00DOCUNIT：0452D552CADOCWELDING:0452D552BZDOCCANNING: F01Z501906DOC CATALYST:0452D551EM | 新鲜件DOC+SDPFUNIT:F01ZH003G0-00DOCUNIT:F01Z5017X6-00DOCWELDING: F01Z5017X7-00DOCCANNING: F01Z5017X3-00DOC CATALYST:F01Z50178N-00\n变更原因 | 系统工程师要求释放分体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;\n风险点(影响) | 无无\n验证方法\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee below | DOC+SDPF UNIT | JIM-493 | A | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nODOC+SDPFUNIT:0452B311L9-00DOCUNIT:0452D552CADOCWELDING：0452D552BZDOC CANNING: F01Z501906DOCCATALYST:0452D551EM | 老化件DOC+SDPFUNIT: F01ZH003G0-51DOCUNIT:F01Z5017X6-51DOCWELDING:F01Z5017X7-51DOCCANNING:F01Z5017X3-51DOCCATALYST:F01Z50178T-00\n变更原因 | 系统程师要求释放分体式RZ4EDOC低涂敷化件催化剂样件做测试;\n风险点(影响） | 无\n验证方法 | 无"
+  },
+  "source_trace": {
+    "raw_md_file": "jie_jim_knowledge_pdf/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行/ocr/PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ],
+    "cleaning_notes": [
+      "Converted HTML tables to pipe-separated text rows.",
+      "Normalized whitespace, HTML entities, and image placeholders.",
+      "Extracted common PD-ECR fields with deterministic regex and label rules.",
+      "Kept full_clean_text so RAG can still retrieve content not captured by fields."
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+[
+    {
+        "type": "table",
+        "img_path": "images/1fbfb6562df7cd9faf5135cf7d1d446df7a6f1fcfc3a751084fc25f968af4b49.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=4>Product Development Design Change Request产品开发设计变更请求</td><td rowspan=1 colspan=1>Version 15Effectivedate:2024-08-08th</td></tr><tr><td rowspan=1 colspan=1>Design ChangeRequest No.    24_102</td></tr><tr><td rowspan=1 colspan=6>Customer project Name/客户项目名称：                JIM-493           MCR No./ MCR号:</td></tr><tr><td rowspan=1 colspan=6>Sample status / 样件状态：     A Sample      ]B Sample    C Sample    D Sample</td></tr><tr><td rowspan=1 colspan=6>Change part&amp;product Name/更改零部件产品的名称(简要描述)</td></tr><tr><td rowspan=1 colspan=6>DOC+SDPF新鲜件(不可拆)：F01ZH003EC-01DOC+SDPF化件(不可拆)：F01ZH003EC-51 SCR新鲜件：F01ZH0033JDOC+SDPF新鲜件(可拆)： F01ZH003G1-00 DOC+SDPF化件(可拆)：F01ZH003G1-51   SCR化件：F01ZH003ED-51</td></tr><tr><td rowspan=1 colspan=6>Reason of changes/更改理由（简要描述)：</td></tr><tr><td rowspan=1 colspan=6>系统程师要求释放RZ4EDOC50g催化剂新鲜件化件（可拆+不可拆）样件做测试；</td></tr><tr><td rowspan=1 colspan=2>Change from/变更来源：</td><td rowspan=1 colspan=4></td></tr><tr><td rowspan=1 colspan=2>Customer request /客户要</td><td rowspan=1 colspan=1>求</td><td rowspan=1 colspan=3>Supplier request /供应商请求                        Design optimization/设计优化</td></tr><tr><td rowspan=1 colspan=2>Correction /更正(错误)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>Other/其他  （系统工程师测试样件）</td></tr><tr><td rowspan=1 colspan=2>Change inform to/变更通知人：</td><td rowspan=1 colspan=4>Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang</td></tr><tr><td rowspan=1 colspan=6>Yang Guangtuo,Jia Kebin, Luo jing, Lu Qingsong</td></tr><tr><td rowspan=1 colspan=6>Whether this change impact others component or product 此变更是否影响到其他部件和产品：         yes/是   no/否</td></tr><tr><td rowspan=1 colspan=6>If impact others product，Whether others projects&amp;product change or not？如果影响，别的部件和产品是否也需要同时变更？</td></tr><tr><td rowspan=1 colspan=6></td></tr><tr><td rowspan=1 colspan=2>Design/设计工程师</td><td rowspan=2 colspan=2>卢青松</td><td rowspan=2 colspan=1>Date/日期：</td><td rowspan=2 colspan=1>2024.8.9</td></tr><tr><td rowspan=1 colspan=2>Signature/签名：</td></tr><tr><td rowspan=1 colspan=2>Check/校对工程师</td><td rowspan=2 colspan=2>杨机</td><td rowspan=2 colspan=1>Date /日期：</td><td rowspan=2 colspan=1>204.08.14</td></tr><tr><td rowspan=1 colspan=2>Signature/签名:</td></tr><tr><td rowspan=1 colspan=6>Description of Change/更改描述：（下面空白处请列出详细的变更前后对比）具体变更详见附件</td></tr></table>",
+        "bbox": [
+            10,
+            38,
+            964,
+            927
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/18fa5abfc44b7109d25b8c8f3d52feab5ae919fd39182e9d8f328570baa0f4d6.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "content": "C",
+        "sub_type": "seal",
+        "bbox": [
+            731,
+            598,
+            915,
+            781
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "table",
+        "img_path": "images/b3c1a13403015fe5ea7004978e0d029129014dd0833c3109db8d79237d68a33f.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1>BOSCH博世Confidential</td><td rowspan=2 colspan=7>Design Change Review Sheet设计变更评审表C</td><td rowspan=1 colspan=2>Version 13Effective date:2024-08-08th</td><td></td></tr><tr><td rowspan=1 colspan=2>Design ChangeRequest No.        24_102</td><td></td></tr><tr><td rowspan=1 colspan=10>1.Function&amp;Performance will be influenced?/系统性能影响？     yes/是no/否</td><td></td></tr><tr><td rowspan=1 colspan=3>如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)</td><td rowspan=1 colspan=6></td><td rowspan=2 colspan=1>Ssrvem波</td><td></td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=6>首批样件，无写验证</td><td></td></tr><tr><td rowspan=1 colspan=3>Whether the catalyst information is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC)</td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1>Catalyst/签名</td><td></td></tr><tr><td rowspan=1 colspan=3>2.Interface&amp;boundary (internal and custome</td><td rowspan=1 colspan=6>r) wil be influenced?/接口&amp;边界(内部和客户)影响？     yes/是</td><td rowspan=1 colspan=1>no/否</td><td></td></tr><tr><td rowspan=1 colspan=3>Ifimpact custmer,whethergetconfirm fromcustomer side?请说明影响和是否得到客户的确认？</td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1>oese2</td><td></td></tr><tr><td rowspan=1 colspan=3>3. Mechanical strength&amp;Durability willbe in</td><td rowspan=1 colspan=6>fuenced?/机械强度&amp;可靠性影响？                         yes/是</td><td rowspan=1 colspan=1>no/否</td><td></td></tr><tr><td rowspan=1 colspan=3>IfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划?（例如：仿真分析等）</td><td rowspan=1 colspan=6>A样件无需FEA仿真</td><td rowspan=2 colspan=1>$valdai</td><td></td></tr><tr><td rowspan=1 colspan=3>Whether need sample to test? Plan?是否需要样件进行验证？计划？</td><td rowspan=1 colspan=6></td><td></td></tr><tr><td rowspan=1 colspan=3>4.Product document influenced?</td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1></td><td rowspan=8 colspan=1></td></tr><tr><td rowspan=1 colspan=3>4.1 Interface FMEA-relevant /IFMEA:</td><td rowspan=1 colspan=2>no/否</td><td rowspan=1 colspan=4>yes/是  Note_</td><td rowspan=6 colspan=1>0</td></tr><tr><td rowspan=1 colspan=3>4.2.Product FMEA-relevant /DFMEA:</td><td rowspan=1 colspan=1>n0</td><td rowspan=1 colspan=1>/否</td><td rowspan=1 colspan=4>yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.3.Special Charecteristics /PSC:(针对C Sample)</td><td rowspan=1 colspan=1>no</td><td rowspan=1 colspan=1>/否</td><td rowspan=1 colspan=4>yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.4.IMDS relevant： (针对C Sample)</td><td rowspan=1 colspan=2>no/否</td><td rowspan=1 colspan=4>yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.5 Offer drawing relevant(针对C Sample)</td><td rowspan=1 colspan=2>no/否</td><td rowspan=1 colspan=4>yes/是   Note</td></tr><tr><td rowspan=1 colspan=3>4.6. TCD relevant:</td><td rowspan=1 colspan=6>no/否    yes/是   Note</td></tr><tr><td rowspan=1 colspan=10>5.Changed parts Stock&amp; treatment/需要变更零件的库存统计和处理？                          NA.(新零件放行,不涉及库存）（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关）                                 涉及到已经生产过的零件变更</td></tr><tr><td rowspan=1 colspan=3>RBCWRDC（外库）和RBCW仓库，是否有库存，</td><td rowspan=1 colspan=6> 无库存        有库存，库存数量   R2量改</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>()</td></tr><tr><td rowspan=1 colspan=3>供应商处（已做好，未发货）是否有库存，</td><td rowspan=1 colspan=4> 无库存       □有库存，库存数量</td><td rowspan=1 colspan=2>催北剂择件</td><td rowspan=3 colspan=1>PUE</td><td rowspan=29 colspan=1>名岁</td></tr><tr><td rowspan=1 colspan=3>P是否有库存，</td><td rowspan=1 colspan=4> 无库存       □有库存，库存数量</td><td rowspan=2 colspan=2>不涉是问题</td></tr><tr><td rowspan=1 colspan=3>在途，运输中是否有库存</td><td rowspan=1 colspan=4> 无库存        □有库存，库存数量</td></tr><tr><td rowspan=2 colspan=3>被影响到的实物库存处理指示：（设计工程师组织会议讨论）</td><td rowspan=1 colspan=6>□可以继续使用完      □改制后使用    □报废</td><td rowspan=1 colspan=1>Design/签名</td></tr><tr><td rowspan=1 colspan=6>改制费用          □                  报废成本</td><td rowspan=1 colspan=1>PUE /签名李</td></tr><tr><td rowspan=1 colspan=3>已装车件处理方法（发客户或标定车等）(SMP组织会议讨论)</td><td rowspan=1 colspan=6>改制     □             更换其吧（单独说明)：</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>6. Influence on supplier part?</td><td rowspan=1 colspan=6></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=3>Was this change confirmed withPurchasing (Sup变更后的零件，生产可行性供应商是否确认？</td><td rowspan=1 colspan=6>plier) for feasibility? Feedback from Supplier?反馈？</td><td rowspan=5 colspan=1>李岑PUE/签名</td></tr><tr><td rowspan=1 colspan=9></td></tr><tr><td rowspan=1 colspan=9>Infuenceon purchasing part deliverytime？对采购件交货时间的影响？</td></tr><tr><td rowspan=1 colspan=9>涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.   no/否yes/是</td></tr><tr><td rowspan=1 colspan=9>Does the change influence on purchasing cost？变更对采购成本的影响？样件诗报所□increase/增加，金额decrease/降低，金额no change/不变</td></tr><tr><td rowspan=1 colspan=10>7. DFMA &amp; Sample prodcution OPL?</td></tr><tr><td rowspan=1 colspan=9></td><td></td></tr><tr><td rowspan=2 colspan=9></td><td></td></tr><tr><td rowspan=2 colspan=1>Desgn/%卢青松</td></tr><tr><td rowspan=2 colspan=9>8. Influence on LPN manufacturing&amp;assembly process?</td></tr><tr><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=9>Feedback from manufacturing engineer？生产制造装配是否影响，反馈？</td><td></td></tr><tr><td rowspan=2 colspan=9>无</td><td></td></tr><tr><td rowspan=4 colspan=1>PUE/签名_</td></tr><tr><td rowspan=1 colspan=9>Infuenceon project&amp;product delivery time？对项&amp;产品交货时间的影响？</td></tr><tr><td rowspan=1 colspan=9>Influence on manufacturing cost/对产成本的影响？ increase/增加，金额                            decrease/降低，金额                      □no change/不变</td></tr><tr><td rowspan=2 colspan=9>9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响              ；需求样品订单数量</td></tr><tr><td rowspan=2 colspan=1>PM/签名_</td></tr><tr><td rowspan=2 colspan=9>10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.:                            RBCW/TC□库存报废，金额只购成本增加，金额产成本增加，金额</td></tr><tr><td rowspan=1 colspan=1>R3</td></tr><tr><td rowspan=1 colspan=2>Design Team Leader</td><td rowspan=1 colspan=4>System SM-ENG-CV1</td><td rowspan=1 colspan=4>Depar02t MU8age2-1TCR3</td></tr><tr><td rowspan=1 colspan=2>Signaturel名杨个</td><td rowspan=1 colspan=4>Signature/签名:</td><td rowspan=1 colspan=4>发</td></tr></table>",
+        "bbox": [
+            58,
+            35,
+            914,
+            964
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/7f203bbc96fd640d7aee94d54a76face1556de65905354f1e081092dee156f3d.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            95,
+            0,
+            361,
+            980
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 2,
+        "bbox": [
+            542,
+            623,
+            677,
+            935
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "table",
+        "img_path": "images/57051ed343fc1257a5553391af4cc64962a1c6cf4b8590d439d1d4e9cceb9e70.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=2></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=2>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>DOC+SDPFUNIT：F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING:F01Z5016MNDOCCATALYST:F01Z501906</td><td rowspan=1 colspan=3>QUA新鲜件DOC+SDPFUNIT:F01ZH003EC-01DOC+SDPFWELDING:F01Z5017X2-00DOCCANNING: F01Z5017X3-00DOCCATALYST: F01Z50178N-00</td></tr><tr><td rowspan=1 colspan=2>变更原因</td><td rowspan=1 colspan=6>系统工程师要求释放体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;</td></tr><tr><td rowspan=1 colspan=1>风险点 (影响)</td><td rowspan=1 colspan=7>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=7>无</td></tr><tr><td rowspan=1 colspan=8></td></tr></table>",
+        "bbox": [
+            193,
+            65,
+            805,
+            953
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/8e6383ba2037935d85497ec3e746488b56c2bf008db01286a1d45d3b7a7a9707.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=7></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=1>Project</td><td rowspan=1 colspan=1>样件阶段</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=1>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td rowspan=1 colspan=8>变更后</td></tr><tr><td rowspan=1 colspan=3>调DOC+SDPFUNIT:F01ZH00303DOC+SDPFWELDING:F01Z5016MMDOCCANNING: F01Z5016MNDOCCATALYST: F01Z501906</td><td rowspan=1 colspan=8>国老化件DOC+SDPFUNIT: F01ZH003EC-51DOC+SDPFWELDING: F01Z5017X2-51DOCCANNING:F01Z5017X3-51DOCCATALYST: F01Z50178T-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=11>系统工程师要求释放体式RZ4EDOC低涂敷化件催化剂样件做测试;</td></tr><tr><td rowspan=1 colspan=1>风险点 （影响）</td><td rowspan=1 colspan=11>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=11>无</td></tr></table>",
+        "bbox": [
+            191,
+            66,
+            803,
+            953
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "table",
+        "img_path": "images/4ef3d84cff0868f172f710a6427736686d42768e99b13f06490e81d58b5f63b1.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=1 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统程师要求释放RZ4ESCR化件催化剂样件做测试；</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=2 colspan=6>无验证方法                                                                                              无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr></table>",
+        "bbox": [
+            193,
+            65,
+            803,
+            953
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "table",
+        "img_path": "images/a47f63433803ee8aadfedcafebec3e47d6fd326b31d3d4ebb1e9788066bba4fa.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td></td><td></td><td rowspan=1 colspan=8></td><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td></td><td></td><td></td><td></td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=7>0SDOC+SDPFUNIT: 0452B311L9-00DOCUNIT：0452D552CADOCWELDING:0452D552BZDOCCANNING: F01Z501906DOC CATALYST:0452D551EM</td><td rowspan=1 colspan=3>新鲜件DOC+SDPFUNIT:F01ZH003G0-00DOCUNIT:F01Z5017X6-00DOCWELDING: F01Z5017X7-00DOCCANNING: F01Z5017X3-00DOC CATALYST:F01Z50178N-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=10>系统工程师要求释放分体式RZ4EDOC低涂敷新鲜件催化剂样件做测试;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响)</td><td rowspan=3 colspan=10>无无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td></tr><tr><td rowspan=1 colspan=1></td></tr></table>",
+        "bbox": [
+            191,
+            65,
+            805,
+            953
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/892dc8761cde390afcaf27bea0b3e8f4db36e340035478c408502e2809689aca.jpg",
+        "table_caption": [
+            "",
+            ""
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td rowspan=2 colspan=1></td><td rowspan=1 colspan=1>零件号</td><td rowspan=1 colspan=1>零件名称</td><td rowspan=1 colspan=2>Project</td><td rowspan=1 colspan=1>样件阶段</td><td rowspan=1 colspan=1>变更来源</td></tr><tr><td rowspan=1 colspan=1>See below</td><td rowspan=1 colspan=1>DOC+SDPF UNIT</td><td rowspan=1 colspan=2>JIM-493</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>BOSCH/Customer</td></tr><tr><td rowspan=2 colspan=1>变更描述</td><td rowspan=1 colspan=3>变更前</td><td rowspan=1 colspan=3>变更后</td></tr><tr><td rowspan=1 colspan=3>ODOC+SDPFUNIT:0452B311L9-00DOCUNIT:0452D552CADOCWELDING：0452D552BZDOC CANNING: F01Z501906DOCCATALYST:0452D551EM</td><td rowspan=1 colspan=3>老化件DOC+SDPFUNIT: F01ZH003G0-51DOCUNIT:F01Z5017X6-51DOCWELDING:F01Z5017X7-51DOCCANNING:F01Z5017X3-51DOCCATALYST:F01Z50178T-00</td></tr><tr><td rowspan=1 colspan=1>变更原因</td><td rowspan=1 colspan=6>系统程师要求释放分体式RZ4EDOC低涂敷化件催化剂样件做测试;</td></tr><tr><td rowspan=1 colspan=1>风险点(影响）</td><td rowspan=1 colspan=6>无</td></tr><tr><td rowspan=1 colspan=1>验证方法</td><td rowspan=1 colspan=6>无</td></tr></table>",
+        "bbox": [
+            191,
+            66,
+            803,
+            953
+        ],
+        "page_idx": 7
+    }
+]

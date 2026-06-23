@@ -1,0 +1,83 @@
+{
+  "case_id": "PDECR25_084",
+  "source_file": "jie_jim_knowledge_pdf/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹/ocr/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹.md",
+  "metadata": {
+    "dc_no": "PDECR25_084",
+    "date": "2025-07-02",
+    "mcr_no": "",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "sample_type": [
+      "D Sample"
+    ],
+    "sample_type_candidates": [
+      "A Sample",
+      "B Sample",
+      "C Sample",
+      "D Sample"
+    ],
+    "change_type_raw": [
+      "Customer request"
+    ],
+    "change_type_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ],
+    "source_type": "mineru_markdown",
+    "language": "zh/en",
+    "requires_validation": "need_human_check"
+  },
+  "business_fields": {
+    "responsible_person": "卢松",
+    "responsible_department": "",
+    "approval_persons": [
+      "Yang Guangtuo",
+      "Luo jing",
+      "Lu Qingsong"
+    ],
+    "approval_departments": [],
+    "affected_documents": [],
+    "check_engineer": "杨广抓"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC-DPF:F01ZH003FU-00",
+    "reason_for_change": "客户要求压差支架取消卡夹",
+    "change_source_selected": [
+      "Customer request"
+    ],
+    "change_source_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ]
+  },
+  "modules": {
+    "change_request_description": "Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-07-02th\n25081\nCustomer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:\nSample status / 样件状态： A Sample B Sample C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC-DPF:F01ZH003FU-00\nReason of changes/更改理由（简要描述)\n客户要求压差支架取消卡夹\nChange from/变更来源：\nCustomer request /客户要求√ | Supplier request /供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, LYicen, Ge Jilong\nYang Guangtuo, Luo jing， Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign /设计工程师 | 卢松 | Date/日期： | 2025.7.2\nSignature/签名：\nCheck/校对工程师 | 杨广抓 | Date /日期： | 2025.07.03\nSignature/签名：\nDescription of Change/更改描述：(下面空白处请列出详细的变更前后对比）\n\nBOSCH 博世 Confidential |",
+    "impact_analysis": "Design Change Review Sheet | 设计变更评审表 | Version 13 Effective date:2025-07-02th\nDesign Change Request No. | 2508\nIfYes,System impaction evaluation? | 1.Function&Performance wil be influenced?/系统性能影响？\n如果是，系统影响评估？ (如果是初次样件放行，空白处请说明样件目的)\nWhether need sample to test?Plan? | sem%\n是否需要样件进行验证？计划？ Whether the catalyst information is confirmed? | catalst\n催化剂信息是否确认？（物料号、图纸、SPEC) | 2.Interface&boundary (internal and customer) wil be infuenced?/接口&边界(内部和客户)影响？ | yes/是 | no/否\nIf impact custmer,whetherget confirm from customer side?\n请说明影响和是否得到客户的确认？\n3. Mechanical strength&Durability wil be infuenced?/机械强度&可靠性影响？ If Yes, How to evaluate? Plan? | yes/是 | no/香\n如果是，请说明影响和如何评估，计划？ (例如：仿真分析等) | $varati\nWhether need sample to test?Plan? 是否需要样件进行验证？计划？\n4. Product document infuenced? 4.1 Interface FMEA-relevant/IFMEA: | no/否 | yes/是 Note_\n4.2.Product FMEA-relevant/DFMEA: | n0/否 yes/是 Note\n4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note\n4.4.IMDS relevant: (针对C Sample) | no/否 yes/是 Note_\n4.5 Offer drawing relevant(针对c Sample) | no/否 yes/是 Note\n4.6. TCD relevant: | no/否 yes/是 Note | 030声\n5. Changed parts Stock& treatment/需要变更零件的库存统计和处理？ （只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） | NA.(新零件放行，不涉及库存） 涉及到已经生产过的零件变更\nRBCWRDC（外库）和RBCW仓库，是否有库存， | 无库存 有库存，库存数量\n供应商处(已做好，未发货）是否有库存， | ]有库存，库存数量\nLPN工厂是否有库存， | □ 无库存 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | □ 无库存 | ]有库存，库存数量 | PUE /签名\n被影响到的实物库存处理指示： | 可以继续使用完 | □改制后使用 □报废 | Design/签名\n（设计工程师组织会议讨论） | 改制费用 报万成本 | PUE /签名\n(SMP组织会议讨论） | 已装车件处理方法（发客户或标定车等） | 改制 其他（单独说明） | 更换\n6. Influence on supplier part? | Was this change confrmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?\n变更后的零件，生产可行性供应商是否确认？反馈？\nInfluence on purchasing part delivery time？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. Does the change infuence on purchasing cost？变更对采购成本的影响？ | □no/否yes/是\nincrease/增加,金额 | □decrease/降低，金额 | no change/不变 | PUE/签名\n7. DFMA & Sample prodcution OPL?\n必要时附加DFMA文件\n支架+隔热罩.娘废1W. | 改制6000 | 卢松 Design /签名\n8.Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer?生产制造装配是否影响，反馈？\nInfuenceonproject&product deliver time？对项目&产品交货时间的影\nInfluence on manufacturing cost /对产成本的影响？ increase/增加，金额 | decrease/降低，金额 | no change/不变 | 李岑 PUE/签名\n9.PM alignment? (Influence on project Timeline? Cost?); 是否同意对项目时间和成本的影响 需求样品订单数量\n10.如果涉及以下情况需TCR3审核确认。 库存报废，金额 | 不涉及则 平购成本增加，金额 | na. | RB 牛产成本增加，金额\nDesign Team Leader | ENG-CV1 | PUR | TCR3\nSignature/签名 | Signature | Signature /签名: | 谢友待\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5017X1-05 | DP TUBE BRACKET | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 线束固定支架取消后，线束固定卡箍随之取消;\n风险点（影响） | 无\n验证方法 | 无\n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee blow | INSULATION | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nMAMELAE BOSCH 05C) BOSCH WORD MARX /B0SC - MARK DOC封装：博世汽车系统（无锡）有限公司\nBOSCH O5 -DOC载体：NGK（苏州）环保陶瓷有限公司 DOC涂层：庄信万丰（上海）化工有限公司 SDPF封装：博世汽车系统（无锡）有限公司 NG- 2ATE- -SDPF载体：NGK（苏州）环保陶资有限公司 -E415 _IN5 SDPF涂层：庄信万丰（上海）化工有限公司 CA100271850 -E415 JOE- ECA100271850 FO1ZH0O3FU Made in China (16) | BOSCH (059) DOC封装：博世汽专系统（无锡）有限公司 SDPF封装：博世汽车系统（无锡）有限公司 一00载体：日G区（苏归）环保阳党有限公司 -SDPF载体：NGK（苏）环保陶资和限公司 一DOC涂层：主信为丰（上海）化工存限公司 -SDF泰层：注省发丰（上海）化工有限公司 E415 CA10027185D ECA100271851\nF01ZH003FU N- Made in China 1 (10.4) | F01ZH003FU F01ZH003FU Mede in Chine Made in China OR COOE\nDOCINSULATION02:F01Z5018AW-03 DPFINSULATION01: F01Z5018AZ-03 | DOCINSULATION02:F01Z5018AW-03 DPFINSULATION01:F01Z5018AZ-03\n变更原因 线束固定支架取消后，客户图纸号随之更改;\n风险点 （影响) 验证方法 | 无\n无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FU-00 | DOC+SDPF UNIT | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nHEMTUEER05C2.1ESTA7E -0OC DOc ：RHEE E415CA100271850F01Z-003FUMade in ChinaETE ATELATFHHAEtSXFCA1002/1850F01Z1003F0Mgde in | (05cDOC ：A5手修有系5TATC- -DOC数公：1：)4事，-DOC：公E E415CA100271851F01ZH003FUMede in ChineFNAEHLATE050-SDPF 第A保公-SOPTE415-CA100271851-F01ZH003FUMade in Chine\n变更原因 | 上述铭牌更改后，总成图纸随之更改;\n风险点(影响) | 无\n验证方法 | 无",
+    "full_clean_text": "BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-07-02th\n25081\nCustomer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:\nSample status / 样件状态： A Sample B Sample C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nDOC-DPF:F01ZH003FU-00\nReason of changes/更改理由（简要描述)\n客户要求压差支架取消卡夹\nChange from/变更来源：\nCustomer request /客户要求√ | Supplier request /供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | Zhang Shengchang,Zhang Hanquan,Shen Weibo, LYicen, Ge Jilong\nYang Guangtuo, Luo jing， Lu Qingsong\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nifimpact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign /设计工程师 | 卢松 | Date/日期： | 2025.7.2\nSignature/签名：\nCheck/校对工程师 | 杨广抓 | Date /日期： | 2025.07.03\nSignature/签名：\nDescription of Change/更改描述：(下面空白处请列出详细的变更前后对比）\n\nBOSCH 博世 Confidential | Design Change Review Sheet | 设计变更评审表 | Version 13 Effective date:2025-07-02th\nDesign Change Request No. | 2508\nIfYes,System impaction evaluation? | 1.Function&Performance wil be influenced?/系统性能影响？\n如果是，系统影响评估？ (如果是初次样件放行，空白处请说明样件目的)\nWhether need sample to test?Plan? | sem%\n是否需要样件进行验证？计划？ Whether the catalyst information is confirmed? | catalst\n催化剂信息是否确认？（物料号、图纸、SPEC) | 2.Interface&boundary (internal and customer) wil be infuenced?/接口&边界(内部和客户)影响？ | yes/是 | no/否\nIf impact custmer,whetherget confirm from customer side?\n请说明影响和是否得到客户的确认？\n3. Mechanical strength&Durability wil be infuenced?/机械强度&可靠性影响？ If Yes, How to evaluate? Plan? | yes/是 | no/香\n如果是，请说明影响和如何评估，计划？ (例如：仿真分析等) | $varati\nWhether need sample to test?Plan? 是否需要样件进行验证？计划？\n4. Product document infuenced? 4.1 Interface FMEA-relevant/IFMEA: | no/否 | yes/是 Note_\n4.2.Product FMEA-relevant/DFMEA: | n0/否 yes/是 Note\n4.3.Special Charecteristics /PSC: (针对C Sample) | no/否 yes/是 Note\n4.4.IMDS relevant: (针对C Sample) | no/否 yes/是 Note_\n4.5 Offer drawing relevant(针对c Sample) | no/否 yes/是 Note\n4.6. TCD relevant: | no/否 yes/是 Note | 030声\n5. Changed parts Stock& treatment/需要变更零件的库存统计和处理？ （只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） | NA.(新零件放行，不涉及库存） 涉及到已经生产过的零件变更\nRBCWRDC（外库）和RBCW仓库，是否有库存， | 无库存 有库存，库存数量\n供应商处(已做好，未发货）是否有库存， | ]有库存，库存数量\nLPN工厂是否有库存， | □ 无库存 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | □ 无库存 | ]有库存，库存数量 | PUE /签名\n被影响到的实物库存处理指示： | 可以继续使用完 | □改制后使用 □报废 | Design/签名\n（设计工程师组织会议讨论） | 改制费用 报万成本 | PUE /签名\n(SMP组织会议讨论） | 已装车件处理方法（发客户或标定车等） | 改制 其他（单独说明） | 更换\n6. Influence on supplier part? | Was this change confrmed with Purchasing (Supplier) for feasibility? Feedback from Supplier?\n变更后的零件，生产可行性供应商是否确认？反馈？\nInfluence on purchasing part delivery time？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. Does the change infuence on purchasing cost？变更对采购成本的影响？ | □no/否yes/是\nincrease/增加,金额 | □decrease/降低，金额 | no change/不变 | PUE/签名\n7. DFMA & Sample prodcution OPL?\n必要时附加DFMA文件\n支架+隔热罩.娘废1W. | 改制6000 | 卢松 Design /签名\n8.Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer?生产制造装配是否影响，反馈？\nInfuenceonproject&product deliver time？对项目&产品交货时间的影\nInfluence on manufacturing cost /对产成本的影响？ increase/增加，金额 | decrease/降低，金额 | no change/不变 | 李岑 PUE/签名\n9.PM alignment? (Influence on project Timeline? Cost?); 是否同意对项目时间和成本的影响 需求样品订单数量\n10.如果涉及以下情况需TCR3审核确认。 库存报废，金额 | 不涉及则 平购成本增加，金额 | na. | RB 牛产成本增加，金额\nDesign Team Leader | ENG-CV1 | PUR | TCR3\nSignature/签名 | Signature | Signature /签名: | 谢友待\n\n[image] \n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01Z5017X1-05 | DP TUBE BRACKET | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\n变更原因 | 线束固定支架取消后，线束固定卡箍随之取消;\n风险点（影响） | 无\n验证方法 | 无\n\n##\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nSee blow | INSULATION | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nMAMELAE BOSCH 05C) BOSCH WORD MARX /B0SC - MARK DOC封装：博世汽车系统（无锡）有限公司\nBOSCH O5 -DOC载体：NGK（苏州）环保陶瓷有限公司 DOC涂层：庄信万丰（上海）化工有限公司 SDPF封装：博世汽车系统（无锡）有限公司 NG- 2ATE- -SDPF载体：NGK（苏州）环保陶资有限公司 -E415 _IN5 SDPF涂层：庄信万丰（上海）化工有限公司 CA100271850 -E415 JOE- ECA100271850 FO1ZH0O3FU Made in China (16) | BOSCH (059) DOC封装：博世汽专系统（无锡）有限公司 SDPF封装：博世汽车系统（无锡）有限公司 一00载体：日G区（苏归）环保阳党有限公司 -SDPF载体：NGK（苏）环保陶资和限公司 一DOC涂层：主信为丰（上海）化工存限公司 -SDF泰层：注省发丰（上海）化工有限公司 E415 CA10027185D ECA100271851\nF01ZH003FU N- Made in China 1 (10.4) | F01ZH003FU F01ZH003FU Mede in Chine Made in China OR COOE\nDOCINSULATION02:F01Z5018AW-03 DPFINSULATION01: F01Z5018AZ-03 | DOCINSULATION02:F01Z5018AW-03 DPFINSULATION01:F01Z5018AZ-03\n变更原因 线束固定支架取消后，客户图纸号随之更改;\n风险点 （影响) 验证方法 | 无\n无\n\n零件号 | 零件名称 | Project | 样件阶段 | 变更来源\nF01ZH003FU-00 | DOC+SDPF UNIT | JIM-493 | D | BOSCH/Customer\n变更描述 | 变更前 | 变更后\nHEMTUEER05C2.1ESTA7E -0OC DOc ：RHEE E415CA100271850F01Z-003FUMade in ChinaETE ATELATFHHAEtSXFCA1002/1850F01Z1003F0Mgde in | (05cDOC ：A5手修有系5TATC- -DOC数公：1：)4事，-DOC：公E E415CA100271851F01ZH003FUMede in ChineFNAEHLATE050-SDPF 第A保公-SOPTE415-CA100271851-F01ZH003FUMade in Chine\n变更原因 | 上述铭牌更改后，总成图纸随之更改;\n风险点(影响) | 无\n验证方法 | 无"
+  },
+  "source_trace": {
+    "raw_md_file": "jie_jim_knowledge_pdf/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹/ocr/PDECR25_084_JIM_493_D-sample-压差支架取消卡夹.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ],
+    "cleaning_notes": [
+      "Converted HTML tables to pipe-separated text rows.",
+      "Normalized whitespace, HTML entities, and image placeholders.",
+      "Extracted common PD-ECR fields with deterministic regex and label rules.",
+      "Kept full_clean_text so RAG can still retrieve content not captured by fields."
+    ]
+  }
+}

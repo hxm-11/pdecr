@@ -1,0 +1,57 @@
+[
+  {
+    "case_id": "PDECR24_093",
+    "dc_no": "24_093",
+    "mcr_no": "",
+    "customer_project": "JIM-493",
+    "product_no": "F01ZH003G1-00",
+    "part_no": "F01ZH003G1-00",
+    "change_type": "Customer request / Design optimization",
+    "source_file": "PDECR24_093_JIM_493_origin.pdf",
+    "notes": "A-sample detachable and integrated DOC+SDPF release reference."
+  },
+  {
+    "case_id": "PDECR24_102",
+    "dc_no": "24_102",
+    "mcr_no": "",
+    "customer_project": "JIM-493",
+    "product_no": "F01ZH003G1-00",
+    "part_no": "SCR / DOC low coating sample parts",
+    "change_type": "Sample release",
+    "source_file": "PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行_origin.pdf",
+    "notes": "Low-coating sample release reference."
+  },
+  {
+    "case_id": "PDECR24_130",
+    "dc_no": "24_130",
+    "mcr_no": "",
+    "customer_project": "JIM-493",
+    "product_no": "",
+    "part_no": "",
+    "change_type": "B-Sample boundary adjustment",
+    "source_file": "PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置_origin.pdf",
+    "notes": "Intentionally keeps incomplete product/part metadata for missing-field display."
+  },
+  {
+    "case_id": "PDECR25_049",
+    "dc_no": "25_049",
+    "mcr_no": "",
+    "customer_project": "JIM-493",
+    "product_no": "",
+    "part_no": "Detachable DOC aged part",
+    "change_type": "A-Sample release",
+    "source_file": "PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放_origin.pdf",
+    "notes": "A-sample detachable DOC aged part release."
+  },
+  {
+    "case_id": "T0004-PD-ECR_JP360cooler",
+    "dc_no": "",
+    "mcr_no": "",
+    "customer_project": "JP360",
+    "product_no": "Injector",
+    "part_no": "F03Z...",
+    "change_type": "Design optimization",
+    "source_file": "T0004-PD-ECR_JP360cooler.md",
+    "notes": "Curated markdown case used for loader fallback validation."
+  }
+]

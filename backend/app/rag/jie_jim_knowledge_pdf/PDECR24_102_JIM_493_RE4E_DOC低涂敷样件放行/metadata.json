@@ -1,0 +1,25 @@
+{
+  "case_id": "PDECR24_102",
+  "source_file": "PDECR24_102_JIM_493_RE4E_DOC低涂敷样件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "24_102",
+    "date": "2024-08-08",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Customer request / 客户要求；Other / 其他（系统工程师测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF 新鲜件（不可拆）：F01ZH003EC-01; DOC+SDPF 老化件（不可拆）：F01ZH003EC-51; SCR 新鲜件：F01ZH0033J; DOC+SDPF 新鲜件（可拆）：F01ZH003G1-00; DOC+SDPF 老化件（可拆）：F01ZH003G1-51; SCR 老化件：F01ZH003ED-51",
+    "reason_for_change": "系统工程师要求释放RZ4E DOC 50g催化剂新鲜件、老化件（可拆+不可拆）样件做测试。",
+    "change_source": [
+      "Customer request",
+      "Other"
+    ]
+  }
+}

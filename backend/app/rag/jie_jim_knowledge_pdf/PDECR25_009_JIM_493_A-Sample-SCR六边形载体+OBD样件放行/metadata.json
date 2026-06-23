@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR25_009",
+  "source_file": "PDECR25_009_JIM_493_A-Sample-SCR六边形载体+OBD样件放行_origin.pdf",
+  "metadata": {
+    "dc_no": "25_009",
+    "date": "2025-04-28",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "SCR六边形载体测试件（老化件）：F01ZH003P8-01; SCR 1/20涂敷件（OBD件）：F01ZH003FV-40; SCR 1/25涂敷件（OBD件）：F01ZH003FV-41",
+    "reason_for_change": "系统工程师催化剂测试样件放行。",
+    "change_source": [
+      "Other"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+import { createFileRoute, Outlet } from "@tanstack/react-router"
+
+import AppSidebar from "@/components/Sidebar/AppSidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
+
+export const Route = createFileRoute("/_layout")({
+  component: Layout,
+  // beforeLoad: async ({ location }) => {
+  //   if (location.pathname.startsWith("/pd-ecr")) {
+  //     return
+  //   }
+
+  //   if (!isLoggedIn()) {
+  //     throw redirect({
+  //       to: "/login",
+  //     })
+  //   }
+  // },
+})
+
+function Layout() {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="sticky top-0 z-10 flex h-12 shrink-0 items-center gap-2 border-b px-3">
+          <SidebarTrigger className="-ml-1 text-muted-foreground" />
+        </header>
+        <main className="flex min-h-0 flex-1 bg-stone-50 p-3 md:p-4">
+          <div className="min-h-0 w-full min-w-0">
+            <Outlet />
+          </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  )
+}
+
+export default Layout

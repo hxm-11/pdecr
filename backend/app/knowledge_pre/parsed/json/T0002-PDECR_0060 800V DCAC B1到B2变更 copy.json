@@ -1,0 +1,66 @@
+{
+  "case_id": "T0002",
+  "source_file": "backend/app/rag/excel_source/T0002-PDECR_0060 800V DCAC B1到B2变更.xlsx",
+  "metadata": {
+    "dc_no": "PDECR_0060",
+    "date": "2025-11-25",
+    "mcr_no": "BM-00095101_005",
+    "customer_project": [
+      "Geely",
+      "CNHTC",
+      "XCMG"
+    ],
+    "affected_product_no": [
+      "F01Z7P001R-01",
+      "F01Z7P001Y-01",
+      "F01Z7P001P-01",
+      "F01Z7P001T-01"
+    ],
+    "component_no": [
+      "F01ZD302X-01",
+      "F01ZD302Y-01"
+    ],
+    "sample_type": "B",
+    "change_type_raw": "Design optimization",
+    "change_type": "design_optimization",
+    "source_type": "excel",
+    "language": "zh",
+    "requires_validation": "yes"
+  },
+  "business_fields": {
+    "responsible_person": "",
+    "responsible_department": "2",
+    "approval_persons": [
+      "PN No",
+      "NA\nStep",
+      "LI Xin",
+      "ZHENG Xinjie",
+      "LI Bing",
+      "LI Ke",
+      "ZHANG Bing",
+      "ZHENG Xuan",
+      "JIANG Xingkai",
+      "YUAN Senqi",
+      "JIANG Ningtao",
+      "GAO Tong",
+      "YIN Ning",
+      "MAO Yiyi",
+      "WU Xiaojian",
+      "导入清单",
+      "王小龙",
+      "范嫦娥",
+      "执行日期",
+      "变更计划"
+    ],
+    "approval_departments": [],
+    "affected_documents": []
+  },
+  "modules": {
+    "change_request_description": "",
+    "impact_analysis": "",
+    "validation_trial_run_plan": "",
+    "validation_trial_run_result": "",
+    "implementation_task_plan": "",
+    "implementation_task_result": ""
+  }
+}

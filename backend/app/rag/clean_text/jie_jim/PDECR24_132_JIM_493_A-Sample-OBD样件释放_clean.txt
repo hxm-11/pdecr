@@ -1,0 +1,192 @@
+BOSCH 博世 | Product Development Design Change Request 产品开发设计变更请求 | Version 15 Effective date:2024-11-23th Design Change
+Confidential | Customer project Name/客户项目名称： | JIM-493 | RauestNo. | 24_132
+MCR No./ MCR号: Sample status/ 样件状态： A Sample B Sample ]C Sample
+Change part&product Name/更改零部件产品的名称（简要描述) DOC可拆65g新鲜件：F01Z50181Y-00 DOC可拆65g化件：F01Z50181Y-51 | D Sample
+DOC可拆白载体：F01Z5017X9-25 DOC可拆1/6涂敷：F01Z5017X9-31 DOC可拆1/8涂敷：F01Z5017X9-32 DPF可拆白载体：F01Z5017XC-25 SCR1/9涂敷：F01ZH003FV-36 SCR1/10涂敷：F01ZH003FV-37
+SCR1/12涂敷：F01ZH003FV-38 SCR1/15涂敷：F01ZH003FV-39 Reason of changes/更改理由（简要描述)：
+程师测试样件放行;
+Change from/变更来源： Customer request /客户要求
+Correction/更正(错误) | Other/其他 | Supplier request /供应商请求 （ 系统测试样件 | Design optimization/设计优化
+Change inform to/变更通知人：
+Zhang Shengchang,Zhang Hanquan, Shen Weibo, Li Yicen, Fang Jiayan, Yin Kangzhuang
+Yang Guangtuo,Jia Kebin, Luo jing，Lu Qingsong Whether this change impact others component or product 此变更是否影响到其他部件和产品：
+yes/是 no/否 If impact others product，Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？
+Design/设计工程师 | 卢青松 | Date /日期： | 2024.12.2
+Signature /签名： Check/校对工程师 | Date/日期:
+杨抗 Signature/签名：
+2024.12.23 Description of Change/更改描述：(下面空白处请列出详细的变更前后对比)
+具体变更详见附件PPT
+B样分体式 50g/cft DOC催化剂涂敷极值件
+DOC65g新鲜件 | 总成号 | 分总成号 F01Z50181Y-00 | 催化剂号
+DOC 65g老化件 | " | F01Z50181Y-51 | F01Z50178L F01Z50178R-00
+DOc白载体 | -- | F01Z5017X9-25 | F01Z501887 白载体
+- | F01Z5017X9-31 F01Z50178N-31
+DOC1/8涂敷 | -- | F01Z5017X9-32 | F01Z50178N-32
+DPF新鲜件 | -- | F01Z5017XC-01 | F01Z5017WM-00
+DPF白载体 | - | F01Z5017XC-25 | F01Z5102DF-00
+B样波纹管170mm | 1/9涂敷 | 白载体 | 1/10涂敷 | 1/12涂敷 | 1/15涂敷
+总成号 | 催化剂号 | 总成号 | 催化剂号 | 总成号 | 催化剂号 | 催化剂号
+SCRIASC | F01ZH003FV-36 | F01Z50180N-36 | F01ZH003FV-37 | F01Z50180N-37 | F01ZH003EV-38 | 总成号
+
+[image] 
+
+[image] 
+
+[image] 
+
+(4.4 | BOSCH博世Confidential | Design Change Review Sheet设计变更评审表
+Version 13Effective date: 2024-11-23th
+24132
+1.Function&Performance will be influenced?/系统性能影响？ yes/是no/否
+如果是，系统影响评估？(如果是初次样件放行，空白处请说明样件目的)
+System/签名_
+Whether need sample to test? Plan?是否需要样件进行验证？计划？
+Whetherthe catalystinformation is confirmed?催化剂信息是否确认？（物料号、图纸、SPEC) | 10.2减涂覆ec.特定，考和试catay | s签名张汉泉
+2.Interface&boundary (internal and custom | er) wil be infulenced?/接口&边界(内部和客户)影响？ yes/是
+no/否
+if impact custmerwhether get confirm fromcustomer side?请说明影响和是否得到客户的确认？
+Desi801%
+3. Mechanical strength&Durability wil be in | fluenced?/机械强度&可靠性影响？ yes/是
+no/香
+If Yes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？例如：仿真分析等)
+vaidai
+Whether need sample to test?Plan?是否需要样件进行验证？计划？
+4. Product document infuenced?
+4.1Interface FMEA-relevant/IFMEA: | √no/否 | yes/是 Note_
+4.2.Product FMEA-relevant/DFMEA: | n0否
+Deslen12么
+yes/是 Note
+4.3.Special Charecteristics /PSC:(针对C Sample) | no香 | yes/是 Note
+4.IMDSrelevant: (针对C Sample) | n0否 | yes/是 Note
+4.5 Offer drawing relevant：(针对C Sample) | n0香 yes/是 Noteno/否 yes/是 Note
+.6. TCD relevant:
+5. Changed parts Stock& treatment/需（只针对涉及到已经生产过的零件变更，新 | 要变更零件的库存统计和处理？放行零件和本条不相关） NA.(新零件放行,不涉及库存）涉及到已经生产过的零件变更
+RBCW RDC（外库)和RBCW仓库，是否有库存， | 无库存 有库存，库存数量
+供应商处（已做好，未发货）是否有库存，
+无库 □有库存，库存数量
+PUE 2
+LPN工厂是否有库存， | 无库存 □有库存，库存数量
+在途，运输中是否有库存 | 无库存 □有库存，库存数量
+被影响到的实物库存处理指示：（设计工程师组织会议讨论） | □可以继续使用完 □改制后使用 □报废
+Design /签名
+□ 元 报废成
+PUE1本
+已装车件处理方法（发客户或标定车等）(SMP组织会议讨论） | 改制 更换其他(单独说明）
+6. Influence on supplier part?
+变更后的零件，生产可行性供应商是否确认？反馈？
+PUE签%
+涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/查yes/是
+Does the change influence on purchasing cost？变更对采购成本的影响？□increase/增加，金额 decrease/降低，金额 □]no change/不变
+7. DFMA & Sample prodcution OPL?
+只更快催化剂，无需DFMA
+oes
+8. Influence on LPN manufacturing&assembly process?
+方P
+□increase/增加，金额 decrease/降低，金额 no change/不变
+9. PM alignment? (Influence on project Timeline? Cost?);是否同意对项目时间和成本的影响 需求样品订单数量
+PM/名2
+10.如果涉及以下情况需TCR3审核确认。不涉及则 NA. RB□库存报废，金额平购成本增加，金额牛产成本增加，金额
+CW7TCR3
+DesignTeam Leader | ENG-CV1 | PUR
+Signare
+TCR3Signature/签名：
+Signature/签名5 | Signature/签名: | 8\$
+
+[image] 
+
+##
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z50181Y-00 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00 | 0DOCUNIT：F01Z50181Y-00DOCWELDING:F01Z50181Z-00DOCCANNING:F01Z50182A-00DOCCATALYST:F01Z50178L
+变更原因 | 系统工程师要求释放DOC65g新鲜样件做实验;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z50181Y-51 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+2ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00 | ®DOCUNIT:F01Z50181Y-51DOCWELDING:F01Z50181Z-51DOCCANNING:F01Z50182A-51DOCCATALYST:F01Z50178R-00
+变更原因 | 系统工程师要求释放DOC65g老化样件做实验;
+风险点（影响） | 无
+验证方法 | 无
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X9-25 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+d ODOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00 | DOCUNIT:F01Z5017X9-25DOCWELDING:F01Z5017XA-25DOCCANNING: F01Z5017NM-25DOCSUBSTRATE: F01Z501887
+变更原因 | 系统工程师要求释放DOC可拆白载体样件做标定实验;
+无无
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017X9-31 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+TDOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00
+deDOCUNIT：F01Z5017X9-31DOCWELDING:F01Z5017XA-31DOC CANNING:F01Z5017NM-31DOCCATALYST: F01Z50178N-31
+变更原因 | 系统工程师要求释放DOC可拆1/6涂敷样件做标定实验;
+无无
+验证方法
+
+零件号 | 零件名称
+JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+DOCUNIT:F01Z5017X9-01DOCWELDING:F01Z5017XA-01DOCCANNING:F01Z5017NM-01DOCCATALYST:F01Z50178N-00 | d文DOCUNIT：F01Z5017X9-32DOCWELDING:F01Z5017XA-32DOCCANNING:F01Z5017NM-32DOCCATALYST:F01Z50178N-32
+变更原因 | 系统工程师要求释放DOC可拆1/8涂敷样件做标定实验;
+无无
+
+suBu Auedoid
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01Z5017XC-25 | DOC UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+laldSDPFUNIT:F01Z5017XC-01SDPFWELDING: F01Z5017XD-01SDPFCANNING:F01Z5017NP-01SDPFCATALYST:F01Z5017WM-00 | laldSDPFUNIT:F01Z5017XC-25SDPFWELDING:F01Z5017XD-25SDPFCANNING:F01Z5017NP-25SDPFSUBSTRATE:F01Z5102DF-00
+变更原因 | 系统工程师要求释放DPF可拆白载体样件做标定实验;
+风险点 （影响) | 无
+验证方法 | 无
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-36 | SCR UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前
+变更后
+变更原因 | 系统工程师要求释放SCR1/9涂敷样件做标定实验;
+无无
+验证方法
+
+##
+
+suBu Auedoid
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-37 | SCR UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+SCRUNIT:F01ZH003FV-02 SCRWELDING:F01Z5017W9-01 SCRCANNING: F01Z5017WA-01 | SCRUNIT:F01ZH003FV-37 SCRWELDING:F01Z5017W9-37
+SCR CANNING: F01Z5017WA-37 SCRCATALYST:F01Z501891 SCRCATALYST:F01Z50180N-37
+变更原因 | 系统工程师要求释放SCR1/10涂敷样件做标定实验;
+风险点（影响） 验证方法 | 无 无
+
+sau Auedoid
+
+零件号 | 零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-38 | SCR UNIT | JIM-493 | A | BOSCH/Customer
+变更描述 | 变更前 | 变更后
+变更原因 | 系统工程师要求释放SCR1/12涂敷样件做标定实验;
+无无
+
+##
+
+零件号
+零件名称 | Project | 样件阶段 | 变更来源
+F01ZH003FV-39 | SCR UNIT | JIM-493
+变更描述
+A
+变更前
+BOSCH/Customer
+变更后
+变更原因 | 系统工程师要求释放SCR1/15涂敷样件做标定实验;
+风险点(影响) | 无
+无
+
+##

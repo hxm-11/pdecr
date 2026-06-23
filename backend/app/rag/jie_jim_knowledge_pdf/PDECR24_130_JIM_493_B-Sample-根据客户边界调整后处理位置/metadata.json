@@ -1,0 +1,25 @@
+{
+  "case_id": "PDECR24_130",
+  "source_file": "PDECR24_130_JIM_493_B-Sample-根据客户边界调整后处理位置_origin.pdf",
+  "metadata": {
+    "dc_no": "24_130",
+    "date": "2024-11-09",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "B Sample"
+    ],
+    "change_type": "Customer request / 客户要求；Design optimization / 设计优化。",
+    "sample_type": "B Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPFUNIT: F01ZH003FU-03; SCRUNIT: F01ZH003FV-03",
+    "reason_for_change": "根据客户边界调整，后处理位置及零件随之更改；用于CP装车。",
+    "change_source": [
+      "Customer request",
+      "Design optimization"
+    ]
+  }
+}

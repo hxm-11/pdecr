@@ -1,0 +1,25 @@
+{
+  "case_id": "PDECR24_114",
+  "source_file": "PDECR24_114_JIM_493_origin.pdf",
+  "metadata": {
+    "dc_no": "24_114",
+    "date": "2024-09-29",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "B Sample"
+    ],
+    "change_type": "Customer request / 客户要求, Supplier request / 供应商请求",
+    "sample_type": "B Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC+SDPF 新鲜件：F01ZH003FU-02; SCR 新鲜件：F01ZH003FV-02",
+    "reason_for_change": "JIM493 新鲜件、老化件（可拆 + 不可拆）样件首次释放。",
+    "change_source": [
+      "Customer request",
+      "Supplier request"
+    ]
+  }
+}

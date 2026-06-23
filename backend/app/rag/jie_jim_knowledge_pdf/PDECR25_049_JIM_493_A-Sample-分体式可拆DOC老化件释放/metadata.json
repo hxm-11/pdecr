@@ -1,0 +1,26 @@
+{
+  "case_id": "PDECR25_049",
+  "source_file": "PDECR25_049_JIM_493_A-Sample-分体式可拆DOC老化件释放_origin.pdf",
+  "metadata": {
+    "dc_no": "25_049",
+    "date": "2025-05-22",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "A Sample"
+    ],
+    "change_type": "Other / 其他（系统测试样件）",
+    "sample_type": "A Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC可拆件（JM50g老化件）：F01Z5018U4-51; DOC可拆件（BASF50g老化件）：F01Z5018U7-51; DOC可拆件（JM65g老化件）：F01Z5018UA-51; DOC可拆件（BASF65g老化件）：F01Z5018UD-51; DOC+SDPF白载体件（混合器加隔板）：F01ZH003R3-01",
+    "reason_for_change": "系统工程师催化剂测试样件放行。",
+    "change_source": [
+      "Customer request",
+      "Design optimization",
+      "Other"
+    ]
+  }
+}

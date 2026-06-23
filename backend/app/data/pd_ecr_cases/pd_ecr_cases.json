@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "case_no": "T0004-PD-ECR_JP360cooler",
+    "title": "JP360 cooler change",
+    "create_date": "2026-06-10",
+    "product_class": "Injector",
+    "customer": "Bosch internal",
+    "project": "JP360",
+    "part_number": "F03Z...",
+    "initiator": "Fan Xiaofeng",
+    "department": "Engineering",
+    "change_reason": "Design optimization based on historical issue.",
+    "current_design": "Current design description.",
+    "change_proposal": "Proposed design change.",
+    "impact_analysis": "Impact analysis content.",
+    "verification_plan": "Validation plan content.",
+    "implementation_plan": "Implementation checklist content.",
+    "source_file": "T0004-PD-ECR_JP360cooler.md"
+  }
+]

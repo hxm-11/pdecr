@@ -1,0 +1,57 @@
+.vscode/*
+!.vscode/extensions.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Frontend dependencies and build output
+node_modules/
+frontend/dist/
+frontend_pre/dist/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Local app state and generated artifacts
+backend/app/app.db
+backend/app/uploads/
+backend/app/reports/
+backend/app/static/uploads/
+backend/app/static/reports/
+backend/app/rag/generated_reports/
+backend/app/rag/uploaded_images/
+backend/app/rag/vector_store/
+backend/app/rag/models/
+*.zip
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env
+.env.*
+!.env.example
+
+node_modules/
+dist/
+build/
+
+backend/app/rag/output/
+backend/app/rag/pdecr_knowledge/
+
+my-video/

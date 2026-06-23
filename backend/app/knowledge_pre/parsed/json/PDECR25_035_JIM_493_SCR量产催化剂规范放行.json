@@ -1,0 +1,77 @@
+{
+  "case_id": "PDECR25_035",
+  "source_file": "jie_jim_knowledge_pdf/PDECR25_035_JIM_493_SCR量产催化剂规范放行/ocr/PDECR25_035_JIM_493_SCR量产催化剂规范放行.md",
+  "metadata": {
+    "dc_no": "25_035",
+    "date": "2025-04-17",
+    "mcr_no": "",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "sample_type": [],
+    "sample_type_candidates": [
+      "A Sample",
+      "B Sample",
+      "C Sample",
+      "D Sample"
+    ],
+    "change_type_raw": [],
+    "change_type_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ],
+    "source_type": "mineru_markdown",
+    "language": "zh/en",
+    "requires_validation": "need_human_check"
+  },
+  "business_fields": {
+    "responsible_person": "卢松",
+    "responsible_department": "",
+    "approval_persons": [
+      "YANG Guangtuo",
+      "JIA Kebin",
+      "LUO jing"
+    ],
+    "approval_departments": [],
+    "affected_documents": [],
+    "check_engineer": "杨拓"
+  },
+  "change_basic": {
+    "change_part_product_name": "F01Z5018CM-01SCR催化剂量产规范释放",
+    "reason_for_change": "JIM493项目催化剂PPAP计划排在2025年5月份，需要SCR催化剂量产规范，用于量产催化剂放行",
+    "change_source_selected": [],
+    "change_source_candidates": [
+      "Customer request",
+      "Supplier request",
+      "Design optimization",
+      "Correction",
+      "Process",
+      "Other"
+    ]
+  },
+  "modules": {
+    "change_request_description": "Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-04-17th\n25_035\nCustomer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:\nSample status / 样件状态： A Sample ]B Sample ]C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nF01Z5018CM-01SCR催化剂量产规范释放\nReason ofchanges/更改理由(简要描述)：\nJIM493项目催化剂PPAP计划排在2025年5月份，需要SCR催化剂量产规范，用于量产催化剂放行\nChange from/变更来源：\nCustomer request /客户要求 回 | Supplier request /供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | ZHANG Shengchang,Zhang Hanquan, SHEN Weibo, LI Yicen,\nYANG Guangtuo, JIA Kebin, LUO jing,\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nif impact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢松 | Date /日期:\nSignature/签名:\n2025.4.18\nCheck/校对工程师 | 杨拓 | Date /日期：\nSignature/签名：\n2025.04.18\nDescription of Change/更改描述：（下面空白处请列出详细的变更前后对比)变更前\nUnit\nWC Loading SCR (Front)\n$2 | all parts\nWR(Ra)WC Loading ASc | $An^{-09-10%6) | $21$ | $20200 | $allpatsal patsallpatts\nPt loadingCu content (Front) | $2.$\\31$\nCu content Rear) | 132.3161.7\nASC Zone lengthWashcoat achesin M ATRmethod) | 40.8 60.8 | 1pcs\n% | 。 | 2 | 1pcs\nell lealn | 96 | 0 | all pas\nRBCW/ENG-CV1\nsignature/签 | 张江泉Date/日期 2025.01.17\nNo.ndex | 1Issue版本 | Date日期 | Department部门 | Author作者\nIst dr a | f2025.01.17 | ENG-CV1 | ZHANG Hanquan\n1049X1070en\n\nBOSCH 博世 Confidential | 设计变更评审表 |",
+    "impact_analysis": "Design Change Review Sheet | Version 13 Effective date: 2025-04-17th\nDesign Change Request No. 25_035\nif Yes, System impaction evaluation? 如果是，系统影响评估？ | 1.Function&Performance wil be influenced?/系统性能影响？ | yes/是 | no/否\n如果是初次样件放行，空白处请说明样件目的） | 否，ATSPL验证已成\nWhether need sample to test? Plan? 是否需要样件进行验证？计划？ | NA | srstm签名被\nWhether the catalyst information is confirmed? 催化剂信息是否确认？（物料号、图纸、SPEC) | spe已3行 | catals名张江泉\n2.Interface&boundary(internal and customer) wil be influenced?/接&边界(内部和客户)影响？ | yes/是 | no/否\nif impact custmer,whether get confirm from customer side? 请说明影响和是否得到客户的确认？ | 青去\n3. Mechanical strength&Durability will be influenced?/机械强度&可靠性影响？ | □yes/是 | no/否\nIf Yes， How to evaluate？Plan?如果是，请说明影 响和如何评估，计划？ (例如：仿真分析等)\nWhether need sample to test? Plan? 是否需要样件进行验证？计划？\n4.Product document infuenced?\n4.1 Interface FMEA-relevant/IFMEA: | no/否 | yes/是 Note\n4.2.Product FMEA-relevant /DFMEA: | no香 | yes/是 | Note 有主项日起释 | Does\n4.3.Special Charecteristics /PSC:(针对C Sample) 4.4.IMDS relevant： (针对C Sample) | no/否 | yes/是 | Note\nno/否 | yes/是 Note\n4.5 Offer drawing relevant(针对C Sample) | no/否 | yes/是 | Note\n4.6.TCD relevant: | no/否 yes/是 Note | □ NA.(新零件放行，不涉及库存)\n5. Changed pars Stock& treatment/需要变更零件的库存统计和处理？ | （只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） | 涉及到口经生 | 过的零 件变更\nRBCW RDC（外库）和RBCW仓库，是否有库存， | □ 无库存 | 有库存，库存数量\n供应商处（已做好，未发货）是否有库存， | 无库存 | □有库存，库存数量 | t\nLPN工厂是否有库存， | □ 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | 无库存 | □有库存，库存数量 □改制后使用 | PUE 名\n被影响到的实物库存处理指示： （设计工程师组织会议讨论) | □可以继续使用完 改制费用 | □ | □报废 报废成 | Design/签名\n已装车件处理方法（发客户或标定车等） (SMP组织会议讨论） | □ 改制 | 更换 | PUE /签名\n其他（单独说明）;\n6. Influence on supplier part? Was this change confirmed with Purchasing(Supplier) for feasibility? Feedback from Supplier? 变更后的零件，生产可行性供应商是否确认？反馈？ | 李岑\nInfluence on purchasing part delivery time？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.\nDoes the change infuence on purchasing cost？变更对采购成本的影响？\n7. DFMA & Sample prodcution OPL? no chanae/不变\n必要时附加DFMA文件\n催化剂提前放行无需DFMA 002\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\nInfuence on project&product deliver time？对项&产品交货时间的影响？\nInfluence on manufacturing cost /对产成本的影响？\n9.Pn aligien Tituenceon project Timeline?Cost?) 是否同意对项目时间和成本的影响 34小s ;需求样品订单数量\n10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.: 库存报废，金额 采购成本增加，金额 生产成本增加,金额\nDesign Team Leader Signature /签名 | ENG-CV1 Signature /签名： | PUR | TCR3 | 5友福\n加 | Signature /签 | Signature /签名：",
+    "full_clean_text": "BOSCH博世Confidential | Product Development Design Change Request产品开发设计变更请求 | Version 15Effective date:2025-04-17th\n25_035\nCustomer project Name/客户项目名称： JIM-493 | MCR No./ MCR号:\nSample status / 样件状态： A Sample ]B Sample ]C Sample D Sample\nChange part&product Name/更改零部件产品的名称(简要描述)\nF01Z5018CM-01SCR催化剂量产规范释放\nReason ofchanges/更改理由(简要描述)：\nJIM493项目催化剂PPAP计划排在2025年5月份，需要SCR催化剂量产规范，用于量产催化剂放行\nChange from/变更来源：\nCustomer request /客户要求 回 | Supplier request /供应商请求 Design optimization /设计优化\nCorrection/更正(错误) | Other/其他\nChange inform to/变更通知人： | ZHANG Shengchang,Zhang Hanquan, SHEN Weibo, LI Yicen,\nYANG Guangtuo, JIA Kebin, LUO jing,\nWhether this change impact others component or product 此变更是否影响到其他部件和产品： yes/是 no/否\nif impact others product， Whether others projects&product change or not？如果影响，别的部件和产品是否也需要同时变更？\nDesign/设计工程师 | 卢松 | Date /日期:\nSignature/签名:\n2025.4.18\nCheck/校对工程师 | 杨拓 | Date /日期：\nSignature/签名：\n2025.04.18\nDescription of Change/更改描述：（下面空白处请列出详细的变更前后对比)变更前\nUnit\nWC Loading SCR (Front)\n$2 | all parts\nWR(Ra)WC Loading ASc | $An^{-09-10%6) | $21$ | $20200 | $allpatsal patsallpatts\nPt loadingCu content (Front) | $2.$\\31$\nCu content Rear) | 132.3161.7\nASC Zone lengthWashcoat achesin M ATRmethod) | 40.8 60.8 | 1pcs\n% | 。 | 2 | 1pcs\nell lealn | 96 | 0 | all pas\nRBCW/ENG-CV1\nsignature/签 | 张江泉Date/日期 2025.01.17\nNo.ndex | 1Issue版本 | Date日期 | Department部门 | Author作者\nIst dr a | f2025.01.17 | ENG-CV1 | ZHANG Hanquan\n1049X1070en\n\nBOSCH 博世 Confidential | 设计变更评审表 | Design Change Review Sheet | Version 13 Effective date: 2025-04-17th\nDesign Change Request No. 25_035\nif Yes, System impaction evaluation? 如果是，系统影响评估？ | 1.Function&Performance wil be influenced?/系统性能影响？ | yes/是 | no/否\n如果是初次样件放行，空白处请说明样件目的） | 否，ATSPL验证已成\nWhether need sample to test? Plan? 是否需要样件进行验证？计划？ | NA | srstm签名被\nWhether the catalyst information is confirmed? 催化剂信息是否确认？（物料号、图纸、SPEC) | spe已3行 | catals名张江泉\n2.Interface&boundary(internal and customer) wil be influenced?/接&边界(内部和客户)影响？ | yes/是 | no/否\nif impact custmer,whether get confirm from customer side? 请说明影响和是否得到客户的确认？ | 青去\n3. Mechanical strength&Durability will be influenced?/机械强度&可靠性影响？ | □yes/是 | no/否\nIf Yes， How to evaluate？Plan?如果是，请说明影 响和如何评估，计划？ (例如：仿真分析等)\nWhether need sample to test? Plan? 是否需要样件进行验证？计划？\n4.Product document infuenced?\n4.1 Interface FMEA-relevant/IFMEA: | no/否 | yes/是 Note\n4.2.Product FMEA-relevant /DFMEA: | no香 | yes/是 | Note 有主项日起释 | Does\n4.3.Special Charecteristics /PSC:(针对C Sample) 4.4.IMDS relevant： (针对C Sample) | no/否 | yes/是 | Note\nno/否 | yes/是 Note\n4.5 Offer drawing relevant(针对C Sample) | no/否 | yes/是 | Note\n4.6.TCD relevant: | no/否 yes/是 Note | □ NA.(新零件放行，不涉及库存)\n5. Changed pars Stock& treatment/需要变更零件的库存统计和处理？ | （只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） | 涉及到口经生 | 过的零 件变更\nRBCW RDC（外库）和RBCW仓库，是否有库存， | □ 无库存 | 有库存，库存数量\n供应商处（已做好，未发货）是否有库存， | 无库存 | □有库存，库存数量 | t\nLPN工厂是否有库存， | □ 无库存 | □有库存，库存数量\n在途，运输中是否有库存 | 无库存 | □有库存，库存数量 □改制后使用 | PUE 名\n被影响到的实物库存处理指示： （设计工程师组织会议讨论) | □可以继续使用完 改制费用 | □ | □报废 报废成 | Design/签名\n已装车件处理方法（发客户或标定车等） (SMP组织会议讨论） | □ 改制 | 更换 | PUE /签名\n其他（单独说明）;\n6. Influence on supplier part? Was this change confirmed with Purchasing(Supplier) for feasibility? Feedback from Supplier? 变更后的零件，生产可行性供应商是否确认？反馈？ | 李岑\nInfluence on purchasing part delivery time？对采购件交货时间的影响？\n涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消.\nDoes the change infuence on purchasing cost？变更对采购成本的影响？\n7. DFMA & Sample prodcution OPL? no chanae/不变\n必要时附加DFMA文件\n催化剂提前放行无需DFMA 002\n8. Influence on LPN manufacturing&assembly process?\nFeedback from manufacturing engineer？生产制造装配是否影响，反馈？\nInfuence on project&product deliver time？对项&产品交货时间的影响？\nInfluence on manufacturing cost /对产成本的影响？\n9.Pn aligien Tituenceon project Timeline?Cost?) 是否同意对项目时间和成本的影响 34小s ;需求样品订单数量\n10.如果涉及以下情况需TCR3审核确认。不涉及则 NA.: 库存报废，金额 采购成本增加，金额 生产成本增加,金额\nDesign Team Leader Signature /签名 | ENG-CV1 Signature /签名： | PUR | TCR3 | 5友福\n加 | Signature /签 | Signature /签名："
+  },
+  "source_trace": {
+    "raw_md_file": "jie_jim_knowledge_pdf/PDECR25_035_JIM_493_SCR量产催化剂规范放行/ocr/PDECR25_035_JIM_493_SCR量产催化剂规范放行.md",
+    "confidence": "medium",
+    "need_human_check": [
+      "checkboxes",
+      "sample_status_selected",
+      "change_source_selected",
+      "signature_names"
+    ],
+    "cleaning_notes": [
+      "Converted HTML tables to pipe-separated text rows.",
+      "Normalized whitespace, HTML entities, and image placeholders.",
+      "Extracted common PD-ECR fields with deterministic regex and label rules.",
+      "Kept full_clean_text so RAG can still retrieve content not captured by fields."
+    ]
+  }
+}

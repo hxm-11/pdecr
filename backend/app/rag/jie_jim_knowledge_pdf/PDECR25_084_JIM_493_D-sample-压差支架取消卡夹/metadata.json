@@ -1,0 +1,24 @@
+{
+  "case_id": "PDECR25_084",
+  "source_file": "PDECR25_084_JIM_493_D-sample-压差支架取消卡夹_origin.pdf",
+  "metadata": {
+    "dc_no": "25_084",
+    "date": "2025-07-02",
+    "customer_project": [
+      "JIM-493"
+    ],
+    "mcr_no": "",
+    "sample_status": [
+      "D Sample"
+    ],
+    "change_type": "Customer request / 客户要求",
+    "sample_type": "D Sample"
+  },
+  "change_basic": {
+    "change_part_product_name": "DOC-DPF: F01ZH003FU-00",
+    "reason_for_change": "客户要求压差支架取消卡夹",
+    "change_source": [
+      "Customer request"
+    ]
+  }
+}

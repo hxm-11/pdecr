@@ -1,0 +1,54 @@
+{
+  "case_id": "T0009",
+  "source_file": "backend/app/rag/excel_source/T0009-PDECR_0053_Signed.pdf",
+  "metadata": {
+    "dc_no": "PDECR_0053",
+    "date": "2025-11-05",
+    "mcr_no": "N/A",
+    "customer_project": [
+      "57cc e-compressor"
+    ],
+    "affected_product_no": [
+      "57cc e-compressor F01Z 7P0 013-04 CNHTC",
+      "57cc e-compressor F01Z 7P0 00H-01 XCMG",
+      "57cc e-compressor F01Z 7P0 012-04 Geely FD",
+      "57cc e-compressor F01Z 7P0 012 Geely SOP",
+      "57cc e-compressor F01Z 7P0 014-02 Qingling H47",
+      "57cc e-compressor F01Z 7P0 01E-01 Qingling 4.5T BEV"
+    ],
+    "component_no": [
+      "F01Z7D0013-01",
+      "F01Z7D000H-01",
+      "F01Z7D0012-01",
+      "F01Z7D0012",
+      "F01Z7D0014-01",
+      "F01Z7D001E-01",
+      "F01Z7S0003",
+      "F01Z7S0003-01"
+    ],
+    "sample_type": "FD",
+    "change_type_raw": "Other",
+    "change_type": "other",
+    "source_type": "pdf",
+    "language": "zh",
+    "requires_validation": "yes"
+  },
+  "business_fields": {
+    "responsible_person": "ZHU Qiangmin(RBCD/EIS3",
+    "responsible_department": "RBCD/EIS3",
+    "approval_persons": [
+      "导入清单",
+      "测试记录"
+    ],
+    "approval_departments": [],
+    "affected_documents": []
+  },
+  "modules": {
+    "change_request_description": "Step 1: Change request Basic information Customer project Name/客户项目名称： 57cc e-compressor MCR No./ MCR号: NA Affect Product No./产品 Component No./零部件号： 57cc e-compressor F01Z7P0 013-04CNHTC57cc e-compressor F01Z 7P0 00H-01 XCMG57cc e-compressor F01Z 7P0 012-04 Geely FD57cc e-compressor F01Z 7P0 012 Geely SOP57cc e-compressor F01Z 7P0014-02 Qingling H4745cc e-compressor F01Z 7P0 01E-01 Qingling 4.5T BEV Offerdrawing: EOL function PMB:F01Z7D0013-01 F01Z7S0003F01Z7D000H-01 F01Z7S0003-01F01Z7D0012-01F01Z7D0012F01Z7D0014-01F01Z7D001E-01 Sample type/样品类型： □A □B□C FD Initiator/发起人： ZHU Qiangmin(RBCD/EIS3) Reason of changes /更改理由： 1.改善拔出时保护帽冲击。2.PMB符合生产实际。 Customer request /客户要求 Supplier request/供应商请求□ Design optimization /设计优化□ Correction/更正(错误) □ P rocess /工艺 Other/其它回\n\nStep 2: Change proposal Change discription Before Change After Change1.更改Offerdrawing中关于压缩机出厂时内部充氮压力，从0.15MPaA~0.25MPaA更改为0.13MPaA~0.19MPaA. When the compressor leaves the factory it is internally sealed withit is discovered that the compressor has no positive pressure andand use压缩机出厂时内部划入O.13MPaA~0.19MPaA的干燥氮气，开启使用时发现压缩机没有正压力，应道知博世公司质量部门确认后使用After removing theinletandoutlet protective caps.it shouldbe Afton nomnvinn tho intot and nutlot nnntartivo rane it chould ho2.更改功能检测规范3.1.4测试点中关于进口温度变更，从24.0±3℃改为25.0±6℃。3.1.4Test points/测试点 3.1.4 Test points/测试点 Test Setting value Re sult speificatio n Seting value Result specificatio Set Speed设定转速[pm] Inlet pressure进口压力[barg] Inlettemperature进口温度{c} outtet出[barg] DC Power[A} Rise time升压时间 → Test SAS[rpm] S[barg] Inlettemperature进口温度pc Outetpressure出口压力[bare] DC Powercurent直流电流[A] Ag (1000150) (1.0±0.2) (25.0±6) (8.3±1.5) (0.9±0.2) Record （1000±150) (24.0±3) (0.9±0.2) BOSCH Development Changes in PD-PhaseDoc. Approval: RBCD/EISConfidential 产品开发更改 Effectivedate:20250610DC No./开发更改编号:PDECR_0053Date/日期：20251105",
+    "impact_analysis": "Step 3.1 Impact analysis /影响分析 1.Function Performance wil beinfuenced?/产品功能性能影响？ yes/是 no/否 If Yes, product impaction evaluation?如果是，产品影响评估？(如果是初次样件放行，空白处请说明样件目的) Trom米强敏 Whether need sample to test? Plan? 不需要是否需要样件进行验证？计划？ 2.1 Interface boundary to customer wil be influenced?/接口 边界是否影响客户？ yes/是 □no/香 Please explain the impact and whether it has been confirmed by the customer?请说offrrawing充压变需告知客明影响和是否得到客户的确认？ customerPM名 2.2 Interface boundary to intermal wil be infuenced?/接口 边界是否影响内部？ yes/是 □no/否 If Yes, internal impaction evaluation? 1.测试线需要更改设定如果是，内部影响是否评估？(例如：测试接头，噪音测试夹具等) .改不向压力下保护帽弹出状态试验，见附件。 rostm 朱强 3. Mechanical srengthDurability wil b infuenced?/产品可靠性、鲁棒性影响？ yes/是 no/否 IfYes， How to evaluate？Plan?如果是，请说明影响和如何评估，计划？ NA（例如：仿真分析等） Validation/签名 Whether need new sample or fixture to test? Plan?是否需要样件以及定制/改制夹具进行验证？计划？ 4.Others component wil be infuenced?/影响其它零部件？ 不影响 Ifyes， Which componentswillchange in parallel?？如果影响，哪些零部件也需要同时变更？ 5.Manufactory/assemblytesting wilbe infuenced?/加工，装配，测试是否影响？ Feedback from manufacturing engineer?生产制造装配是否影响，反馈？ lheProduction/签名_ 测试线需要更改设定参数，1.功能测试PMB进温度判断标准更改；2.充氮压设置需要更改。 infuence on project product delivery time？对项目 产品交货时间的影响？ 无 Infuence on manufacturing cost/对生产成本的影响？ Increase/增加，金额 □Decrease/降低，金额 No change/不变 6.Influence on supplier par?Feedback from SupplierPurchasing? NA.(新零件放行，不涉及库存) Was thisheonfitrhasingpierforfeaibilityafSpp变更后的零件，生产可行性供应商是否确认？反馈？ PPS forpurchase parts/签名(Belowonly for DCAC)DCAC Mech.签名DCAC软/硬件签名Quality：签名 Influence on purchasing part delivery time？对采购件交货时间的影响？ 涉及到变更的零件，博世已出PR，供应商还未来得及生产的订单，是否已经通知供应商取消. no/否□yes/是 7：Does the change influence on purchasing cost？变更对采购成本的影响？ □Increase/增加，金额_ □Decrease/降低，金额_ no change/不变 8.Changed parts Stock treatment/需要变更零件的库存统计和处理？（只针对涉及到已经生产过的零件变更，新放行零件和本条不相关） □涉及到已经生产过的零件变更 RBCW仓库和RBCD仓库，是否有库存， 无库存 有库存，库存数量 允许混合发货_ cos/签名inAafn 供应商处是否有库存， 无库存 □有库存，库存数量 erg cmilbogPP /签名 在途，运输中是否有库存 无库存 □有库存，库存数量_ 被影响到的实物库存处理指示：（设计工程师组织会议讨论） 可以继续使用完 □改制后使用 □报废 pps for purchase parts/签名Quality for DCAC:/签名 □改制费用 □报废成本 9. DFMA Sample prodcution OPL? no/否yes/是 DFMA会议纪要，请附件说明；如果变更无需DFMA或前期PDECR已经做过DFMA，请说明并列出之前的PD_ECR号AnyOPLnotclosedfromlast time sample production?上次样件生产是否仍有OPL没有完成？请说明或者附件说明 10.PMalimentnueerojetTieint是否同意对项目时间和成本的影响 ：需求样品订单数量 名11.6. 11.如果涉及以下情况需TCR3 审核确认。不涉及则 N.A□库存报废，金额_ □采购成本增加，金额 □生产成本增加，金额",
+    "validation_trial_run_plan": "Step 3.2Quality Assurance Items/检价项 1 Validations 验证 Plan fnish date 划完成日期 Resp.person负责人 Comments备注 ammu Capability Studies_CMK NA □Capability Studies_ MSA NA MAE release NA QMN Cleanness test NA QZ test NA □200hPDL NA Test program or fixture etc. 功能台架进气温度范围需要更新 1 Interface FMEA-relevant/IFMEA: □no/否yes/是 Resp.person: Due date 2025.11.07 2.Product FMEA-relevant /DFMEA: no/否 yes/是 Resp.person: Due date: 3. Special Charecteristics relevantPSC: no/否 yes/是 Resp.person: Due date: no/否 yes/是 Resp.person: 4. IMDS relevant: Due date: 5 Offer drawing relevant: no/否 yes/是 Resp.person:Fan ChangeLi PingzhengWang Xiaolong Due date 2025.11.07 6.TCD relevant: □no/否 yes/是 Qian Jiong/Sun Xudong Due date 2025.11.15 7. Norm, WB, HF...relevant: □no/否yes/是 Resp.person: Wu Zhaohui Due date 2025.11.10\n\nStep4 Technical feasilility Validation plan aproval/技术可行性验证计划批准 Design team leader Development SM SMP-TMS RB CW/TCRR3 Signature/签名：本你06.1. Signature /签名：0 2005.1126 Signature /签名 225发福Signature/签名： Development Changes in PD-Phase 产品开发更改 Confidential 产品升发更改 Effective date:20250610DC No./开发更改编号: PDECR_0053Date /日期： 20251105",
+    "validation_trial_run_result": "Step5 Documents release/文档发布 1. Documents release (drawing,ofer drawing， Bom, Spec.)/文档发布(图纸，客户图纸，…) Development confirmation/研发确认： Date /日期：",
+    "implementation_task_plan": "Step 6.1 Implementation check list/导入清单 Departments YIN Description Responsible Due date Development N Change BOMs Drawings Documents in POE system Y Inform documents update (check work-on can met requirements) All designe 2025.11.0 Y Update Offer drawing, TCD, D-FMEA All design e2025.11.0 N Norm, WB, HF. N MoC, IMDS. Manufacturing N Related (Production/Testing) equipement be ready on site Y Related (Production/Testing) program be ready Wu Zhaohui 2025.11.1 N Related (Production/Testing) tooling / cutting /fixture etc. be ready N Old tooling / cutting / fixture disposal N Old materials disposal N Planner update the planning sheet N Update FMEA N Update CP/FC (Control Plan/Flow Chart) Y Update WI/PDS(Include attachments.)》测试记录表 Wu Zhaohui 2025.11.1 N First batch Mark, Special Mark (Inside Package) N First batch Mark, Special Mark (Outside Package) Y Training Wu Zhaohui 2025.11.10 cOS N Confirm the storage of old parts and coordinate the introductiondate for new part (RM) N Confirm the delivery date of old parts and first delivery of new parts (FG) N Check sample orders which affected:material order of CKD N Confirm production scheduling according to the alignment, anychanges share the information to MOEx,MFE N Confirm the old stock/ do prioritize delivery and inventory handling N Inform the first delivery to PMO PPS(PPS- PMQ/PQA) N Check sample orders which afected: material order of purchasing N Inform internal related departments(COS, MFE, MOEx)with N Update incoming inspection plan QMM1 N Update testing programe on testing equipment N Update inspection plan for CKD parts EIS4 Y Distribute the Offer drawing, TCD to customer Qian Jiong 2025.11.07 LOP N Check 10 digit material order PMO N Check sample orders which affected: Customer order N Inform Customer the first delivery information",
+    "implementation_task_result": "Step6.2 Implementation date /执行日期Planned implementation date:变更计划执行日期 _2025.11.07_ ![](images/ee0e8d30893b2d31a838e4705b25bb1e237c77df92d099884703748970c0000e.jpg) ![](images/927f305d44f387a53abd5cd73c42b9f04b067b815161d5fc25eebe4f83e63ce7.jpg) © Bosch Powertrain System Internal C-SC1 | RBCD/EIS 释放声，冲击力不大 拆保护帽时能听到压力 ![](images/bc31d4961dbc949735e4d2667c02b2921adc6c3fc65cd822c0ba36c368f3ebe8.jpg) 0.25MPaA 拆保护帽时无明显压力释放声，只在拔出时有“叭”声 0.13MPaA拆保护帽时能听到压力释放声，且冲击力很小 ![](images/8d227ee019f4a9dc09bcc0a6705b56be2d4b27c9e9ef25b2b491130494617eb1.jpg) ![](images/29fc03acbcfc34bd08da09e7742e726c78ace1316c34d2b49612f48fe206b9ad.jpg) ![](images/5a80b6b1d91872a8d56233ab3355d89ebafe39d0d1a10e565efb834ddc3f6d36.jpg) Background：产线和质量部反馈当前设定压力过高，在拆保护帽时，保护帽冲击力较入。基于不同压力下的试验结果，决定降低充氮压力：0.15MPaA\\~0.25MPaA→0.13MPaA\\~0.19MPaA。 结果：压力在0.13MPaA\\~0.19MPaA之间，能够在拧松保护帽过程中感受到压缩机内正压力，并且其冲击力也不大。 重要备注：Offer drawing中要求压缩机拧松保护帽开启使用时需要能感受到内部正压力。 , also regarding any disposal, exploitation, reproduction, editing, distibutin, as Wel as in he event or appncauons tor mnnsakr picpony wgn 拆保护帽时能听到压力释放声，冲击力不大 ![](images/9f2447b0a3ebbc0bdcd9d1c166ad622e62925fe562ced75f69d220914a5161fa.jpg) ![](images/6254aea06dbbfeb72ad88817e488700f09d104b0677d9219ebe44c0cbac93de0.jpg) 12月份进气温度监控187组测试数据@57CC ![](images/460268de24f286e81ccf92950a22a17e0c1e1b177b23a325021d82172a8553b2.jpg) ![](images/0a7206bc59c14034a82cc830bc5b05c6f00783956b18e580e1156e822061271c.jpg) 下线气测PMB中进气温度定义范围：24.0±3℃。由规范定义初期为数不多的儿台压缩机数据J仞始值工过压缩空气由FCM集中供气，空气温度受季节影响较大，当前气测台架只有气体干燥作用，无控温作用。基了过去将近一年的实际生产数据，调整进气温度设定至25.0±6℃，对压缩机下线功能检查无影响。 压力保压能力良好。 结果：压缩机内部2.5bar压力下半个月内几乎无泄露，说明当前保护帽装配状态下内部 ![](images/e8370afc85d1a1d9422dee4c7f1708eb9187a5bea415ae7f0c48632f406731fd.jpg) 压缩机内部压力泄露试验 充氮压力试验"
+  }
+}

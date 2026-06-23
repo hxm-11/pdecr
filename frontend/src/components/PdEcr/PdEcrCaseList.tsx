@@ -297,7 +297,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
       : `Loaded ${historyResult.relatedCases.length} similar PD-ECR case(s).`,
   )
   const [isImporting, setIsImporting] = useState(false)
-  const [openingCaseId, setOpeningCaseId] = useState<string | null>(null)
   const [allRows, setAllRows] = useState<PdEcrCaseRow[]>(() =>
     isAllListView ? [] : buildPdEcrCaseRows(historyResult),
   )
@@ -387,7 +386,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
 
   const openCase = async (row: PdEcrCaseRow) => {
     const caseNo = row.sourceFile || row.id
-    setOpeningCaseId(row.id)
     setStatus(`Opening modules for ${row.id}...`)
 
     try {
@@ -479,8 +477,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
           to: "/pd-ecr/content",
         })
       }
-    } finally {
-      setOpeningCaseId(null)
     }
   }
 
@@ -853,10 +849,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                               <ExternalLink className="size-3" /> PDF
                             </button>
                           ) : null}
-                          <button type="button" onClick={() => openCase(row)} disabled={openingCaseId === row.id}
-                            className={hasPdfForRow(row) ? "inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-stone-200 bg-stone-50 px-1.5 py-0.5 text-xs font-medium text-stone-600 hover:bg-stone-100 transition" : "whitespace-nowrap font-semibold text-amber-700 hover:text-amber-900 text-xs"}>
-                            {openingCaseId === row.id ? "..." : hasPdfForRow(row) ? "Modules" : row.link}
-                          </button>
                         </div>
                       </td>
                     </tr>

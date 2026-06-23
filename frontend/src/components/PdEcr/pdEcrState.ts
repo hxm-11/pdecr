@@ -5,6 +5,15 @@ import type {
   PdEcrModules,
 } from "@/lib/pdEcrApi"
 
+export const CHANGE_SOURCE_OPTIONS = [
+  { value: "Customer request", label: "Customer request / 客户要求" },
+  { value: "Supplier request", label: "Supplier request / 供应商请求" },
+  { value: "Design optimization", label: "Design optimization / 设计优化" },
+  { value: "Correction", label: "Correction / 更正(错误)" },
+  { value: "Process", label: "Process / 工艺" },
+  { value: "Other", label: "Other / 其它" },
+] as const
+
 export type PdEcrModuleId =
   | "basic_information"
   | "change_description"
@@ -133,7 +142,7 @@ export const pdEcrModuleMeta: Partial<
     subtitle: "Content 1 / 6",
   },
   change_description: {
-    title: "Affection analysis",
+    title: "Impact analysis",
     backendKeys: ["change_description", "change-description"],
     subtitle: "Content 2 / 6",
   },
@@ -163,7 +172,7 @@ export const pdEcrModuleMeta: Partial<
     subtitle: "Content 1 / 6",
   },
   "impact-analysis": {
-    title: "Affection analysis",
+    title: "Impact analysis",
     backendKeys: ["change_description", "impact-analysis", "affection_analysis"],
     subtitle: "Content 2 / 6",
   },
@@ -268,7 +277,7 @@ export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   },
   {
     id: "impact-analysis",
-    title: "Affection analysis",
+    title: "Impact analysis",
     subtitle: "Content 2 / 6",
     summary: "等待生成影响分析。",
     data: {
@@ -362,8 +371,8 @@ const v01ModuleMeta: Partial<
       "变更来源、原因、发起人、当前方案、变更方案、影响部门和 before/after 信息。",
   },
   "impact-analysis": {
-    title: "Affection analysis",
-    subtitle: "Affection analysis",
+    title: "Impact analysis",
+    subtitle: "Impact analysis",
     summary: "基于历史相似 CASE 生成影响分析答案，供业务工程师校准。",
   },
   "validation-plan": {
@@ -404,7 +413,10 @@ function cloneModuleForV01(
     id,
     title: meta.title,
     subtitle: meta.subtitle,
-    summary: source?.summary || source?.description || meta.summary,
+    summary: cleanPdEcrDisplayText(
+      source?.summary || source?.description,
+      meta.summary,
+    ),
     description: source?.description,
     data:
       source?.data && Object.keys(source.data).length
@@ -476,6 +488,36 @@ function stringifyValue(value: unknown): string {
   }
 
   return String(value)
+}
+
+function looksLikeMarkdownTemplate(value: string) {
+  return (
+    /^#{1,6}\s/m.test(value) ||
+    /\|[^|\n]+\|[^|\n]*\|/.test(value) ||
+    /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/m.test(value)
+  )
+}
+
+export function cleanPdEcrDisplayText(value: unknown, fallback = "") {
+  const text = stringifyValue(value).trim()
+  if (!text || text === "-") return fallback
+
+  if (looksLikeMarkdownTemplate(text)) {
+    return fallback
+  }
+
+  return (
+    text
+      .replace(/[^\s,;|()<>[\]{}"']+\.md\b/gi, "")
+      .replace(/^#{1,6}\s*/gm, "")
+      .replace(/^\s*[-*+]\s+/gm, "")
+      .replace(/\*\*(.+?)\*\*/g, "$1")
+      .replace(/\*(.+?)\*/g, "$1")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\[(.+?)\]\(.*?\)/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim() || fallback
+  )
 }
 
 function normalizeData(module?: PdEcrModule): Record<string, string> {
@@ -587,12 +629,12 @@ export function normalizeModules(
         id,
         title: meta.title,
         subtitle: backendModule.subtitle || meta.subtitle,
-        summary:
+        summary: cleanPdEcrDisplayText(
           backendModule.summary ||
-          backendModule.description ||
-          firstMeaningfulValue(data) ||
-          fallbackModule?.summary ||
-          "暂无内容",
+            backendModule.description ||
+            firstMeaningfulValue(data),
+          fallbackModule?.summary || "暂无内容",
+        ),
         data,
         sourceCases: backendModule.source_cases || (data.source_cases as string[]),
         sourceFiles: backendModule.source_files || (data.source_files as string[]),
@@ -618,11 +660,10 @@ export function normalizeModules(
     const fallbackModule = fallback.find((module) => module.id === id)
     const backendModule = pickBackendModule(modules, id)
     const data = normalizeData(backendModule)
-    const summary =
-      backendModule?.description ||
-      firstMeaningfulValue(data) ||
-      fallbackModule?.summary ||
-      "暂无内容"
+    const summary = cleanPdEcrDisplayText(
+      backendModule?.description || firstMeaningfulValue(data),
+      fallbackModule?.summary || "暂无内容",
+    )
 
     return {
       id,

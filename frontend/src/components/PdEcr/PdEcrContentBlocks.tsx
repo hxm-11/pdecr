@@ -27,6 +27,10 @@ function normalizePreviewToken(text: string) {
     .trim()
 }
 
+function displayModuleSubtitle(value: string) {
+  return /\.md\b/i.test(value) ? "Generated module" : value
+}
+
 function isTemplateNoiseLine(line: string, module: PdEcrDisplayModule) {
   const normalizedLine = normalizePreviewToken(line)
   const normalizedTitle = normalizePreviewToken(module.title)
@@ -99,7 +103,7 @@ function GeneratedBlock({
         <ArrowRight className="size-4 text-stone-400 transition group-hover:translate-x-1 group-hover:text-amber-700" />
       </div>
       <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-stone-500">
-        {module.subtitle}
+        {displayModuleSubtitle(module.subtitle)}
       </p>
       <h2 className="mt-1 text-xl font-semibold tracking-normal text-stone-900">
         {module.title}

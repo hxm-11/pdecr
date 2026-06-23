@@ -21,6 +21,7 @@ from app.services.pd_ecr_case_service import now_utc
 APP_DIR = Path(__file__).resolve().parents[1]
 RAG_DIR = APP_DIR / "rag"
 DATA_DIR = APP_DIR / "data"
+KNOWLEDGE_DIR = RAG_DIR / "knowledge"
 
 
 def file_hash(path: Path) -> str:
@@ -314,4 +315,98 @@ def import_historical_sources(
         "updated_sources": updated_sources,
         "skipped_sources": skipped_sources,
         "warnings_by_file": warnings_by_file,
+    }
+
+
+def ingest_uploaded_file(
+    *,
+    session: Session,
+    file_path: Path,
+    original_filename: str,
+    current_user: User,
+) -> dict[str, Any]:
+    """Parse an uploaded Excel or PDF file, create a PdEcrCase, and return parsed data."""
+    import shutil
+
+    from app.core.config import settings
+    from app.rag.excel_to_markdown import convert_excel as _convert_excel
+    from app.rag.pdf_to_markdown import convert_pdf as _convert_pdf
+
+    suffix = file_path.suffix.lower()
+    knowledge_md_path: Path | None = None
+    parsed_text = ""
+    parsed_by = ""
+
+    # ---- Parse file ----
+    if suffix in (".xlsx", ".xlsm", ".xls"):
+        # Excel: use existing converter but target a temp knowledge dir
+        _convert_excel(file_path)
+        knowledge_md_path = KNOWLEDGE_DIR / f"{file_path.stem}.md"
+        parsed_by = "excel_to_markdown"
+    elif suffix == ".pdf":
+        _convert_pdf(file_path)
+        knowledge_md_path = KNOWLEDGE_DIR / f"{file_path.stem}.md"
+        parsed_by = "pdf_to_markdown"
+    else:
+        raise ValueError(f"Unsupported file type: {suffix}")
+
+    if knowledge_md_path and knowledge_md_path.exists():
+        parsed_text = safe_read_text(knowledge_md_path)
+
+    # ---- Extract metadata ----
+    metadata = extract_metadata(file_path, parsed_text)
+    case_no = metadata["case_no"]
+
+    # ---- Create or get case ----
+    existing_case = session.exec(
+        select(PdEcrCase).where(PdEcrCase.case_no == case_no)
+    ).first()
+    case = get_or_create_case(
+        session=session,
+        metadata=metadata,
+        source_type="file_upload",
+        current_user=current_user,
+    )
+    is_new = existing_case is None
+
+    # ---- Save source document record ----
+    upsert_source_document(
+        session=session,
+        case=case,
+        path=file_path,
+        metadata=metadata,
+        warnings=[],
+        current_user=current_user,
+    )
+
+    # ---- Fill module content from parsed text ----
+    merge_source_into_modules(
+        session=session,
+        case=case,
+        path=knowledge_md_path or file_path,
+        text=parsed_text,
+        metadata=metadata,
+    )
+
+    write_activity(
+        session=session,
+        action="case.file_uploaded",
+        case_id=case.id,
+        actor_id=current_user.id,
+        target_id=str(case.id),
+        metadata={
+            "original_filename": original_filename,
+            "parsed_by": parsed_by,
+            "is_new_case": is_new,
+        },
+    )
+    session.commit()
+
+    return {
+        "case_id": str(case.id),
+        "case_no": case_no,
+        "is_new": is_new,
+        "parsed_by": parsed_by,
+        "metadata": metadata,
+        "content_preview": parsed_text[:2000],
     }

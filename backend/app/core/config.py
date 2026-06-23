@@ -60,6 +60,9 @@ class Settings(BaseSettings):
     # Set USE_SQLITE=true for local development without PostgreSQL
     USE_SQLITE: bool = False
 
+    # Upload directory for PD-ECR file imports
+    UPLOAD_DIR: str = "uploads"
+
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
@@ -67,7 +70,7 @@ class Settings(BaseSettings):
             return "sqlite:///./pd_ecr.db"
         return str(
             PostgresDsn.build(
-                scheme="postgresql+psycopg",
+                scheme="postgresql+psycopg2",
                 username=self.POSTGRES_USER,
                 password=self.POSTGRES_PASSWORD,
                 host=self.POSTGRES_SERVER,

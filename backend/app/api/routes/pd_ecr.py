@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Dict
 from urllib.parse import quote
 
-from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from jinja2 import BaseLoader, Environment
@@ -67,7 +67,7 @@ from app.services.pd_ecr_case_loader import (
 )
 from app.services.pd_ecr_export import export_v1_draft
 from app.services.pd_ecr_generation import generate_grounded_draft, get_cached_draft
-from app.services.pd_ecr_import_service import import_historical_sources
+from app.services.pd_ecr_import_service import import_historical_sources, ingest_uploaded_file
 from app.services.pd_ecr_realtime_service import pd_ecr_connection_manager
 from app.services.pd_ecr_retrieval import retrieve_similar_cases
 from app.services.pd_ecr_schema import GeneratedDraft, NewPdEcrRequest
@@ -1549,6 +1549,71 @@ def create_pd_ecr_case_comment(
             if comment.created_at
             else None,
         }
+    }
+
+
+@router.post("/cases/upload-file")
+async def upload_pd_ecr_case_file(
+    file: UploadFile,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Upload a single Excel or PDF file to create a PD-ECR case.
+
+    Returns parsed metadata, case info, and content preview.
+    The file is automatically added to the FAISS knowledge index in the background.
+    """
+    import threading
+    from app.core.config import settings
+
+    # Validate file type
+    filename = file.filename or "unknown"
+    suffix = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if suffix not in ("xlsx", "xlsm", "xls", "pdf"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type: .{suffix}. Supported: .xlsx, .xls, .pdf",
+        )
+
+    # Save uploaded file to uploads directory
+    upload_dir = Path(settings.UPLOAD_DIR)
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    safe_name = f"{uuid.uuid4().hex}_{filename}"
+    file_path = upload_dir / safe_name
+
+    try:
+        content = await file.read()
+        file_path.write_bytes(content)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {exc}")
+
+    # Parse and ingest (sync, but ok for typical file sizes)
+    try:
+        result = ingest_uploaded_file(
+            session=session,
+            file_path=file_path,
+            original_filename=filename,
+            current_user=current_user,
+        )
+    except Exception as exc:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to process file: {exc}")
+
+    # Trigger background FAISS index rebuild
+    def _rebuild():
+        try:
+            from app.rag.build_index import rebuild_index
+            rebuild_index()
+        except Exception:
+            traceback.print_exc()
+
+    threading.Thread(target=_rebuild, daemon=True).start()
+
+    return {
+        "status": "ok",
+        "filename": filename,
+        **result,
     }
 
 

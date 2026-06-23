@@ -27,6 +27,7 @@ import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import {
   buildGeneratedResult,
   buildHistoryResult,
+  CHANGE_SOURCE_OPTIONS,
   loadGeneratedResult,
   loadHistoryResult,
   resolveRowPdfUrl,
@@ -50,6 +51,7 @@ type CreationData = {
   changeType: string
   initiator: string
   source: string
+  sourceNote: string
   reason: string
   currentDesign: string
   changeProposal: string
@@ -94,6 +96,7 @@ const defaultCreationData: CreationData = {
   changeType: "",
   initiator: "",
   source: "",
+  sourceNote: "",
   reason: "",
   currentDesign: "",
   changeProposal: "",
@@ -125,7 +128,7 @@ const stepConfigs: StepConfig[] = [
       },
       {
         label: "补充信息",
-        fields: ["date", "mcrNo", "changeType", "reason", "currentDesign", "changeProposal", "targetCloseDate", "changeDescription"],
+        fields: ["date", "mcrNo", "changeType", "sourceNote", "reason", "currentDesign", "changeProposal", "targetCloseDate", "changeDescription"],
       },
     ],
     kind: "input",
@@ -154,6 +157,7 @@ const fieldLabels: Record<keyof CreationData, string> = {
   changeType: "Change type",
   initiator: "Initiator",
   source: "Change source",
+  sourceNote: "Source note",
   reason: "Reason",
   currentDesign: "Current design",
   changeProposal: "Change proposal",
@@ -210,6 +214,7 @@ function buildInput(data: CreationData): PdEcrInput {
     change_proposal: data.changeProposal,
     remarks: [
       `Source: ${data.source}`,
+      `Source note: ${data.sourceNote}`,
       `Target close date: ${data.targetCloseDate}`,
       data.changeDescription,
       data.impactAnalysis,
@@ -513,7 +518,7 @@ export function StepTemplatePreview({
     )
   }
 
-  if (title.includes("Affection analysis")) {
+  if (title.includes("Impact analysis") || title.includes("Affection analysis")) {
     const rows = [
       "Function & Performance",
       "Interface and Appearance",
@@ -702,6 +707,82 @@ export function StepTemplatePreview({
   }
 
   return null
+}
+
+function SourceDropdown({
+  selected,
+  onChange,
+  highlighted,
+}: {
+  selected: string
+  onChange: (value: string) => void
+  highlighted?: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  })
+
+  const selectedSet = new Set(
+    selected.split(",").map((s) => s.trim()).filter(Boolean),
+  )
+
+  const toggle = (value: string) => {
+    const next = selectedSet.has(value)
+      ? [...selectedSet].filter((s) => s !== value)
+      : [...selectedSet, value]
+    onChange(next.join(", "))
+  }
+
+  const displayText =
+    selectedSet.size > 0
+      ? [...selectedSet].map((v) => CHANGE_SOURCE_OPTIONS.find((o) => o.value === v)?.label || v).join("、")
+      : "Select change source..."
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className={`flex h-10 w-full items-center justify-between rounded-lg border px-3 text-left text-sm shadow-none transition ${
+          open
+            ? "border-amber-500 ring-2 ring-amber-100"
+            : highlighted ? "border-amber-300 bg-amber-50" : "border-stone-300 bg-white"
+        }`}
+      >
+        <span className={selectedSet.size > 0 ? "truncate text-stone-900" : "text-stone-400"}>
+          {displayText}
+        </span>
+        <span className="ml-2 shrink-0 text-stone-400">▼</span>
+      </button>
+      {open && (
+        <div className="absolute z-20 mt-1 w-full rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+          {CHANGE_SOURCE_OPTIONS.map((opt) => (
+            <label
+              key={opt.value}
+              className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-amber-50"
+            >
+              <input
+                type="checkbox"
+                checked={selectedSet.has(opt.value)}
+                onChange={() => toggle(opt.value)}
+                className="accent-amber-600"
+              />
+              {opt.label}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export function PdEcrCreationWorkflow() {
@@ -1016,13 +1097,19 @@ export function PdEcrCreationWorkflow() {
                           const fieldId = `pd-ecr-${field}`
                           const highlighted = Boolean(group.highlight)
                           return (
-                            <label key={field} htmlFor={fieldId}
+                            <label key={field} htmlFor={field === "source" ? undefined : fieldId}
                               className={fieldIsLong(field) ? "space-y-2 md:col-span-2" : "space-y-2"}
                             >
                               <span className={`text-sm font-semibold ${highlighted ? "text-amber-800" : "text-stone-700"}`}>
                                 {fieldLabels[field]}
                               </span>
-                              {fieldIsLong(field) ? (
+                              {field === "source" ? (
+                                <SourceDropdown
+                                  selected={data[field]}
+                                  onChange={(value) => updateField(field, value)}
+                                  highlighted={highlighted}
+                                />
+                              ) : fieldIsLong(field) ? (
                                 <textarea id={fieldId} value={data[field]}
                                   onChange={(e) => updateField(field, e.target.value)}
                                   className={`min-h-24 w-full resize-y rounded-lg border px-4 py-3 text-sm leading-6 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 ${highlighted ? "border-amber-300 bg-amber-50 text-stone-900" : "border-stone-300 bg-white text-stone-900"}`}
@@ -1130,10 +1217,6 @@ export function PdEcrCreationWorkflow() {
                                     PDF
                                   </button>
                                 ) : null}
-                                <button type="button" onClick={() => openSimilarModules(item)}
-                                  className="text-xs text-stone-500 hover:text-stone-700 underline">
-                                  Modules
-                                </button>
                               </div>
                             </div>
                           )

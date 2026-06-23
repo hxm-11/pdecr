@@ -10,7 +10,7 @@ import {
   Sparkles,
   Upload,
 } from "lucide-react"
-import { type ReactNode, useEffect, useMemo, useState } from "react"
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Button } from "@/components/ui/button"
@@ -43,6 +43,21 @@ function textValue(module: PdEcrDisplayModule, keys: string[], fallback = "-") {
     }
   }
   return fallback
+}
+
+function isMarkdownFileName(value: unknown) {
+  return /\.md\b/i.test(String(value || ""))
+}
+
+function visibleFileRefs(values: unknown): string[] {
+  const list = Array.isArray(values) ? values : values ? [values] : []
+  return list
+    .map((value) => String(value || "").trim())
+    .filter((value) => value && !isMarkdownFileName(value))
+}
+
+function redactMarkdownFileNames(value: string) {
+  return value.replace(/[^\s,;|()<>[\]{}"']+\.md\b/gi, "")
 }
 
 function StatusLights({
@@ -427,7 +442,7 @@ function buildFirstApprovalRows(
   })
 }
 
-function FirstSignatureStatus({ module }: { module: PdEcrDisplayModule }) {
+export function FirstSignatureStatus({ module }: { module: PdEcrDisplayModule }) {
   const { rows, suggestedDate, source, targetCloseDate, leadDays } =
     useMemo(() => {
       const suggestions = getStoredApprovalSuggestions()
@@ -516,10 +531,15 @@ function GeneratedContent({ module }: { module: PdEcrDisplayModule }) {
     module.data.content || module.data.content_md || module.summary || "",
   ).trim()
   const templateFile = String(module.data.template_file || module.subtitle || "")
+  const visibleTemplateFile = isMarkdownFileName(templateFile)
+    ? ""
+    : templateFile
   const ragResults = Array.isArray(module.data.rag_retrieval_results)
     ? (module.data.rag_retrieval_results as Record<string, unknown>[])
     : []
-  const aiPrompt = String(module.data.ai_prompt || "").trim()
+  const aiPrompt = redactMarkdownFileNames(
+    String(module.data.ai_prompt || "").trim(),
+  ).trim()
 
   return (
     <div className="space-y-5">
@@ -530,12 +550,12 @@ function GeneratedContent({ module }: { module: PdEcrDisplayModule }) {
               Template rendered content
             </p>
             <h2 className="mt-1 text-xl font-semibold text-stone-900">
-              {templateFile || "Generated module"}
+              {visibleTemplateFile || "Generated module"}
             </h2>
           </div>
-          {templateFile ? (
+          {visibleTemplateFile ? (
             <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
-              {templateFile}
+              {visibleTemplateFile}
             </span>
           ) : null}
         </div>
@@ -658,7 +678,7 @@ function GeneratedContent({ module }: { module: PdEcrDisplayModule }) {
                     {String(item.case_id || `Case ${index + 1}`)}
                   </span>
                   <span className="text-stone-500">
-                    {String(item.source_file || "")}
+                    {visibleFileRefs(item.source_file).join(", ")}
                   </span>
                 </div>
                 <p className="mt-2 leading-6 text-stone-700">
@@ -775,7 +795,7 @@ const changeFieldSpecs: {
   },
 ]
 
-const departmentOptions = ["Sales", "ENG", "TEF", "Production", "QMM", "LOG"]
+export const departmentOptions = ["Sales", "ENG", "TEF", "Production", "QMM", "LOG"]
 
 function cleanModuleText(value: unknown) {
   return String(value ?? "")
@@ -1300,137 +1320,561 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
   )
 }
 
+function SourceTracePanel({ module }: { module: PdEcrDisplayModule }) {
+  const [open, setOpen] = useState(false)
+  const cases = (module.sourceCases || []).filter(Boolean)
+  const files = (module.sourceFiles || []).filter(Boolean)
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50">
+      {open ? (
+        <div className="w-80 rounded-lg border border-stone-200 bg-white shadow-xl">
+          <div className="flex items-center justify-between rounded-t-lg bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+            <span>Source Cases / 来源追溯</span>
+            <button onClick={() => setOpen(false)} className="text-stone-300 hover:text-white text-lg leading-none">&times;</button>
+          </div>
+          <div className="max-h-64 overflow-y-auto p-3 space-y-2">
+            {cases.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-stone-500 mb-1">Related Cases</p>
+                {cases.map((c, i) => (
+                  <div key={i} className="rounded border border-amber-100 bg-amber-50 px-2 py-1 text-xs text-stone-700">
+                    {String(c)}
+                  </div>
+                ))}
+              </div>
+            )}
+            {files.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-stone-500 mb-1 mt-2">Source Files</p>
+                {files.map((f, i) => (
+                  <div key={i} className="truncate rounded border border-stone-200 bg-stone-50 px-2 py-1 text-xs text-stone-600">
+                    {String(f)}
+                  </div>
+                ))}
+              </div>
+            )}
+            {!cases.length && !files.length && (
+              <p className="text-xs text-stone-400">No source cases available</p>
+            )}
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-semibold text-amber-700 shadow-lg hover:bg-amber-100 transition"
+        >
+          <span>📋</span> Source Trace
+        </button>
+      )}
+    </div>
+  )
+}
+
 export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
-  const impactLabels = [
-    "Function & Performance influenced",
-    "Interface and Appearance influenced",
-    "Reliability and robustness influenced",
-    "Other component influenced",
-    "Manufactory / assembly / testing influenced",
-    "Influence on supplier part",
+  const impactItems = [
+    { en: "Function & Performance will be influenced?", zh: "产品功能性能影响?" },
+    { en: "Interface and Appearance will be influenced?", zh: "接口和外观影响?" },
+    { en: "Reliability and robustness will be influenced?", zh: "产品可靠性、鲁棒性影响?" },
+    { en: "Other components will be influenced?", zh: "其他零部件影响?" },
+    { en: "Manufactory / assembly / testing will be influenced?", zh: "加工、装配、测试影响?" },
+    { en: "Influence on supplier part?", zh: "供应商零件影响?" },
+    { en: "Influence on System / HW / SW / Calibration / Mechanical?", zh: "系统/硬件/软件/标定/机械影响?" },
+    { en: "Influence on cost?", zh: "对成本的影响?" },
   ]
-  const documentLabels = [
+  const docItems = [
     "Interface FMEA relevant / IFMEA",
     "Product FMEA relevant / DFMEA",
     "Special Characteristics relevant / PSC",
     "IMDS relevant",
     "Offer drawing relevant",
     "TCD relevant",
-    "Norm, WB, HF relevant",
+    "Norm, WB, HF... relevant",
+    "WI check",
   ]
+  const validationItems = [
+    "Trial Run", "Capability Studies CMK", "Capability Studies MSA",
+    "MAE release", "Cleanness test", "QZ test", "BOM check", "Test report", "PAV release",
+  ]
+  const stockDeliveryOptions = [
+    "Not affect",
+    "Use in other products",
+    "Scrap",
+    "Rework",
+    "Use up",
+    "Recall",
+  ]
+  const defaultStockDeliveryRows = [
+    {
+      label: "Raw materials",
+      zh: "原材料",
+      options: ["Not affect", "Use in other products", "Scrap", "Rework", "Use up"],
+      checked: ["Not affect"],
+      remark: "包含在途",
+    },
+    {
+      label: "Parts/Subassemble",
+      zh: "零件/分总成",
+      options: ["Not affect", "Use in other products", "Scrap", "Rework", "Use up"],
+      checked: ["Not affect"],
+      remark: "",
+    },
+    {
+      label: "Finished goods(inhouse)",
+      zh: "厂内成品",
+      options: ["Not affect", "Scrap", "Rework", "Use up"],
+      checked: ["Not affect"],
+      remark: "",
+    },
+    {
+      label: "Finished goods(RDCK外库)",
+      zh: "RDCK外库成品",
+      options: ["Not affect", "Scrap", "Rework", "Use up"],
+      checked: ["Not affect"],
+      remark: "",
+    },
+    {
+      label: "Finished goods(customer)",
+      zh: "客户处成品",
+      options: ["Not affect", "Recall", "Rework"],
+      checked: ["Not affect"],
+      remark: "包含在途",
+    },
+  ]
+  const approvalDepts = ["Development", "Purchasing", "MFE", "Quality", "COS", "MOEx", "LOG"]
 
   const storageKey = `pd-ecr-impact-analysis-${module.id}`
-  type DocRow = { label: string; no: boolean; yes: boolean; respPerson: string; dueDate: string }
+  type ImpactRow = { no: boolean; yes: boolean; confirmedBy: string; confirmedAt: string; desc: string }
+  type DocRow = { no: boolean; yes: boolean; respPerson: string; dueDate: string }
+  type ValRow = { checked: boolean; finishDate: string; respPerson: string; comments: string }
+  type ApprovalRow = { person: string; date: string }
+  type StockDeliveryRow = {
+    label: string
+    zh: string
+    options: string[]
+    checked: string[]
+    remark: string
+  }
 
-  const [impacts, setImpacts] = useState(() => {
-    const raw = localStorage.getItem(storageKey)
-    if (raw) {
-      try { const parsed = JSON.parse(raw); if (parsed.impacts) return parsed.impacts as typeof defaultImpacts } catch {}
-    }
-    return impactLabels.map((label, i) => ({
-      label,
-      no: i !== 0 && i !== 4,
-      yes: i === 0 || i === 4,
-      confirmedBy: (i === 0 || i === 4) ? "Engineer" : "",
-    }))
+  const defaultImpact = (): ImpactRow => ({ no: true, yes: false, confirmedBy: "", confirmedAt: "", desc: "" })
+  const defaultDoc = (): DocRow => ({ no: true, yes: false, respPerson: "", dueDate: "" })
+  const defaultVal = (): ValRow => ({ checked: false, finishDate: "", respPerson: "", comments: "" })
+  const defaultApproval = (): ApprovalRow => ({ person: "", date: "" })
+
+  const [impacts, setImpacts] = useState<ImpactRow[]>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.impacts?.length === 8) return p.impacts } catch {}
+    return impactItems.map(() => defaultImpact())
   })
-  const defaultImpacts = impactLabels.map((label, i) => ({
-    label, no: i !== 0 && i !== 4, yes: i === 0 || i === 4, confirmedBy: (i === 0 || i === 4) ? "Engineer" : "",
-  }))
-
   const [documents, setDocuments] = useState<DocRow[]>(() => {
-    const raw = localStorage.getItem(storageKey)
-    if (raw) {
-      try { const parsed = JSON.parse(raw); if (parsed.documents) return parsed.documents } catch {}
-    }
-    return documentLabels.map((label, i) => ({
-      label, no: i > 2, yes: i <= 2, respPerson: "", dueDate: "",
-    }))
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.documents?.length) return p.documents } catch {}
+    return docItems.map(() => defaultDoc())
+  })
+  const [validations, setValidations] = useState<ValRow[]>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.validations?.length) return p.validations } catch {}
+    return validationItems.map(() => defaultVal())
+  })
+  const [mixedDeliveries, setMixedDeliveries] = useState<string>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.mixedDeliveries) return p.mixedDeliveries } catch {}
+    return "YES"
+  })
+  const [mixedDeliveryRemark, setMixedDeliveryRemark] = useState<string>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.mixedDeliveryRemark) return p.mixedDeliveryRemark } catch {}
+    return "单机不混，整托可混"
+  })
+  const [firstDeliveryAnswer, setFirstDeliveryAnswer] = useState<string>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.firstDeliveryAnswer) return p.firstDeliveryAnswer } catch {}
+    return "维持跟先前一样"
+  })
+  const [stockDeliveryRows, setStockDeliveryRows] = useState<StockDeliveryRow[]>(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem(storageKey) || "")
+      if (p?.stockDeliveryRows?.length) return p.stockDeliveryRows
+    } catch {}
+    return defaultStockDeliveryRows
+  })
+  const [approvals, setApprovals] = useState<ApprovalRow[]>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.approvals?.length === 7) return p.approvals } catch {}
+    return approvalDepts.map(() => defaultApproval())
+  })
+  const [costNote, setCostNote] = useState(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.costNote) return p.costNote } catch {}
+    return ""
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const toggleImpact = (index: number, field: "no" | "yes") => {
-    setImpacts((prev) => prev.map((r, i) => i === index ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
-  }
-  const updateImpactConfirmedBy = (index: number, value: string) => {
-    setImpacts((prev) => prev.map((r, i) => i === index ? { ...r, confirmedBy: value } : r))
-  }
-  const toggleDocument = (index: number, field: "no" | "yes") => {
-    setDocuments((prev) => prev.map((r, i) => i === index ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
-  }
-  const updateDocumentField = (index: number, field: "respPerson" | "dueDate", value: string) => {
-    setDocuments((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
-  }
+  // Auto-save on data change (debounced 1s, skips initial render)
+  useEffect(() => {
+    const skip = !autoSaveTimer.current
+    if (skip) { autoSaveTimer.current = setTimeout(() => {}, 0); return }
+    setSaveStatus("Saving...")
+    clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => {
+      localStorage.setItem(storageKey, JSON.stringify({
+        impacts, documents, validations, mixedDeliveries, mixedDeliveryRemark,
+        firstDeliveryAnswer, stockDeliveryRows, approvals, costNote,
+      }))
+      setSaveStatus("Auto-saved")
+      setTimeout(() => setSaveStatus("Draft"), 2000)
+    }, 1000)
+    return () => clearTimeout(autoSaveTimer.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [impacts, documents, validations, mixedDeliveries, mixedDeliveryRemark, firstDeliveryAnswer, stockDeliveryRows, approvals, costNote])
 
-  const saveImpactAnalysis = () => {
-    localStorage.setItem(storageKey, JSON.stringify({ impacts, documents }))
-    setSaveStatus("Saved")
+  const navigate = useNavigate()
+
+  // Sync: when engineer fills "Confirmed by", auto-stamp on right approval panel
+  const updateImpact = (i: number, f: keyof ImpactRow, v: string) => {
+    setImpacts((p) => p.map((r, j) => {
+      if (j !== i) return r
+      const next = { ...r, [f]: v }
+      if (f === "confirmedBy" && v.trim() && !r.confirmedAt) {
+        next.confirmedAt = new Date().toISOString()
+      }
+      return next
+    }))
   }
+  const toggleImpact = (i: number, field: "no" | "yes") =>
+    setImpacts((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  const toggleDoc = (i: number, field: "no" | "yes") =>
+    setDocuments((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  const updateDoc = (i: number, f: keyof DocRow, v: string) =>
+    setDocuments((p) => p.map((r, j) => j === i ? { ...r, [f]: v } : r))
+  const updateVal = (i: number, f: keyof ValRow, v: string | boolean) =>
+    setValidations((p) => p.map((r, j) => j === i ? { ...r, [f]: v } : r))
+  const updateApproval = (i: number, f: keyof ApprovalRow, v: string) =>
+    setApprovals((p) => p.map((r, j) => {
+      if (j !== i) return r
+      const next = { ...r, [f]: v }
+      if (f === "person" && v.trim() && !r.date) next.date = new Date().toISOString().slice(0, 10)
+      return next
+    }))
+  const updateStockDeliveryRemark = (i: number, v: string) =>
+    setStockDeliveryRows((p) => p.map((r, j) => j === i ? { ...r, remark: v } : r))
+  const toggleStockDelivery = (i: number, option: string) =>
+    setStockDeliveryRows((p) => p.map((r, j) => {
+      if (j !== i) return r
+      const checked = r.checked.includes(option)
+        ? r.checked.filter((item) => item !== option)
+        : [...r.checked, option]
+      return { ...r, checked }
+    }))
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
-      <div className="space-y-5">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
-          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={saveImpactAnalysis}>Save changes</Button>
+    <div className="grid gap-5 xl:grid-cols-[4fr_1fr]">
+      {/* ═══ LEFT: scrollable Impact Analysis Content ═══ */}
+      <div className="min-w-0 space-y-5 pr-1" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+            <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-400 animate-pulse" : saveStatus === "Auto-saved" ? "bg-green-500" : "bg-amber-500"}`} />{saveStatus}
+          </span>
+          <Button type="button" variant="outline" size="sm" className="bg-white"
+            onClick={() => navigate({ to: "/pd-ecr/content" })}>
+            返回模块
+          </Button>
         </div>
-        <div className="overflow-hidden rounded-lg border border-stone-200">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-amber-600 text-white">
-              <tr>
-                <th className="px-3 py-2">Step 3.1 Impact analysis</th>
-                <th className="px-3 py-2">No</th>
-                <th className="px-3 py-2">Yes</th>
-                <th className="px-3 py-2">Confirmed by</th>
-              </tr>
-            </thead>
-            <tbody>
-              {impacts.map((row, index) => (
-                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
-                  <td className="px-3 py-2">{index + 1}. {row.label}</td>
-                  <td className="px-3 py-2"><input type="checkbox" checked={row.no} onChange={() => toggleImpact(index, "no")} /></td>
-                  <td className="px-3 py-2"><input type="checkbox" checked={row.yes} onChange={() => toggleImpact(index, "yes")} /></td>
-                  <td className="px-3 py-2"><input value={row.confirmedBy} onChange={(e) => updateImpactConfirmedBy(index, e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Engineer name" /></td>
+
+        {/* Step 3.1 Impact analysis */}
+        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+            <span className="mr-2 text-amber-400">Step 3.1</span>Impact Analysis / 影响分析
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                  <th className="w-8 px-3 py-2.5">#</th>
+                  <th className="px-3 py-2.5">Influence area / 影响范围</th>
+                  <th className="w-12 px-2 py-2.5 text-center">No</th>
+                  <th className="w-12 px-2 py-2.5 text-center">Yes</th>
+                  <th className="w-64 px-3 py-2.5">Remark / 备注</th>
+                  <th className="w-40 px-3 py-2.5">Confirmed by / 确认人</th>
                 </tr>
+              </thead>
+              <tbody>
+                {impacts.map((row, i) => (
+                  <tr key={impactItems[i].en} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                    <td className="px-3 py-2.5 text-xs text-stone-400">{i + 1}</td>
+                    <td className="px-3 py-2.5">
+                      <p className="text-sm font-medium text-stone-800">{impactItems[i].en}</p>
+                      <p className="text-xs text-stone-400">{impactItems[i].zh}</p>
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      <input type="checkbox" checked={row.no} onChange={() => toggleImpact(i, "no")} className="accent-stone-500 size-4" />
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      <input type="checkbox" checked={row.yes} onChange={() => toggleImpact(i, "yes")} className="accent-amber-600 size-4" />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <input value={row.desc} onChange={(e) => updateImpact(i, "desc", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                        placeholder="Remark / 备注" />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <div>
+                        <input value={row.confirmedBy} onChange={(e) => updateImpact(i, "confirmedBy", e.target.value)}
+                          className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Name" />
+                        {row.confirmedAt && <p className="mt-0.5 text-[10px] text-stone-400">{new Date(row.confirmedAt).toLocaleString()}</p>}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button type="button" onClick={() => setImpacts((p) => [...p, defaultImpact()])}
+            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+            + 添加影响项
+          </button>
+          {/* Cost note (item 8) */}
+          <div className="border-t border-stone-200 bg-amber-50/30 px-4 py-3">
+            <p className="text-sm font-semibold text-stone-700">8. Influence on cost / 对成本的影响</p>
+            <div className="mt-2 flex flex-wrap items-center gap-4">
+              {["Increase", "Decrease", "No change"].map((opt) => (
+                <label key={opt} className="flex items-center gap-1.5 text-sm">
+                  <input type="radio" name={`cost-${module.id}`} value={opt} checked={costNote === opt}
+                    onChange={(e) => setCostNote(e.target.value)} className="accent-amber-600" />{opt}
+                </label>
               ))}
-            </tbody>
-          </table>
+              <input value={costNote && !["Increase","Decrease","No change"].includes(costNote) ? costNote : ""}
+                onChange={(e) => setCostNote(e.target.value)}
+                className="h-8 flex-1 rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注说明..." />
+            </div>
+          </div>
         </div>
-        <div className="overflow-hidden rounded-lg border border-stone-200">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-amber-600 text-white">
-              <tr>
-                <th className="px-3 py-2">Step 3.3 Affected documents Check</th>
-                <th className="px-3 py-2">No</th>
-                <th className="px-3 py-2">Yes</th>
-                <th className="px-3 py-2">Resp. person</th>
-                <th className="px-3 py-2">Due date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {documents.map((row, index) => (
-                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
-                  <td className="px-3 py-2">{index + 1}. {row.label}</td>
-                  <td className="px-3 py-2"><input type="checkbox" checked={row.no} onChange={() => toggleDocument(index, "no")} /></td>
-                  <td className="px-3 py-2"><input type="checkbox" checked={row.yes} onChange={() => toggleDocument(index, "yes")} /></td>
-                  <td className="px-3 py-2"><input value={row.respPerson} onChange={(e) => updateDocumentField(index, "respPerson", e.target.value)} className="h-8 w-28 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Resp." /></td>
-                  <td className="px-3 py-2"><input type="date" value={row.dueDate} onChange={(e) => updateDocumentField(index, "dueDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
+
+        {/* Mixed Deliveries */}
+        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+            <span className="mr-2 text-amber-400">Step 3.1.9</span>Stock / Delivery Treatment / 库存发货处理
+          </div>
+          <div className="p-4">
+            <div className="overflow-x-auto rounded-md border border-stone-200">
+              <table className="min-w-250 w-full text-left text-sm">
+                <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                  <tr>
+                    <th className="w-72 px-3 py-2.5">Item / 项目</th>
+                    {stockDeliveryOptions.map((option) => (
+                      <th key={option} className="w-28 px-2 py-2.5 text-center normal-case">
+                        {option}
+                      </th>
+                    ))}
+                    <th className="min-w-64 px-3 py-2.5">Remark / 备注</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-t border-stone-200">
+                    <td className="px-3 py-2.5 font-medium text-stone-800">
+                      <p>Mixed Deliveries Permissible?</p>
+                      <p className="text-xs font-normal text-stone-400">改前改后是否可以混合供货？</p>
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      <label className="inline-flex items-center gap-1.5">
+                        <input type="radio" name={`mixed-${module.id}`} value="YES" checked={mixedDeliveries === "YES"}
+                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-amber-600" />
+                        YES
+                      </label>
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      <label className="inline-flex items-center gap-1.5">
+                        <input type="radio" name={`mixed-${module.id}`} value="NO" checked={mixedDeliveries === "NO"}
+                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-amber-600" />
+                        NO
+                      </label>
+                    </td>
+                    <td colSpan={stockDeliveryOptions.length - 2} className="px-2 py-2.5" />
+                    <td className="px-3 py-2.5">
+                      <input value={mixedDeliveryRemark} onChange={(e) => setMixedDeliveryRemark(e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                    </td>
+                  </tr>
+                  <tr className="border-t border-stone-200 bg-stone-50/50">
+                    <td className="px-3 py-2.5 font-medium text-stone-800">
+                      <p>How to deal with 1st delivery after change?</p>
+                      <p className="text-xs font-normal text-stone-400">改后第一批货物的交货要求?</p>
+                    </td>
+                    <td colSpan={stockDeliveryOptions.length + 1} className="px-3 py-2.5">
+                      <input value={firstDeliveryAnswer} onChange={(e) => setFirstDeliveryAnswer(e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                        placeholder="Answer / 回答" />
+                    </td>
+                  </tr>
+                  {stockDeliveryRows.map((row, i) => (
+                    <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50/50">
+                      <td className="px-3 py-2.5 font-medium text-stone-800">
+                        <p>{row.label}</p>
+                        <p className="text-xs font-normal text-stone-400">{row.zh}</p>
+                      </td>
+                      {stockDeliveryOptions.map((option) => (
+                        <td key={option} className="px-2 py-2.5 text-center">
+                          {row.options.includes(option) ? (
+                            <input type="checkbox" checked={row.checked.includes(option)}
+                              onChange={() => toggleStockDelivery(i, option)}
+                              className="accent-amber-600 size-4" aria-label={`${row.label} ${option}`} />
+                          ) : null}
+                        </td>
+                      ))}
+                      <td className="px-3 py-2.5">
+                        <input value={row.remark} onChange={(e) => updateStockDeliveryRemark(i, e.target.value)}
+                          className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                          placeholder="Remark / 备注" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 3.2 Validation items */}
+        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+            <span className="mr-2 text-amber-400">Step 3.2</span>Quality Assurance / 验证项目
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                  <th className="w-8 px-3 py-2.5">☑</th>
+                  <th className="px-3 py-2.5">Validation / 验证项目</th>
+                  <th className="w-32 px-3 py-2.5">Plan finish date</th>
+                  <th className="w-28 px-3 py-2.5">Resp. person</th>
+                  <th className="px-3 py-2.5">Comments / 备注</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {validations.map((row, i) => (
+                  <tr key={i} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                    <td className="px-3 py-2.5 text-center">
+                      <input type="checkbox" checked={row.checked} onChange={(e) => updateVal(i, "checked", e.target.checked)} className="accent-amber-600 size-4" />
+                    </td>
+                    <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{validationItems[i]}</td>
+                    <td className="px-3 py-2.5">
+                      <input type="date" value={row.finishDate} onChange={(e) => updateVal(i, "finishDate", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <input value={row.respPerson} onChange={(e) => updateVal(i, "respPerson", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <input value={row.comments} onChange={(e) => updateVal(i, "comments", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button type="button" onClick={() => setValidations((p) => [...p, defaultVal()])}
+            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+            + 添加验证项
+          </button>
         </div>
-        <GeneratedContent module={module} />
-        <FirstSignatureStatus module={module} />
+
+        {/* Step 3.3 Affected documents */}
+        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+            <span className="mr-2 text-amber-400">Step 3.3</span>Affected Documents Check / 受影响文件检查
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                  <th className="w-8 px-3 py-2.5">#</th>
+                  <th className="px-3 py-2.5">Document / 文件</th>
+                  <th className="w-12 px-2 py-2.5 text-center">No</th>
+                  <th className="w-12 px-2 py-2.5 text-center">Yes</th>
+                  <th className="w-28 px-3 py-2.5">Resp. person</th>
+                  <th className="w-36 px-3 py-2.5">Due date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {documents.map((row, i) => (
+                  <tr key={i} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                    <td className="px-3 py-2.5 text-xs text-stone-400">{i + 1}</td>
+                    <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{docItems[i]}</td>
+                    <td className="px-2 py-2.5 text-center">
+                      <input type="checkbox" checked={row.no} onChange={() => toggleDoc(i, "no")} className="accent-stone-500 size-4" />
+                    </td>
+                    <td className="px-2 py-2.5 text-center">
+                      <input type="checkbox" checked={row.yes} onChange={() => toggleDoc(i, "yes")} className="accent-amber-600 size-4" />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <input value={row.respPerson} onChange={(e) => updateDoc(i, "respPerson", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <input type="date" value={row.dueDate} onChange={(e) => updateDoc(i, "dueDate", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button type="button" onClick={() => setDocuments((p) => [...p, defaultDoc()])}
+            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+            + 添加文件项
+          </button>
+        </div>
+
         <ToolFooter module={module} />
       </div>
-      <SignatureDashboard module={module} />
-      <AiTask>
-        <ol className="list-decimal space-y-2 pl-5">
-          <li>检索历史相似 CASE 的影响分析部分内容，自动生成影响分析问题条的答案。</li>
-          <li>AI 再次检查工程师调整后的内容，推介后续相关措施。</li>
-        </ol>
-      </AiTask>
+
+      {/* ═══ RIGHT: Leader Approval Panel (1/5, sticky) ═══ */}
+      <div className="hidden xl:block">
+        <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+          {/* Auto-synced approval panel */}
+          <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
+            <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
+              Step 4 / 7 Approval / 审批签字
+            </div>
+            <div className="divide-y divide-stone-100">
+              {approvalDepts.map((dept, i) => (
+                <div key={dept} className="px-4 py-2.5">
+                  <p className="text-xs font-semibold text-stone-700">{dept}</p>
+                  <input value={approvals[i].person} onChange={(e) => updateApproval(i, "person", e.target.value)}
+                    className="mt-1 h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                    placeholder="签批人..." />
+                  {approvals[i].date ? (
+                    <p className="mt-1 text-[10px] text-stone-400">{approvals[i].date}</p>
+                  ) : (
+                    <p className="mt-1 text-[10px] text-stone-300">待签字</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Impact confirmations feed into approval */}
+          <div className="rounded-lg border border-stone-200 bg-stone-50 p-4">
+            <p className="text-xs font-semibold text-stone-500">已确认的影响项</p>
+            <div className="mt-2 max-h-48 space-y-1.5 overflow-y-auto">
+              {impacts.filter((r) => r.confirmedBy).length === 0 && (
+                <p className="text-xs text-stone-400">左侧填写确认人后自动显示</p>
+              )}
+              {impacts.filter((r) => r.confirmedBy).map((r, i) => (
+                <div key={i} className="rounded border border-amber-100 bg-white px-2 py-1 text-xs">
+                  <span className="font-medium text-stone-700">{impactItems[i].en.slice(0, 40)}...</span>
+                  <div className="mt-0.5 flex items-center justify-between text-stone-500">
+                    <span>{r.confirmedBy}</span>
+                    <span className="text-[10px]">{r.confirmedAt ? new Date(r.confirmedAt).toLocaleString() : ""}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <SignatureDashboard module={module} />
+        </div>
+      </div>
+
+      {/* ═══ Floating Source Trace (bottom-right, collapsible) ═══ */}
+      {module.sourceCases?.length || module.sourceFiles?.length ? (
+        <SourceTracePanel module={module} />
+      ) : null}
     </div>
   )
 }
@@ -1916,59 +2360,6 @@ function renderModuleBody(module: PdEcrDisplayModule) {
   }
 }
 
-function SourceTracePanel({ module }: { module: PdEcrDisplayModule }) {
-  const sourceCases =
-    module.sourceCases ||
-    (Array.isArray(module.data.source_cases)
-      ? (module.data.source_cases as string[])
-      : [])
-  const sourceFiles =
-    module.sourceFiles ||
-    (Array.isArray(module.data.source_files)
-      ? (module.data.source_files as string[])
-      : [])
-  const warnings =
-    module.warnings ||
-    (Array.isArray(module.data.warnings)
-      ? (module.data.warnings as string[])
-      : [])
-  const needsHumanInput = Boolean(
-    module.needsHumanInput || module.data.needs_human_input,
-  )
-
-  return (
-    <aside className="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-4">
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border border-amber-300 bg-white px-3 py-1 text-xs font-semibold text-amber-800">
-          Source trace
-        </span>
-        {needsHumanInput ? (
-          <span className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold text-red-700">
-            Needs human input
-          </span>
-        ) : null}
-      </div>
-      <div className="mt-3 grid gap-3 text-sm text-stone-700 md:grid-cols-2">
-        <div>
-          <p className="font-semibold text-stone-900">Source cases</p>
-          <p className="mt-1 break-words">{sourceCases.join(", ") || "-"}</p>
-        </div>
-        <div>
-          <p className="font-semibold text-stone-900">Source files</p>
-          <p className="mt-1 break-words">{sourceFiles.join(", ") || "-"}</p>
-        </div>
-      </div>
-      {warnings.length ? (
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-amber-900">
-          {warnings.map((warning) => (
-            <li key={warning}>{warning}</li>
-          ))}
-        </ul>
-      ) : null}
-    </aside>
-  )
-}
-
 function loadModule(moduleId: string): {
   module?: PdEcrDisplayModule
   reportUrl?: string
@@ -2053,18 +2444,18 @@ export function PdEcrModuleDetail({ moduleId }: { moduleId: string }) {
         </div>
 
         <article className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="border-b border-stone-200 bg-white p-6 md:p-8">
-            <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="border-b border-stone-200 bg-white px-4 py-3">
+            <div className="flex items-center gap-3">
+              <div className="flex size-8 items-center justify-center rounded bg-amber-50 text-amber-600">
+                <FileText className="size-4" />
+              </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-600">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-amber-600">
                   {source}
                 </p>
-                <h1 className="mt-3 text-3xl font-semibold tracking-normal text-stone-900">
+                <h1 className="text-lg font-semibold text-stone-900">
                   {module.title}
                 </h1>
-              </div>
-              <div className="flex size-12 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-                <FileText className="size-6" />
               </div>
             </div>
             <p className="mt-4 max-w-5xl text-base leading-7 text-stone-600">

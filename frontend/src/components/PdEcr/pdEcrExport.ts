@@ -28,6 +28,27 @@ function formatExportValue(value: unknown): string {
   return JSON.stringify(value, null, 2)
 }
 
+function isMarkdownFileName(value: unknown) {
+  return /\.md\b/i.test(String(value || ""))
+}
+
+function withoutMarkdownFiles(values: unknown): string[] {
+  const list = Array.isArray(values) ? values : values ? [values] : []
+  return list
+    .map((value) => String(value || "").trim())
+    .filter((value) => value && !isMarkdownFileName(value))
+}
+
+function shouldExportModuleField(key: string, value: unknown) {
+  if (key === "source_files") return false
+
+  if (["source_files", "source_file", "template_file"].includes(key)) {
+    return withoutMarkdownFiles(value).length > 0
+  }
+
+  return !isMarkdownFileName(value)
+}
+
 export function downloadText(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type })
   const url = URL.createObjectURL(blob)
@@ -64,10 +85,17 @@ function buildPdEcrCaseRows(cases: PdEcrCaseSummary[]) {
 }
 
 function buildModuleFields(module: PdEcrDisplayModule) {
+  const visibleSourceFiles = withoutMarkdownFiles(
+    module.sourceFiles || module.data.source_files || [],
+  )
   const entries: [string, unknown][] = [
-    ...Object.entries(module.data),
+    ...Object.entries(module.data).filter(([key, value]) =>
+      shouldExportModuleField(key, value),
+    ),
     ["source_cases", module.sourceCases || module.data.source_cases || []],
-    ["source_files", module.sourceFiles || module.data.source_files || []],
+    ...(visibleSourceFiles.length
+      ? ([["source_files", visibleSourceFiles]] as [string, unknown][])
+      : []),
     ["needs_human_input", module.needsHumanInput ?? module.data.needs_human_input ?? false],
     ["warnings", module.warnings || module.data.warnings || []],
   ]
@@ -94,7 +122,7 @@ function buildModuleFields(module: PdEcrDisplayModule) {
 
 function buildModuleCard(module: PdEcrDisplayModule, index: number) {
   const sources = module.sourceCases || module.data?.source_cases || []
-  const files = module.sourceFiles || module.data?.source_files || []
+  const files = withoutMarkdownFiles(module.sourceFiles || module.data?.source_files || [])
   const needsHuman = module.needsHumanInput ?? module.data?.needs_human_input
   const warnings = module.warnings || module.data?.warnings || []
   const sourceLabel = Array.isArray(sources) && sources.length ? sources.join(", ") : Array.isArray(files) && files.length ? files.join(", ") : null

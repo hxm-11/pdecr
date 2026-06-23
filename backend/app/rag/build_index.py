@@ -317,5 +317,37 @@ def main():
     print("Meta:", META_PATH)
 
 
+_index_lock = None
+
+
+def _get_index_lock():
+    global _index_lock
+    if _index_lock is None:
+        import threading
+        _index_lock = threading.Lock()
+    return _index_lock
+
+
+def rebuild_index() -> bool:
+    """Rebuild the FAISS index. Returns True on success, False on failure.
+
+    Uses a lock to prevent concurrent rebuilds.
+    Safe to call from a background thread.
+    """
+    lock = _get_index_lock()
+    if not lock.acquire(blocking=False):
+        print("FAISS index rebuild already in progress, skipping.")
+        return False
+    try:
+        main()
+        return True
+    except Exception:
+        import traceback
+        traceback.print_exc()
+        return False
+    finally:
+        lock.release()
+
+
 if __name__ == "__main__":
     main()

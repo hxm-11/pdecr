@@ -361,6 +361,33 @@ export async function importHistoricalPdEcrCases(
   return res.data
 }
 
+export type PdEcrUploadResult = {
+  status: string
+  filename: string
+  case_id: string
+  case_no: string
+  is_new: boolean
+  parsed_by: string
+  metadata: Record<string, unknown>
+  content_preview: string
+}
+
+export async function uploadPdEcrFile(
+  file: File,
+): Promise<PdEcrUploadResult> {
+  const formData = new FormData()
+  formData.append("file", file)
+
+  const res = await pdEcrApi.post<PdEcrUploadResult>(
+    "/api/v1/pd-ecr/cases/upload-file",
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    },
+  )
+  return res.data
+}
+
 export async function retrievePdEcrSimilarCases(
   input: Record<string, unknown>,
   topK = 5,

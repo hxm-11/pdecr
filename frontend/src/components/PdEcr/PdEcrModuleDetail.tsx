@@ -879,16 +879,26 @@ function buildChangeDraft(module: PdEcrDisplayModule): ChangeDescriptionDraft {
   }
 }
 
-function getActiveRecordId() {
+function getActiveRecordId(): string {
   const active = loadActiveResult()
 
-  return (
+  const resolved =
     active.currentCase?.id ||
     active.reportUrl ||
     active.relatedCases[0] ||
-    active.source ||
-    "pd-ecr"
-  )
+    active.source
+
+  if (resolved) return resolved
+
+  // No case associated — use a persistent draft-id so multiple
+  // standalone drafts don't collide under a single fallback key.
+  const draftKey = "pd-ecr-draft-record-id"
+  const existing = localStorage.getItem(draftKey)
+  if (existing) return existing
+
+  const newId = `draft-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+  localStorage.setItem(draftKey, newId)
+  return newId
 }
 
 function changeDraftStorageKey(module: PdEcrDisplayModule) {

@@ -417,6 +417,78 @@ test("completes V1 flow from form retrieval to generated module export", async (
   ).toBeVisible()
 })
 
+test("uploads new PD-ECR files through staged document review before knowledge ingestion", async ({
+  page,
+}) => {
+  let stagedUploadCalled = false
+  let legacyUploadCalled = false
+
+  const stagedDocument = {
+    id: "staged-doc-001",
+    status: "draft",
+    original_filename: "new-change.xlsx",
+    file_type: "xlsx",
+    preview_pdf_url: null,
+    parsed_text:
+      "# Parsed PD-ECR\n\n| Field | Content |\n| --- | --- |\n| Product No. | F01ZH003G1-00 |",
+    metadata: {
+      product_no: "F01ZH003G1-00",
+      customer_project: "JIM-493",
+      change_source: "Purchasing",
+      reason: "RPP cost reduction",
+      change_description: "Second supplier change",
+    },
+    sections: [
+      {
+        index: 0,
+        heading: "Change description",
+        level: 1,
+        content: "Second supplier change",
+        page_no: 1,
+      },
+    ],
+    tables: [],
+    created_at: "2026-06-24T00:00:00Z",
+    updated_at: "2026-06-24T00:00:00Z",
+  }
+
+  await page.route("**/api/v1/pd-ecr/cases/upload-file", async (route) => {
+    legacyUploadCalled = true
+    await route.fulfill({
+      status: 500,
+      json: { detail: "Legacy upload should not be used" },
+    })
+  })
+
+  await page.route("**/api/v1/pd-ecr/documents/upload", async (route) => {
+    stagedUploadCalled = true
+    await route.fulfill({ json: stagedDocument })
+  })
+
+  await page.route("**/api/v1/pd-ecr/documents/staged-doc-001", async (route) => {
+    await route.fulfill({ json: stagedDocument })
+  })
+
+  await page.addInitScript(() => {
+    localStorage.setItem("access_token", "test-token")
+  })
+
+  await page.goto("/pd-ecr/new")
+
+  await page.locator('input[type="file"]').setInputFiles({
+    name: "new-change.xlsx",
+    mimeType:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    buffer: Buffer.from("fake excel bytes"),
+  })
+
+  await expect(page).toHaveURL(/\/pd-ecr\/documents\/staged-doc-001$/)
+  await expect(page.getByRole("heading", { name: "new-change.xlsx" })).toBeVisible()
+  await expect(page.getByText("AI 解析完成")).toBeVisible()
+  expect(stagedUploadCalled).toBe(true)
+  expect(legacyUploadCalled).toBe(false)
+})
+
 test("keeps change description editable and accepts before after attachments", async ({
   page,
 }) => {

@@ -64,11 +64,30 @@ def sanitize_case_no(value: str) -> str:
     return text or "PD-ECR-UNKNOWN"
 
 
-def extract_metadata(path: Path, text: str, raw_json: dict[str, Any] | None = None) -> dict[str, Any]:
+def extract_metadata(
+    path: Path,
+    text: str,
+    raw_json: dict[str, Any] | None = None,
+    table_metadata: dict[str, str] | None = None,
+    excel_metadata: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Extract structured metadata from parsed file content.
+
+    Priority order (highest first):
+    1. table_metadata  — MinerU markdown table parser (most reliable)
+    2. excel_metadata  — Excel native key-value extraction
+    3. raw_json        — pre-existing structured JSON (docling / metadata.json)
+    4. text regex      — fallback patterns on raw markdown text
+    """
     raw_json = raw_json or {}
-    metadata = raw_json.get("metadata") if isinstance(raw_json.get("metadata"), dict) else {}
-    business = raw_json.get("business_fields") if isinstance(raw_json.get("business_fields"), dict) else {}
-    merged: dict[str, Any] = {**metadata, **business}
+    json_metadata = raw_json.get("metadata") if isinstance(raw_json.get("metadata"), dict) else {}
+    json_business = raw_json.get("business_fields") if isinstance(raw_json.get("business_fields"), dict) else {}
+    merged: dict[str, Any] = {
+        **(table_metadata or {}),   # Tier 1: MinerU table parser
+        **(excel_metadata or {}),    # Tier 2: Excel key-value
+        **json_business,             # Tier 3: JSON business fields
+        **json_metadata,             # Tier 3: JSON metadata
+    }
 
     def first(keys: tuple[str, ...], patterns: tuple[str, ...] = ()) -> str | None:
         for key in keys:
@@ -325,36 +344,92 @@ def ingest_uploaded_file(
     original_filename: str,
     current_user: User,
 ) -> dict[str, Any]:
-    """Parse an uploaded Excel or PDF file, create a PdEcrCase, and return parsed data."""
+    """Parse an uploaded Excel or PDF file, create a PdEcrCase, and return parsed data.
+
+    Enhanced pipeline:
+    - PDF:  MinerU → structured table metadata + keyword-filtered markdown
+    - Excel: openpyxl/xlrd → keyword-filtered markdown
+             then optionally Excel→PDF→MinerU for richer indexing
+    """
     import shutil
+    import traceback
 
     from app.core.config import settings
     from app.rag.excel_to_markdown import convert_excel as _convert_excel
     from app.rag.pdf_to_markdown import convert_pdf as _convert_pdf
+    from app.rag.mineru_md_parser import extract_structured_metadata
 
     suffix = file_path.suffix.lower()
     knowledge_md_path: Path | None = None
     parsed_text = ""
     parsed_by = ""
+    table_metadata: dict[str, str] = {}
+    excel_metadata: dict[str, str] = {}
 
     # ---- Parse file ----
     if suffix in (".xlsx", ".xlsm", ".xls"):
-        # Excel: use existing converter but target a temp knowledge dir
+        # ── Excel path ──
         _convert_excel(file_path)
         knowledge_md_path = KNOWLEDGE_DIR / f"{file_path.stem}.md"
         parsed_by = "excel_to_markdown"
+
+        # ── Enhanced: Excel → PDF → MinerU for richer knowledge base content ──
+        try:
+            from app.rag.excel_to_pdf import convert_excel_to_pdf
+            pdf_path = convert_excel_to_pdf(file_path)
+            if pdf_path and shutil.which("mineru") is not None:
+                from app.rag.pdf_to_markdown import run_mineru, write_pdf_markdown
+                mineru_md_path = run_mineru(pdf_path, backend="pipeline")
+                mineru_text = mineru_md_path.read_text(encoding="utf-8", errors="ignore")
+
+                # Write MinerU markdown to knowledge/ for FAISS indexing
+                mineru_knowledge_path = KNOWLEDGE_DIR / f"{file_path.stem}_mineru.md"
+                write_pdf_markdown(
+                    file_path,
+                    f"Excel→PDF→MinerU ({original_filename})",
+                    mineru_text,
+                )
+                # Overwrite the default output path with our preferred location
+                default_out = KNOWLEDGE_DIR / f"{file_path.stem}.md"
+                if mineru_knowledge_path.exists() and mineru_knowledge_path != default_out:
+                    # write_pdf_markdown writes to KNOWLEDGE_DIR/{stem}.md;
+                    # rename to _mineru.md so the original keyword-filtered
+                    # markdown is preserved
+                    if default_out.exists():
+                        default_out.replace(mineru_knowledge_path)
+
+                # Extract structured table metadata from MinerU markdown
+                table_metadata = extract_structured_metadata(mineru_text)
+        except Exception:
+            traceback.print_exc()
+            # Non-fatal: Excel→PDF→Mineru is an enhancement
+
     elif suffix == ".pdf":
+        # ── PDF path ──
         _convert_pdf(file_path)
         knowledge_md_path = KNOWLEDGE_DIR / f"{file_path.stem}.md"
         parsed_by = "pdf_to_markdown"
+
+        # ── Enhanced: extract structured table metadata from MinerU output ──
+        if knowledge_md_path and knowledge_md_path.exists():
+            parsed_text = safe_read_text(knowledge_md_path)
+            try:
+                table_metadata = extract_structured_metadata(parsed_text)
+            except Exception:
+                traceback.print_exc()
     else:
         raise ValueError(f"Unsupported file type: {suffix}")
 
     if knowledge_md_path and knowledge_md_path.exists():
         parsed_text = safe_read_text(knowledge_md_path)
 
-    # ---- Extract metadata ----
-    metadata = extract_metadata(file_path, parsed_text)
+    # ---- Extract metadata (table_metadata has highest priority) ----
+    metadata = extract_metadata(
+        file_path,
+        parsed_text,
+        table_metadata=table_metadata,
+        excel_metadata=excel_metadata,
+    )
     case_no = metadata["case_no"]
 
     # ---- Create or get case ----

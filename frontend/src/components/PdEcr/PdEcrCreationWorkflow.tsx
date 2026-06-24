@@ -22,6 +22,7 @@ import {
   type PdEcrInput,
   type PdEcrSimilarCase,
   retrievePdEcrSimilarCases,
+  uploadAndStageDocument,
 } from "@/lib/pdEcrApi"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import {
@@ -1001,11 +1002,26 @@ export function PdEcrCreationWorkflow() {
   const nextStep = () =>
     setStep((current) => Math.min(current + 1, stepConfigs.length - 1))
   const previousStep = () => setStep((current) => Math.max(current - 1, 0))
-  const handleUpload = (files: FileList | null) => {
-    const names = Array.from(files ?? []).map((file) => file.name)
-    if (!names.length) return
-    setUploadedFiles((current) => [...current, ...names])
-    setStatus(`Uploaded file reference: ${names.join(", ")}`)
+  const handleUpload = async (files: FileList | null) => {
+    const selectedFiles = Array.from(files ?? [])
+    if (!selectedFiles.length) return
+
+    const [file] = selectedFiles
+    setUploadedFiles((current) => [...current, file.name])
+    setStatus(`正在上传并解析 ${file.name}...`)
+
+    try {
+      const staged = await uploadAndStageDocument(file)
+      setStatus(`解析完成，请核对 ${staged.original_filename} 后确认入库。`)
+      navigate({
+        to: "/pd-ecr/documents/$docId",
+        params: { docId: staged.id },
+      })
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unknown upload error"
+      setStatus(`上传或解析失败: ${message}`)
+    }
   }
 
   return (
@@ -1316,9 +1332,11 @@ export function PdEcrCreationWorkflow() {
                     Upload files
                     <input
                       type="file"
-                      multiple
                       className="hidden"
-                      onChange={(event) => handleUpload(event.target.files)}
+                      onChange={(event) => {
+                        void handleUpload(event.target.files)
+                        event.target.value = ""
+                      }}
                     />
                   </label>
                 </Button>

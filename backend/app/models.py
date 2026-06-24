@@ -440,6 +440,70 @@ class HistoricalSourceDocument(HistoricalSourceDocumentBase, table=True):
     imported_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# Staged Document — holds AI-parsed content awaiting human review before
+# being committed to PdEcrCase + knowledge base.
+# ══════════════════════════════════════════════════════════════════════════
+
+class PdEcrStagedDocumentBase(SQLModel):
+    status: str = Field(default="pending", index=True, max_length=32)
+    original_filename: str = Field(max_length=500)
+    original_file_path: str = Field(max_length=1500)
+    preview_pdf_path: str | None = Field(default=None, max_length=1500)
+    file_type: str = Field(default="unknown", max_length=32)  # pdf / excel / word
+
+    # ── AI-parsed content (user can edit before confirming) ──
+    parsed_text: str = Field(default="", sa_column=Column(Text))
+    metadata_json: dict[str, Any] = Field(
+        default_factory=dict, sa_column=Column(JSON, nullable=False)
+    )
+    sections_json: list[dict[str, Any]] = Field(
+        default_factory=list, sa_column=Column(JSON, nullable=False)
+    )
+    tables_json: list[dict[str, Any]] = Field(
+        default_factory=list, sa_column=Column(JSON, nullable=False)
+    )
+
+
+class PdEcrStagedDocument(PdEcrStagedDocumentBase, table=True):
+    __tablename__ = "pd_ecr_staged_document"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_by_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    confirmed_case_id: uuid.UUID | None = Field(default=None, foreign_key="pd_ecr_case.id", index=True)
+
+
+# ── Pydantic-only models for the review API ──
+
+class PdEcrStagedDocumentUpdate(SQLModel):
+    """Fields the user can edit during review."""
+    metadata_json: dict[str, Any] | None = None
+    sections_json: list[dict[str, Any]] | None = None
+    tables_json: list[dict[str, Any]] | None = None
+
+
+PdEcrMetadataSpec: dict[str, dict[str, str]] = {
+    "case_no":    {"label": "案例编号", "zh": "案例编号"},
+    "dc_no":      {"label": "DC No", "zh": "DC编号"},
+    "mcr_no":     {"label": "MCR No", "zh": "MCR编号"},
+    "date":       {"label": "日期", "zh": "日期"},
+    "customer_project": {"label": "Customer Project", "zh": "客户项目"},
+    "product_no": {"label": "Product No", "zh": "产品号"},
+    "part_no":    {"label": "Part No / Component No", "zh": "零部件号"},
+    "change_type": {"label": "Change Type", "zh": "变更类型"},
+    "change_source": {"label": "Change Source", "zh": "变更来源"},
+    "sample_type": {"label": "Sample Status", "zh": "样件状态"},
+    "initiator":  {"label": "Initiator", "zh": "发起人"},
+    "reason":     {"label": "Reason for Change", "zh": "变更原因"},
+    "change_proposal": {"label": "Change Proposal", "zh": "变更描述"},
+    "current_design": {"label": "Current Design", "zh": "当前设计"},
+    "remarks":    {"label": "Remarks", "zh": "备注"},
+}
+
+
 class PdEcrCaseCreate(PdEcrCaseBase):
     modules: list[dict[str, Any]] | None = None
 

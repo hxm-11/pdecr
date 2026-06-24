@@ -31,6 +31,8 @@ from app.models import (
     PdEcrActivity,
     PdEcrCommentCreate,
     PdEcrModuleUpdate,
+    PdEcrStagedDocument,
+    PdEcrStagedDocumentUpdate,
     PdEcrTaskCreate,
     PdEcrVersion,
 )
@@ -97,6 +99,7 @@ class PdEcrModuleDraftPayload(BaseModel):
     record_id: str
     module_id: str
     data: Dict[str, Any]
+    title: str = ""
 
 
 class PdEcrModuleAssignmentPayload(BaseModel):
@@ -170,7 +173,30 @@ def get_draft_db_connection() -> sqlite3.Connection:
         )
         """
     )
+    # Migration: add title and created_at columns if they don't exist yet
+    for column, col_def in [
+        ("title", "TEXT NOT NULL DEFAULT ''"),
+        ("created_at", "TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"),
+    ]:
+        try:
+            connection.execute(
+                f"ALTER TABLE pd_ecr_module_draft ADD COLUMN {column} {col_def}"
+            )
+        except sqlite3.OperationalError:
+            pass  # column already exists
+    # Backfill created_at for existing rows
+    connection.execute(
+        "UPDATE pd_ecr_module_draft SET created_at = updated_at "
+        "WHERE created_at = '' OR created_at IS NULL"
+    )
     return connection
+
+
+def _parse_draft_data(data_text: str) -> dict:
+    try:
+        return json.loads(data_text)
+    except json.JSONDecodeError:
+        return {}
 
 
 def format_case_field(value: Any, fallback: str = "-") -> str:
@@ -675,108 +701,155 @@ def list_pd_ecr_cases(
     limit: int = 100,
 ):
     global _knowledge_scan_cache, _knowledge_scan_cache_ts
+    all_cases: list[dict[str, Any]] = []
+    seen: set[str] = set()
 
+    def _dedup_keys(case: dict[str, Any]) -> set[str]:
+        """Build multiple dedup keys for a case so the same record from
+        different sources (with different case_no formatting) is recognised.
+
+        Priority of key types:
+        1. PDECR case code extracted from case_no (e.g. PDECR24_093)
+        2. T-code extracted from case_no (e.g. T0001)
+        3. Exact case_no (lowercased)
+        4. Source file / PDF file stem
+        5. Raw id fallback
+        """
+        keys: set[str] = set()
+
+        case_no = str(case.get("case_no") or "").strip()
+        source_file = str(case.get("source_file") or case.get("pdf_file") or "").strip()
+
+        # ── PDECR code (most reliable cross-source identifier) ──
+        pdecr_code = extract_pdecr_case_code(case_no) if case_no else ""
+        if pdecr_code:
+            keys.add(f"pdecr:{pdecr_code.lower()}")
+        if source_file:
+            sf_pdecr = extract_pdecr_case_code(source_file)
+            if sf_pdecr:
+                keys.add(f"pdecr:{sf_pdecr.lower()}")
+
+        # ── T-code (T0001-style) ──
+        t_code = extract_case_code(case_no) if case_no else ""
+        if t_code:
+            keys.add(f"tc:{t_code.lower()}")
+        if source_file:
+            sf_tcode = extract_case_code(source_file)
+            if sf_tcode:
+                keys.add(f"tc:{sf_tcode.lower()}")
+
+        # ── Exact case_no ──
+        if case_no:
+            keys.add(f"cn:{case_no.lower()}")
+
+        # ── Source file stem ──
+        if source_file:
+            keys.add(f"sf:{Path(source_file).stem.lower()}")
+
+        # ── Raw id (last resort) ──
+        raw_id = str(case.get("id") or "")
+        if raw_id:
+            keys.add(f"id:{raw_id.lower()}")
+
+        return keys
+
+    def _add_cases(incoming: list[dict[str, Any]], source_label: str) -> None:
+        for case in incoming:
+            keys = _dedup_keys(case)
+            if keys & seen:  # any intersection → duplicate
+                continue
+            seen.update(keys)
+            case["_source"] = source_label
+            all_cases.append(case)
+
+    # ── Source 1: V1 normalized files ──
     try:
-        normalized_cases = [
+        normalized = [
             case_to_list_item(case)
             for case in load_historical_cases(sources={"jie_jim"})
         ]
-        normalized_cases = _enrich_cases_with_pdf_urls(normalized_cases)
-        lowered_query = (query or "").strip().lower()
-        if lowered_query:
-            normalized_cases = [
-                case
-                for case in normalized_cases
-                if lowered_query in json.dumps(case, ensure_ascii=False).lower()
-            ]
-        if normalized_cases:
-            return {
-                "source": "v1_normalized_files",
-                "cases": normalized_cases[skip : skip + limit],
-                "total": len(normalized_cases),
-            }
+        normalized = _enrich_cases_with_pdf_urls(normalized)
+        _add_cases(normalized, "v1_normalized_files")
     except Exception as e:
         debug_print("PD-ECR V1 case loader fallback:", e)
 
-    pdf_paths = sorted(PDECR_JIE_JIM_PDF_DIR.glob("*.pdf"))
-    if pdf_paths:
-        lowered_query = (query or "").strip().lower()
-        pdf_cases = list_pdecr_pdf_case_records()
-        if lowered_query:
-            pdf_cases = [
-                case
-                for case in pdf_cases
-                if lowered_query in json.dumps(case, ensure_ascii=False).lower()
-            ]
+    # ── Source 2: PDECR_JIE_JIM PDF directory ──
+    if PDECR_JIE_JIM_PDF_DIR.exists():
+        try:
+            pdf_cases = list_pdecr_pdf_case_records()
+            _add_cases(pdf_cases, "pdecr_jie_jim_pdf")
+        except Exception as e:
+            debug_print("PD-ECR PDF case loader fallback:", e)
 
-        return {
-            "source": "pdecr_jie_jim_pdf",
-            "cases": pdf_cases[skip : skip + limit],
-            "total": len(pdf_cases),
-        }
-
+    # ── Source 3: PostgreSQL / SQLite database ──
     try:
         db_cases = list_db_cases(
             session=session,
             status_filter=status,
-            query=query,
-            skip=skip,
-            limit=limit,
+            query=None,  # query applied later on merged set
+            skip=0,
+            limit=10000,
         )
-        if db_cases:
-            return {
-                "source": "database",
-                "cases": [serialize_case(case) for case in db_cases],
-            }
+        _add_cases(
+            [serialize_case(case) for case in db_cases],
+            "database",
+        )
     except Exception as e:
         debug_print("PD-ECR database case list fallback:", e)
 
-    # 缓存命中则直接返回
+    # ── Source 4: JSON file + knowledge directory (with cache) ──
     now = _time.time()
     if _knowledge_scan_cache is not None and (now - _knowledge_scan_cache_ts) < _KNOWLEDGE_SCAN_CACHE_TTL:
-        return _knowledge_scan_cache
+        _add_cases(_knowledge_scan_cache.get("cases", []), "knowledge_cache")
+    else:
+        json_cases: list[Dict[str, Any]] = []
+        if DATA_PATH.exists():
+            try:
+                with DATA_PATH.open("r", encoding="utf-8") as f:
+                    json_cases = json.load(f)
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"读取 PD-ECR cases 失败：{e}")
 
-    cases = []
+        knowledge_dir = Path(__file__).resolve().parents[2] / "rag" / "knowledge"
+        existing_sources = {
+            str(item.get("source_file") or item.get("case_no") or "").strip()
+            for item in json_cases
+            if isinstance(item, dict)
+        }
+        existing_case_codes = {
+            extract_case_code(str(item.get("source_file") or item.get("case_no") or ""))
+            for item in json_cases
+            if isinstance(item, dict)
+        }
 
-    if DATA_PATH.exists():
-        try:
-            with DATA_PATH.open("r", encoding="utf-8") as f:
-                cases = json.load(f)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"读取 PD-ECR cases 失败：{e}")
+        if knowledge_dir.exists():
+            next_id = len(json_cases) + 1
+            for path in sorted(knowledge_dir.glob("*.md")):
+                if "_signature_structured" in path.stem:
+                    continue
+                case_code = extract_case_code(path.name)
+                if path.name in existing_sources or (case_code and case_code in existing_case_codes):
+                    continue
+                json_cases.append(build_knowledge_case_record(path, next_id))
+                next_id += 1
 
-    knowledge_dir = Path(__file__).resolve().parents[2] / "rag" / "knowledge"
-    existing_sources = {
-        str(item.get("source_file") or item.get("case_no") or "").strip()
-        for item in cases
-        if isinstance(item, dict)
+        _knowledge_scan_cache = {"cases": json_cases}
+        _knowledge_scan_cache_ts = now
+        _add_cases(json_cases, "knowledge_files")
+
+    # ── Query filter ──
+    lowered_query = (query or "").strip().lower()
+    if lowered_query:
+        all_cases = [
+            case
+            for case in all_cases
+            if lowered_query in json.dumps(case, ensure_ascii=False).lower()
+        ]
+
+    return {
+        "cases": all_cases[skip : skip + limit],
+        "total": len(all_cases),
     }
-    existing_case_codes = {
-        extract_case_code(str(item.get("source_file") or item.get("case_no") or ""))
-        for item in cases
-        if isinstance(item, dict)
-    }
-
-    if knowledge_dir.exists():
-        next_id = len(cases) + 1
-        for path in sorted(knowledge_dir.glob("*.md")):
-            if "_signature_structured" in path.stem:
-                continue
-
-            case_code = extract_case_code(path.name)
-            if path.name in existing_sources or (case_code and case_code in existing_case_codes):
-                continue
-
-            cases.append(build_knowledge_case_record(path, next_id))
-            next_id += 1
-
-    result = {"cases": cases}
-
-    # 写入缓存
-    _knowledge_scan_cache = result
-    _knowledge_scan_cache_ts = now
-
-    return result
 
 
 def _find_pdf_fuzzy(requested_name: str, *search_dirs: Path) -> Path | None:
@@ -1149,7 +1222,7 @@ def get_pd_ecr_module_draft(
     with get_draft_db_connection() as connection:
         draft = connection.execute(
             """
-            SELECT record_id, module_id, data, updated_at
+            SELECT record_id, module_id, data, title, created_at, updated_at
             FROM pd_ecr_module_draft
             WHERE record_id = ? AND module_id = ?
             """,
@@ -1159,15 +1232,12 @@ def get_pd_ecr_module_draft(
     if not draft:
         return {"record_id": record_id, "module_id": module_id, "data": None}
 
-    try:
-        data = json.loads(draft["data"])
-    except json.JSONDecodeError:
-        data = {}
-
     return {
         "record_id": draft["record_id"],
         "module_id": draft["module_id"],
-        "data": data,
+        "title": draft["title"],
+        "data": _parse_draft_data(draft["data"]),
+        "created_at": draft["created_at"],
         "updated_at": draft["updated_at"],
     }
 
@@ -1190,19 +1260,20 @@ def save_pd_ecr_module_draft(
     with get_draft_db_connection() as connection:
         connection.execute(
             """
-            INSERT INTO pd_ecr_module_draft (record_id, module_id, data, updated_at)
-            VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+            INSERT INTO pd_ecr_module_draft (record_id, module_id, data, title, created_at, updated_at)
+            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
             ON CONFLICT(record_id, module_id)
             DO UPDATE SET
                 data = excluded.data,
+                title = excluded.title,
                 updated_at = CURRENT_TIMESTAMP
             """,
-            (record_id, module_id, data_json),
+            (record_id, module_id, data_json, payload.title),
         )
         connection.commit()
         draft = connection.execute(
             """
-            SELECT record_id, module_id, data, updated_at
+            SELECT record_id, module_id, data, title, created_at, updated_at
             FROM pd_ecr_module_draft
             WHERE record_id = ? AND module_id = ?
             """,
@@ -1212,9 +1283,82 @@ def save_pd_ecr_module_draft(
     return {
         "record_id": draft["record_id"],
         "module_id": draft["module_id"],
+        "title": draft["title"],
         "data": json.loads(draft["data"]),
+        "created_at": draft["created_at"],
         "updated_at": draft["updated_at"],
     }
+
+
+@router.get("/module-drafts/list")
+def list_pd_ecr_module_drafts(
+    record_id: str | None = None,
+    limit: int = 100,
+    offset: int = 0,
+):
+    with get_draft_db_connection() as connection:
+        if record_id:
+            rows = connection.execute(
+                """
+                SELECT record_id, module_id, data, title, created_at, updated_at
+                FROM pd_ecr_module_draft
+                WHERE record_id = ?
+                ORDER BY updated_at DESC
+                LIMIT ? OFFSET ?
+                """,
+                (record_id, limit, offset),
+            ).fetchall()
+        else:
+            rows = connection.execute(
+                """
+                SELECT record_id, module_id, data, title, created_at, updated_at
+                FROM pd_ecr_module_draft
+                ORDER BY updated_at DESC
+                LIMIT ? OFFSET ?
+                """,
+                (limit, offset),
+            ).fetchall()
+
+    return {
+        "drafts": [
+            {
+                "record_id": row["record_id"],
+                "module_id": row["module_id"],
+                "title": row["title"],
+                "data": _parse_draft_data(row["data"]),
+                "created_at": row["created_at"],
+                "updated_at": row["updated_at"],
+            }
+            for row in rows
+        ],
+    }
+
+
+@router.delete("/module-drafts")
+def delete_pd_ecr_module_draft(
+    record_id: str,
+    module_id: str,
+):
+    if not record_id or not module_id:
+        raise HTTPException(
+            status_code=400,
+            detail="record_id and module_id are required",
+        )
+
+    with get_draft_db_connection() as connection:
+        cursor = connection.execute(
+            """
+            DELETE FROM pd_ecr_module_draft
+            WHERE record_id = ? AND module_id = ?
+            """,
+            (record_id, module_id),
+        )
+        connection.commit()
+
+    if cursor.rowcount == 0:
+        raise HTTPException(status_code=404, detail="Draft not found")
+
+    return {"deleted": True, "record_id": record_id, "module_id": module_id}
 
 
 @router.post("/cases")
@@ -1613,8 +1757,208 @@ async def upload_pd_ecr_case_file(
     return {
         "status": "ok",
         "filename": filename,
+        "indexing": {
+            "pending": True,
+            "message": "文件已入库，知识库正在后台索引中。新数据将在数秒后可供检索。",
+        },
         **result,
     }
+
+
+@router.get("/knowledge-base/status")
+def get_knowledge_base_status():
+    """Return the RAG knowledge base indexing status.
+
+    Users can call this to verify their uploaded files have been indexed.
+    """
+    from app.rag.build_index import get_rebuild_status
+
+    rebuild = get_rebuild_status()
+
+    # Count files currently in the knowledge directory
+    knowledge_dir = Path(__file__).resolve().parents[2] / "rag" / "knowledge"
+    file_count = 0
+    if knowledge_dir.exists():
+        file_count = len([
+            p for p in knowledge_dir.rglob("*")
+            if p.suffix.lower() in (".md", ".txt") and "_signature_structured" not in p.stem
+        ])
+
+    return {
+        "knowledge_files_on_disk": file_count,
+        "knowledge_dir": str(knowledge_dir),
+        "last_rebuild": rebuild,
+    }
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# Staged Document Review Flow
+# upload → parse → stage → review → edit → confirm → case + knowledge base
+# ══════════════════════════════════════════════════════════════════════════
+
+class PdEcrStagedDocumentResponse(BaseModel):
+    id: str
+    status: str
+    original_filename: str
+    file_type: str
+    preview_pdf_url: str | None = None
+    parsed_text: str = ""
+    metadata: dict[str, Any] = {}
+    sections: list[dict[str, Any]] = []
+    tables: list[dict[str, Any]] = []
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+def _staged_to_response(doc: PdEcrStagedDocument) -> PdEcrStagedDocumentResponse:
+    return PdEcrStagedDocumentResponse(
+        id=str(doc.id),
+        status=doc.status,
+        original_filename=doc.original_filename,
+        file_type=doc.file_type,
+        preview_pdf_url=(
+            f"/api/v1/pd-ecr/documents/{doc.id}/preview"
+            if doc.preview_pdf_path
+            else None
+        ),
+        parsed_text=doc.parsed_text,
+        metadata=doc.metadata_json,
+        sections=doc.sections_json,
+        tables=doc.tables_json,
+        created_at=doc.created_at.isoformat() if doc.created_at else None,
+        updated_at=doc.updated_at.isoformat() if doc.updated_at else None,
+    )
+
+
+@router.post(
+    "/documents/upload",
+    response_model=PdEcrStagedDocumentResponse,
+)
+async def upload_and_stage_document(
+    file: UploadFile,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Upload a file, parse it, and create a staged document for review.
+
+    The parsed result is NOT written to the case database yet.
+    User must review and call POST /documents/{id}/confirm to commit.
+    """
+    from app.core.config import settings
+    from app.services.pd_ecr_stage_service import stage_uploaded_file
+
+    filename = file.filename or "unknown"
+    suffix = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if suffix not in ("xlsx", "xlsm", "xls", "pdf", "docx", "doc"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type: .{suffix}. Supported: .xlsx, .xls, .pdf, .docx",
+        )
+
+    upload_dir = Path(settings.UPLOAD_DIR)
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    safe_name = f"{uuid.uuid4().hex}_{filename}"
+    file_path = upload_dir / safe_name
+
+    try:
+        content = await file.read()
+        file_path.write_bytes(content)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {exc}")
+
+    try:
+        staged = stage_uploaded_file(
+            session=session,
+            file_path=file_path,
+            original_filename=filename,
+            user=current_user,
+        )
+    except Exception as exc:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to parse file: {exc}")
+
+    return _staged_to_response(staged)
+
+
+@router.get(
+    "/documents/{doc_id}",
+    response_model=PdEcrStagedDocumentResponse,
+)
+def get_staged_document(
+    doc_id: str,
+    session: SessionDep,
+):
+    """Retrieve a staged document for review."""
+    from app.services.pd_ecr_stage_service import get_staged_document
+
+    doc = get_staged_document(session=session, doc_id=doc_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Staged document not found")
+    return _staged_to_response(doc)
+
+
+@router.patch(
+    "/documents/{doc_id}",
+    response_model=PdEcrStagedDocumentResponse,
+)
+def update_staged_document(
+    doc_id: str,
+    payload: PdEcrStagedDocumentUpdate,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Save user edits to a staged document's metadata, sections, or tables."""
+    from app.services.pd_ecr_stage_service import get_staged_document, update_staged_document
+
+    doc = get_staged_document(session=session, doc_id=doc_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Staged document not found")
+    if doc.status != "pending":
+        raise HTTPException(status_code=400, detail="Document is already confirmed or rejected")
+
+    updated = update_staged_document(session=session, doc=doc, payload=payload)
+    return _staged_to_response(updated)
+
+
+@router.post("/documents/{doc_id}/confirm")
+def confirm_staged_document(
+    doc_id: str,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Confirm a staged document: create PdEcrCase + modules + vector chunks + FAISS rebuild."""
+    from app.services.pd_ecr_stage_service import get_staged_document, confirm_staged_document
+
+    doc = get_staged_document(session=session, doc_id=doc_id)
+    if doc is None:
+        raise HTTPException(status_code=404, detail="Staged document not found")
+    if doc.status == "confirmed":
+        raise HTTPException(status_code=400, detail="Document is already confirmed")
+
+    result = confirm_staged_document(session=session, doc=doc, user=current_user)
+    return result
+
+
+@router.get("/documents/{doc_id}/preview")
+def get_staged_document_preview(doc_id: str, session: SessionDep):
+    """Serve the preview PDF for a staged document."""
+    from app.services.pd_ecr_stage_service import get_staged_document
+
+    doc = get_staged_document(session=session, doc_id=doc_id)
+    if doc is None or not doc.preview_pdf_path:
+        raise HTTPException(status_code=404, detail="Preview not available")
+
+    pdf_path = Path(doc.preview_pdf_path)
+    if not pdf_path.exists():
+        raise HTTPException(status_code=404, detail="Preview file not found on disk")
+
+    return FileResponse(
+        pdf_path,
+        media_type="application/pdf",
+        filename=doc.original_filename.rsplit(".", 1)[0] + ".pdf",
+        content_disposition_type="inline",
+    )
 
 
 @router.post("/import/historical")

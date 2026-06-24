@@ -258,12 +258,22 @@ def load_documents() -> List[Dict]:
                 continue
             if "_signature_structured" in file_path.stem:
                 continue
+
+            # Tag document type based on filename suffix for better retrieval relevance
+            stem = file_path.stem.lower()
+            if "_mineru" in stem:
+                doc_type = "excel_via_mineru"
+            elif stem.endswith("_parsed"):
+                doc_type = "excel_keyword_filtered"
+            else:
+                doc_type = "text"
+
             text = read_text_file(file_path)
             for i, chunk in enumerate(split_text(text)):
                 docs.append({
                     "source": file_path.name,
                     "chunk_id": i,
-                    "document_type": "text",
+                    "document_type": doc_type,
                     "text": f"Source file: {file_path.name}\n{chunk}",
                 })
 
@@ -282,8 +292,9 @@ def load_documents() -> List[Dict]:
     return docs
 
 
-def main():
-    docs = load_documents()
+def main(docs: list | None = None):
+    if docs is None:
+        docs = load_documents()
 
     if not docs:
         print("没有找到知识库文件，请把 .md/.txt 放到 app/rag/knowledge/，或把 .json 放到 app/rag/knowledge/parsed/json/")
@@ -328,6 +339,43 @@ def _get_index_lock():
     return _index_lock
 
 
+# ── Rebuild status tracking ──
+
+_STATUS_PATH = VECTOR_DIR / "pd_ecr_rebuild_status.json"
+
+
+def _write_rebuild_status(success: bool, doc_count: int, error: str = "") -> None:
+    """Persist rebuild status so the API and UI can report it."""
+    import json as _json
+    from datetime import datetime, timezone
+
+    VECTOR_DIR.mkdir(parents=True, exist_ok=True)
+    _STATUS_PATH.write_text(
+        _json.dumps(
+            {
+                "last_rebuild_at": datetime.now(timezone.utc).isoformat(),
+                "success": success,
+                "total_documents": doc_count,
+                "error": error,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+
+
+def get_rebuild_status() -> dict | None:
+    """Return the last rebuild status, or None if never rebuilt."""
+    import json as _json
+
+    if not _STATUS_PATH.exists():
+        return None
+    try:
+        return _json.loads(_STATUS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
 def rebuild_index() -> bool:
     """Rebuild the FAISS index. Returns True on success, False on failure.
 
@@ -339,11 +387,15 @@ def rebuild_index() -> bool:
         print("FAISS index rebuild already in progress, skipping.")
         return False
     try:
-        main()
+        docs = load_documents()
+        main(docs=docs)
+        _write_rebuild_status(success=True, doc_count=len(docs))
         return True
     except Exception:
         import traceback
+        err = traceback.format_exc()
         traceback.print_exc()
+        _write_rebuild_status(success=False, doc_count=0, error=str(err))
         return False
     finally:
         lock.release()

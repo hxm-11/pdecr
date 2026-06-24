@@ -22,9 +22,11 @@ import { Route as LayoutItemsRouteImport } from './routes/_layout/items'
 import { Route as LayoutAdminRouteImport } from './routes/_layout/admin'
 import { Route as LayoutProjectsProjectIdRouteImport } from './routes/_layout/projects.$projectId'
 import { Route as LayoutPdEcrNewRouteImport } from './routes/_layout/pd-ecr_.new'
+import { Route as LayoutPdEcrDraftsRouteImport } from './routes/_layout/pd-ecr_.drafts'
 import { Route as LayoutPdEcrDashboardRouteImport } from './routes/_layout/pd-ecr_.dashboard'
 import { Route as LayoutPdEcrContentRouteImport } from './routes/_layout/pd-ecr_.content'
 import { Route as LayoutPdEcrCasesRouteImport } from './routes/_layout/pd-ecr_.cases'
+import { Route as LayoutPdEcrDocumentsDocIdRouteImport } from './routes/_layout/pd-ecr_.documents.$docId'
 import { Route as LayoutPdEcrContentModuleIdRouteImport } from './routes/_layout/pd-ecr_.content_.$moduleId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -91,6 +93,11 @@ const LayoutPdEcrNewRoute = LayoutPdEcrNewRouteImport.update({
   path: '/pd-ecr/new',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutPdEcrDraftsRoute = LayoutPdEcrDraftsRouteImport.update({
+  id: '/pd-ecr_/drafts',
+  path: '/pd-ecr/drafts',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutPdEcrDashboardRoute = LayoutPdEcrDashboardRouteImport.update({
   id: '/pd-ecr_/dashboard',
   path: '/pd-ecr/dashboard',
@@ -106,6 +113,12 @@ const LayoutPdEcrCasesRoute = LayoutPdEcrCasesRouteImport.update({
   path: '/pd-ecr/cases',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutPdEcrDocumentsDocIdRoute =
+  LayoutPdEcrDocumentsDocIdRouteImport.update({
+    id: '/pd-ecr_/documents/$docId',
+    path: '/pd-ecr/documents/$docId',
+    getParentRoute: () => LayoutRoute,
+  } as any)
 const LayoutPdEcrContentModuleIdRoute =
   LayoutPdEcrContentModuleIdRouteImport.update({
     id: '/pd-ecr_/content_/$moduleId',
@@ -127,9 +140,11 @@ export interface FileRoutesByFullPath {
   '/pd-ecr/cases': typeof LayoutPdEcrCasesRoute
   '/pd-ecr/content': typeof LayoutPdEcrContentRoute
   '/pd-ecr/dashboard': typeof LayoutPdEcrDashboardRoute
+  '/pd-ecr/drafts': typeof LayoutPdEcrDraftsRoute
   '/pd-ecr/new': typeof LayoutPdEcrNewRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/pd-ecr/content/$moduleId': typeof LayoutPdEcrContentModuleIdRoute
+  '/pd-ecr/documents/$docId': typeof LayoutPdEcrDocumentsDocIdRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -145,9 +160,11 @@ export interface FileRoutesByTo {
   '/pd-ecr/cases': typeof LayoutPdEcrCasesRoute
   '/pd-ecr/content': typeof LayoutPdEcrContentRoute
   '/pd-ecr/dashboard': typeof LayoutPdEcrDashboardRoute
+  '/pd-ecr/drafts': typeof LayoutPdEcrDraftsRoute
   '/pd-ecr/new': typeof LayoutPdEcrNewRoute
   '/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/pd-ecr/content/$moduleId': typeof LayoutPdEcrContentModuleIdRoute
+  '/pd-ecr/documents/$docId': typeof LayoutPdEcrDocumentsDocIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,9 +182,11 @@ export interface FileRoutesById {
   '/_layout/pd-ecr_/cases': typeof LayoutPdEcrCasesRoute
   '/_layout/pd-ecr_/content': typeof LayoutPdEcrContentRoute
   '/_layout/pd-ecr_/dashboard': typeof LayoutPdEcrDashboardRoute
+  '/_layout/pd-ecr_/drafts': typeof LayoutPdEcrDraftsRoute
   '/_layout/pd-ecr_/new': typeof LayoutPdEcrNewRoute
   '/_layout/projects/$projectId': typeof LayoutProjectsProjectIdRoute
   '/_layout/pd-ecr_/content_/$moduleId': typeof LayoutPdEcrContentModuleIdRoute
+  '/_layout/pd-ecr_/documents/$docId': typeof LayoutPdEcrDocumentsDocIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -185,9 +204,11 @@ export interface FileRouteTypes {
     | '/pd-ecr/cases'
     | '/pd-ecr/content'
     | '/pd-ecr/dashboard'
+    | '/pd-ecr/drafts'
     | '/pd-ecr/new'
     | '/projects/$projectId'
     | '/pd-ecr/content/$moduleId'
+    | '/pd-ecr/documents/$docId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -203,9 +224,11 @@ export interface FileRouteTypes {
     | '/pd-ecr/cases'
     | '/pd-ecr/content'
     | '/pd-ecr/dashboard'
+    | '/pd-ecr/drafts'
     | '/pd-ecr/new'
     | '/projects/$projectId'
     | '/pd-ecr/content/$moduleId'
+    | '/pd-ecr/documents/$docId'
   id:
     | '__root__'
     | '/_layout'
@@ -222,9 +245,11 @@ export interface FileRouteTypes {
     | '/_layout/pd-ecr_/cases'
     | '/_layout/pd-ecr_/content'
     | '/_layout/pd-ecr_/dashboard'
+    | '/_layout/pd-ecr_/drafts'
     | '/_layout/pd-ecr_/new'
     | '/_layout/projects/$projectId'
     | '/_layout/pd-ecr_/content_/$moduleId'
+    | '/_layout/pd-ecr_/documents/$docId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -328,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutPdEcrNewRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/pd-ecr_/drafts': {
+      id: '/_layout/pd-ecr_/drafts'
+      path: '/pd-ecr/drafts'
+      fullPath: '/pd-ecr/drafts'
+      preLoaderRoute: typeof LayoutPdEcrDraftsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/pd-ecr_/dashboard': {
       id: '/_layout/pd-ecr_/dashboard'
       path: '/pd-ecr/dashboard'
@@ -347,6 +379,13 @@ declare module '@tanstack/react-router' {
       path: '/pd-ecr/cases'
       fullPath: '/pd-ecr/cases'
       preLoaderRoute: typeof LayoutPdEcrCasesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/pd-ecr_/documents/$docId': {
+      id: '/_layout/pd-ecr_/documents/$docId'
+      path: '/pd-ecr/documents/$docId'
+      fullPath: '/pd-ecr/documents/$docId'
+      preLoaderRoute: typeof LayoutPdEcrDocumentsDocIdRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/pd-ecr_/content_/$moduleId': {
@@ -381,8 +420,10 @@ interface LayoutRouteChildren {
   LayoutPdEcrCasesRoute: typeof LayoutPdEcrCasesRoute
   LayoutPdEcrContentRoute: typeof LayoutPdEcrContentRoute
   LayoutPdEcrDashboardRoute: typeof LayoutPdEcrDashboardRoute
+  LayoutPdEcrDraftsRoute: typeof LayoutPdEcrDraftsRoute
   LayoutPdEcrNewRoute: typeof LayoutPdEcrNewRoute
   LayoutPdEcrContentModuleIdRoute: typeof LayoutPdEcrContentModuleIdRoute
+  LayoutPdEcrDocumentsDocIdRoute: typeof LayoutPdEcrDocumentsDocIdRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -395,8 +436,10 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutPdEcrCasesRoute: LayoutPdEcrCasesRoute,
   LayoutPdEcrContentRoute: LayoutPdEcrContentRoute,
   LayoutPdEcrDashboardRoute: LayoutPdEcrDashboardRoute,
+  LayoutPdEcrDraftsRoute: LayoutPdEcrDraftsRoute,
   LayoutPdEcrNewRoute: LayoutPdEcrNewRoute,
   LayoutPdEcrContentModuleIdRoute: LayoutPdEcrContentModuleIdRoute,
+  LayoutPdEcrDocumentsDocIdRoute: LayoutPdEcrDocumentsDocIdRoute,
 }
 
 const LayoutRouteWithChildren =

@@ -88,6 +88,14 @@ BASE_DIR = pathlib.Path(__file__).parent
 REPORTS_DIR = (BASE_DIR / "reports").resolve()
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Ensure knowledge base directories exist at startup so uploaded files
+# can be written immediately even before the first converter import.
+KNOWLEDGE_DIR = (BASE_DIR / "app" / "rag" / "knowledge").resolve()
+KNOWLEDGE_DIR.mkdir(parents=True, exist_ok=True)
+
+VECTOR_STORE_DIR = (BASE_DIR / "app" / "rag" / "vector_store").resolve()
+VECTOR_STORE_DIR.mkdir(parents=True, exist_ok=True)
+
 app.mount(
     "/static/reports",
     StaticFiles(directory=str(REPORTS_DIR)),

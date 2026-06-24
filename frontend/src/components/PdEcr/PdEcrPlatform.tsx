@@ -18,7 +18,7 @@ import {
   type PdEcrInput,
   type PdEcrModule,
   searchPdEcrHistory,
-  uploadPdEcrFile,
+  uploadAndStageDocument,
 } from "@/lib/pdEcrApi"
 import { departmentOptions } from "./PdEcrModuleDetail"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
@@ -453,23 +453,14 @@ export function PdEcrPlatform() {
   const [isDragging, setIsDragging] = useState(false)
 
   const uploadMutation = useMutation({
-    mutationFn: (file: File) => uploadPdEcrFile(file),
-    onSuccess: (result) => {
-      const meta = result.metadata || {}
-      setNewChange((current) => ({
-        ...current,
-        product: String(meta.product_no || meta.product || ""),
-        customer: String(meta.customer_project || meta.customer || ""),
-        source: String(meta.change_source || meta.source || ""),
-        reason: String(meta.reason || ""),
-        partNumber: String(meta.part_no || meta.component_no || ""),
-        description: result.content_preview || String(meta.change_proposal || ""),
-        date: String(meta.date || current.date),
-        initiator: String(meta.initiator || ""),
-      }))
-      setUploadStatus(
-        `✅ ${result.filename} 已入库 (${result.case_no})${result.is_new ? " · 新建" : " · 更新已有"}`,
-      )
+    mutationFn: (file: File) => uploadAndStageDocument(file),
+    onSuccess: (staged) => {
+      setUploadStatus(`✅ ${staged.original_filename} 解析完成，进入审核`)
+      // Navigate to the review page instead of auto-filling the form
+      navigate({
+        to: "/pd-ecr/documents/$docId",
+        params: { docId: staged.id },
+      })
     },
     onError: (error: Error) => {
       setUploadStatus(`❌ 上传失败: ${error.message}`)
@@ -480,8 +471,8 @@ export function PdEcrPlatform() {
     const file = files?.[0]
     if (!file) return
     const suffix = file.name.split(".").pop()?.toLowerCase()
-    if (!suffix || !["xlsx", "xls", "xlsm", "pdf"].includes(suffix)) {
-      setUploadStatus("❌ 仅支持 .xlsx / .xls / .pdf 文件")
+    if (!suffix || !["xlsx", "xls", "xlsm", "pdf", "docx", "doc"].includes(suffix)) {
+      setUploadStatus("❌ 仅支持 .xlsx / .xls / .pdf / .docx 文件")
       return
     }
     setUploadStatus(`⏳ 正在解析 ${file.name}...`)
@@ -515,95 +506,106 @@ export function PdEcrPlatform() {
           </div>
         </header>
 
-        <main className="grid min-h-0 flex-1 gap-4 overflow-y-auto xl:grid-cols-[1fr_2fr]">
-          <WorkPanel
-            eyebrow="AI Search"
-            title="历史数据检索"
-            icon={<Database className="size-5" />}
-          >
-            <div className="space-y-4">
-              <label className="space-y-2">
-                <span className="text-sm font-semibold text-stone-700">
-                  AI Search
-                </span>
-                <textarea
-                  aria-label="AI Search"
-                  value={searchText}
-                  onChange={(event) => setSearchText(event.target.value)}
-                  placeholder="输入变更原因、变更描述等关键词进行模糊搜索..."
-                  className="min-h-24 w-full resize-none rounded-lg border border-stone-300 bg-white px-4 py-3 text-base leading-7 text-stone-900 shadow-none outline-none placeholder:text-stone-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+        <main className="grid min-h-0 flex-1 gap-4 overflow-y-auto xl:grid-cols-2">
+          {/* ═══ LEFT COLUMN — Upload + AI Search ═══ */}
+          <div className="flex min-h-0 flex-col gap-4">
+            {/* ── File Upload Panel ── */}
+            <WorkPanel
+              eyebrow="Upload"
+              title="文件上传"
+              icon={<Upload className="size-5" />}
+            >
+              <label
+                className={`relative block rounded-lg border-2 border-dashed p-4 text-center transition cursor-pointer ${
+                  isDragging
+                    ? "border-amber-500 bg-amber-50"
+                    : "border-stone-300 bg-stone-50 hover:border-amber-400 hover:bg-amber-50/50"
+                }`}
+                onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+                onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
+                onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileDrop(e.dataTransfer.files) }}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".xlsx,.xls,.xlsm,.pdf,.docx,.doc"
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                  onChange={(e) => handleFileDrop(e.target.files)}
                 />
+                {uploadMutation.isPending ? (
+                  <div className="flex items-center justify-center gap-2 text-amber-700">
+                    <span className="inline-block size-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
+                    <span className="text-sm font-semibold">解析文件中...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-3 text-stone-500">
+                    <Upload className="size-5" />
+                    <span className="text-sm">
+                      拖拽 Excel / PDF 文件到此处，或点击上传
+                    </span>
+                  </div>
+                )}
               </label>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
-                <p className="text-sm text-amber-800">
-                  点击 Run 后进入数据库相似 CASE 列表页。
-                </p>
-                <Button
-                  type="button"
-                  onClick={() => historyMutation.mutate()}
-                  disabled={historyMutation.isPending}
-                  className="h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
+              {uploadStatus && (
+                <p
+                  className={`mt-2 text-xs ${
+                    uploadStatus.startsWith("✅")
+                      ? "text-green-700"
+                      : uploadStatus.startsWith("❌")
+                        ? "text-red-600"
+                        : "text-amber-700"
+                  }`}
                 >
-                  <Search className="size-4" />
-                  {historyMutation.isPending ? "Running" : "Run"}
-                </Button>
-              </div>
-            </div>
-          </WorkPanel>
+                  {uploadStatus}
+                </p>
+              )}
+            </WorkPanel>
 
+            {/* ── AI Search Panel ── */}
+            <WorkPanel
+              eyebrow="AI Search"
+              title="历史数据检索"
+              icon={<Database className="size-5" />}
+            >
+              <div className="space-y-4">
+                <label className="space-y-2">
+                  <span className="text-sm font-semibold text-stone-700">
+                    AI Search
+                  </span>
+                  <textarea
+                    aria-label="AI Search"
+                    value={searchText}
+                    onChange={(event) => setSearchText(event.target.value)}
+                    placeholder="输入变更原因、变更描述等关键词进行模糊搜索..."
+                    className="min-h-24 w-full resize-none rounded-lg border border-stone-300 bg-white px-4 py-3 text-base leading-7 text-stone-900 shadow-none outline-none placeholder:text-stone-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+                  />
+                </label>
+
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
+                  <p className="text-sm text-amber-800">
+                    点击 Run 后进入数据库相似 CASE 列表页。
+                  </p>
+                  <Button
+                    type="button"
+                    onClick={() => historyMutation.mutate()}
+                    disabled={historyMutation.isPending}
+                    className="h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
+                  >
+                    <Search className="size-4" />
+                    {historyMutation.isPending ? "Running" : "Run"}
+                  </Button>
+                </div>
+              </div>
+            </WorkPanel>
+          </div>
+
+          {/* ═══ RIGHT COLUMN — New Change Form ═══ */}
           <WorkPanel
             eyebrow="New creation"
             title="新建变更"
             icon={<Sparkles className="size-5" />}
           >
-            {/* 文件上传拖拽区 */}
-            <label
-              className={`relative block rounded-lg border-2 border-dashed p-4 text-center transition cursor-pointer ${
-                isDragging
-                  ? "border-amber-500 bg-amber-50"
-                  : "border-stone-300 bg-stone-50 hover:border-amber-400 hover:bg-amber-50/50"
-              }`}
-              onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
-              onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
-              onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileDrop(e.dataTransfer.files) }}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".xlsx,.xls,.xlsm,.pdf"
-                className="absolute inset-0 cursor-pointer opacity-0"
-                onChange={(e) => handleFileDrop(e.target.files)}
-              />
-              {uploadMutation.isPending ? (
-                <div className="flex items-center justify-center gap-2 text-amber-700">
-                  <span className="inline-block size-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
-                  <span className="text-sm font-semibold">解析文件中...</span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center gap-3 text-stone-500">
-                  <Upload className="size-5" />
-                  <span className="text-sm">
-                    拖拽 Excel / PDF 文件到此处，或点击上传
-                  </span>
-                </div>
-              )}
-            </label>
-
-            {uploadStatus && (
-              <p
-                className={`text-xs ${
-                  uploadStatus.startsWith("✅")
-                    ? "text-green-700"
-                    : uploadStatus.startsWith("❌")
-                      ? "text-red-600"
-                      : "text-amber-700"
-                }`}
-              >
-                {uploadStatus}
-              </p>
-            )}
-
             {/* 产品 & 客户 — 最优先 */}
             <div className="grid gap-3 sm:grid-cols-2">
               <FormField

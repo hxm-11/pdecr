@@ -1,4 +1,4 @@
-import { FileText, Folder, FolderKanban, Home, Users } from "lucide-react"
+import { FileText, Inbox, LayoutDashboard, Users } from "lucide-react"
 
 import { SidebarAppearance } from "@/components/Common/Appearance"
 import { Logo } from "@/components/Common/Logo"
@@ -13,10 +13,9 @@ import { type Item, Main } from "./Main"
 import { User } from "./User"
 
 const baseItems: Item[] = [
-  { icon: Home, title: "Dashboard", path: "/" },
+  { icon: LayoutDashboard, title: "Dashboard", path: "/pd-ecr/dashboard" },
   { icon: FileText, title: "PD-ECR", path: "/pd-ecr" },
-  { icon: FolderKanban, title: "Cases", path: "/pd-ecr/dashboard" },
-  { icon: Folder, title: "项目管理", path: "/projects" },
+  { icon: Inbox, title: "草稿箱", path: "/pd-ecr/drafts" },
 ]
 
 export function AppSidebar() {

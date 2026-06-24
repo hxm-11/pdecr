@@ -243,14 +243,30 @@ export type PdEcrModuleDraftPayload = {
   record_id: string
   module_id: string
   data: Record<string, unknown>
+  title?: string
 }
 
 export type PdEcrModuleDraftResponse = {
   id?: string
   record_id: string
   module_id: string
+  title?: string
   data: Record<string, unknown> | null
+  created_at?: string | null
   updated_at?: string | null
+}
+
+export type PdEcrDraftListItem = {
+  record_id: string
+  module_id: string
+  title: string
+  data: Record<string, unknown> | null
+  created_at?: string | null
+  updated_at?: string | null
+}
+
+export type PdEcrDraftListResponse = {
+  drafts: PdEcrDraftListItem[]
 }
 
 export type PdEcrGeneratedCaseResponse = {
@@ -550,6 +566,116 @@ export async function savePdEcrModuleDraft(
   const res = await pdEcrApi.post<PdEcrModuleDraftResponse>(
     "/api/v1/pd-ecr/module-drafts",
     payload,
+  )
+  return res.data
+}
+
+export async function listPdEcrModuleDrafts(
+  recordId?: string,
+): Promise<PdEcrDraftListResponse> {
+  const res = await pdEcrApi.get<PdEcrDraftListResponse>(
+    "/api/v1/pd-ecr/module-drafts/list",
+    { params: recordId ? { record_id: recordId } : {} },
+  )
+  return res.data
+}
+
+export async function deletePdEcrModuleDraft(
+  recordId: string,
+  moduleId: string,
+): Promise<{ deleted: boolean }> {
+  const res = await pdEcrApi.delete<{ deleted: boolean }>(
+    "/api/v1/pd-ecr/module-drafts",
+    { params: { record_id: recordId, module_id: moduleId } },
+  )
+  return res.data
+}
+
+// ── Staged Document Review Flow ──
+
+export type PdEcrStagedSection = {
+  index: number
+  heading: string
+  level: number
+  content: string
+  page_no: number
+}
+
+export type PdEcrStagedTable = {
+  index: number
+  caption: string
+  headers: string[]
+  rows: string[][]
+  page_no: number
+}
+
+export type PdEcrStagedDocument = {
+  id: string
+  status: string
+  original_filename: string
+  file_type: string
+  preview_pdf_url: string | null
+  parsed_text: string
+  metadata: Record<string, unknown>
+  sections: PdEcrStagedSection[]
+  tables: PdEcrStagedTable[]
+  created_at: string | null
+  updated_at: string | null
+}
+
+export type PdEcrStagedDocumentUpdate = {
+  metadata_json?: Record<string, unknown>
+  sections_json?: PdEcrStagedSection[]
+  tables_json?: PdEcrStagedTable[]
+}
+
+export type PdEcrConfirmResponse = {
+  status: string
+  case_id: string
+  case_no: string
+  is_new_case: boolean
+  chunks_created: number
+  indexing: { pending: boolean; message: string }
+}
+
+export async function uploadAndStageDocument(
+  file: File,
+): Promise<PdEcrStagedDocument> {
+  const formData = new FormData()
+  formData.append("file", file)
+  const res = await pdEcrApi.post<PdEcrStagedDocument>(
+    "/api/v1/pd-ecr/documents/upload",
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } },
+  )
+  return res.data
+}
+
+export async function getStagedDocument(
+  docId: string,
+): Promise<PdEcrStagedDocument> {
+  const res = await pdEcrApi.get<PdEcrStagedDocument>(
+    `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}`,
+  )
+  return res.data
+}
+
+export async function updateStagedDocument(
+  docId: string,
+  payload: PdEcrStagedDocumentUpdate,
+): Promise<PdEcrStagedDocument> {
+  const res = await pdEcrApi.patch<PdEcrStagedDocument>(
+    `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}`,
+    payload,
+  )
+  return res.data
+}
+
+export async function confirmStagedDocument(
+  docId: string,
+): Promise<PdEcrConfirmResponse> {
+  const res = await pdEcrApi.post<PdEcrConfirmResponse>(
+    `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}/confirm`,
   )
   return res.data
 }

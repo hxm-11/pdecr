@@ -1,0 +1,57 @@
+[
+    {
+        "type": "text",
+        "text": "DC No PDECR-TEST-001",
+        "bbox": [
+            90,
+            86,
+            309,
+            102
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Date 2026-06-24",
+        "bbox": [
+            90,
+            103,
+            273,
+            118
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Customer project JIM-TEST",
+        "bbox": [
+            90,
+            121,
+            255,
+            137
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Initiator Test User",
+        "bbox": [
+            90,
+            139,
+            257,
+            154
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Reason of changes Test upload pipeline end-to-end",
+        "bbox": [
+            89,
+            155,
+            426,
+            172
+        ],
+        "page_idx": 0
+    }
+]

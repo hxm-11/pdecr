@@ -2264,7 +2264,7 @@ export function ImplementationView({
   const storageKey = `pd-ecr-implementation-${module.id}`
 
   // ── State ──
-  const [developmentConfirmation, setDevelopmentConfirmation] = useState(() => {
+  const [developmentConfirmation] = useState(() => {
     try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.developmentConfirmation) return p.developmentConfirmation } catch {}
     return ""
   })
@@ -2278,7 +2278,7 @@ export function ImplementationView({
     } catch {}
     return defaultChecklist
   })
-  const [implementationDate, setImplementationDate] = useState(() => {
+  const [implementationDate] = useState(() => {
     try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.implementationDate) return p.implementationDate } catch {}
     return ""
   })

@@ -174,7 +174,10 @@ export function PdEcrContentBlocks() {
             {status}
           </p>
 
-          <PdEcrModuleAccordion modules={result.modules} />
+          <PdEcrModuleAccordion
+            modules={result.modules}
+            caseId={result.currentCase?.id}
+          />
         </section>
 
         <footer className="flex flex-wrap items-center gap-3 pb-2">

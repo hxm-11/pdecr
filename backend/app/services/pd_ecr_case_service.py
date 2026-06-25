@@ -198,6 +198,9 @@ def can_edit_module(
     if module is None:
         return False
 
+    if user_pd_ecr_role(user) == "module_owner" and user_is_assigned_to_module(user, module):
+        return True
+
     # Department leader: edit modules their department owns
     if is_department_leader(user) and user_can_lead_module(user, module.module_id):
         return True

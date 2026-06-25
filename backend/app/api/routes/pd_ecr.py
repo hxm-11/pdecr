@@ -55,6 +55,13 @@ from app.services.pd_ecr_notification_service import (
     run_due_reminders,
     send_module_assignment_email,
 )
+from app.services.pd_ecr_workflow import (
+    confirm_department_task,
+    get_workflow_state,
+    request_department_changes,
+    review_leader_task,
+    submit_for_department_confirmation,
+)
 from app.services.pd_ecr_ai_case_service import (
     apply_generated_module,
     create_case_from_ai,
@@ -114,6 +121,27 @@ class PdEcrModuleAssignmentPayload(BaseModel):
 
 class PdEcrTransitionPayload(BaseModel):
     status: str
+
+
+class PdEcrWorkflowSubmitPayload(BaseModel):
+    selected_departments: list[str]
+    assignees: Dict[str, Dict[str, Any]] | None = None
+
+
+class PdEcrDepartmentTaskConfirmPayload(BaseModel):
+    impact_result: str
+    impact_remark: str | None = None
+    action_required: str | None = None
+
+
+class PdEcrWorkflowCommentPayload(BaseModel):
+    comment: str
+
+
+class PdEcrLeaderReviewPayload(BaseModel):
+    decision: str
+    review_comment: str | None = None
+    signature_name: str | None = None
 
 
 class PdEcrImportPayload(BaseModel):
@@ -1437,6 +1465,78 @@ def transition_pd_ecr_case(
             )
         )
     }
+
+
+@router.post("/cases/{case_id}/workflow/submit")
+def submit_pd_ecr_workflow(
+    case_id: str,
+    payload: PdEcrWorkflowSubmitPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    case = get_case_or_404(session=session, case_id=case_id)
+    return submit_for_department_confirmation(
+        session=session,
+        case=case,
+        selected_departments=payload.selected_departments,
+        assignees=payload.assignees,
+        current_user=current_user,
+    )
+
+
+@router.get("/cases/{case_id}/workflow")
+def get_pd_ecr_workflow(case_id: str, session: SessionDep):
+    case = get_case_or_404(session=session, case_id=case_id)
+    return get_workflow_state(session=session, case=case)
+
+
+@router.post("/workflow/department-tasks/{task_id}/confirm")
+def confirm_pd_ecr_department_task(
+    task_id: uuid.UUID,
+    payload: PdEcrDepartmentTaskConfirmPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return confirm_department_task(
+        session=session,
+        task_id=task_id,
+        impact_result=payload.impact_result,
+        impact_remark=payload.impact_remark,
+        action_required=payload.action_required,
+        current_user=current_user,
+    )
+
+
+@router.post("/workflow/department-tasks/{task_id}/request-changes")
+def request_pd_ecr_department_changes(
+    task_id: uuid.UUID,
+    payload: PdEcrWorkflowCommentPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return request_department_changes(
+        session=session,
+        task_id=task_id,
+        comment=payload.comment,
+        current_user=current_user,
+    )
+
+
+@router.post("/workflow/leader-tasks/{task_id}/review")
+def review_pd_ecr_leader_task(
+    task_id: uuid.UUID,
+    payload: PdEcrLeaderReviewPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return review_leader_task(
+        session=session,
+        task_id=task_id,
+        decision=payload.decision,
+        review_comment=payload.review_comment,
+        signature_name=payload.signature_name,
+        current_user=current_user,
+    )
 
 
 @router.get("/cases/{case_id}/modules")

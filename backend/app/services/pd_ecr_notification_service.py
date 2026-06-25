@@ -9,17 +9,16 @@ from app.services.pd_ecr_audit_service import write_activity
 
 try:
     from app.utils import send_email
-except ModuleNotFoundError as exc:
-    if exc.name != "emails":
-        raise
+except Exception as import_error:
 
     def send_email(
         *,
         email_to: str,
         subject: str = "",
         html_content: str = "",
+        _import_error: Exception = import_error,
     ) -> None:
-        raise RuntimeError("Email utility dependency is not installed")
+        raise RuntimeError(f"Email utility is not available: {_import_error}")
 
 
 DONE_STATUSES = {"done", "approved", "closed", "completed", "cancelled"}
@@ -63,6 +62,102 @@ def build_module_email_html(
     <p><strong>Due date:</strong> {due_date}</p>
     <p><strong>Open module:</strong> {link}</p>
     """
+
+
+def build_workflow_email_subject(
+    case: PdEcrCase, *, department: str, notification_type: str
+) -> str:
+    prefix = {
+        "department_confirmation_request": "PD-ECR department confirmation requested",
+        "department_confirmation_completed": "PD-ECR department confirmation completed",
+        "leader_review_request": "PD-ECR leader review requested",
+        "leader_review_approved": "PD-ECR leader review approved",
+        "leader_review_rejected": "PD-ECR leader review rejected",
+        "changes_requested": "PD-ECR changes requested",
+    }.get(notification_type, "PD-ECR workflow notification")
+    return f"{prefix}: {case.case_no} / {department}"
+
+
+def build_workflow_email_html(
+    case: PdEcrCase,
+    *,
+    department: str,
+    action: str,
+    comment: str | None = None,
+) -> str:
+    link = f"/pd-ecr/cases/{case.id}/workflow"
+    comment_html = f"<p><strong>Comment:</strong> {comment}</p>" if comment else ""
+    return f"""
+    <h2>{action}</h2>
+    <p><strong>PD-ECR:</strong> {case.case_no}</p>
+    <p><strong>MCR:</strong> {case.mcr_no or "-"}</p>
+    <p><strong>Case:</strong> {case.title or "-"}</p>
+    <p><strong>Department:</strong> {department}</p>
+    <p><strong>Status:</strong> {case.status}</p>
+    {comment_html}
+    <p><strong>Open workflow:</strong> {link}</p>
+    """
+
+
+def record_workflow_notification(
+    *,
+    session: Session,
+    case: PdEcrCase,
+    recipient_email: str | None,
+    notification_type: str,
+    department: str,
+    comment: str | None = None,
+    sent_at: datetime | None = None,
+) -> PdEcrNotification:
+    subject = build_workflow_email_subject(
+        case, department=department, notification_type=notification_type
+    )
+    recipient = recipient_email or ""
+    status = "sent"
+    error_message = None
+    if not recipient:
+        status = "failed"
+        error_message = "Workflow notification has no recipient_email"
+    else:
+        try:
+            send_email(
+                email_to=recipient,
+                subject=subject,
+                html_content=build_workflow_email_html(
+                    case,
+                    department=department,
+                    action=subject,
+                    comment=comment,
+                ),
+            )
+        except Exception as exc:
+            status = "failed"
+            error_message = str(exc)
+
+    notification = PdEcrNotification(
+        case_id=case.id,
+        module_id=None,
+        recipient_email=recipient,
+        notification_type=notification_type,
+        subject=subject,
+        status=status,
+        provider="smtp",
+        error_message=error_message,
+        sent_at=(sent_at or now_utc()) if status == "sent" else None,
+    )
+    session.add(notification)
+    write_activity(
+        session=session,
+        action=f"workflow_notification.{status}",
+        case_id=case.id,
+        target_type="workflow",
+        target_id=department,
+        metadata={
+            "notification_type": notification_type,
+            "recipient_email": recipient,
+        },
+    )
+    return notification
 
 
 def _record_notification(

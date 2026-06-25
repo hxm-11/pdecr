@@ -128,7 +128,9 @@ export type PdEcrKnowledgeBaseStatus = {
 export type PdEcrCaseStatus =
   | "draft"
   | "submitted"
+  | "department_confirmation"
   | "in_review"
+  | "leader_review"
   | "changes_requested"
   | "approved"
   | "implementation"
@@ -327,6 +329,66 @@ export type PdEcrModuleAssignmentPayload = {
   due_date?: string | null
   reminder_policy?: Record<string, unknown>
   send_assignment_email?: boolean
+}
+
+export type PdEcrDepartmentWorkflowTask = {
+  id: string
+  case_id: string
+  department: string
+  status: string
+  assignee_id?: string | null
+  assignee_email?: string | null
+  assignee_name?: string | null
+  impact_result?: string | null
+  impact_remark?: string | null
+  action_required?: string | null
+  confirmed_by_id?: string | null
+  confirmed_by_name?: string | null
+  confirmed_at?: string | null
+  due_date?: string | null
+}
+
+export type PdEcrLeaderReviewWorkflowTask = {
+  id: string
+  case_id: string
+  department: string
+  status: string
+  reviewer_id?: string | null
+  reviewer_email?: string | null
+  reviewer_name?: string | null
+  review_comment?: string | null
+  signature_name?: string | null
+  reviewed_at?: string | null
+}
+
+export type PdEcrWorkflowState = {
+  case: PdEcrCase
+  department_tasks: PdEcrDepartmentWorkflowTask[]
+  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
+}
+
+export type PdEcrWorkflowSubmitPayload = {
+  selected_departments: string[]
+  assignees: Record<
+    string,
+    {
+      assignee_id?: string | null
+      assignee_email: string
+      assignee_name?: string | null
+    }
+  >
+}
+
+export type PdEcrDepartmentTaskConfirmPayload = {
+  impact_result: string
+  impact_remark?: string | null
+  action_required?: string | null
+}
+
+export type PdEcrLeaderTaskReviewPayload = {
+  decision: "approved" | "rejected" | "changes_requested"
+  review_comment?: string | null
+  signature_name?: string | null
 }
 
 export async function searchPdEcrHistory(
@@ -534,6 +596,59 @@ export async function sendPdEcrModuleReminder(
 ): Promise<{ notification: Record<string, unknown> }> {
   const res = await pdEcrApi.post<{ notification: Record<string, unknown> }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}/send-reminder`,
+  )
+  return res.data
+}
+
+export async function getPdEcrWorkflow(
+  caseId: string,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.get<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow`,
+  )
+  return res.data
+}
+
+export async function submitPdEcrWorkflow(
+  caseId: string,
+  payload: PdEcrWorkflowSubmitPayload,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/submit`,
+    payload,
+  )
+  return res.data
+}
+
+export async function confirmPdEcrDepartmentTask(
+  taskId: string,
+  payload: PdEcrDepartmentTaskConfirmPayload,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/department-tasks/${encodeURIComponent(taskId)}/confirm`,
+    payload,
+  )
+  return res.data
+}
+
+export async function requestPdEcrDepartmentChanges(
+  taskId: string,
+  comment: string,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/department-tasks/${encodeURIComponent(taskId)}/request-changes`,
+    { comment },
+  )
+  return res.data
+}
+
+export async function reviewPdEcrLeaderTask(
+  taskId: string,
+  payload: PdEcrLeaderTaskReviewPayload,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/leader-tasks/${encodeURIComponent(taskId)}/review`,
+    payload,
   )
   return res.data
 }

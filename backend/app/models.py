@@ -213,7 +213,9 @@ class TaskUpdate(TaskBase):
 PD_ECR_STATUSES = {
     "draft",
     "submitted",
+    "department_confirmation",
     "in_review",
+    "leader_review",
     "changes_requested",
     "approved",
     "implementation",
@@ -311,6 +313,56 @@ class PdEcrTask(PdEcrTaskBase, table=True):
     case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
     assignee_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
     created_by_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrDepartmentTaskBase(SQLModel):
+    department: str = Field(index=True, min_length=1, max_length=64)
+    status: str = Field(default="pending", index=True, max_length=32)
+    assignee_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    assignee_email: str | None = Field(default=None, index=True, max_length=255)
+    assignee_name: str | None = Field(default=None, max_length=255)
+    impact_result: str | None = Field(default=None, max_length=64)
+    impact_remark: str | None = Field(default=None, sa_column=Column(Text))
+    action_required: str | None = Field(default=None, sa_column=Column(Text))
+    confirmed_by_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    confirmed_by_name: str | None = Field(default=None, max_length=255)
+    confirmed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    due_date: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrDepartmentTask(PdEcrDepartmentTaskBase, table=True):
+    __tablename__ = "pd_ecr_department_task"
+    __table_args__ = (
+        UniqueConstraint("case_id", "department", name="uq_pd_ecr_dept_task_case_dept"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrLeaderReviewTaskBase(SQLModel):
+    department: str = Field(index=True, min_length=1, max_length=64)
+    status: str = Field(default="pending", index=True, max_length=32)
+    reviewer_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    reviewer_email: str | None = Field(default=None, index=True, max_length=255)
+    reviewer_name: str | None = Field(default=None, max_length=255)
+    review_comment: str | None = Field(default=None, sa_column=Column(Text))
+    signature_name: str | None = Field(default=None, max_length=255)
+    reviewed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrLeaderReviewTask(PdEcrLeaderReviewTaskBase, table=True):
+    __tablename__ = "pd_ecr_leader_review_task"
+    __table_args__ = (
+        UniqueConstraint("case_id", "department", name="uq_pd_ecr_leader_task_case_dept"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
     created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
     updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
 

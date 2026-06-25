@@ -1402,10 +1402,6 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     "Norm, WB, HF... relevant",
     "WI check",
   ]
-  const validationItems = [
-    "Trial Run", "Capability Studies CMK", "Capability Studies MSA",
-    "MAE release", "Cleanness test", "QZ test", "BOM check", "Test report", "PAV release",
-  ]
   const stockDeliveryOptions = [
     "Not affect",
     "Use in other products",
@@ -1456,7 +1452,6 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const storageKey = `pd-ecr-impact-analysis-${module.id}`
   type ImpactRow = { no: boolean; yes: boolean; confirmedBy: string; confirmedAt: string; desc: string }
   type DocRow = { no: boolean; yes: boolean; respPerson: string; dueDate: string }
-  type ValRow = { checked: boolean; finishDate: string; respPerson: string; comments: string }
   type ApprovalRow = { person: string; date: string }
   type StockDeliveryRow = {
     label: string
@@ -1468,7 +1463,6 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
 
   const defaultImpact = (): ImpactRow => ({ no: true, yes: false, confirmedBy: "", confirmedAt: "", desc: "" })
   const defaultDoc = (): DocRow => ({ no: true, yes: false, respPerson: "", dueDate: "" })
-  const defaultVal = (): ValRow => ({ checked: false, finishDate: "", respPerson: "", comments: "" })
   const defaultApproval = (): ApprovalRow => ({ person: "", date: "" })
 
   const [impacts, setImpacts] = useState<ImpactRow[]>(() => {
@@ -1478,10 +1472,6 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const [documents, setDocuments] = useState<DocRow[]>(() => {
     try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.documents?.length) return p.documents } catch {}
     return docItems.map(() => defaultDoc())
-  })
-  const [validations, setValidations] = useState<ValRow[]>(() => {
-    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.validations?.length) return p.validations } catch {}
-    return validationItems.map(() => defaultVal())
   })
   const [mixedDeliveries, setMixedDeliveries] = useState<string>(() => {
     try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.mixedDeliveries) return p.mixedDeliveries } catch {}
@@ -1533,7 +1523,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
       localStorage.setItem(storageKey, JSON.stringify({
-        impacts, documents, validations, mixedDeliveries, mixedDeliveryRemark,
+        impacts, documents, mixedDeliveries, mixedDeliveryRemark,
         firstDeliveryAnswer, stockDeliveryRows, approvals, costNote,
       }))
       setSaveStatus("Auto-saved")
@@ -1541,7 +1531,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [impacts, documents, validations, mixedDeliveries, mixedDeliveryRemark, firstDeliveryAnswer, stockDeliveryRows, approvals, costNote])
+  }, [impacts, documents, mixedDeliveries, mixedDeliveryRemark, firstDeliveryAnswer, stockDeliveryRows, approvals, costNote])
 
   const navigate = useNavigate()
 
@@ -1562,15 +1552,13 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     setDocuments((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
   const updateDoc = (i: number, f: keyof DocRow, v: string) =>
     setDocuments((p) => p.map((r, j) => j === i ? { ...r, [f]: v } : r))
-  const updateVal = (i: number, f: keyof ValRow, v: string | boolean) =>
-    setValidations((p) => p.map((r, j) => j === i ? { ...r, [f]: v } : r))
   const updateApproval = (i: number, f: keyof ApprovalRow, v: string) =>
     setApprovals((p) => p.map((r, j) => {
       if (j !== i) return r
       const next = { ...r, [f]: v }
       if (f === "person") {
         if (v.trim()) {
-          next.date = new Date().toISOString().replace("T", " ").slice(0, 19)
+          const now = new Date(); next.date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
         } else {
           next.date = ""
         }
@@ -1622,7 +1610,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                   <th className="px-3 py-2.5">Influence area / 影响范围</th>
                   <th className="w-12 px-2 py-2.5 text-center">No</th>
                   <th className="w-12 px-2 py-2.5 text-center">Yes</th>
-                  <th className="w-64 px-3 py-2.5">Remark / 备注</th>
+                  <th className="w-64 px-3 py-2.5">Measures / 措施</th>
                   <th className="w-40 px-3 py-2.5">Confirmed by / 确认人</th>
                 </tr>
               </thead>
@@ -1771,61 +1759,6 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
           )}
         </div>
 
-        {/* Step 3.2 Validation items */}
-        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <button
-            type="button"
-            onClick={() => toggleStep("step-3.2")}
-            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
-          >
-            <span><span className="mr-2 text-amber-400">Step 3.2</span>Quality Assurance / 验证项目</span>
-            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.2") ? "rotate-180" : ""}`} />
-          </button>
-          {expandedSteps.has("step-3.2") && (
-          <>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-                  <th className="w-8 px-3 py-2.5">☑</th>
-                  <th className="px-3 py-2.5">Validation / 验证项目</th>
-                  <th className="w-32 px-3 py-2.5">Plan finish date</th>
-                  <th className="w-28 px-3 py-2.5">Resp. person</th>
-                  <th className="px-3 py-2.5">Comments / 备注</th>
-                </tr>
-              </thead>
-              <tbody>
-                {validations.map((row, i) => (
-                  <tr key={i} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                    <td className="px-3 py-2.5 text-center">
-                      <input type="checkbox" checked={row.checked} onChange={(e) => updateVal(i, "checked", e.target.checked)} className="accent-amber-600 size-4" />
-                    </td>
-                    <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{validationItems[i]}</td>
-                    <td className="px-3 py-2.5">
-                      <input type="date" value={row.finishDate} onChange={(e) => updateVal(i, "finishDate", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <input value={row.respPerson} onChange={(e) => updateVal(i, "respPerson", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <input value={row.comments} onChange={(e) => updateVal(i, "comments", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注" />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <button type="button" onClick={() => setValidations((p) => [...p, defaultVal()])}
-            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
-            + 添加验证项
-          </button>
-          </>
-          )}
-        </div>
-
         {/* Step 3.3 Affected documents */}
         <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
           <button
@@ -1891,7 +1824,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
           {/* Auto-synced approval panel */}
           <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
             <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
-              Step 4 / 7 Approval / 审批签字
+              Change-Feasibility Review / 可行性评审
             </div>
             <div className="divide-y divide-stone-100">
               {approvalDepts.map((dept, i) => (
@@ -1905,7 +1838,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                       ✓ {approvals[i].date}
                     </p>
                   ) : (
-                    <p className="mt-1 text-[10px] text-stone-300">待签字</p>
+                    <p className="mt-1 text-[10px] text-stone-300">待确认</p>
                   )}
                 </div>
               ))}
@@ -1950,14 +1883,14 @@ export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
     "Cleanness test", "QZ test", "200h PDL", "BOM check", "Test report", "PAV release", "Other",
   ]
   const storageKey = `pd-ecr-validation-plan-${module.id}`
-  type ValRow = { label: string; checked: boolean; criteria: string; finishDate: string; respPerson: string; comments: string }
+  type ValRow = { id: string; label: string; checked: boolean; criteria: string; finishDate: string; respPerson: string; comments: string }
 
   const [rows, setRows] = useState<ValRow[]>(() => {
     const raw = localStorage.getItem(storageKey)
     if (raw) {
       try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
     }
-    return rowLabels.map((label) => ({ label, checked: false, criteria: "AI suggested criteria", finishDate: "", respPerson: "", comments: "" }))
+    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, criteria: "AI suggested criteria", finishDate: "", respPerson: "", comments: "" }))
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
 
@@ -1971,45 +1904,58 @@ export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
   }
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-3xl font-semibold">
-            <span className="bg-yellow-200 px-1">QAC / Validation plan (with evaluation criteria)</span> in trial run:
-          </h2>
-          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={savePlan}>Save changes</Button>
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+          <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-400 animate-pulse" : saveStatus === "Saved" ? "bg-green-500" : "bg-amber-500"}`} />{saveStatus || "Draft"}
+        </span>
+        <Button type="button" variant="outline" size="sm" className="bg-white" onClick={savePlan}>Save changes</Button>
+      </div>
+
+      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <div className="flex items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
+          <span><span className="mr-2 text-amber-400">Step 3.2</span>QAC &amp; Validation plan</span>
         </div>
-        <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
-        <div className="overflow-hidden rounded-lg border border-stone-200">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-amber-600 text-white">
-              <tr>
-                {["Validations", "Evaluation criteria", "Plan finish date", "Resp. person", "Comments"].map((h) => (
-                  <th key={h} className="px-3 py-2">{h}</th>
-                ))}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                <th className="w-8 px-3 py-2.5">☑</th>
+                <th className="px-3 py-2.5">Validation / 验证项目</th>
+                <th className="w-32 px-3 py-2.5">Plan finish date</th>
+                <th className="w-28 px-3 py-2.5">Resp. person</th>
+                <th className="px-3 py-2.5">Comments / 备注</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, index) => (
-                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
-                  <td className="px-3 py-2">
-                    <input type="checkbox" checked={row.checked} onChange={() => toggleCheck(index)} className="mr-2" />
-                    {row.label}
+              {rows.map((row, i) => (
+                <tr key={row.id} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                  <td className="px-3 py-2.5 text-center">
+                    <input type="checkbox" checked={row.checked} onChange={() => toggleCheck(i)} className="accent-amber-600 size-4" />
                   </td>
-                  <td className="px-3 py-2"><input value={row.criteria} onChange={(e) => updateField(index, "criteria", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" /></td>
-                  <td className="px-3 py-2"><input type="date" value={row.finishDate} onChange={(e) => updateField(index, "finishDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
-                  <td className="px-3 py-2"><input value={row.respPerson} onChange={(e) => updateField(index, "respPerson", e.target.value)} className="h-8 w-24 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Owner" /></td>
-                  <td className="px-3 py-2"><input value={row.comments} onChange={(e) => updateField(index, "comments", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Remark" /></td>
+                  <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{row.label}</td>
+                  <td className="px-3 py-2.5">
+                    <input type="date" value={row.finishDate} onChange={(e) => updateField(i, "finishDate", e.target.value)}
+                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <input value={row.respPerson} onChange={(e) => updateField(i, "respPerson", e.target.value)}
+                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <input value={row.comments} onChange={(e) => updateField(i, "comments", e.target.value)}
+                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注" />
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <GeneratedContent module={module} />
-        <ToolFooter module={module} />
+        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, criteria: "", finishDate: "", respPerson: "", comments: "" }])}
+          className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+          + 添加验证项
+        </button>
       </div>
-      <SignatureDashboard module={module} />
-      <AiTask>检索历史相似 CASE 的 validation plan 内容，自动生成各个 validation plan 的内容，提供给业务工程师校准。</AiTask>
     </div>
   )
 }
@@ -2265,55 +2211,55 @@ export function ImplementationView({
   resultOnly?: boolean
 }) {
   // ── Data definitions matching Excel template ──
-  type ImplRow = { department: string; yn: string; description: string; responsible: string; dueDate: string; result?: string }
+  type ImplRow = { id: string; department: string; yn: string; description: string; responsible: string; dueDate: string; result?: string; resultNote?: string }
+  let _implRowId = 0
+  const nextImplRowId = () => `impl-${Date.now()}-${_implRowId++}-${Math.random().toString(36).slice(2, 6)}`
 
   const defaultChecklist: ImplRow[] = [
     // Development
-    { department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "" },
-    { department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "" },
-    { department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "" },
-    { department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "" },
-    { department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Documents release (drawing, offer drawing, BOM, Spec., ...)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "" },
     // Manufacturing
-    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "" },
-    { department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "" },
     // COS
-    { department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "" },
-    { department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "" },
-    { department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "" },
-    { department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "" },
-    { department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "" },
-    { department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "" },
     // Purchasing
-    { department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "" },
-    { department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "" },
-    { department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "" },
     // Quality
-    { department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "" },
-    { department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "" },
     // CPjM
-    { department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "" },
     // LOP
-    { department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "" },
     // PMO
-    { department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "" },
-    { department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "" },
     // Others
-    { department: "Others", yn: "", description: "", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Others", yn: "", description: "", responsible: "", dueDate: "" },
   ]
-
-  const approvalDepts = ["Development", "Purchasing", "MFE", "COS", "Quality", "CPjM", "MOEx", "LOG"]
-  type ApprovalRow = { person: string; date: string }
 
   const storageKey = `pd-ecr-implementation-${module.id}`
 
@@ -2323,16 +2269,18 @@ export function ImplementationView({
     return ""
   })
   const [checklistRows, setChecklistRows] = useState<ImplRow[]>(() => {
-    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.checklistRows?.length) return p.checklistRows } catch {}
+    try {
+      const p = JSON.parse(localStorage.getItem(storageKey) || "")
+      if (p?.checklistRows?.length) {
+        // Migrate old data: ensure every row has an id
+        return p.checklistRows.map((r: ImplRow) => r.id ? r : { ...r, id: nextImplRowId() })
+      }
+    } catch {}
     return defaultChecklist
   })
   const [implementationDate, setImplementationDate] = useState(() => {
     try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.implementationDate) return p.implementationDate } catch {}
     return ""
-  })
-  const [approvals, setApprovals] = useState<ApprovalRow[]>(() => {
-    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.approvals?.length === 8) return p.approvals } catch {}
-    return approvalDepts.map(() => ({ person: "", date: "" }))
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -2358,7 +2306,7 @@ export function ImplementationView({
   }
   const addChecklistItem = (dept: string) => {
     setChecklistRows((prev) => {
-      const newRow: ImplRow = { department: dept, yn: "", description: "", responsible: "", dueDate: "", result: "" }
+      const newRow: ImplRow = { id: nextImplRowId(), department: dept, yn: "", description: "", responsible: "", dueDate: "", result: "", resultNote: "" }
       // Insert after the last item of this department
       const lastIndex = prev.map((r) => r.department).lastIndexOf(dept)
       if (lastIndex >= 0) {
@@ -2369,10 +2317,6 @@ export function ImplementationView({
       return [...prev, newRow]
     })
   }
-  const updateApproval = (i: number, field: keyof ApprovalRow, value: string) => {
-    setApprovals((prev) => prev.map((r, j) => j === i ? { ...r, [field]: value } : r))
-  }
-
   // ── Auto-save ──
   useEffect(() => {
     const skip = !autoSaveTimer.current
@@ -2381,45 +2325,19 @@ export function ImplementationView({
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
       localStorage.setItem(storageKey, JSON.stringify({
-        developmentConfirmation, checklistRows, implementationDate, approvals,
+        developmentConfirmation, checklistRows, implementationDate,
       }))
       setSaveStatus("Auto-saved")
       setTimeout(() => setSaveStatus("Draft"), 2000)
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [developmentConfirmation, checklistRows, implementationDate, approvals])
+  }, [developmentConfirmation, checklistRows, implementationDate])
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
         <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
-      </div>
-
-      {/* ── Step 5: Documents release ── */}
-      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-        <button
-          type="button"
-          onClick={() => toggleStep("step-5")}
-          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
-        >
-          <span><span className="mr-2 text-amber-400">Step 5</span>Documents release / 文档发布</span>
-          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-5") ? "rotate-180" : ""}`} />
-        </button>
-        {expandedSteps.has("step-5") && (
-          <div className="p-4">
-            <p className="text-sm text-stone-600 mb-3">Documents release (drawing, offer drawing, BOM, Spec., ...)</p>
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-semibold text-stone-700 whitespace-nowrap">Development confirmation / 研发确认:</label>
-              <input
-                value={developmentConfirmation}
-                onChange={(e) => setDevelopmentConfirmation(e.target.value)}
-                className="h-9 flex-1 rounded border border-stone-200 bg-white px-3 text-sm outline-none focus:border-amber-400"
-                placeholder="确认人签字..."
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* ── Step 6.1: Implementation check list ── */}
@@ -2464,18 +2382,26 @@ export function ImplementationView({
                       <table className="w-full text-left text-sm">
                         <thead>
                           <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
-                            <th className="w-14 px-2 py-2 text-center">Y/N</th>
+                            <th className="w-8 px-2 py-2 text-center">#</th>
                             <th className="px-3 py-2">Description</th>
+                            <th className="w-14 px-2 py-2 text-center">Y/N</th>
                             <th className="w-36 px-3 py-2">Responsible</th>
                             <th className="w-32 px-3 py-2">Due date</th>
-                            <th className="w-28 px-3 py-2">Result</th>
+                            <th className="w-28 px-3 py-2">STATUS</th>
+                            <th className="w-40 px-3 py-2">Result</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {deptRows.map((row) => {
-                            const globalIndex = checklistRows.indexOf(row)
+                          {deptRows.map((row, idx) => {
+                            const globalIndex = checklistRows.findIndex((r) => r.id === row.id)
                             return (
-                              <tr key={globalIndex} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                              <tr key={row.id} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                                <td className="px-2 py-2 text-center text-xs text-stone-400">
+                                  {idx + 1}
+                                </td>
+                                <td className="px-3 py-2 text-xs leading-5 text-stone-700">
+                                  {row.description || "-"}
+                                </td>
                                 <td className="px-2 py-2 text-center">
                                   <select
                                     value={row.yn}
@@ -2486,14 +2412,6 @@ export function ImplementationView({
                                     <option value="Y">Y</option>
                                     <option value="N">N</option>
                                   </select>
-                                </td>
-                                <td className="px-3 py-2">
-                                  <input
-                                    value={row.description}
-                                    onChange={(e) => updateChecklist(globalIndex, "description", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                                    placeholder="Description..."
-                                  />
                                 </td>
                                 <td className="px-3 py-2">
                                   <input
@@ -2534,6 +2452,14 @@ export function ImplementationView({
                                     <option value="Open">Open</option>
                                   </select>
                                 </td>
+                                <td className="px-3 py-2">
+                                  <input
+                                    value={row.resultNote || ""}
+                                    onChange={(e) => updateChecklist(globalIndex, "resultNote", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    placeholder="Result..."
+                                  />
+                                </td>
                               </tr>
                             )
                           })}
@@ -2555,68 +2481,6 @@ export function ImplementationView({
         )}
       </div>
 
-      {/* ── Step 6.2: Implementation date ── */}
-      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-        <button
-          type="button"
-          onClick={() => toggleStep("step-6.2")}
-          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
-        >
-          <span><span className="mr-2 text-amber-400">Step 6.2</span>Implementation date / 执行日期</span>
-          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-6.2") ? "rotate-180" : ""}`} />
-        </button>
-        {expandedSteps.has("step-6.2") && (
-          <div className="p-4">
-            <label className="text-sm font-semibold text-stone-700">Planned implementation date / 变更计划执行日期:</label>
-            <input
-              type="date"
-              value={implementationDate}
-              onChange={(e) => setImplementationDate(e.target.value)}
-              className="mt-2 h-9 w-64 rounded border border-stone-200 bg-white px-3 text-sm outline-none focus:border-amber-400"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* ── Step 7: Implementation approval ── */}
-      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-        <button
-          type="button"
-          onClick={() => toggleStep("step-7")}
-          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
-        >
-          <span><span className="mr-2 text-amber-400">Step 7</span>Implementation approval / 导入审批</span>
-          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-7") ? "rotate-180" : ""}`} />
-        </button>
-        {expandedSteps.has("step-7") && (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-                  {approvalDepts.map((dept) => (
-                    <th key={dept} className="px-3 py-2.5">{dept}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-stone-100">
-                  {approvals.map((row, i) => (
-                    <td key={i} className="px-3 py-2">
-                      <input
-                        value={row.person}
-                        onChange={(e) => updateApproval(i, "person", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                        placeholder="签批人..."
-                      />
-                      {row.date && <p className="mt-0.5 text-[10px] text-stone-400">{row.date}</p>}
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

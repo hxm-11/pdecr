@@ -767,13 +767,13 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
               </p>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-180 border-collapse text-left text-sm">
+              <table className="w-full min-w-180 border-collapse table-fixed text-left text-sm">
                 <thead>
                   <tr className="bg-stone-800 text-white">
                     <th className="sticky left-0 z-20 w-12 bg-stone-800 px-3 py-3 font-semibold">
                       <span className="sr-only">Selection</span>
                     </th>
-                    <th className="sticky left-12 z-20 bg-stone-800 px-3 py-3 font-semibold">
+                    <th className="sticky left-12 z-20 w-36 bg-stone-800 px-3 py-3 font-semibold">
                       <button type="button" onClick={() => toggleSort("id")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
                         PD-ECR Nr. <ArrowUpDown className="size-3" />
                       </button>
@@ -814,8 +814,8 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       <td className={index % 2 === 0 ? "sticky left-0 z-10 bg-white px-3 py-3" : "sticky left-0 z-10 bg-stone-50 px-3 py-3"}>
                         <input aria-label={`Select ${row.id}`} type="checkbox" checked={selectedIds.includes(row.id)} onChange={(event) => toggleRow(row.id, event.target.checked)} className="size-4 rounded border-stone-300 text-amber-600" />
                       </td>
-                      <td className={index % 2 === 0 ? "sticky left-12 z-10 whitespace-nowrap bg-white px-3 py-3 font-semibold text-amber-700" : "sticky left-12 z-10 whitespace-nowrap bg-stone-50 px-3 py-3 font-semibold text-amber-700"}>
-                        {row.id}
+                      <td className={index % 2 === 0 ? "sticky left-12 z-10 w-36 bg-white px-3 py-3 font-semibold text-amber-700" : "sticky left-12 z-10 w-36 bg-stone-50 px-3 py-3 font-semibold text-amber-700"}>
+                        <span className="block truncate" title={row.id}>{row.id}</span>
                       </td>
                       <td className="hidden lg:table-cell px-3 py-3 text-stone-700 text-xs">{row.dcNo || "-"}</td>
                       <td className="hidden lg:table-cell px-3 py-3 text-stone-700 text-xs">{row.createDate || "-"}</td>

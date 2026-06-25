@@ -6,16 +6,18 @@ import {
   SignatureDashboard,
 } from "./PdEcrModuleDetail"
 
-// ── Simplified module list: only 3 modules ──
+// ── Simplified module list ──
 const ACCORDION_MODULE_IDS = [
   "change-description",
   "impact-analysis",
+  "validation-plan",
   "implementation-plan",
 ] as const
 
 const MODULE_LABELS: Record<string, { title: string; subtitle: string }> = {
   "change-description": { title: "变更描述", subtitle: "Change Description" },
   "impact-analysis": { title: "影响分析", subtitle: "Impact Analysis" },
+  "validation-plan": { title: "QAC & Validation plan", subtitle: "QAC & Validation Plan" },
   "implementation-plan": { title: "实施与验证", subtitle: "Implementation & Validation" },
 }
 
@@ -68,7 +70,19 @@ function ApprovalSignerPanel({ impactModule }: { impactModule?: PdEcrDisplayModu
 
   const updateApproval = (i: number, field: keyof ApprovalRow, value: string) => {
     setApprovals((prev) =>
-      prev.map((r, j) => (j !== i ? r : { ...r, [field]: value }))
+      prev.map((r, j) => {
+        if (j !== i) return r
+        const next = { ...r, [field]: value }
+        if (field === "person") {
+          if (value.trim()) {
+            const now = new Date()
+            next.date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
+          } else {
+            next.date = ""
+          }
+        }
+        return next
+      })
     )
   }
 
@@ -90,7 +104,7 @@ function ApprovalSignerPanel({ impactModule }: { impactModule?: PdEcrDisplayModu
                 placeholder="签批人..."
               />
               {approvals[i].date ? (
-                <p className="mt-1 text-[10px] text-stone-400">{approvals[i].date}</p>
+                <p className="mt-1 text-[10px] font-medium text-emerald-600">✓ {approvals[i].date}</p>
               ) : (
                 <p className="mt-1 text-[10px] text-stone-300">待签字</p>
               )}

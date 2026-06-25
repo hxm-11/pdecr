@@ -1,10 +1,8 @@
 import { useNavigate } from "@tanstack/react-router"
 import {
   ArrowLeft,
-  ArrowRight,
   ClipboardList,
   Download,
-  FileCheck2,
   Home,
   Sparkles,
 } from "lucide-react"
@@ -12,122 +10,16 @@ import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { exportPdEcrDraft, resolvePdEcrAssetUrl } from "@/lib/pdEcrApi"
+import { PdEcrModuleAccordion } from "./PdEcrModuleAccordion"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import { buildPdEcrOnePageHtml, downloadText } from "./pdEcrExport"
-import {
-  loadActiveResult,
-  type PdEcrDisplayModule,
-  saveActiveResult,
-} from "./pdEcrState"
-
-function normalizePreviewToken(text: string) {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "")
-    .trim()
-}
-
-function displayModuleSubtitle(value: string) {
-  return /\.md\b/i.test(value) ? "Generated module" : value
-}
-
-function isTemplateNoiseLine(line: string, module: PdEcrDisplayModule) {
-  const normalizedLine = normalizePreviewToken(line)
-  const normalizedTitle = normalizePreviewToken(module.title)
-  const normalizedSubtitle = normalizePreviewToken(module.subtitle)
-
-  if (!normalizedLine) return true
-  if (normalizedLine === normalizedTitle || normalizedLine === normalizedSubtitle) {
-    return true
-  }
-
-  return (
-    /^[-:|\s]+$/.test(line) ||
-    /^field\s*\/.*content\s*\//i.test(line) ||
-    /^content\s*\d+\s*\/\s*\d+$/i.test(line) ||
-    /^step\s*\d+(\.\d+)?\b/i.test(line) ||
-    /^sheet\s*:/i.test(line)
-  )
-}
-
-/** Strip template markdown for clean card preview text. */
-function cleanModulePreviewText(module: PdEcrDisplayModule) {
-  const source = String(module.summary || module.data.content || "")
-  const lines = source
-    .replace(/```[\s\S]*?```/g, " ")
-    .split(/\r?\n/)
-    .map((line) =>
-      line
-        .replace(/^#{1,6}\s*/, "")
-        .replace(/^>\s*/, "")
-        .replace(/^[-*+]\s+/, "")
-        .replace(/\*\*(.+?)\*\*/g, "$1")
-        .replace(/\*(.+?)\*/g, "$1")
-        .replace(/`([^`]+)`/g, "$1")
-        .replace(/\[(.+?)\]\(.*?\)/g, "$1")
-        .trim(),
-    )
-    .filter((line) => !line.includes("|"))
-    .filter((line) => !isTemplateNoiseLine(line, module))
-
-  return lines
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim()
-}
-
-function GeneratedBlock({
-  module,
-  onOpen,
-}: {
-  module: PdEcrDisplayModule
-  onOpen: (module: PdEcrDisplayModule) => void
-}) {
-  const cleanSummary = cleanModulePreviewText(module)
-  const empty =
-    !cleanSummary ||
-    cleanSummary === "暂无内容" ||
-    cleanSummary === "-" ||
-    cleanSummary.startsWith("No extracted")
-
-  return (
-    <button
-      type="button"
-      onClick={() => onOpen(module)}
-      className="group flex min-h-44 flex-col rounded-lg border border-stone-200 bg-white p-5 text-left shadow-sm transition hover:border-amber-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className={`flex size-11 items-center justify-center rounded-lg ${empty ? "bg-stone-100 text-stone-400" : "bg-amber-50 text-amber-700"}`}>
-          <FileCheck2 className="size-5" />
-        </div>
-        <ArrowRight className="size-4 text-stone-400 transition group-hover:translate-x-1 group-hover:text-amber-700" />
-      </div>
-      <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-stone-500">
-        {displayModuleSubtitle(module.subtitle)}
-      </p>
-      <h2 className="mt-1 text-xl font-semibold tracking-normal text-stone-900">
-        {module.title}
-      </h2>
-      <p className={`mt-3 line-clamp-3 text-sm leading-6 ${empty ? "italic text-stone-400" : "text-stone-600"}`}>
-        {empty ? "Waiting for AI generation — click to configure" : cleanSummary}
-      </p>
-    </button>
-  )
-}
+import { loadActiveResult } from "./pdEcrState"
 
 export function PdEcrContentBlocks() {
   const navigate = useNavigate()
   const result = useMemo(() => loadActiveResult(), [])
   const [status, setStatus] = useState("Ready")
   const reportUrl = resolvePdEcrAssetUrl(result.reportUrl)
-
-  const openModule = (module: PdEcrDisplayModule) => {
-    saveActiveResult(result)
-    navigate({
-      to: "/pd-ecr/content/$moduleId",
-      params: { moduleId: module.id },
-    })
-  }
 
   const exportOnePage = async () => {
     if (result.draftId) {
@@ -244,7 +136,7 @@ export function PdEcrContentBlocks() {
                 </span>
               </div>
               <p className="mt-2 text-sm text-stone-500">
-                PD-ECR content block · 点击模块查看对应报告内容
+                PD-ECR 内容模块 · 点击展开查看详细内容与签字状态
               </p>
             </div>
             <Button
@@ -282,15 +174,7 @@ export function PdEcrContentBlocks() {
             {status}
           </p>
 
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {result.modules.map((module) => (
-              <GeneratedBlock
-                key={module.id}
-                module={module}
-                onOpen={openModule}
-              />
-            ))}
-          </div>
+          <PdEcrModuleAccordion modules={result.modules} />
         </section>
 
         <footer className="flex flex-wrap items-center gap-3 pb-2">

@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import {
   ArrowLeft,
-  Clock3,
+  ChevronDown,
   ExternalLink,
   FileText,
   Home,
@@ -160,7 +160,7 @@ function AiTask({ children }: { children: ReactNode }) {
   )
 }
 
-function firstDataValue(module: PdEcrDisplayModule, keys: string[]) {
+export function firstDataValue(module: PdEcrDisplayModule, keys: string[]) {
   for (const key of keys) {
     const value = module.data[key]
     if (value !== undefined && value !== null && String(value).trim()) {
@@ -170,7 +170,7 @@ function firstDataValue(module: PdEcrDisplayModule, keys: string[]) {
   return ""
 }
 
-function SignatureDashboard({ module }: { module: PdEcrDisplayModule }) {
+export function SignatureDashboard({ module }: { module: PdEcrDisplayModule }) {
   const rows = [
     {
       role: "Engineering",
@@ -1381,7 +1381,7 @@ function SourceTracePanel({ module }: { module: PdEcrDisplayModule }) {
   )
 }
 
-export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
+export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisplayModule; hideApproval?: boolean }) {
   const impactItems = [
     { en: "Function & Performance will be influenced?", zh: "产品功能性能影响?" },
     { en: "Interface and Appearance will be influenced?", zh: "接口和外观影响?" },
@@ -1513,6 +1513,18 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
   const [saveStatus, setSaveStatus] = useState("Draft")
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
+  // Inner step expand/collapse state (multi-select)
+  const [expandedSteps, setExpandedSteps] = useState<Set<string>>(() => new Set(["step-3.1"]))
+
+  const toggleStep = (stepId: string) => {
+    setExpandedSteps((prev) => {
+      const next = new Set(prev)
+      if (next.has(stepId)) next.delete(stepId)
+      else next.add(stepId)
+      return next
+    })
+  }
+
   // Auto-save on data change (debounced 1s, skips initial render)
   useEffect(() => {
     const skip = !autoSaveTimer.current
@@ -1556,7 +1568,13 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
     setApprovals((p) => p.map((r, j) => {
       if (j !== i) return r
       const next = { ...r, [f]: v }
-      if (f === "person" && v.trim() && !r.date) next.date = new Date().toISOString().slice(0, 10)
+      if (f === "person") {
+        if (v.trim()) {
+          next.date = new Date().toISOString().replace("T", " ").slice(0, 19)
+        } else {
+          next.date = ""
+        }
+      }
       return next
     }))
   const updateStockDeliveryRemark = (i: number, v: string) =>
@@ -1571,9 +1589,9 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
     }))
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[4fr_1fr]">
+    <div className={hideApproval ? "" : "grid gap-5 xl:grid-cols-[4fr_1fr]"}>
       {/* ═══ LEFT: scrollable Impact Analysis Content ═══ */}
-      <div className="min-w-0 space-y-5 pr-1" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+      <div className={`min-w-0 space-y-5 ${hideApproval ? "" : "pr-1"}`} style={hideApproval ? {} : { maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
             <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-400 animate-pulse" : saveStatus === "Auto-saved" ? "bg-green-500" : "bg-amber-500"}`} />{saveStatus}
@@ -1586,9 +1604,16 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
 
         {/* Step 3.1 Impact analysis */}
         <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
-            <span className="mr-2 text-amber-400">Step 3.1</span>Impact Analysis / 影响分析
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleStep("step-3.1")}
+            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          >
+            <span><span className="mr-2 text-amber-400">Step 3.1</span>Impact Analysis / 影响分析</span>
+            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1") ? "rotate-180" : ""}`} />
+          </button>
+          {expandedSteps.has("step-3.1") && (
+          <>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
@@ -1651,13 +1676,21 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
                 className="h-8 flex-1 rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注说明..." />
             </div>
           </div>
+          </>
+          )}
         </div>
 
         {/* Mixed Deliveries */}
         <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
-            <span className="mr-2 text-amber-400">Step 3.1.9</span>Stock / Delivery Treatment / 库存发货处理
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleStep("step-3.1.9")}
+            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          >
+            <span><span className="mr-2 text-amber-400">Step 3.1.9</span>Stock / Delivery Treatment / 库存发货处理</span>
+            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1.9") ? "rotate-180" : ""}`} />
+          </button>
+          {expandedSteps.has("step-3.1.9") && (
           <div className="p-4">
             <div className="overflow-x-auto rounded-md border border-stone-200">
               <table className="min-w-250 w-full text-left text-sm">
@@ -1735,13 +1768,21 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
               </table>
             </div>
           </div>
+          )}
         </div>
 
         {/* Step 3.2 Validation items */}
         <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
-            <span className="mr-2 text-amber-400">Step 3.2</span>Quality Assurance / 验证项目
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleStep("step-3.2")}
+            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          >
+            <span><span className="mr-2 text-amber-400">Step 3.2</span>Quality Assurance / 验证项目</span>
+            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.2") ? "rotate-180" : ""}`} />
+          </button>
+          {expandedSteps.has("step-3.2") && (
+          <>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
@@ -1781,13 +1822,22 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
             className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
             + 添加验证项
           </button>
+          </>
+          )}
         </div>
 
         {/* Step 3.3 Affected documents */}
         <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-          <div className="bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
-            <span className="mr-2 text-amber-400">Step 3.3</span>Affected Documents Check / 受影响文件检查
-          </div>
+          <button
+            type="button"
+            onClick={() => toggleStep("step-3.3")}
+            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          >
+            <span><span className="mr-2 text-amber-400">Step 3.3</span>Affected Documents Check / 受影响文件检查</span>
+            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.3") ? "rotate-180" : ""}`} />
+          </button>
+          {expandedSteps.has("step-3.3") && (
+          <>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
@@ -1828,12 +1878,14 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
             className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
             + 添加文件项
           </button>
+          </>
+          )}
         </div>
 
-        <ToolFooter module={module} />
       </div>
 
-      {/* ═══ RIGHT: Leader Approval Panel (1/5, sticky) ═══ */}
+      {/* ═══ RIGHT: Leader Approval Panel (1/5, sticky) — hidden when outer panel is active ═══ */}
+      {!hideApproval && (
       <div className="hidden xl:block">
         <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
           {/* Auto-synced approval panel */}
@@ -1849,7 +1901,9 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
                     className="mt-1 h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
                     placeholder="签批人..." />
                   {approvals[i].date ? (
-                    <p className="mt-1 text-[10px] text-stone-400">{approvals[i].date}</p>
+                    <p className="mt-1 text-[10px] font-medium text-emerald-600">
+                      ✓ {approvals[i].date}
+                    </p>
                   ) : (
                     <p className="mt-1 text-[10px] text-stone-300">待签字</p>
                   )}
@@ -1880,6 +1934,7 @@ export function ImpactAnalysisView({ module }: { module: PdEcrDisplayModule }) {
           <SignatureDashboard module={module} />
         </div>
       </div>
+      )}
 
       {/* ═══ Floating Source Trace (bottom-right, collapsible) ═══ */}
       {module.sourceCases?.length || module.sourceFiles?.length ? (
@@ -2204,108 +2259,363 @@ export function ValidationResultFunctionalView({
 
 export function ImplementationView({
   module,
-  resultOnly = false,
+  resultOnly: _resultOnly = false,
 }: {
   module: PdEcrDisplayModule
   resultOnly?: boolean
 }) {
-  const rowLabels = [
-    "Change BOMs & Drawings & Documents in POE system",
-    "Inform documents update",
-    "Update offer drawing, TCD, D-FMEA",
-    "Norm, WB, HF",
-    "MoC, IMDS",
-    "Related equipment be ready on site",
-    "Related program be ready",
-    "Old tooling / cutting / fixture disposal",
-    "Old materials disposal",
-  ]
-  const storageKey = `pd-ecr-implementation-${module.id}`
-  type ImplRow = { label: string; department: string; yn: string; description: string; responsible: string; dueDate: string; result: string }
+  // ── Data definitions matching Excel template ──
+  type ImplRow = { department: string; yn: string; description: string; responsible: string; dueDate: string; result?: string }
 
-  const [rows, setRows] = useState<ImplRow[]>(() => {
-    const raw = localStorage.getItem(storageKey)
-    if (raw) {
-      try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
-    }
-    return rowLabels.map((label, i) => ({
-      label,
-      department: i < 5 ? "Development" : "Manufacturing",
-      yn: i % 3 === 0 ? "Y" : "N",
-      description: label,
-      responsible: resultOnly ? "XXX" : "",
-      dueDate: resultOnly ? "Apr. 30" : "",
-      result: resultOnly ? "Done" : "",
-    }))
+  const defaultChecklist: ImplRow[] = [
+    // Development
+    { department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "" },
+    { department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "" },
+    { department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "" },
+    { department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "" },
+    { department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "" },
+    // Manufacturing
+    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "" },
+    { department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "" },
+    // COS
+    { department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "" },
+    { department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "" },
+    { department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "" },
+    { department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "" },
+    { department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "" },
+    { department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "" },
+    // Purchasing
+    { department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "" },
+    { department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "" },
+    { department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "" },
+    // Quality
+    { department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "" },
+    { department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "" },
+    // CPjM
+    { department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "" },
+    // LOP
+    { department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "" },
+    // PMO
+    { department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "" },
+    { department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "" },
+    // Others
+    { department: "Others", yn: "", description: "", responsible: "", dueDate: "" },
+  ]
+
+  const approvalDepts = ["Development", "Purchasing", "MFE", "COS", "Quality", "CPjM", "MOEx", "LOG"]
+  type ApprovalRow = { person: string; date: string }
+
+  const storageKey = `pd-ecr-implementation-${module.id}`
+
+  // ── State ──
+  const [developmentConfirmation, setDevelopmentConfirmation] = useState(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.developmentConfirmation) return p.developmentConfirmation } catch {}
+    return ""
+  })
+  const [checklistRows, setChecklistRows] = useState<ImplRow[]>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.checklistRows?.length) return p.checklistRows } catch {}
+    return defaultChecklist
+  })
+  const [implementationDate, setImplementationDate] = useState(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.implementationDate) return p.implementationDate } catch {}
+    return ""
+  })
+  const [approvals, setApprovals] = useState<ApprovalRow[]>(() => {
+    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.approvals?.length === 8) return p.approvals } catch {}
+    return approvalDepts.map(() => ({ person: "", date: "" }))
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const updateField = (index: number, field: keyof ImplRow, value: string) => {
-    setRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+  // Inner step expand/collapse
+  const [expandedSteps, setExpandedSteps] = useState<Set<string>>(() => new Set(["step-6.1"]))
+  const [expandedDepts, setExpandedDepts] = useState<Set<string>>(() => new Set(["dept-Development"]))
+  const toggleStep = (stepId: string) => {
+    setExpandedSteps((prev) => {
+      const next = new Set(prev)
+      if (next.has(stepId)) next.delete(stepId)
+      else next.add(stepId)
+      return next
+    })
   }
-  const saveImplementation = () => {
-    localStorage.setItem(storageKey, JSON.stringify({ rows }))
-    setSaveStatus("Saved")
+
+  // ── Department list for Step 6.1 ──
+  const departments = [...new Set(checklistRows.map((r) => r.department))]
+
+  // ── Mutations ──
+  const updateChecklist = (index: number, field: keyof ImplRow, value: string) => {
+    setChecklistRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
   }
+  const addChecklistItem = (dept: string) => {
+    setChecklistRows((prev) => {
+      const newRow: ImplRow = { department: dept, yn: "", description: "", responsible: "", dueDate: "", result: "" }
+      // Insert after the last item of this department
+      const lastIndex = prev.map((r) => r.department).lastIndexOf(dept)
+      if (lastIndex >= 0) {
+        const next = [...prev]
+        next.splice(lastIndex + 1, 0, newRow)
+        return next
+      }
+      return [...prev, newRow]
+    })
+  }
+  const updateApproval = (i: number, field: keyof ApprovalRow, value: string) => {
+    setApprovals((prev) => prev.map((r, j) => j === i ? { ...r, [field]: value } : r))
+  }
+
+  // ── Auto-save ──
+  useEffect(() => {
+    const skip = !autoSaveTimer.current
+    if (skip) { autoSaveTimer.current = setTimeout(() => {}, 0); return }
+    setSaveStatus("Saving...")
+    clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => {
+      localStorage.setItem(storageKey, JSON.stringify({
+        developmentConfirmation, checklistRows, implementationDate, approvals,
+      }))
+      setSaveStatus("Auto-saved")
+      setTimeout(() => setSaveStatus("Draft"), 2000)
+    }, 1000)
+    return () => clearTimeout(autoSaveTimer.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [developmentConfirmation, checklistRows, implementationDate, approvals])
 
   return (
-    <div className="grid gap-5 xl:grid-cols-[1fr_24rem]">
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
-          <Button type="button" size="sm" className="bg-amber-600 hover:bg-amber-700" onClick={saveImplementation}>Save changes</Button>
-        </div>
-        <div className="overflow-hidden rounded-lg border border-stone-200">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead className="bg-amber-600 text-white">
-              <tr>
-                {["Departments", "Y/N", "Description", "Responsible", "Due date", "Implementation result"].map((h) => (
-                  <th key={h} className="px-3 py-2">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, index) => (
-                <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50">
-                  <td className="px-3 py-2"><select value={row.department} onChange={(e) => updateField(index, "department", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-1 text-sm"><option>Development</option><option>Manufacturing</option><option>Purchasing</option><option>Quality</option></select></td>
-                  <td className="px-3 py-2"><select value={row.yn} onChange={(e) => updateField(index, "yn", e.target.value)} className="h-8 w-16 rounded border border-stone-300 bg-white px-1 text-sm"><option>Y</option><option>N</option></select></td>
-                  <td className="px-3 py-2"><input value={row.description} onChange={(e) => updateField(index, "description", e.target.value)} className="h-8 w-full rounded border border-stone-300 bg-white px-2 text-sm" /></td>
-                  <td className="px-3 py-2"><input value={row.responsible} onChange={(e) => updateField(index, "responsible", e.target.value)} className="h-8 w-24 rounded border border-stone-300 bg-white px-2 text-sm" placeholder="Resp." /></td>
-                  <td className="px-3 py-2"><input type="date" value={row.dueDate} onChange={(e) => updateField(index, "dueDate", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-2 text-sm" /></td>
-                  <td className="px-3 py-2"><select value={row.result} onChange={(e) => updateField(index, "result", e.target.value)} className="h-8 rounded border border-stone-300 bg-white px-1 text-sm"><option value="">-</option><option>Closed</option><option>Ongoing</option><option>Open</option></select></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <GeneratedContent module={module} />
-        <ToolFooter module={module} />
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
       </div>
-      <div className="space-y-5">
-        <SignatureDashboard module={module} />
-        <div className="rounded-lg border border-stone-200 bg-white p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="font-semibold">Dashboard</p>
-              <h3 className="mt-3 text-xl font-semibold">Overdue of Measures</h3>
+
+      {/* ── Step 5: Documents release ── */}
+      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => toggleStep("step-5")}
+          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+        >
+          <span><span className="mr-2 text-amber-400">Step 5</span>Documents release / 文档发布</span>
+          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-5") ? "rotate-180" : ""}`} />
+        </button>
+        {expandedSteps.has("step-5") && (
+          <div className="p-4">
+            <p className="text-sm text-stone-600 mb-3">Documents release (drawing, offer drawing, BOM, Spec., ...)</p>
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-semibold text-stone-700 whitespace-nowrap">Development confirmation / 研发确认:</label>
+              <input
+                value={developmentConfirmation}
+                onChange={(e) => setDevelopmentConfirmation(e.target.value)}
+                className="h-9 flex-1 rounded border border-stone-200 bg-white px-3 text-sm outline-none focus:border-amber-400"
+                placeholder="确认人签字..."
+              />
             </div>
-            <StatusLights active={resultOnly ? "green" : "amber"} />
           </div>
-          <div className="mt-4 flex gap-4 text-sm">
-            <Clock3 className="size-10 text-amber-600" />
-            <ul className="space-y-1">
-              {rows.filter((r) => r.dueDate && !r.result).slice(0, 3).map((r) => (
-                <li key={r.label}>{r.description.slice(0, 40)}... Resp. {r.responsible || "TBD"}</li>
-              ))}
-              {rows.filter((r) => r.dueDate && !r.result).length === 0 && <li>No overdue measures</li>}
-            </ul>
+        )}
+      </div>
+
+      {/* ── Step 6.1: Implementation check list ── */}
+      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => toggleStep("step-6.1")}
+          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+        >
+          <span><span className="mr-2 text-amber-400">Step 6.1</span>Implementation check list / 导入清单</span>
+          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-6.1") ? "rotate-180" : ""}`} />
+        </button>
+        {expandedSteps.has("step-6.1") && (
+          <div className="divide-y divide-stone-200">
+            {departments.map((dept) => {
+              const deptRows = checklistRows.filter((r) => r.department === dept)
+              const deptKey = `dept-${dept}`
+              const isDeptExpanded = expandedDepts.has(deptKey)
+              const toggleDept = () => {
+                setExpandedDepts((prev) => {
+                  const next = new Set(prev)
+                  if (next.has(deptKey)) next.delete(deptKey)
+                  else next.add(deptKey)
+                  return next
+                })
+              }
+              return (
+                <div key={dept}>
+                  {/* ── Department header bar ── */}
+                  <button
+                    type="button"
+                    onClick={toggleDept}
+                    className="flex w-full items-center gap-2 bg-stone-100 px-4 py-2 text-left hover:bg-stone-200 transition cursor-pointer"
+                  >
+                    <ChevronDown className={`size-3.5 text-stone-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
+                    <span className="text-sm font-semibold text-stone-800">{dept}</span>
+                    <span className="text-xs text-stone-400">({deptRows.length} items)</span>
+                  </button>
+                  {/* ── Department mini-table (with its own headers) ── */}
+                  {isDeptExpanded && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm">
+                        <thead>
+                          <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                            <th className="w-14 px-2 py-2 text-center">Y/N</th>
+                            <th className="px-3 py-2">Description</th>
+                            <th className="w-36 px-3 py-2">Responsible</th>
+                            <th className="w-32 px-3 py-2">Due date</th>
+                            <th className="w-28 px-3 py-2">Result</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {deptRows.map((row) => {
+                            const globalIndex = checklistRows.indexOf(row)
+                            return (
+                              <tr key={globalIndex} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                                <td className="px-2 py-2 text-center">
+                                  <select
+                                    value={row.yn}
+                                    onChange={(e) => updateChecklist(globalIndex, "yn", e.target.value)}
+                                    className="h-8 w-14 rounded border border-stone-200 bg-white px-1 text-xs outline-none focus:border-amber-400"
+                                  >
+                                    <option value="">-</option>
+                                    <option value="Y">Y</option>
+                                    <option value="N">N</option>
+                                  </select>
+                                </td>
+                                <td className="px-3 py-2">
+                                  <input
+                                    value={row.description}
+                                    onChange={(e) => updateChecklist(globalIndex, "description", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    placeholder="Description..."
+                                  />
+                                </td>
+                                <td className="px-3 py-2">
+                                  <input
+                                    value={row.responsible}
+                                    onChange={(e) => updateChecklist(globalIndex, "responsible", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    placeholder="Resp."
+                                  />
+                                </td>
+                                <td className="px-3 py-2">
+                                  <input
+                                    type="date"
+                                    value={row.dueDate}
+                                    onChange={(e) => updateChecklist(globalIndex, "dueDate", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                  />
+                                </td>
+                                <td className="px-3 py-2">
+                                  <select
+                                    value={row.result || ""}
+                                    onChange={(e) => updateChecklist(globalIndex, "result", e.target.value)}
+                                    disabled={row.yn === "N"}
+                                    className={`h-8 w-full rounded border px-1 text-xs font-semibold outline-none transition ${
+                                      row.yn === "N"
+                                        ? "border-stone-100 bg-stone-100 text-stone-300 cursor-not-allowed"
+                                        : row.result === "Closed"
+                                          ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                                          : row.result === "Ongoing"
+                                            ? "border-amber-300 bg-amber-50 text-amber-700"
+                                            : row.result === "Open"
+                                              ? "border-blue-300 bg-blue-50 text-blue-700"
+                                              : "border-stone-200 bg-white"
+                                    }`}
+                                  >
+                                    <option value="">-</option>
+                                    <option value="Closed">Closed</option>
+                                    <option value="Ongoing">Ongoing</option>
+                                    <option value="Open">Open</option>
+                                  </select>
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                      <button
+                        type="button"
+                        onClick={() => addChecklistItem(dept)}
+                        className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition"
+                      >
+                        + 添加项
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
-        </div>
-        <AiTask>
-          {resultOnly
-            ? "自动抓取措施状态，列出 overdue 措施，并自动 LINK OUTLOOK 提醒 RESP. 关于过期措施执行。"
-            : "基于历史相似 CASE 和影响分析部分内容，AI 推荐执行措施供工程师校准。"}
-        </AiTask>
+        )}
+      </div>
+
+      {/* ── Step 6.2: Implementation date ── */}
+      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => toggleStep("step-6.2")}
+          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+        >
+          <span><span className="mr-2 text-amber-400">Step 6.2</span>Implementation date / 执行日期</span>
+          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-6.2") ? "rotate-180" : ""}`} />
+        </button>
+        {expandedSteps.has("step-6.2") && (
+          <div className="p-4">
+            <label className="text-sm font-semibold text-stone-700">Planned implementation date / 变更计划执行日期:</label>
+            <input
+              type="date"
+              value={implementationDate}
+              onChange={(e) => setImplementationDate(e.target.value)}
+              className="mt-2 h-9 w-64 rounded border border-stone-200 bg-white px-3 text-sm outline-none focus:border-amber-400"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* ── Step 7: Implementation approval ── */}
+      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <button
+          type="button"
+          onClick={() => toggleStep("step-7")}
+          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+        >
+          <span><span className="mr-2 text-amber-400">Step 7</span>Implementation approval / 导入审批</span>
+          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-7") ? "rotate-180" : ""}`} />
+        </button>
+        {expandedSteps.has("step-7") && (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                  {approvalDepts.map((dept) => (
+                    <th key={dept} className="px-3 py-2.5">{dept}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-stone-100">
+                  {approvals.map((row, i) => (
+                    <td key={i} className="px-3 py-2">
+                      <input
+                        value={row.person}
+                        onChange={(e) => updateApproval(i, "person", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                        placeholder="签批人..."
+                      />
+                      {row.date && <p className="mt-0.5 text-[10px] text-stone-400">{row.date}</p>}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -2345,13 +2655,13 @@ export function FallbackView({ module }: { module: PdEcrDisplayModule }) {
   )
 }
 
-function renderModuleBody(module: PdEcrDisplayModule) {
+export function renderModuleBody(module: PdEcrDisplayModule, hideApproval?: boolean) {
   switch (module.id) {
     case "change_description":
     case "change-description":
       return <ChangeDescriptionView module={module} />
     case "impact-analysis":
-      return <ImpactAnalysisView module={module} />
+      return <ImpactAnalysisView module={module} hideApproval={hideApproval} />
     case "validation-plan":
       return <ValidationPlanView module={module} />
     case "validation-result":

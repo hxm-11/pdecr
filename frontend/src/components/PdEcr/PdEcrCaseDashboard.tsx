@@ -15,7 +15,12 @@ import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { listPdEcrCases, type PdEcrCaseRecord } from "@/lib/pdEcrApi"
+import {
+  getPdEcrKnowledgeBaseStatus,
+  listPdEcrCases,
+  type PdEcrCaseRecord,
+  type PdEcrKnowledgeBaseStatus,
+} from "@/lib/pdEcrApi"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 
 type DashboardCase = {
@@ -169,6 +174,116 @@ function MetricTile({
   )
 }
 
+function formatStatusDate(value?: string | null) {
+  if (!value) return "-"
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value.slice(0, 19)
+  return date.toLocaleString()
+}
+
+function parserLabel(key: string) {
+  const labels: Record<string, string> = {
+    xlsx_controls: "XLSX controls",
+    excel_to_markdown: "Excel parser",
+    pdf_to_markdown: "PDF parser",
+    mineru: "MinerU OCR",
+    libreoffice: "LibreOffice",
+  }
+  return labels[key] || key
+}
+
+function KnowledgeHealthPanel({
+  status,
+  isLoading,
+  isError,
+}: {
+  status?: PdEcrKnowledgeBaseStatus
+  isLoading: boolean
+  isError: boolean
+}) {
+  const vectorReady = Boolean(
+    status?.vector_store?.index_exists && status?.vector_store?.meta_exists,
+  )
+  const rebuildOk = status?.last_rebuild?.success
+  const totalDocuments = status?.last_rebuild?.total_documents ?? "-"
+  const pending = status?.staged_documents?.pending ?? 0
+  const capabilities = Object.entries(status?.parser_capabilities ?? {})
+
+  return (
+    <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
+        <div>
+          <p className="text-sm font-semibold text-stone-900">
+            Knowledge Base Health
+          </p>
+          <p className="text-xs text-stone-500">
+            RAG index, staged uploads, and parser capability checks.
+          </p>
+        </div>
+        <span
+          className={
+            vectorReady && rebuildOk !== false
+              ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700"
+              : "rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700"
+          }
+        >
+          {isLoading
+            ? "Checking"
+            : isError
+              ? "Unavailable"
+              : vectorReady
+                ? "Ready"
+                : "Needs rebuild"}
+        </span>
+      </div>
+
+      <div className="grid gap-3 p-4 md:grid-cols-4">
+        <MetricTile
+          label="Indexed docs"
+          value={isLoading ? "..." : totalDocuments}
+          hint={`${status?.knowledge_files_on_disk ?? 0} source files`}
+        />
+        <MetricTile
+          label="Vector chunks"
+          value={isLoading ? "..." : status?.vector_store?.chunk_files ?? 0}
+          hint={vectorReady ? "FAISS + metadata ready" : "Index missing"}
+        />
+        <MetricTile
+          label="Upload review"
+          value={isLoading ? "..." : pending}
+          hint={`${pending} pending review`}
+        />
+        <MetricTile
+          label="Last rebuild"
+          value={rebuildOk === false ? "Failed" : rebuildOk ? "OK" : "-"}
+          hint={formatStatusDate(status?.last_rebuild?.last_rebuild_at)}
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-2 border-t border-stone-100 px-4 py-3">
+        {capabilities.length > 0 ? (
+          capabilities.map(([key, enabled]) => (
+            <span
+              key={key}
+              className={
+                enabled
+                  ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"
+                  : "rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-500"
+              }
+            >
+              {parserLabel(key)}
+            </span>
+          ))
+        ) : (
+          <span className="text-xs text-stone-500">
+            Parser capability status not available.
+          </span>
+        )}
+      </div>
+    </section>
+  )
+}
+
 export function PdEcrCaseDashboard() {
   const navigate = useNavigate()
   const [searchText, setSearchText] = useState("")
@@ -177,6 +292,15 @@ export function PdEcrCaseDashboard() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["pd-ecr-cases"],
     queryFn: listPdEcrCases,
+    refetchOnWindowFocus: true,
+  })
+  const {
+    data: knowledgeStatus,
+    isLoading: isKnowledgeLoading,
+    isError: isKnowledgeError,
+  } = useQuery({
+    queryKey: ["pd-ecr-knowledge-base-status"],
+    queryFn: getPdEcrKnowledgeBaseStatus,
     refetchOnWindowFocus: true,
   })
 
@@ -264,6 +388,12 @@ export function PdEcrCaseDashboard() {
           <MetricTile label="In Review" value={stats.inReview} hint="Open workflow" />
           <MetricTile label="Ready" value={stats.closed} hint="Approved or closed" />
         </section>
+
+        <KnowledgeHealthPanel
+          status={knowledgeStatus}
+          isLoading={isKnowledgeLoading}
+          isError={isKnowledgeError}
+        />
 
         <section className="grid gap-3 lg:grid-cols-[1fr_18rem]">
           <div className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">

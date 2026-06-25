@@ -59,6 +59,41 @@ test.beforeEach(async ({ page }) => {
       },
     })
   })
+
+  await page.route("**/api/v1/pd-ecr/knowledge-base/status", async (route) => {
+    await route.fulfill({
+      json: {
+        knowledge_files_on_disk: 24,
+        knowledge_dir: "C:\\app\\rag\\knowledge",
+        vector_store: {
+          index_exists: true,
+          meta_exists: true,
+          chunk_files: 5,
+          index_path: "C:\\app\\rag\\vector_store\\pd_ecr.faiss",
+          meta_path: "C:\\app\\rag\\vector_store\\pd_ecr_meta.pkl",
+          index_updated_at: "2026-06-24T09:00:00+08:00",
+          meta_updated_at: "2026-06-24T09:00:00+08:00",
+        },
+        staged_documents: {
+          pending: 2,
+          confirmed: 7,
+          total: 9,
+        },
+        parser_capabilities: {
+          xlsx_controls: true,
+          excel_to_markdown: true,
+          pdf_to_markdown: true,
+          mineru: false,
+        },
+        last_rebuild: {
+          success: true,
+          total_documents: 128,
+          last_rebuild_at: "2026-06-24T09:05:00+08:00",
+          error: "",
+        },
+      },
+    })
+  })
 })
 
 test("uses PD-ECR dashboard as the real dashboard and removes project management", async ({
@@ -75,6 +110,10 @@ test("uses PD-ECR dashboard as the real dashboard and removes project management
   ).not.toBeVisible()
   await expect(page.getByText("项目管理")).not.toBeVisible()
   await expect(page.getByText("3 total cases")).toBeVisible()
+  await expect(page.getByText("Knowledge Base Health")).toBeVisible()
+  await expect(page.getByText("128")).toBeVisible()
+  await expect(page.getByText("2 pending review")).toBeVisible()
+  await expect(page.getByText("XLSX controls")).toBeVisible()
   await expect(page.getByText("PDECR25_084")).toBeVisible()
 
   await page.goto("/projects")

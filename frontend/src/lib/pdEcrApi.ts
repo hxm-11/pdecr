@@ -95,6 +95,36 @@ export type PdEcrCaseListResponse = {
   cases?: PdEcrCaseRecord[]
 }
 
+export type PdEcrKnowledgeBaseStatus = {
+  knowledge_files_on_disk: number
+  knowledge_dir: string
+  vector_store: {
+    index_path: string
+    meta_path: string
+    index_exists: boolean
+    meta_exists: boolean
+    index_size_bytes?: number
+    meta_size_bytes?: number
+    index_updated_at?: string | null
+    meta_updated_at?: string | null
+    chunk_files: number
+  }
+  staged_documents: {
+    pending: number
+    confirmed: number
+    total: number
+    rejected?: number
+    [key: string]: number | undefined
+  }
+  parser_capabilities: Record<string, boolean>
+  last_rebuild?: {
+    last_rebuild_at?: string
+    success?: boolean
+    total_documents?: number
+    error?: string
+  } | null
+}
+
 export type PdEcrCaseStatus =
   | "draft"
   | "submitted"
@@ -311,6 +341,13 @@ export async function searchPdEcrHistory(
 
 export async function listPdEcrCases(): Promise<PdEcrCaseListResponse> {
   const res = await pdEcrApi.get<PdEcrCaseListResponse>("/api/v1/pd-ecr/cases")
+  return res.data
+}
+
+export async function getPdEcrKnowledgeBaseStatus(): Promise<PdEcrKnowledgeBaseStatus> {
+  const res = await pdEcrApi.get<PdEcrKnowledgeBaseStatus>(
+    "/api/v1/pd-ecr/knowledge-base/status",
+  )
   return res.data
 }
 

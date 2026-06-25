@@ -3,6 +3,10 @@ import { expect, test } from "@playwright/test"
 test.use({ storageState: { cookies: [], origins: [] } })
 
 test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("access_token", "playwright-test-token")
+  })
+
   await page.route("**/api/v1/users/me", async (route) => {
     await route.fulfill({
       json: {
@@ -109,7 +113,7 @@ test("opens similar PD-ECR case list after running search", async ({
   ).toBeVisible()
   await expect(page.getByText("LL-0001")).toBeVisible()
   await expect(page.getByText("LL-0002")).toBeVisible()
-  await expect(page.getByRole("button", { name: "Customer" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Customer", exact: true })).toBeVisible()
 })
 
 test("opens PDF history rows as modules and shows rendered template markdown", async ({

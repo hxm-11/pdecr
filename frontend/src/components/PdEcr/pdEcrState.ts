@@ -92,6 +92,7 @@ export type PdEcrStoredResult = {
 const STORAGE_KEY = "pd-ecr-generated-result"
 const HISTORY_STORAGE_KEY = "pd-ecr-history-result"
 const ACTIVE_STORAGE_KEY = "pd-ecr-active-result"
+const DEMO_FALLBACK_ENABLED = import.meta.env.VITE_PD_ECR_DEMO_FALLBACK === "1"
 
 /** Shared utility to resolve a PDF URL from a case row, used by both PdEcrCaseList and PdEcrCreationWorkflow. */
 export function resolveRowPdfUrl(row: PdEcrPdEcrCaseRow, apiBaseUrl?: string): string | null {
@@ -221,7 +222,7 @@ export const moduleOrder: PdEcrModuleId[] = [
   "implementation-result",
 ]
 
-export const fallbackHistoryModules: PdEcrDisplayModule[] = [
+const demoFallbackHistoryModules: PdEcrDisplayModule[] = [
   {
     id: "change-description",
     title: "变更描述",
@@ -264,6 +265,9 @@ export const fallbackHistoryModules: PdEcrDisplayModule[] = [
     },
   },
 ]
+
+export const fallbackHistoryModules: PdEcrDisplayModule[] =
+  DEMO_FALLBACK_ENABLED ? demoFallbackHistoryModules : []
 
 export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   {

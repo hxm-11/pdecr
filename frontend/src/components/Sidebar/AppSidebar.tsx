@@ -1,4 +1,4 @@
-import { FileText, Inbox, LayoutDashboard, Users } from "lucide-react"
+import { FileText, Inbox, LayoutDashboard } from "lucide-react"
 
 import { SidebarAppearance } from "@/components/Common/Appearance"
 import { Logo } from "@/components/Common/Logo"
@@ -8,23 +8,15 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import useAuth from "@/hooks/useAuth"
 import { type Item, Main } from "./Main"
-import { User } from "./User"
 
-const baseItems: Item[] = [
+const items: Item[] = [
   { icon: LayoutDashboard, title: "Dashboard", path: "/pd-ecr/dashboard" },
   { icon: FileText, title: "PD-ECR", path: "/pd-ecr" },
   { icon: Inbox, title: "草稿箱", path: "/pd-ecr/drafts" },
 ]
 
 export function AppSidebar() {
-  const { user: currentUser } = useAuth()
-
-  const items = currentUser?.is_superuser
-    ? [...baseItems, { icon: Users, title: "Admin", path: "/admin" }]
-    : baseItems
-
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="px-4 py-8 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
@@ -35,7 +27,6 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarAppearance />
-        <User user={currentUser} />
       </SidebarFooter>
     </Sidebar>
   )

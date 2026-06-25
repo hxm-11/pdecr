@@ -463,19 +463,9 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
           to: "/pd-ecr/content",
         })
       } catch {
-        saveActiveResult({
-          source: "history",
-          relatedCases: rows.map((item) => item.id),
-          caseRows: rows,
-          currentCase: row,
-          modules: fallbackHistoryModules,
-        })
         setStatus(
-          `Backend unavailable. Opened offline modules for ${row.id}.`,
+          `Backend unavailable. Could not load modules for ${row.id}.`,
         )
-        navigate({
-          to: "/pd-ecr/content",
-        })
       }
     }
   }
@@ -784,7 +774,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       <span className="sr-only">Selection</span>
                     </th>
                     <th className="sticky left-12 z-20 bg-stone-800 px-3 py-3 font-semibold">
-                      <button type="button" aria-label="Sort by case number" onClick={() => toggleSort("id")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
+                      <button type="button" onClick={() => toggleSort("id")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
                         PD-ECR Nr. <ArrowUpDown className="size-3" />
                       </button>
                     </th>
@@ -844,6 +834,9 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-1.5">
+                          <button type="button" onClick={() => openCase(row)} className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-stone-200 bg-white px-1.5 py-0.5 text-xs font-semibold text-stone-700 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700">
+                            Open modules
+                          </button>
                           {hasPdfForRow(row) ? (
                             <button type="button" onClick={() => openPdf(row)} className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-xs font-semibold text-amber-700 hover:bg-amber-100 transition">
                               <ExternalLink className="size-3" /> PDF

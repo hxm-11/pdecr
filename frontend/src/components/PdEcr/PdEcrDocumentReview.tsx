@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "@tanstack/react-router"
 import {
   ArrowLeft,
   CheckCircle,
+  CheckSquare,
   FileText,
   Save,
   Sparkles,
@@ -21,7 +22,6 @@ import {
   type PdEcrStagedTable,
 } from "@/lib/pdEcrApi"
 import { CHANGE_SOURCE_OPTIONS } from "./pdEcrState"
-import { departmentOptions } from "./PdEcrModuleDetail"
 
 // ── Metadata fields — match the platform NewChangeForm exactly ──
 
@@ -41,6 +41,17 @@ type ReviewForm = {
 }
 
 type ReviewFormTextKey = Exclude<keyof ReviewForm, "departments" | "devDomains">
+
+type ParsedControl = {
+  type?: string
+  sheet?: string
+  cell?: string
+  caption?: string
+  checked?: boolean
+  value?: string
+  nearby_label?: string
+  source?: string
+}
 
 const DEV_DOMAINS = ["SYS", "ME", "HW"]
 
@@ -147,20 +158,25 @@ export function PdEcrDocumentReview() {
   const updateForm = (key: keyof ReviewForm, value: string) =>
     setForm((prev) => ({ ...prev, [key]: value }))
 
-  const toggleDepartment = (dept: string, checked: boolean) =>
-    setForm((prev) => ({
-      ...prev,
-      departments: checked
-        ? [...prev.departments, dept]
-        : prev.departments.filter((d) => d !== dept),
-    }))
-
   const previewUrl = useMemo(
     () => (data?.preview_pdf_url ? resolvePdEcrAssetUrl(data.preview_pdf_url) : null),
     [data?.preview_pdf_url],
   )
 
   const selectedSources = form.source.split(",").map((s) => s.trim()).filter(Boolean)
+  const parsedControls = useMemo(() => {
+    const raw = data?.metadata?.controls_json
+    return Array.isArray(raw) ? (raw as ParsedControl[]) : []
+  }, [data?.metadata])
+  const checkedControls = parsedControls.filter((control) => control.checked).length
+  const qualityWarnings = [
+    !data?.parsed_text?.trim() ? "未解析到正文文本" : "",
+    sections.length === 0 ? "未识别到章节" : "",
+    tables.length === 0 ? "未识别到表格" : "",
+    data?.file_type?.match(/^xls/) && parsedControls.length === 0
+      ? "Excel 未识别到控件"
+      : "",
+  ].filter(Boolean)
 
   // ── Save draft ──
   const saveMutation = useMutation({
@@ -286,6 +302,63 @@ export function PdEcrDocumentReview() {
 
         {/* RIGHT: Metadata form + Sections + Tables */}
         <div className="space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+          <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+            <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
+              <FileText className="size-4 text-amber-700" />
+              解析质量报告
+            </div>
+            <div className="grid gap-3 p-4 sm:grid-cols-4">
+              <div className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2">
+                <p className="text-lg font-semibold text-stone-900">{sections.length}</p>
+                <p className="text-xs font-semibold text-stone-600">
+                  {sections.length} sections
+                </p>
+              </div>
+              <div className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2">
+                <p className="text-lg font-semibold text-stone-900">{tables.length}</p>
+                <p className="text-xs font-semibold text-stone-600">
+                  {tables.length} tables
+                </p>
+              </div>
+              <div className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2">
+                <p className="text-lg font-semibold text-stone-900">{parsedControls.length}</p>
+                <p className="text-xs font-semibold text-stone-600">
+                  {parsedControls.length} controls
+                </p>
+              </div>
+              <div className="rounded-md border border-stone-200 bg-stone-50 px-3 py-2">
+                <p className="text-lg font-semibold text-stone-900">{checkedControls}</p>
+                <p className="text-xs font-semibold text-stone-600">
+                  checked controls
+                </p>
+              </div>
+            </div>
+            <div className="border-t border-stone-100 px-4 py-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                入库提示
+              </p>
+              <p className="mt-1 text-sm text-stone-600">
+                确认入库后会按章节、表格行和 Excel 控件生成 RAG chunks，并触发知识库后台重建。
+              </p>
+              {qualityWarnings.length > 0 ? (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {qualityWarnings.map((warning) => (
+                    <span
+                      key={warning}
+                      className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700"
+                    >
+                      {warning}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="mt-2 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                  结构化解析可用于审核和入库
+                </span>
+              )}
+            </div>
+          </section>
+
           {/* ── Metadata form — matches platform NewChangeForm ── */}
           <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
             <div className="border-b border-stone-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-900">
@@ -406,6 +479,42 @@ export function PdEcrDocumentReview() {
               </fieldset>
             </div>
           </section>
+
+          {/* ── Parsed Excel controls ── */}
+          {parsedControls.length > 0 && (
+            <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+              <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
+                <CheckSquare className="size-4 text-amber-700" />
+                控件状态 · {parsedControls.length} 个
+              </div>
+              <div className="divide-y divide-stone-100">
+                {parsedControls.map((control, index) => (
+                  <div key={`${control.sheet}-${control.cell}-${index}`} className="grid gap-2 p-3 text-sm sm:grid-cols-[minmax(0,1fr)_8rem_5rem] sm:items-center">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-stone-800">
+                        {control.nearby_label || control.caption || "Checkbox"}
+                      </p>
+                      <p className="mt-0.5 truncate text-xs text-stone-500">
+                        {control.sheet || "-"} · {control.cell || "-"} · {control.source || "-"}
+                      </p>
+                    </div>
+                    <span className="inline-flex w-fit items-center rounded border border-stone-200 bg-stone-50 px-2 py-1 text-xs font-semibold text-stone-700">
+                      {control.caption || control.value || "-"}
+                    </span>
+                    <label className="inline-flex items-center gap-2 text-xs font-semibold text-stone-700">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(control.checked)}
+                        readOnly
+                        className="accent-amber-600"
+                      />
+                      {control.checked ? "checked" : "unchecked"}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* ── Sections ── */}
           {sections.length > 0 && (

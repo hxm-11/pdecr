@@ -192,8 +192,17 @@ def _parse_file(file_path: Path, suffix: str) -> dict[str, Any]:
 
     parsed_text = ""
     parsed_by = ""
+    controls_json: list[dict[str, Any]] = []
 
     if suffix in (".xlsx", ".xlsm", ".xls"):
+        if suffix in (".xlsx", ".xlsm"):
+            try:
+                from app.rag.xlsx_controls import extract_xlsx_controls
+
+                controls_json = extract_xlsx_controls(file_path)
+            except Exception:
+                logger.warning("XLSX control extraction failed", exc_info=True)
+
         _convert_excel(file_path)
         md_path = KNOWLEDGE_DIR / f"{file_path.stem}.md"
         parsed_by = "excel_to_markdown"
@@ -270,7 +279,10 @@ def _parse_file(file_path: Path, suffix: str) -> dict[str, Any]:
         "change_source": change.get("change_source", ""),
         "change_proposal": change.get("change_proposal", ""),
         "title": ident.get("dc_no", file_path.stem),
+        "controls_json": controls_json,
     }
+    if controls_json:
+        structured["_controls"] = controls_json
 
     # ── Extract sections & tables for display ──
     sections, tables = _parse_sections_and_tables(cleaned)
@@ -494,7 +506,7 @@ def confirm_staged_document(
         source_path=doc.original_file_path,
         source_kind=doc.file_type,
         content_hash="",  # computed separately
-        extracted_metadata=metadata,
+        extracted_metadata=_build_source_extracted_metadata(metadata, doc),
         import_warnings=[],
     ))
 
@@ -552,6 +564,19 @@ def confirm_staged_document(
 # Vector chunk builder
 # ──────────────────────────────────────────────────────────────────────
 
+def _build_source_extracted_metadata(
+    metadata: dict[str, Any],
+    doc: PdEcrStagedDocument,
+) -> dict[str, Any]:
+    """Persist staged structured JSON with the source document record."""
+    return {
+        **metadata,
+        "sections_json": doc.sections_json,
+        "tables_json": doc.tables_json,
+        "controls_json": metadata.get("controls_json", []),
+    }
+
+
 def _build_vector_chunks(doc: PdEcrStagedDocument, case: PdEcrCase) -> int:
     """Build row-level chunks from structured PD-ECR JSON with metadata-aware
     context. Each chunk represents one logical row (a field, an impact item,
@@ -580,6 +605,90 @@ def _build_vector_chunks(doc: PdEcrStagedDocument, case: PdEcrCase) -> int:
         source_file=doc.original_filename,
         file_id=str(doc.id),
     )
+
+    metadata = getattr(doc, "metadata_json", {}) or {}
+    base_metadata = {
+        key: metadata.get(key)
+        for key in (
+            "dc_no",
+            "mcr_no",
+            "customer_project",
+            "product_no",
+            "part_no",
+            "change_type",
+            "sample_type",
+            "initiator",
+        )
+        if metadata.get(key)
+    }
+
+    for control in metadata.get("controls_json", []) or []:
+        caption = str(control.get("caption") or "")
+        nearby_label = str(control.get("nearby_label") or "")
+        value = str(control.get("value") or "")
+        checked = bool(control.get("checked"))
+        control_metadata = {
+            **base_metadata,
+            "sheet": control.get("sheet", ""),
+            "cell": control.get("cell", ""),
+            "caption": caption,
+            "checked": checked,
+            "value": value,
+            "nearby_label": nearby_label,
+            "control_source": control.get("source", ""),
+        }
+        all_chunks.append({
+            "file_id": str(doc.id),
+            "source_file": doc.original_filename,
+            "case_no": case.case_no,
+            "page_no": 1,
+            "section": str(control.get("sheet") or "controls"),
+            "field": caption or str(control.get("cell") or "checkbox"),
+            "chunk_index": len(all_chunks),
+            "document_type": "staged_excel_control",
+            "metadata": control_metadata,
+            "text": (
+                f"Checkbox control: {nearby_label}\n"
+                f"Option: {caption}\n"
+                f"Value: {value}\n"
+                f"Checked: {'yes' if checked else 'no'}\n"
+                f"Cell: {control.get('cell', '')}"
+            ).strip(),
+        })
+
+    for table in getattr(doc, "tables_json", []) or []:
+        headers = [str(header) for header in table.get("headers", [])]
+        for row_index, row in enumerate(table.get("rows", []) or []):
+            cells = [str(cell) for cell in row]
+            row_cells = {
+                headers[index] if index < len(headers) else f"column_{index + 1}": cell
+                for index, cell in enumerate(cells)
+            }
+            row_text = " | ".join(cells)
+            table_metadata = {
+                **base_metadata,
+                "table_index": table.get("index", 0),
+                "table_caption": table.get("caption", ""),
+                "row_index": row_index,
+                "headers": headers,
+                "cells": row_cells,
+            }
+            all_chunks.append({
+                "file_id": str(doc.id),
+                "source_file": doc.original_filename,
+                "case_no": case.case_no,
+                "page_no": table.get("page_no", 1),
+                "section": str(table.get("caption") or "table"),
+                "field": "_table_row",
+                "chunk_index": len(all_chunks),
+                "document_type": "staged_excel_table_row",
+                "metadata": table_metadata,
+                "text": (
+                    f"Table: {table.get('caption', '')}\n"
+                    f"Headers: {' | '.join(headers)}\n"
+                    f"Row {row_index}: {row_text}"
+                ).strip(),
+            })
 
     # Also include full section texts as context chunks
     for sec in doc.sections_json:

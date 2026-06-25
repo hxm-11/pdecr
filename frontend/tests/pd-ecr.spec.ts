@@ -437,6 +437,18 @@ test("uploads new PD-ECR files through staged document review before knowledge i
       change_source: "Purchasing",
       reason: "RPP cost reduction",
       change_description: "Second supplier change",
+      controls_json: [
+        {
+          type: "checkbox",
+          sheet: "Impact analysis&QAC",
+          cell: "E49",
+          caption: "yes/是",
+          checked: true,
+          value: "yes",
+          nearby_label: "Function Performance will be influenced?",
+          source: "xlsx_xml",
+        },
+      ],
     },
     sections: [
       {
@@ -447,7 +459,15 @@ test("uploads new PD-ECR files through staged document review before knowledge i
         page_no: 1,
       },
     ],
-    tables: [],
+    tables: [
+      {
+        index: 0,
+        caption: "Basic information",
+        headers: ["Field", "Content"],
+        rows: [["Product No.", "F01ZH003G1-00"]],
+        page_no: 1,
+      },
+    ],
     created_at: "2026-06-24T00:00:00Z",
     updated_at: "2026-06-24T00:00:00Z",
   }
@@ -485,6 +505,13 @@ test("uploads new PD-ECR files through staged document review before knowledge i
   await expect(page).toHaveURL(/\/pd-ecr\/documents\/staged-doc-001$/)
   await expect(page.getByRole("heading", { name: "new-change.xlsx" })).toBeVisible()
   await expect(page.getByText("AI 解析完成")).toBeVisible()
+  await expect(page.getByText("解析质量报告")).toBeVisible()
+  await expect(page.getByText("1 sections")).toBeVisible()
+  await expect(page.getByText("1 tables")).toBeVisible()
+  await expect(page.getByText("1 controls")).toBeVisible()
+  await expect(page.getByText("控件状态")).toBeVisible()
+  await expect(page.getByText("Function Performance will be influenced?")).toBeVisible()
+  await expect(page.getByText("yes/是")).toBeVisible()
   expect(stagedUploadCalled).toBe(true)
   expect(legacyUploadCalled).toBe(false)
 })

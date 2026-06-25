@@ -1765,13 +1765,33 @@ async def upload_pd_ecr_case_file(
     }
 
 
+def _file_status(path: Path) -> dict[str, Any]:
+    return {
+        "path": str(path),
+        "exists": path.exists(),
+        "size_bytes": path.stat().st_size if path.exists() else 0,
+        "updated_at": (
+            datetime.fromtimestamp(path.stat().st_mtime).isoformat()
+            if path.exists()
+            else None
+        ),
+    }
+
+
 @router.get("/knowledge-base/status")
-def get_knowledge_base_status():
+def get_knowledge_base_status(session: SessionDep):
     """Return the RAG knowledge base indexing status.
 
     Users can call this to verify their uploaded files have been indexed.
     """
-    from app.rag.build_index import get_rebuild_status
+    import shutil
+
+    from app.rag.build_index import (
+        INDEX_PATH,
+        META_PATH,
+        VECTOR_DIR,
+        get_rebuild_status,
+    )
 
     rebuild = get_rebuild_status()
 
@@ -1784,9 +1804,43 @@ def get_knowledge_base_status():
             if p.suffix.lower() in (".md", ".txt") and "_signature_structured" not in p.stem
         ])
 
+    staged_docs = session.exec(select(PdEcrStagedDocument)).all()
+    staged_counts = {
+        "pending": 0,
+        "confirmed": 0,
+        "rejected": 0,
+        "total": len(staged_docs),
+    }
+    for doc in staged_docs:
+        status = doc.status or "pending"
+        staged_counts[status] = staged_counts.get(status, 0) + 1
+
+    index_status = _file_status(INDEX_PATH)
+    meta_status = _file_status(META_PATH)
+    chunk_files = len(list(VECTOR_DIR.glob("chunks_*.pkl"))) if VECTOR_DIR.exists() else 0
+
     return {
         "knowledge_files_on_disk": file_count,
         "knowledge_dir": str(knowledge_dir),
+        "vector_store": {
+            "index_path": str(INDEX_PATH),
+            "meta_path": str(META_PATH),
+            "index_exists": index_status["exists"],
+            "meta_exists": meta_status["exists"],
+            "index_size_bytes": index_status["size_bytes"],
+            "meta_size_bytes": meta_status["size_bytes"],
+            "index_updated_at": index_status["updated_at"],
+            "meta_updated_at": meta_status["updated_at"],
+            "chunk_files": chunk_files,
+        },
+        "staged_documents": staged_counts,
+        "parser_capabilities": {
+            "xlsx_controls": True,
+            "excel_to_markdown": True,
+            "pdf_to_markdown": True,
+            "mineru": shutil.which("mineru") is not None,
+            "libreoffice": bool(shutil.which("libreoffice") or shutil.which("soffice")),
+        },
         "last_rebuild": rebuild,
     }
 

@@ -159,15 +159,15 @@ export function PdEcrContentBlocks() {
           <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
-                AI output
+                
               </p>
               <h2 className="text-xl font-semibold tracking-normal text-stone-900">
-                每页内容模块
+                Change
               </h2>
             </div>
             <div className="flex items-center gap-2 text-sm text-amber-800">
               <Sparkles className="size-4" />
-              <span>已按 PD-ECR 报告结构整理</span>
+              <span></span>
             </div>
           </div>
           <p className="mb-4 text-sm text-stone-500" role="status">

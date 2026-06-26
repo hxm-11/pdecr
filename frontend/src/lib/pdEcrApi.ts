@@ -348,6 +348,46 @@ export type PdEcrDepartmentWorkflowTask = {
   due_date?: string | null
 }
 
+export type PdEcrDepartmentVisibility = {
+  id: string
+  case_id: string
+  department: string
+  visible_to_department: boolean
+  published_by_id?: string | null
+  published_at?: string | null
+}
+
+export type PdEcrExecutionWorkflowTask = {
+  id: string
+  case_id: string
+  checklist_row_id: string
+  department: string
+  description: string
+  status: "pending_confirmation" | "confirmed" | "in_progress" | "completed" | "changes_requested" | string
+  assignee_id?: string | null
+  assignee_email?: string | null
+  assignee_name?: string | null
+  due_date?: string | null
+  execution_result?: string | null
+  execution_note?: string | null
+  evidence_note?: string | null
+  completed_by_id?: string | null
+  completed_by_name?: string | null
+  completed_at?: string | null
+  review_comment?: string | null
+}
+
+export type PdEcrExecutionAssignmentInput = {
+  checklist_row_id: string
+  department: string
+  description: string
+  assignee_id?: string | null
+  assignee_email: string
+  assignee_name?: string | null
+  due_date?: string | null
+}
+
+
 export type PdEcrLeaderReviewWorkflowTask = {
   id: string
   case_id: string
@@ -363,6 +403,8 @@ export type PdEcrLeaderReviewWorkflowTask = {
 
 export type PdEcrWorkflowState = {
   case: PdEcrCase
+  department_visibility: PdEcrDepartmentVisibility[]
+  execution_tasks: PdEcrExecutionWorkflowTask[]
   department_tasks: PdEcrDepartmentWorkflowTask[]
   leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
 }
@@ -619,6 +661,60 @@ export async function submitPdEcrWorkflow(
   )
   return res.data
 }
+
+export async function publishPdEcrDepartments(
+  caseId: string,
+  selectedDepartments: string[],
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/publish-departments`,
+    { selected_departments: selectedDepartments },
+  )
+  return res.data
+}
+
+export async function assignPdEcrExecution(
+  caseId: string,
+  assignments: PdEcrExecutionAssignmentInput[],
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/assign-execution`,
+    { assignments },
+  )
+  return res.data
+}
+
+export async function confirmPdEcrExecutionAssignment(
+  taskId: string,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/confirm-assignment`,
+  )
+  return res.data
+}
+
+export async function completePdEcrExecutionTask(
+  taskId: string,
+  payload: { execution_result: string; execution_note?: string; evidence_note?: string },
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/complete`,
+    payload,
+  )
+  return res.data
+}
+
+export async function requestPdEcrExecutionChanges(
+  taskId: string,
+  comment: string,
+): Promise<PdEcrWorkflowState> {
+  const res = await pdEcrApi.post<PdEcrWorkflowState>(
+    `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/request-changes`,
+    { comment },
+  )
+  return res.data
+}
+
 
 export async function confirmPdEcrDepartmentTask(
   taskId: string,

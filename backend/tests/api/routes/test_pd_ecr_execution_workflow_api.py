@@ -68,3 +68,62 @@ def test_assign_execution_endpoint_returns_pending_confirmation_task(
     content = response.json()
     assert content["case"]["status"] == "assignee_confirmation"
     assert content["execution_tasks"][0]["status"] == "pending_confirmation"
+
+
+def test_execution_task_endpoints_confirm_complete_and_request_changes(
+    client: TestClient,
+    superuser_token_headers: dict[str, str],
+) -> None:
+    case_id = _create_case(client, superuser_token_headers, "TASKS")
+    publish = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/cases/{case_id}/workflow/publish-departments",
+        headers=superuser_token_headers,
+        json={"selected_departments": ["quality"]},
+    )
+    assert publish.status_code == 200
+    assign = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/cases/{case_id}/workflow/assign-execution",
+        headers=superuser_token_headers,
+        json={
+            "assignments": [
+                {
+                    "checklist_row_id": "ai-import-28",
+                    "department": "quality",
+                    "description": "Update testing program on testing equipment",
+                    "assignee_email": "quality.owner@example.com",
+                    "assignee_name": "Quality Owner",
+                }
+            ]
+        },
+    )
+    assert assign.status_code == 200
+    task_id = assign.json()["execution_tasks"][0]["id"]
+
+    confirm = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/workflow/execution-tasks/{task_id}/confirm-assignment",
+        headers=superuser_token_headers,
+    )
+    assert confirm.status_code == 200
+    assert confirm.json()["execution_tasks"][0]["status"] == "in_progress"
+
+    complete = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/workflow/execution-tasks/{task_id}/complete",
+        headers=superuser_token_headers,
+        json={
+            "execution_result": "completed",
+            "execution_note": "Testing program updated.",
+            "evidence_note": "Checked on local tester.",
+        },
+    )
+    assert complete.status_code == 200
+    assert complete.json()["case"]["status"] == "leader_review"
+    assert complete.json()["execution_tasks"][0]["status"] == "completed"
+
+    request_changes = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/workflow/execution-tasks/{task_id}/request-changes",
+        headers=superuser_token_headers,
+        json={"comment": "Please attach evidence."},
+    )
+    assert request_changes.status_code == 200
+    assert request_changes.json()["case"]["status"] == "changes_requested"
+    assert request_changes.json()["execution_tasks"][0]["status"] == "changes_requested"

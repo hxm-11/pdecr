@@ -214,3 +214,65 @@ def test_execution_task_cannot_be_completed_before_assignment_confirmation(sessi
 
     assert exc.value.status_code == 422
     assert "must be in_progress" in exc.value.detail
+
+
+def test_in_progress_execution_task_cannot_be_reassigned_to_pending(session):
+    creator = make_user(session, "creator4@example.com")
+    employee = make_user(
+        session,
+        "quality.owner4@example.com",
+        role="department_member",
+        department="quality",
+    )
+    replacement = make_user(
+        session,
+        "quality.replacement@example.com",
+        role="department_member",
+        department="quality",
+    )
+    case = create_case(
+        session=session,
+        case_in=PdEcrCaseCreate(case_no="PDECR-EXEC-005", title="Guard reassignment"),
+        current_user=creator,
+    )
+    state = assign_execution_tasks(
+        session=session,
+        case=case,
+        assignments=[
+            {
+                "checklist_row_id": "ai-import-28",
+                "department": "quality",
+                "description": "Update testing program on testing equipment",
+                "assignee_id": str(employee.id),
+                "assignee_email": employee.email,
+                "assignee_name": employee.full_name,
+            }
+        ],
+        current_user=creator,
+    )
+    task_id = uuid.UUID(state["execution_tasks"][0]["id"])
+    confirm_execution_assignment(
+        session=session,
+        task_id=task_id,
+        current_user=employee,
+    )
+
+    with pytest.raises(HTTPException) as exc:
+        assign_execution_tasks(
+            session=session,
+            case=case,
+            assignments=[
+                {
+                    "checklist_row_id": "ai-import-28",
+                    "department": "quality",
+                    "description": "Update testing program on testing equipment",
+                    "assignee_id": str(replacement.id),
+                    "assignee_email": replacement.email,
+                    "assignee_name": replacement.full_name,
+                }
+            ],
+            current_user=creator,
+        )
+
+    assert exc.value.status_code == 422
+    assert "cannot be reassigned" in exc.value.detail

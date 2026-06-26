@@ -299,11 +299,19 @@ def assign_execution_tasks(
         if not email:
             raise HTTPException(status_code=422, detail=f"Missing assignee_email for row: {row_id}")
 
-        task = existing.get(row_id) or PdEcrExecutionTask(
-            case_id=case.id,
-            checklist_row_id=row_id,
-            department=department,
-        )
+        task = existing.get(row_id)
+        if task is not None:
+            _ensure_execution_task_status(
+                task,
+                {"pending_confirmation", "changes_requested"},
+                "Execution task cannot be reassigned after execution has started",
+            )
+        else:
+            task = PdEcrExecutionTask(
+                case_id=case.id,
+                checklist_row_id=row_id,
+                department=department,
+            )
         task.department = department
         task.description = str(assignment.get("description") or "")
         task.assignee_id = _parse_uuid(assignment.get("assignee_id"))

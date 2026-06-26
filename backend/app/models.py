@@ -212,8 +212,13 @@ class TaskUpdate(TaskBase):
 
 PD_ECR_STATUSES = {
     "draft",
+    "generated",
     "submitted",
     "department_confirmation",
+    "department_alignment",
+    "execution_assignment",
+    "assignee_confirmation",
+    "execution_in_progress",
     "in_review",
     "leader_review",
     "changes_requested",
@@ -336,6 +341,52 @@ class PdEcrDepartmentTask(PdEcrDepartmentTaskBase, table=True):
     __tablename__ = "pd_ecr_department_task"
     __table_args__ = (
         UniqueConstraint("case_id", "department", name="uq_pd_ecr_dept_task_case_dept"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrDepartmentVisibility(SQLModel, table=True):
+    __tablename__ = "pd_ecr_department_visibility"
+    __table_args__ = (
+        UniqueConstraint("case_id", "department", name="uq_pd_ecr_dept_visibility_case_dept"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
+    department: str = Field(index=True, min_length=1, max_length=64)
+    visible_to_department: bool = Field(default=True)
+    published_by_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    published_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrExecutionTaskBase(SQLModel):
+    checklist_row_id: str = Field(index=True, min_length=1, max_length=128)
+    department: str = Field(index=True, min_length=1, max_length=64)
+    description: str = Field(default="", sa_column=Column(Text))
+    status: str = Field(default="pending_confirmation", index=True, max_length=32)
+    assignee_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    assignee_email: str | None = Field(default=None, index=True, max_length=255)
+    assignee_name: str | None = Field(default=None, max_length=255)
+    due_date: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    execution_result: str | None = Field(default=None, max_length=64)
+    execution_note: str | None = Field(default=None, sa_column=Column(Text))
+    evidence_note: str | None = Field(default=None, sa_column=Column(Text))
+    completed_by_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    completed_by_name: str | None = Field(default=None, max_length=255)
+    completed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+    review_comment: str | None = Field(default=None, sa_column=Column(Text))
+
+
+class PdEcrExecutionTask(PdEcrExecutionTaskBase, table=True):
+    __tablename__ = "pd_ecr_execution_task"
+    __table_args__ = (
+        UniqueConstraint("case_id", "checklist_row_id", name="uq_pd_ecr_execution_task_case_row"),
     )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)

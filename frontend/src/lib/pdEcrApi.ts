@@ -409,6 +409,11 @@ export type PdEcrWorkflowState = {
   leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
 }
 
+export type PdEcrMyWorkflowTasks = {
+  execution_tasks: PdEcrExecutionWorkflowTask[]
+  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
+}
+
 export type PdEcrWorkflowSubmitPayload = {
   selected_departments: string[]
   assignees: Record<
@@ -715,6 +720,12 @@ export async function requestPdEcrExecutionChanges(
   return res.data
 }
 
+export async function listMyPdEcrWorkflowTasks(): Promise<PdEcrMyWorkflowTasks> {
+  const res = await pdEcrApi.get<PdEcrMyWorkflowTasks>(
+    "/api/v1/pd-ecr/workflow/my-tasks",
+  )
+  return res.data
+}
 
 export async function confirmPdEcrDepartmentTask(
   taskId: string,

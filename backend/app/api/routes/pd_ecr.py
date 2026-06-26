@@ -61,6 +61,7 @@ from app.services.pd_ecr_workflow import (
     confirm_department_task,
     confirm_execution_assignment,
     get_workflow_state,
+    list_my_workflow_tasks,
     publish_case_to_departments,
     request_department_changes,
     request_execution_task_changes,
@@ -1550,6 +1551,13 @@ def get_pd_ecr_workflow(case_id: str, session: SessionDep):
     case = get_case_or_404(session=session, case_id=case_id)
     return get_workflow_state(session=session, case=case)
 
+
+@router.get("/workflow/my-tasks")
+def get_my_pd_ecr_workflow_tasks(
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return list_my_workflow_tasks(session=session, current_user=current_user)
 
 @router.post("/workflow/execution-tasks/{task_id}/confirm-assignment")
 def confirm_pd_ecr_execution_assignment(

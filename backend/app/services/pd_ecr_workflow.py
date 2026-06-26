@@ -209,6 +209,36 @@ def get_workflow_state(*, session: Session, case: PdEcrCase) -> dict[str, Any]:
     }
 
 
+def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str, Any]:
+    execution_statement = select(PdEcrExecutionTask).order_by(
+        PdEcrExecutionTask.department,
+        PdEcrExecutionTask.checklist_row_id,
+    )
+    leader_statement = select(PdEcrLeaderReviewTask).order_by(
+        PdEcrLeaderReviewTask.department,
+    )
+    if not current_user.is_superuser and getattr(current_user, "pd_ecr_role", None) != "pd_ecr_manager":
+        execution_statement = execution_statement.where(
+            PdEcrExecutionTask.assignee_id == current_user.id
+        )
+        leader_statement = leader_statement.where(
+            PdEcrLeaderReviewTask.reviewer_id == current_user.id
+        )
+
+    execution_tasks = list(session.exec(execution_statement).all())
+    leader_tasks = list(session.exec(leader_statement).all())
+    return {
+        "execution_tasks": [
+            _serialize_execution_task(task)
+            for task in execution_tasks
+        ],
+        "leader_review_tasks": [
+            _serialize_leader_task(task)
+            for task in leader_tasks
+        ],
+    }
+
+
 def _find_leader_for_department(
     *, session: Session, department: str
 ) -> User | None:

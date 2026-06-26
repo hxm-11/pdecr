@@ -9,6 +9,7 @@ from app.models import (
     PdEcrCaseCreate,
     PdEcrDepartmentVisibility,
     PdEcrExecutionTask,
+    PdEcrLeaderReviewTask,
     User,
 )
 from app.services.pd_ecr_case_service import create_case
@@ -16,6 +17,7 @@ from app.services.pd_ecr_workflow import (
     assign_execution_tasks,
     complete_execution_task,
     confirm_execution_assignment,
+    list_my_workflow_tasks,
     publish_case_to_departments,
 )
 
@@ -276,3 +278,100 @@ def test_in_progress_execution_task_cannot_be_reassigned_to_pending(session):
 
     assert exc.value.status_code == 422
     assert "cannot be reassigned" in exc.value.detail
+
+
+def test_list_my_workflow_tasks_filters_by_assignee_and_reviewer(session):
+    assignee = make_user(session, "assignee@example.com", department="quality")
+    reviewer = make_user(
+        session,
+        "leader@example.com",
+        role="department_leader",
+        department="quality",
+    )
+    other_user = make_user(session, "other@example.com", department="manufacturing")
+    case = PdEcrCase(case_no="PDECR-MY-TASKS-001", title="My tasks")
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    session.add(
+        PdEcrExecutionTask(
+            case_id=case.id,
+            checklist_row_id="quality-row",
+            department="quality",
+            description="Update testing program",
+            assignee_id=assignee.id,
+            assignee_email=assignee.email,
+            assignee_name=assignee.full_name,
+        )
+    )
+    session.add(
+        PdEcrExecutionTask(
+            case_id=case.id,
+            checklist_row_id="mfg-row",
+            department="manufacturing",
+            description="Update work instruction",
+            assignee_id=other_user.id,
+            assignee_email=other_user.email,
+            assignee_name=other_user.full_name,
+        )
+    )
+    session.add(
+        PdEcrLeaderReviewTask(
+            case_id=case.id,
+            department="quality",
+            reviewer_id=reviewer.id,
+            reviewer_email=reviewer.email,
+            reviewer_name=reviewer.full_name,
+        )
+    )
+    session.commit()
+
+    assignee_tasks = list_my_workflow_tasks(session=session, current_user=assignee)
+    reviewer_tasks = list_my_workflow_tasks(session=session, current_user=reviewer)
+
+    assert [task["checklist_row_id"] for task in assignee_tasks["execution_tasks"]] == [
+        "quality-row"
+    ]
+    assert assignee_tasks["leader_review_tasks"] == []
+    assert reviewer_tasks["execution_tasks"] == []
+    assert [task["department"] for task in reviewer_tasks["leader_review_tasks"]] == [
+        "quality"
+    ]
+
+
+def test_list_my_workflow_tasks_manager_sees_all_tasks(session):
+    manager = make_user(session, "manager@example.com", role="pd_ecr_manager")
+    assignee = make_user(session, "assignee2@example.com", department="quality")
+    reviewer = make_user(session, "leader2@example.com", department="quality")
+    case = PdEcrCase(case_no="PDECR-MY-TASKS-002", title="Manager tasks")
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    session.add(
+        PdEcrExecutionTask(
+            case_id=case.id,
+            checklist_row_id="quality-row",
+            department="quality",
+            description="Update testing program",
+            assignee_id=assignee.id,
+            assignee_email=assignee.email,
+            assignee_name=assignee.full_name,
+        )
+    )
+    session.add(
+        PdEcrLeaderReviewTask(
+            case_id=case.id,
+            department="quality",
+            reviewer_id=reviewer.id,
+            reviewer_email=reviewer.email,
+            reviewer_name=reviewer.full_name,
+        )
+    )
+    session.commit()
+
+    tasks = list_my_workflow_tasks(session=session, current_user=manager)
+
+    assert len(tasks["execution_tasks"]) == 1
+    assert len(tasks["leader_review_tasks"]) == 1

@@ -127,3 +127,45 @@ def test_execution_task_endpoints_confirm_complete_and_request_changes(
     assert request_changes.status_code == 200
     assert request_changes.json()["case"]["status"] == "changes_requested"
     assert request_changes.json()["execution_tasks"][0]["status"] == "changes_requested"
+
+
+def test_my_workflow_tasks_endpoint_lists_execution_tasks(
+    client: TestClient,
+    superuser_token_headers: dict[str, str],
+) -> None:
+    case_id = _create_case(client, superuser_token_headers, "MYTASKS")
+    publish = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/cases/{case_id}/workflow/publish-departments",
+        headers=superuser_token_headers,
+        json={"selected_departments": ["quality"]},
+    )
+    assert publish.status_code == 200
+    assign = client.post(
+        f"{settings.API_V1_STR}/pd-ecr/cases/{case_id}/workflow/assign-execution",
+        headers=superuser_token_headers,
+        json={
+            "assignments": [
+                {
+                    "checklist_row_id": "ai-import-28",
+                    "department": "quality",
+                    "description": "Update testing program on testing equipment",
+                    "assignee_email": "quality.owner@example.com",
+                    "assignee_name": "Quality Owner",
+                }
+            ]
+        },
+    )
+    assert assign.status_code == 200
+
+    response = client.get(
+        f"{settings.API_V1_STR}/pd-ecr/workflow/my-tasks",
+        headers=superuser_token_headers,
+    )
+
+    assert response.status_code == 200
+    content = response.json()
+    assert any(
+        task["case_id"] == case_id and task["checklist_row_id"] == "ai-import-28"
+        for task in content["execution_tasks"]
+    )
+    assert "leader_review_tasks" in content

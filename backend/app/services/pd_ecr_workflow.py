@@ -348,6 +348,15 @@ def _ensure_execution_task_reviewer(task: PdEcrExecutionTask, user: User) -> Non
     raise HTTPException(status_code=403, detail="No permission to review execution task")
 
 
+def _ensure_execution_task_status(
+    task: PdEcrExecutionTask,
+    allowed: set[str],
+    message: str,
+) -> None:
+    if task.status not in allowed:
+        raise HTTPException(status_code=422, detail=message)
+
+
 def confirm_execution_assignment(
     *,
     session: Session,
@@ -361,6 +370,11 @@ def confirm_execution_assignment(
     case = session.get(PdEcrCase, task.case_id)
     if case is None:
         raise HTTPException(status_code=404, detail="PD-ECR case not found")
+    _ensure_execution_task_status(
+        task,
+        {"pending_confirmation", "changes_requested"},
+        "Execution task must be pending_confirmation or changes_requested before confirmation",
+    )
 
     task.status = "in_progress"
     task.updated_at = now_utc()
@@ -441,6 +455,11 @@ def complete_execution_task(
     case = session.get(PdEcrCase, task.case_id)
     if case is None:
         raise HTTPException(status_code=404, detail="PD-ECR case not found")
+    _ensure_execution_task_status(
+        task,
+        {"in_progress"},
+        "Execution task must be in_progress before completion",
+    )
 
     task.status = "completed"
     task.execution_result = str(execution_result or "").strip()
@@ -480,6 +499,11 @@ def request_execution_task_changes(
     case = session.get(PdEcrCase, task.case_id)
     if case is None:
         raise HTTPException(status_code=404, detail="PD-ECR case not found")
+    _ensure_execution_task_status(
+        task,
+        {"completed"},
+        "Execution task must be completed before requesting changes",
+    )
 
     task.status = "changes_requested"
     task.review_comment = comment

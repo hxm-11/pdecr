@@ -1,6 +1,7 @@
 import uuid
 
 import pytest
+from fastapi import HTTPException
 from sqlmodel import SQLModel, Session, create_engine, select
 
 from app.models import (
@@ -169,3 +170,47 @@ def test_assign_confirm_complete_then_starts_leader_review(session):
     assert state["case"]["status"] == "leader_review"
     assert state["execution_tasks"][0]["status"] == "completed"
     assert state["leader_review_tasks"][0]["reviewer_email"] == leader.email
+
+
+def test_execution_task_cannot_be_completed_before_assignment_confirmation(session):
+    creator = make_user(session, "creator3@example.com")
+    employee = make_user(
+        session,
+        "quality.owner3@example.com",
+        role="department_member",
+        department="quality",
+    )
+    case = create_case(
+        session=session,
+        case_in=PdEcrCaseCreate(case_no="PDECR-EXEC-004", title="Guard execution"),
+        current_user=creator,
+    )
+    state = assign_execution_tasks(
+        session=session,
+        case=case,
+        assignments=[
+            {
+                "checklist_row_id": "ai-import-28",
+                "department": "quality",
+                "description": "Update testing program on testing equipment",
+                "assignee_id": str(employee.id),
+                "assignee_email": employee.email,
+                "assignee_name": employee.full_name,
+            }
+        ],
+        current_user=creator,
+    )
+    task_id = uuid.UUID(state["execution_tasks"][0]["id"])
+
+    with pytest.raises(HTTPException) as exc:
+        complete_execution_task(
+            session=session,
+            task_id=task_id,
+            execution_result="completed",
+            execution_note="Skipped confirmation.",
+            evidence_note=None,
+            current_user=employee,
+        )
+
+    assert exc.value.status_code == 422
+    assert "must be in_progress" in exc.value.detail

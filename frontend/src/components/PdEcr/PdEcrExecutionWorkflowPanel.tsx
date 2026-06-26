@@ -91,6 +91,8 @@ export function PdEcrExecutionWorkflowPanel({
 }) {
   const [workflow, setWorkflow] = useState<PdEcrWorkflowState | null>(null)
   const [selected, setSelected] = useState<Record<string, boolean>>({ quality: true })
+  const [selectionTouched, setSelectionTouched] = useState(false)
+  const [checklistRows, setChecklistRows] = useState<ChecklistRow[]>(() => loadImplementationChecklist())
   const [assignmentEmails, setAssignmentEmails] = useState<Record<string, string>>({})
   const [statusText, setStatusText] = useState("Loading workflow...")
   const [isSaving, setIsSaving] = useState(false)
@@ -112,15 +114,39 @@ export function PdEcrExecutionWorkflowPanel({
     }
   }, [caseId])
 
+  useEffect(() => {
+    const refresh = () => setChecklistRows(loadImplementationChecklist())
+    const timer = window.setInterval(refresh, 1500)
+    window.addEventListener("focus", refresh)
+    return () => {
+      window.clearInterval(timer)
+      window.removeEventListener("focus", refresh)
+    }
+  }, [])
+
   const yRows = useMemo(
-    () => loadImplementationChecklist().filter((row) => row.yn === "Y"),
-    [workflow?.case?.status],
+    () => checklistRows.filter((row) => row.yn === "Y"),
+    [checklistRows],
   )
 
   const publishedDepartments = useMemo(
     () => new Set((workflow?.department_visibility || []).map((item) => item.department)),
     [workflow?.department_visibility],
   )
+
+  useEffect(() => {
+    if (selectionTouched || publishedDepartments.size || !yRows.length) return
+    setSelected((prev) => {
+      const next = { ...prev }
+      yRows.forEach((row) => {
+        const department = normalizeDepartmentId(row.department)
+        if (WORKFLOW_DEPTS.some((dept) => dept.id === department)) {
+          next[department] = true
+        }
+      })
+      return next
+    })
+  }, [publishedDepartments.size, selectionTouched, yRows])
 
   const publishDepartments = async () => {
     const departments = WORKFLOW_DEPTS.filter((dept) => selected[dept.id]).map((dept) => dept.id)
@@ -138,7 +164,10 @@ export function PdEcrExecutionWorkflowPanel({
   }
 
   const assignExecution = async () => {
-    const assignments: PdEcrExecutionAssignmentInput[] = yRows.map((row) => ({
+    const currentRows = loadImplementationChecklist()
+    const currentYRows = currentRows.filter((row) => row.yn === "Y")
+    setChecklistRows(currentRows)
+    const assignments: PdEcrExecutionAssignmentInput[] = currentYRows.map((row) => ({
       checklist_row_id: row.id,
       department: normalizeDepartmentId(row.department),
       description: row.description,
@@ -180,6 +209,7 @@ export function PdEcrExecutionWorkflowPanel({
             publishedDepartments={publishedDepartments}
             selected={selected}
             setSelected={setSelected}
+            onTouchSelection={() => setSelectionTouched(true)}
             onSubmit={publishDepartments}
             disabled={isSaving}
           />
@@ -224,12 +254,14 @@ function DepartmentPublishStep({
   publishedDepartments,
   selected,
   setSelected,
+  onTouchSelection,
   onSubmit,
   disabled,
 }: {
   publishedDepartments: Set<string>
   selected: Record<string, boolean>
   setSelected: Dispatch<SetStateAction<Record<string, boolean>>>
+  onTouchSelection: () => void
   onSubmit: () => void
   disabled: boolean
 }) {
@@ -241,7 +273,10 @@ function DepartmentPublishStep({
           <input
             type="checkbox"
             checked={!!selected[dept.id]}
-            onChange={(event) => setSelected((prev) => ({ ...prev, [dept.id]: event.target.checked }))}
+            onChange={(event) => {
+              onTouchSelection()
+              setSelected((prev) => ({ ...prev, [dept.id]: event.target.checked }))
+            }}
             className="accent-amber-600"
           />
           <span className="font-semibold text-stone-700">{dept.label}</span>

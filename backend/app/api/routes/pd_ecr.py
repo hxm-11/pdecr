@@ -56,9 +56,14 @@ from app.services.pd_ecr_notification_service import (
     send_module_assignment_email,
 )
 from app.services.pd_ecr_workflow import (
+    assign_execution_tasks,
+    complete_execution_task,
     confirm_department_task,
+    confirm_execution_assignment,
     get_workflow_state,
+    publish_case_to_departments,
     request_department_changes,
+    request_execution_task_changes,
     review_leader_task,
     submit_for_department_confirmation,
 )
@@ -127,6 +132,30 @@ class PdEcrWorkflowSubmitPayload(BaseModel):
     selected_departments: list[str]
     assignees: Dict[str, Dict[str, Any]] | None = None
 
+
+
+class PdEcrPublishDepartmentsPayload(BaseModel):
+    selected_departments: list[str]
+
+
+class PdEcrExecutionAssignmentPayload(BaseModel):
+    checklist_row_id: str
+    department: str
+    description: str = ""
+    assignee_id: uuid.UUID | None = None
+    assignee_email: str
+    assignee_name: str | None = None
+    due_date: datetime | None = None
+
+
+class PdEcrAssignExecutionPayload(BaseModel):
+    assignments: list[PdEcrExecutionAssignmentPayload]
+
+
+class PdEcrExecutionCompletePayload(BaseModel):
+    execution_result: str
+    execution_note: str | None = None
+    evidence_note: str | None = None
 
 class PdEcrDepartmentTaskConfirmPayload(BaseModel):
     impact_result: str
@@ -1484,10 +1513,87 @@ def submit_pd_ecr_workflow(
     )
 
 
+@router.post("/cases/{case_id}/workflow/publish-departments")
+def publish_pd_ecr_departments(
+    case_id: str,
+    payload: PdEcrPublishDepartmentsPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    case = get_case_or_404(session=session, case_id=case_id)
+    return publish_case_to_departments(
+        session=session,
+        case=case,
+        selected_departments=payload.selected_departments,
+        current_user=current_user,
+    )
+
+
+@router.post("/cases/{case_id}/workflow/assign-execution")
+def assign_pd_ecr_execution(
+    case_id: str,
+    payload: PdEcrAssignExecutionPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    case = get_case_or_404(session=session, case_id=case_id)
+    return assign_execution_tasks(
+        session=session,
+        case=case,
+        assignments=[item.model_dump(mode="json") for item in payload.assignments],
+        current_user=current_user,
+    )
+
+
 @router.get("/cases/{case_id}/workflow")
 def get_pd_ecr_workflow(case_id: str, session: SessionDep):
     case = get_case_or_404(session=session, case_id=case_id)
     return get_workflow_state(session=session, case=case)
+
+
+@router.post("/workflow/execution-tasks/{task_id}/confirm-assignment")
+def confirm_pd_ecr_execution_assignment(
+    task_id: uuid.UUID,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return confirm_execution_assignment(
+        session=session,
+        task_id=task_id,
+        current_user=current_user,
+    )
+
+
+@router.post("/workflow/execution-tasks/{task_id}/complete")
+def complete_pd_ecr_execution_task(
+    task_id: uuid.UUID,
+    payload: PdEcrExecutionCompletePayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return complete_execution_task(
+        session=session,
+        task_id=task_id,
+        execution_result=payload.execution_result,
+        execution_note=payload.execution_note,
+        evidence_note=payload.evidence_note,
+        current_user=current_user,
+    )
+
+
+@router.post("/workflow/execution-tasks/{task_id}/request-changes")
+def request_pd_ecr_execution_changes(
+    task_id: uuid.UUID,
+    payload: PdEcrWorkflowCommentPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    return request_execution_task_changes(
+        session=session,
+        task_id=task_id,
+        comment=payload.comment,
+        current_user=current_user,
+    )
 
 
 @router.post("/workflow/department-tasks/{task_id}/confirm")

@@ -49,6 +49,50 @@ type ChecklistRow = {
   dueDate?: string
 }
 
+const DEFAULT_IMPLEMENTATION_CHECKLIST: Omit<ChecklistRow, "id">[] = [
+  { department: "Development", yn: "N", description: "Documents release (drawing, offer drawing, BOM, Spec., ...)", responsible: "", dueDate: "" },
+  { department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "" },
+  { department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "" },
+  { department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "" },
+  { department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "" },
+  { department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "" },
+  { department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "" },
+  { department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "" },
+  { department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "" },
+  { department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "" },
+  { department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "" },
+  { department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "" },
+  { department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "" },
+  { department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "" },
+  { department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "" },
+  { department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "" },
+  { department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "" },
+  { department: "Others", yn: "", description: "", responsible: "", dueDate: "" },
+]
+
+function createDefaultImplementationChecklist(): ChecklistRow[] {
+  return DEFAULT_IMPLEMENTATION_CHECKLIST.map((row, index) => ({
+    ...row,
+    id: `impl-default-${index + 1}`,
+  }))
+}
+
 function workflowBadgeClass(status: string) {
   switch (status) {
     case "completed":
@@ -76,9 +120,9 @@ function loadImplementationChecklist(): ChecklistRow[] {
   try {
     const raw = localStorage.getItem("pd-ecr-implementation-implementation-plan")
     const parsed = raw ? JSON.parse(raw) : null
-    return Array.isArray(parsed?.checklistRows) ? parsed.checklistRows : []
+    return Array.isArray(parsed?.checklistRows) ? parsed.checklistRows : createDefaultImplementationChecklist()
   } catch {
-    return []
+    return createDefaultImplementationChecklist()
   }
 }
 
@@ -133,6 +177,7 @@ export function PdEcrExecutionWorkflowPanel({
     () => new Set((workflow?.department_visibility || []).map((item) => item.department)),
     [workflow?.department_visibility],
   )
+  const hasExecutionTasks = !!workflow?.execution_tasks.length
 
   useEffect(() => {
     if (selectionTouched || publishedDepartments.size || !yRows.length) return
@@ -211,14 +256,14 @@ export function PdEcrExecutionWorkflowPanel({
             setSelected={setSelected}
             onTouchSelection={() => setSelectionTouched(true)}
             onSubmit={publishDepartments}
-            disabled={isSaving}
+            disabled={isSaving || hasExecutionTasks}
           />
           <ExecutionAssignmentStep
             rows={yRows}
             assignmentEmails={assignmentEmails}
             setAssignmentEmails={setAssignmentEmails}
             onSubmit={assignExecution}
-            disabled={isSaving || !yRows.length || yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())}
+            disabled={isSaving || hasExecutionTasks || !yRows.length || yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())}
           />
         </div>
       </div>
@@ -387,16 +432,19 @@ function ExecutionTaskCard({
       <p className="mt-1 text-xs text-stone-500">{task.description}</p>
       <p className="mt-1 text-xs text-stone-500">{task.assignee_name || task.assignee_email || "未分配"}</p>
 
-      {task.status === "pending_confirmation" ? (
+      {task.status === "pending_confirmation" || task.status === "changes_requested" ? (
         <div className="mt-3 space-y-2">
+          {task.status === "changes_requested" && task.review_comment ? (
+            <p className="rounded bg-rose-50 p-2 text-xs text-rose-700">{task.review_comment}</p>
+          ) : null}
           {error && <p className="text-xs text-rose-600">{error}</p>}
           <Button type="button" size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700" onClick={confirmAssignment} disabled={isSaving}>
-            {isSaving ? "确认中..." : "Confirm assignment"}
+            {isSaving ? "确认中..." : task.status === "changes_requested" ? "Confirm changes" : "Confirm assignment"}
           </Button>
         </div>
       ) : null}
 
-      {task.status === "in_progress" || task.status === "changes_requested" ? (
+      {task.status === "in_progress" ? (
         <div className="mt-3 space-y-2">
           <input
             value={result}

@@ -1,13 +1,46 @@
 import uuid
 
+import pytest
 from sqlmodel import SQLModel, Session, create_engine, select
 
 from app.models import (
     PdEcrCase,
+    PdEcrCaseCreate,
     PdEcrDepartmentVisibility,
     PdEcrExecutionTask,
     User,
 )
+from app.services.pd_ecr_case_service import create_case
+from app.services.pd_ecr_workflow import (
+    assign_execution_tasks,
+    complete_execution_task,
+    confirm_execution_assignment,
+    publish_case_to_departments,
+)
+
+
+@pytest.fixture()
+def session():
+    engine = create_engine("sqlite:///:memory:")
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as db:
+        yield db
+
+
+def make_user(session, email, role=None, department=None, is_superuser=False):
+    user = User(
+        email=email,
+        hashed_password="x",
+        full_name=email.split("@")[0],
+        display_name=email.split("@")[0],
+        pd_ecr_role=role,
+        department=department,
+        is_superuser=is_superuser,
+    )
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
 
 
 def test_execution_workflow_models_persist_core_fields():
@@ -47,3 +80,92 @@ def test_execution_workflow_models_persist_core_fields():
         assert saved_visibility.visible_to_department is True
         assert saved_task.status == "pending_confirmation"
         assert saved_task.execution_result is None
+
+
+def test_publish_departments_sets_alignment_status_and_visibility(session):
+    creator = make_user(session, "creator@example.com")
+    case = create_case(
+        session=session,
+        case_in=PdEcrCaseCreate(case_no="PDECR-EXEC-002", title="Align departments"),
+        current_user=creator,
+    )
+
+    state = publish_case_to_departments(
+        session=session,
+        case=case,
+        selected_departments=["quality", "design"],
+        current_user=creator,
+    )
+
+    assert state["case"]["status"] == "department_alignment"
+    assert [item["department"] for item in state["department_visibility"]] == [
+        "design",
+        "quality",
+    ]
+
+
+def test_assign_confirm_complete_then_starts_leader_review(session):
+    creator = make_user(session, "creator2@example.com")
+    employee = make_user(
+        session,
+        "quality.owner@example.com",
+        role="department_member",
+        department="quality",
+    )
+    leader = make_user(
+        session,
+        "quality.leader@example.com",
+        role="department_leader",
+        department="quality",
+    )
+    case = create_case(
+        session=session,
+        case_in=PdEcrCaseCreate(case_no="PDECR-EXEC-003", title="Execute task"),
+        current_user=creator,
+    )
+    publish_case_to_departments(
+        session=session,
+        case=case,
+        selected_departments=["quality"],
+        current_user=creator,
+    )
+
+    state = assign_execution_tasks(
+        session=session,
+        case=case,
+        assignments=[
+            {
+                "checklist_row_id": "ai-import-28",
+                "department": "quality",
+                "description": "Update testing program on testing equipment",
+                "assignee_id": str(employee.id),
+                "assignee_email": employee.email,
+                "assignee_name": employee.full_name,
+            }
+        ],
+        current_user=creator,
+    )
+    task_id = uuid.UUID(state["execution_tasks"][0]["id"])
+    assert state["case"]["status"] == "assignee_confirmation"
+    assert state["execution_tasks"][0]["status"] == "pending_confirmation"
+
+    state = confirm_execution_assignment(
+        session=session,
+        task_id=task_id,
+        current_user=employee,
+    )
+    assert state["case"]["status"] == "execution_in_progress"
+    assert state["execution_tasks"][0]["status"] == "in_progress"
+
+    state = complete_execution_task(
+        session=session,
+        task_id=task_id,
+        execution_result="completed",
+        execution_note="Testing program updated.",
+        evidence_note="Checked on local tester.",
+        current_user=employee,
+    )
+
+    assert state["case"]["status"] == "leader_review"
+    assert state["execution_tasks"][0]["status"] == "completed"
+    assert state["leader_review_tasks"][0]["reviewer_email"] == leader.email

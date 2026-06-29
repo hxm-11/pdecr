@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router"
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
 
 import AppSidebar from "@/components/Sidebar/AppSidebar"
 import {
@@ -6,8 +6,21 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { UsersService } from "@/client"
+import { isLoggedIn } from "@/hooks/useAuth"
 
 export const Route = createFileRoute("/_layout")({
+  beforeLoad: async () => {
+    if (!isLoggedIn()) {
+      throw redirect({ to: "/login" })
+    }
+    try {
+      await UsersService.readUserMe()
+    } catch {
+      localStorage.removeItem("access_token")
+      throw redirect({ to: "/login" })
+    }
+  },
   component: Layout,
 })
 

@@ -1,4 +1,4 @@
-import { FileText, Inbox, LayoutDashboard } from "lucide-react"
+import { ClipboardCheck, FileText, Inbox, LayoutDashboard } from "lucide-react"
 
 import { SidebarAppearance } from "@/components/Common/Appearance"
 import { Logo } from "@/components/Common/Logo"
@@ -13,6 +13,7 @@ import { type Item, Main } from "./Main"
 const items: Item[] = [
   { icon: LayoutDashboard, title: "Dashboard", path: "/pd-ecr/dashboard" },
   { icon: FileText, title: "PD-ECR", path: "/pd-ecr" },
+  { icon: ClipboardCheck, title: "My Tasks", path: "/pd-ecr/tasks" },
   { icon: Inbox, title: "草稿箱", path: "/pd-ecr/drafts" },
 ]
 

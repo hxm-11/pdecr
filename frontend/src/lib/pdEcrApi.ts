@@ -127,8 +127,13 @@ export type PdEcrKnowledgeBaseStatus = {
 
 export type PdEcrCaseStatus =
   | "draft"
+  | "generated"
   | "submitted"
   | "department_confirmation"
+  | "department_alignment"
+  | "execution_assignment"
+  | "assignee_confirmation"
+  | "execution_in_progress"
   | "in_review"
   | "leader_review"
   | "changes_requested"
@@ -157,6 +162,17 @@ export type PdEcrCase = {
   created_at?: string | null
   updated_at?: string | null
   closed_at?: string | null
+}
+
+export type PdEcrCurrentUser = {
+  id: string
+  email: string
+  is_active?: boolean
+  is_superuser?: boolean
+  full_name?: string | null
+  display_name?: string | null
+  department?: string | null
+  pd_ecr_role?: string | null
 }
 
 export type PdEcrPermissionFlags = {
@@ -321,6 +337,28 @@ export type PdEcrGeneratedModulePreview = {
   needs_human_input?: boolean
 }
 
+export type PdEcrChangeDescriptionDraftInput = {
+  source?: string
+  reason?: string
+  department?: string
+  initiator?: string
+  date?: string
+  product?: string
+  customer?: string
+  partNumber?: string
+  title?: string
+  changeSummary?: string
+  notChange?: string
+  departments?: string[]
+}
+
+export type PdEcrGenerateFromChangeDescriptionResponse = {
+  input_snapshot?: Record<string, unknown>
+  similar_cases?: PdEcrSimilarCase[]
+  generated_module_ids: string[]
+  modules: PdEcrModule[]
+}
+
 export type PdEcrModuleAssignmentPayload = {
   assignee_id?: string | null
   assignee_email?: string | null
@@ -360,6 +398,8 @@ export type PdEcrDepartmentVisibility = {
 export type PdEcrExecutionWorkflowTask = {
   id: string
   case_id: string
+  case?: PdEcrCase | null
+  case_exists?: boolean
   checklist_row_id: string
   department: string
   description: string
@@ -387,10 +427,11 @@ export type PdEcrExecutionAssignmentInput = {
   due_date?: string | null
 }
 
-
 export type PdEcrLeaderReviewWorkflowTask = {
   id: string
   case_id: string
+  case?: PdEcrCase | null
+  case_exists?: boolean
   department: string
   status: string
   reviewer_id?: string | null
@@ -479,6 +520,11 @@ export async function getPdEcrCase(
   return res.data
 }
 
+export async function getPdEcrCurrentUser(): Promise<PdEcrCurrentUser> {
+  const res = await pdEcrApi.get<PdEcrCurrentUser>("/api/v1/users/me")
+  return res.data
+}
+
 export async function updatePdEcrCase(
   caseId: string,
   payload: Partial<PdEcrCaseCreatePayload>,
@@ -486,6 +532,15 @@ export async function updatePdEcrCase(
   const res = await pdEcrApi.patch<{ case: PdEcrCase }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`,
     payload,
+  )
+  return res.data
+}
+
+export async function deletePdEcrCase(
+  caseId: string,
+): Promise<{ deleted: boolean; id: string; case_no: string }> {
+  const res = await pdEcrApi.delete<{ deleted: boolean; id: string; case_no: string }>(
+    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`,
   )
   return res.data
 }
@@ -579,6 +634,17 @@ export async function generatePdEcrDraft(
   const res = await pdEcrApi.post<PdEcrGenerateResponse>(
     "/api/v1/pd-ecr/generate-draft",
     { input, similar_cases: similarCases },
+  )
+  return res.data
+}
+
+export async function generatePdEcrFromChangeDescription(
+  changeDescription: PdEcrChangeDescriptionDraftInput,
+  topK = 5,
+): Promise<PdEcrGenerateFromChangeDescriptionResponse> {
+  const res = await pdEcrApi.post<PdEcrGenerateFromChangeDescriptionResponse>(
+    "/api/v1/pd-ecr/generate-from-change-description",
+    { change_description: changeDescription, top_k: topK },
   )
   return res.data
 }

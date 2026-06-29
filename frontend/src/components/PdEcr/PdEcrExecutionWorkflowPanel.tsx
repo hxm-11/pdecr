@@ -4,9 +4,11 @@ import {
   assignPdEcrExecution,
   completePdEcrExecutionTask,
   confirmPdEcrExecutionAssignment,
+  getPdEcrCurrentUser,
   getPdEcrWorkflow,
   publishPdEcrDepartments,
   reviewPdEcrLeaderTask,
+  type PdEcrCurrentUser,
   type PdEcrExecutionAssignmentInput,
   type PdEcrExecutionWorkflowTask,
   type PdEcrLeaderReviewWorkflowTask,
@@ -22,6 +24,14 @@ const WORKFLOW_DEPTS = [
   { id: "pm", label: "PM / PMO / COS" },
   { id: "catalyst", label: "Catalyst" },
 ]
+
+const WORKFLOW_STEPS = [
+  { id: "department_alignment", label: "部门可见" },
+  { id: "assignee_confirmation", label: "责任人确认" },
+  { id: "execution_in_progress", label: "执行中" },
+  { id: "leader_review", label: "Leader 签核" },
+  { id: "approved", label: "完成" },
+] as const
 
 const DEPARTMENT_ID_BY_LABEL: Record<string, string> = {
   CPJM: "pm",
@@ -102,8 +112,12 @@ function workflowBadgeClass(status: string) {
     case "changes_requested":
     case "rejected":
       return "border-rose-200 bg-rose-50 text-rose-700"
-    case "pending_confirmation":
+    case "department_alignment":
+    case "assignee_confirmation":
+    case "execution_assignment":
+    case "execution_in_progress":
     case "leader_review":
+    case "pending_confirmation":
     case "in_progress":
       return "border-amber-200 bg-amber-50 text-amber-700"
     default:
@@ -111,9 +125,34 @@ function workflowBadgeClass(status: string) {
   }
 }
 
+function workflowStepIndex(status: string) {
+  if (status === "changes_requested") return 2
+  if (status === "execution_assignment") return 1
+  const index = WORKFLOW_STEPS.findIndex((step) => step.id === status)
+  return index >= 0 ? index : 0
+}
+
 function normalizeDepartmentId(label: string) {
   const normalized = label.trim().toUpperCase()
   return DEPARTMENT_ID_BY_LABEL[normalized] || normalized.toLowerCase()
+}
+
+function errorMessage(error: unknown) {
+  if (!error || typeof error !== "object") return "Request failed"
+  const record = error as {
+    message?: string
+    response?: { status?: number; data?: unknown }
+  }
+  const detail =
+    record.response?.data && typeof record.response.data === "object"
+      ? (record.response.data as { detail?: unknown }).detail
+      : undefined
+  return [
+    record.response?.status ? `HTTP ${record.response.status}` : "",
+    typeof detail === "string" ? detail : record.message || "Request failed",
+  ]
+    .filter(Boolean)
+    .join(": ")
 }
 
 function loadImplementationChecklist(): ChecklistRow[] {
@@ -140,9 +179,17 @@ export function PdEcrExecutionWorkflowPanel({
   const [assignmentEmails, setAssignmentEmails] = useState<Record<string, string>>({})
   const [statusText, setStatusText] = useState("Loading workflow...")
   const [isSaving, setIsSaving] = useState(false)
+  const [currentUser, setCurrentUser] = useState<PdEcrCurrentUser | null>(null)
 
   useEffect(() => {
     let mounted = true
+    getPdEcrCurrentUser()
+      .then((user) => {
+        if (mounted) setCurrentUser(user)
+      })
+      .catch(() => {
+        if (mounted) setCurrentUser(null)
+      })
     getPdEcrWorkflow(caseId)
       .then((state) => {
         if (!mounted) return
@@ -151,7 +198,8 @@ export function PdEcrExecutionWorkflowPanel({
       })
       .catch(() => {
         if (!mounted) return
-        setStatusText("Workflow not started")
+        setWorkflow(null)
+        setStatusText("Workflow not available for this case. Open a saved backend case or regenerate the PD-ECR first.")
       })
     return () => {
       mounted = false
@@ -178,6 +226,10 @@ export function PdEcrExecutionWorkflowPanel({
     [workflow?.department_visibility],
   )
   const hasExecutionTasks = !!workflow?.execution_tasks.length
+  const hasPublishedDepartments = publishedDepartments.size > 0
+  const workflowReady = workflow !== null
+  const canManageWorkflow =
+    !!currentUser?.is_superuser || currentUser?.pd_ecr_role === "pd_ecr_manager"
 
   useEffect(() => {
     if (selectionTouched || publishedDepartments.size || !yRows.length) return
@@ -202,7 +254,7 @@ export function PdEcrExecutionWorkflowPanel({
       setWorkflow(next)
       setStatusText("Published to involved departments")
     } catch (err) {
-      setStatusText(err instanceof Error ? err.message : "Publish failed")
+      setStatusText(errorMessage(err))
     } finally {
       setIsSaving(false)
     }
@@ -227,7 +279,7 @@ export function PdEcrExecutionWorkflowPanel({
       setWorkflow(next)
       setStatusText("Execution assignments sent")
     } catch (err) {
-      setStatusText(err instanceof Error ? err.message : "Assignment failed")
+      setStatusText(errorMessage(err))
     } finally {
       setIsSaving(false)
     }
@@ -246,25 +298,38 @@ export function PdEcrExecutionWorkflowPanel({
         <div className="space-y-3 p-3">
           <p className="text-xs text-stone-500" role="status">{statusText}</p>
           {workflow && (
-            <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold ${workflowBadgeClass(workflow.case.status)}`}>
-              {workflow.case.status}
-            </span>
+            <>
+              <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold ${workflowBadgeClass(workflow.case.status)}`}>
+                {workflow.case.status}
+              </span>
+              <WorkflowProgress status={workflow.case.status} />
+            </>
           )}
-          <DepartmentPublishStep
-            publishedDepartments={publishedDepartments}
-            selected={selected}
-            setSelected={setSelected}
-            onTouchSelection={() => setSelectionTouched(true)}
-            onSubmit={publishDepartments}
-            disabled={isSaving || hasExecutionTasks}
-          />
-          <ExecutionAssignmentStep
-            rows={yRows}
-            assignmentEmails={assignmentEmails}
-            setAssignmentEmails={setAssignmentEmails}
-            onSubmit={assignExecution}
-            disabled={isSaving || hasExecutionTasks || !yRows.length || yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())}
-          />
+          {canManageWorkflow && !hasExecutionTasks ? (
+            <>
+              <DepartmentPublishStep
+                publishedDepartments={publishedDepartments}
+                selected={selected}
+                setSelected={setSelected}
+                onTouchSelection={() => setSelectionTouched(true)}
+                onSubmit={publishDepartments}
+                disabled={isSaving || !workflowReady}
+              />
+              <ExecutionAssignmentStep
+                rows={yRows}
+                assignmentEmails={assignmentEmails}
+                setAssignmentEmails={setAssignmentEmails}
+                onSubmit={assignExecution}
+                disabled={
+                  isSaving ||
+                  !workflowReady ||
+                  !hasPublishedDepartments ||
+                  !yRows.length ||
+                  yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())
+                }
+              />
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -291,6 +356,33 @@ export function PdEcrExecutionWorkflowPanel({
           全部签核完成，查看结果
         </Button>
       )}
+    </div>
+  )
+}
+
+function WorkflowProgress({ status }: { status: string }) {
+  const activeIndex = workflowStepIndex(status)
+
+  return (
+    <div className="grid grid-cols-5 gap-1 rounded border border-stone-100 bg-stone-50 p-1">
+      {WORKFLOW_STEPS.map((step, index) => {
+        const isDone = status === "approved" || index < activeIndex
+        const isActive = index === activeIndex && status !== "approved"
+        return (
+          <div
+            key={step.id}
+            className={`rounded px-1.5 py-1 text-center text-[10px] font-semibold ${
+              isDone
+                ? "bg-emerald-100 text-emerald-800"
+                : isActive
+                  ? "bg-amber-100 text-amber-800"
+                  : "bg-white text-stone-400"
+            }`}
+          >
+            {step.label}
+          </div>
+        )
+      })}
     </div>
   )
 }

@@ -891,6 +891,7 @@ export function PdEcrCreationWorkflow() {
         response.case.case_no || response.case.dc_no || response.case.id
       const currentCase = {
         id: caseLabel,
+        backendCaseId: response.case.id,
         createDate: response.case.created_at?.slice(0, 10) || "-",
         productClass: response.case.product_no || "-",
         from: "Generated draft",
@@ -1248,8 +1249,8 @@ export function PdEcrCreationWorkflow() {
                           <Sparkles className="size-6" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-stone-900">AI 一键生成 6 模块</h3>
-                          <p className="mt-1 text-sm text-stone-500">基于以上相似案例，AI 生成完整的 PD-ECR 报告（变更描述、影响分析、验证计划、验证结果、实施计划、实施结果）。</p>
+                          <h3 className="text-lg font-semibold text-stone-900">AI 一键生成 4 模块</h3>
+                          <p className="mt-1 text-sm text-stone-500">基于以上相似案例，AI 生成当前 PD-ECR 四模块（变更描述、影响分析、验证计划、实施计划）。</p>
                           <Button type="button" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}
                             className="mt-4 h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
                           >
@@ -1278,12 +1279,16 @@ export function PdEcrCreationWorkflow() {
               {currentStep.kind === "review" ? (
                 <div className="space-y-5">
                   <div className="rounded-lg border border-stone-200 bg-white p-5">
-                    <h3 className="text-lg font-semibold text-stone-900">AI 生成的 6 个模块</h3>
+                    <h3 className="text-lg font-semibold text-stone-900">AI 生成的 4 个模块</h3>
                     <p className="mt-1 text-sm text-stone-500">点击模块卡片查看详情，确认内容后导出报告。</p>
                     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                       {generatedModules.length > 0 ? generatedModules.map((mod) => (
                         <button key={mod.id} type="button" onClick={() => {
-                          saveActiveResult({ source: "generated", relatedCases: [], modules: generatedModules })
+                          saveActiveResult({
+                            ...loadGeneratedResult(),
+                            source: "generated",
+                            modules: generatedModules,
+                          })
                           navigate({ to: "/pd-ecr/content/$moduleId", params: { moduleId: mod.id } })
                         }}
                           className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-left transition hover:border-amber-300 hover:shadow-sm"

@@ -4,18 +4,26 @@ from typing import Any
 
 from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError
-from sqlmodel import Session, col, select
+from sqlmodel import Session, col, delete, select
 
 from app.models import (
     PD_ECR_DEFAULT_MODULES,
     PD_ECR_STATUSES,
+    PdEcrActivity,
+    PdEcrAttachment,
     PdEcrCase,
     PdEcrCaseCreate,
     PdEcrCaseUpdate,
+    PdEcrCollaborationSession,
     PdEcrComment,
     PdEcrCommentCreate,
+    PdEcrDepartmentTask,
+    PdEcrDepartmentVisibility,
+    PdEcrExecutionTask,
+    PdEcrLeaderReviewTask,
     PdEcrModule,
     PdEcrModuleUpdate,
+    PdEcrNotification,
     PdEcrTask,
     PdEcrTaskCreate,
     PdEcrVersion,
@@ -44,6 +52,8 @@ MODULE_MANAGEMENT_FIELDS = {
     "reminder_policy",
     "last_reminded_at",
 }
+
+PROTECTED_DELETE_STATUSES = {"approved", "implementation", "closed"}
 
 
 def now_utc() -> datetime:
@@ -514,6 +524,44 @@ def update_case(
     session.commit()
     session.refresh(case)
     return case
+
+
+def delete_case(
+    *,
+    session: Session,
+    case: PdEcrCase,
+    current_user: User,
+) -> dict[str, str]:
+    ensure_case_manage_access(case, current_user, session=session)
+    if case.status in PROTECTED_DELETE_STATUSES:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                "Approved, implementation, and closed PD-ECR cases cannot be deleted. "
+                "Cancel or archive them instead."
+            ),
+        )
+
+    deleted = {"id": str(case.id), "case_no": case.case_no}
+    for model in (
+        PdEcrCollaborationSession,
+        PdEcrNotification,
+        PdEcrActivity,
+        PdEcrVersion,
+        PdEcrAttachment,
+        PdEcrComment,
+        PdEcrLeaderReviewTask,
+        PdEcrExecutionTask,
+        PdEcrDepartmentVisibility,
+        PdEcrDepartmentTask,
+        PdEcrTask,
+        PdEcrModule,
+    ):
+        session.exec(delete(model).where(model.case_id == case.id))  # type: ignore[attr-defined]
+
+    session.delete(case)
+    session.commit()
+    return deleted
 
 
 def transition_case(

@@ -146,10 +146,22 @@ def _serialize_visibility(item: PdEcrDepartmentVisibility) -> dict[str, Any]:
     }
 
 
-def _serialize_execution_task(task: PdEcrExecutionTask) -> dict[str, Any]:
+def _case_summary(case: PdEcrCase | None) -> dict[str, Any] | None:
+    if case is None:
+        return None
+    return serialize_case(case)
+
+
+def _serialize_execution_task(
+    task: PdEcrExecutionTask,
+    *,
+    case: PdEcrCase | None = None,
+) -> dict[str, Any]:
     return {
         "id": str(task.id),
         "case_id": str(task.case_id),
+        "case": _case_summary(case),
+        "case_exists": case is not None,
         "checklist_row_id": task.checklist_row_id,
         "department": task.department,
         "description": task.description,
@@ -170,10 +182,16 @@ def _serialize_execution_task(task: PdEcrExecutionTask) -> dict[str, Any]:
     }
 
 
-def _serialize_leader_task(task: PdEcrLeaderReviewTask) -> dict[str, Any]:
+def _serialize_leader_task(
+    task: PdEcrLeaderReviewTask,
+    *,
+    case: PdEcrCase | None = None,
+) -> dict[str, Any]:
     return {
         "id": str(task.id),
         "case_id": str(task.case_id),
+        "case": _case_summary(case),
+        "case_exists": case is not None,
         "department": task.department,
         "status": task.status,
         "reviewer_id": str(task.reviewer_id) if task.reviewer_id else None,
@@ -195,7 +213,7 @@ def get_workflow_state(*, session: Session, case: PdEcrCase) -> dict[str, Any]:
             for item in _department_visibility(session, case.id)
         ],
         "execution_tasks": [
-            _serialize_execution_task(task)
+            _serialize_execution_task(task, case=case)
             for task in _execution_tasks(session, case.id)
         ],
         "department_tasks": [
@@ -203,7 +221,7 @@ def get_workflow_state(*, session: Session, case: PdEcrCase) -> dict[str, Any]:
             for task in _department_tasks(session, case.id)
         ],
         "leader_review_tasks": [
-            _serialize_leader_task(task)
+            _serialize_leader_task(task, case=case)
             for task in _leader_tasks(session, case.id)
         ],
     }
@@ -227,13 +245,25 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
 
     execution_tasks = list(session.exec(execution_statement).all())
     leader_tasks = list(session.exec(leader_statement).all())
+    case_ids = {
+        task.case_id
+        for task in [*execution_tasks, *leader_tasks]
+        if task.case_id is not None
+    }
+    cases_by_id: dict[uuid.UUID, PdEcrCase] = {}
+    if case_ids:
+        cases = session.exec(
+            select(PdEcrCase).where(PdEcrCase.id.in_(list(case_ids)))  # type: ignore[attr-defined]
+        ).all()
+        cases_by_id = {case.id: case for case in cases}
+
     return {
         "execution_tasks": [
-            _serialize_execution_task(task)
+            _serialize_execution_task(task, case=cases_by_id.get(task.case_id))
             for task in execution_tasks
         ],
         "leader_review_tasks": [
-            _serialize_leader_task(task)
+            _serialize_leader_task(task, case=cases_by_id.get(task.case_id))
             for task in leader_tasks
         ],
     }

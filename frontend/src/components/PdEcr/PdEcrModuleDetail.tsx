@@ -15,16 +15,15 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Button } from "@/components/ui/button"
 import {
-  createPdEcrCase,
-  generatePdEcrReport,
+  generatePdEcrFromChangeDescription,
   getPdEcrModuleDraft,
+  type PdEcrModule,
   resolvePdEcrAssetUrl,
   savePdEcrModuleDraft,
 } from "@/lib/pdEcrApi"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import { buildPdEcrOnePageHtml } from "./pdEcrExport"
 import {
-  buildGeneratedResult,
   findModule,
   loadActiveResult,
   loadGeneratedResult,
@@ -33,6 +32,7 @@ import {
   saveGeneratedResult,
   type PdEcrApprovalSuggestion,
   type PdEcrDisplayModule,
+  type PdEcrModuleId,
 } from "./pdEcrState"
 
 function textValue(module: PdEcrDisplayModule, keys: string[], fallback = "-") {
@@ -907,7 +907,7 @@ function changeDraftStorageKey(module: PdEcrDisplayModule) {
   return `pd-ecr-change-description-draft:${recordId}:${module.id}`
 }
 
-function attachmentStorageKey(module: PdEcrDisplayModule, side: "before" | "after") {
+function attachmentStorageKey(module: PdEcrDisplayModule, side: "before" | "after" | "flow") {
   const recordId = getActiveRecordId()
 
   return `pd-ecr-before-after-attachments:${recordId}:${module.id}:${side}`
@@ -915,7 +915,7 @@ function attachmentStorageKey(module: PdEcrDisplayModule, side: "before" | "afte
 
 function loadStoredAttachments(
   module: PdEcrDisplayModule,
-  side: "before" | "after",
+  side: "before" | "after" | "flow",
 ): BeforeAfterAttachment[] {
   const raw = localStorage.getItem(attachmentStorageKey(module, side))
   if (!raw) return []
@@ -929,7 +929,7 @@ function loadStoredAttachments(
 
 function persistAttachments(
   module: PdEcrDisplayModule,
-  side: "before" | "after",
+  side: "before" | "after" | "flow",
   attachments: BeforeAfterAttachment[],
 ) {
   localStorage.setItem(
@@ -945,6 +945,66 @@ function fileSizeLabel(size: number) {
   if (size < 1024) return `${size} B`
   if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`
   return `${(size / 1024 / 1024).toFixed(1)} MB`
+}
+
+const generatedModuleIds = [
+  "impact-analysis",
+  "validation-plan",
+  "implementation-plan",
+] as const
+const fourModuleOrder = [
+  "change-description",
+  ...generatedModuleIds,
+] as const
+
+function toDisplayModule(module: PdEcrModule): PdEcrDisplayModule {
+  const id = (module.id || module.module_id || "impact-analysis") as PdEcrModuleId
+  const data = module.data || {}
+
+  return {
+    id,
+    title: module.title || id,
+    subtitle: module.subtitle || module.title || id,
+    summary: module.summary || module.description || "",
+    description: module.description,
+    data,
+    sourceCases: module.source_cases || (data.source_cases as string[]) || [],
+    sourceFiles: module.source_files || (data.source_files as string[]) || [],
+    needsHumanInput: Boolean(module.needs_human_input || data.needs_human_input),
+    warnings: module.warnings || (data.warnings as string[]) || [],
+  }
+}
+
+function persistGeneratedModuleData(module: PdEcrDisplayModule) {
+  if (!generatedModuleIds.includes(module.id as (typeof generatedModuleIds)[number])) {
+    return
+  }
+
+  const storageKey =
+    module.id === "impact-analysis"
+      ? `pd-ecr-impact-analysis-${module.id}`
+      : module.id === "validation-plan"
+        ? `pd-ecr-validation-plan-${module.id}`
+        : `pd-ecr-implementation-${module.id}`
+
+  localStorage.setItem(storageKey, JSON.stringify(module.data || {}))
+}
+
+function mergeFourModuleResult(
+  existingModules: PdEcrDisplayModule[],
+  generatedModules: PdEcrDisplayModule[],
+) {
+  const byId = new Map(existingModules.map((item) => [item.id, item]))
+  generatedModules.forEach((item) => {
+    if (generatedModuleIds.includes(item.id as (typeof generatedModuleIds)[number])) {
+      byId.set(item.id, item)
+      persistGeneratedModuleData(item)
+    }
+  })
+
+  return fourModuleOrder
+    .map((id) => byId.get(id))
+    .filter(Boolean) as PdEcrDisplayModule[]
 }
 
 function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
@@ -969,10 +1029,14 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
 
   const generateMutation = useMutation({
     mutationFn: async () => {
+      if (!draft.changeSummary.trim() && !draft.reason.trim()) {
+        throw new Error("请先填写“是什么变更”或变更原因，再生成其他模块。")
+      }
+
       // Save draft first
       localStorage.setItem(storageKey, JSON.stringify(draft))
       const active = loadActiveResult()
-      saveActiveResult({
+      const updatedActive = {
         ...active,
         modules: active.modules.map((item) =>
           item.id === module.id
@@ -993,52 +1057,42 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
                   not_change: draft.notChange,
                   affected_departments: draft.departments.join(", "),
                 },
-              }
+            }
             : item,
         ),
-      })
+      }
+      saveActiveResult(updatedActive)
 
-      // Build PdEcrInput from draft (same pattern as Platform page)
-      const input = {
-        dc_no: `PD-ECR-${Date.now()}`,
-        date: draft.date || new Date().toISOString().slice(0, 10),
-        customer_project: draft.customer || "PD-ECR Platform",
-        initiator: draft.initiator || draft.source,
-        reason: draft.reason,
-        change_proposal: draft.changeSummary,
-        remarks: [
-          `Source: ${draft.source}`,
-          `Product: ${draft.product}`,
-          `Part: ${draft.partNumber}`,
-          `Not change: ${draft.notChange}`,
-          `Affected departments: ${draft.departments.join(", ")}`,
-        ].join("\n"),
+      try {
+        await savePdEcrModuleDraft({
+          record_id: recordId,
+          module_id: module.id,
+          data: draft,
+        })
+      } catch {
+        // Local draft is already saved; database sync is best effort here.
       }
 
-      return generatePdEcrReport(input)
+      return generatePdEcrFromChangeDescription(draft, 5)
     },
     onSuccess: (response) => {
-      const result = buildGeneratedResult(response)
-      saveGeneratedResult(result)
+      const active = loadActiveResult()
+      const generatedModules = (response.modules || []).map(toDisplayModule)
+      const modules = mergeFourModuleResult(active.modules, generatedModules)
+      const relatedCases =
+        response.similar_cases
+          ?.map((item) => item.case_id || item.source_file || "")
+          .filter(Boolean) || active.relatedCases
 
-      // Create DB case in background (non-blocking)
-      const caseNo = response.draft_id || `PD-ECR-${Date.now()}`
-      createPdEcrCase({
-        case_no: caseNo,
-        title: draft.title || draft.changeSummary || "New PD-ECR Change Request",
-        status: "draft",
-        source_type: "ai_generated",
-        dc_no: `PD-ECR-${Date.now()}`,
-        initiator: draft.initiator || draft.source || "AI Generated",
-        customer_project: draft.customer || "PD-ECR Platform",
-        product_no: draft.product || undefined,
-        part_no: draft.partNumber || undefined,
-        change_type: "Engineering Change",
-      }).catch(() => {
-        // Case creation is non-blocking
+      saveGeneratedResult({
+        ...active,
+        source: "generated",
+        inputSnapshot: response.input_snapshot,
+        relatedCases,
+        modules,
       })
 
-      setSaveStatus("All 6 modules regenerated from RAG history.")
+      setSaveStatus("Generated other 3 modules from RAG history.")
       navigate({ to: "/pd-ecr/content" })
     },
     onError: (error) => {
@@ -1056,6 +1110,9 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
   const [afterAttachments, setAfterAttachments] = useState<
     BeforeAfterAttachment[]
   >(() => loadStoredAttachments(module, "after"))
+  const [flowAttachments, setFlowAttachments] = useState<
+    BeforeAfterAttachment[]
+  >(() => loadStoredAttachments(module, "flow"))
 
   useEffect(() => {
     let ignore = false
@@ -1245,7 +1302,7 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
                 disabled={generateMutation.isPending}
               >
                 <Sparkles className="size-4" />
-                {generateMutation.isPending ? "AI 生成中..." : "生成"}
+                {generateMutation.isPending ? "AI 生成中..." : "生成其他模块"}
               </Button>
             </div>
           </div>
@@ -1323,6 +1380,69 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
             {attachmentList("after", afterAttachments)}
           </div>
           <p className="mt-8 text-2xl font-semibold">Flow:</p>
+          <p className="mt-2 text-sm leading-6 text-stone-600">
+            Upload flowcharts, process diagrams, or other flow-related
+            references.
+          </p>
+          <div className="mt-4 min-w-0 rounded-md border border-amber-200 bg-white p-3">
+            <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-50">
+              <Upload className="size-4" />
+              Upload flow files
+              <input
+                aria-label="Upload flow files"
+                type="file"
+                multiple
+                accept="image/*,application/pdf,.pdf"
+                className="sr-only"
+                onChange={(event) => {
+                  const files = event.target.files
+                  const incoming = Array.from(files ?? []).map((file) => ({
+                    name: file.name,
+                    type: file.type || "application/octet-stream",
+                    size: file.size,
+                    previewUrl: file.type.startsWith("image/")
+                      ? URL.createObjectURL(file)
+                      : undefined,
+                  }))
+                  if (!incoming.length) return
+                  setFlowAttachments((current) => {
+                    const next = [...current, ...incoming]
+                    persistAttachments(module, "flow", next)
+                    return next
+                  })
+                }}
+              />
+            </label>
+            <div className="mt-3 space-y-2">
+              {flowAttachments.length ? (
+                flowAttachments.map((file, index) => (
+                  <div
+                    key={`${file.name}-${index}`}
+                    className="rounded border border-stone-200 bg-stone-50 p-2 text-xs text-stone-700"
+                  >
+                    {file.previewUrl ? (
+                      <img
+                        src={file.previewUrl}
+                        alt={file.name}
+                        className="mb-2 h-32 w-full rounded border border-stone-200 bg-white object-contain"
+                      />
+                    ) : null}
+                    <p className="break-all font-semibold text-stone-900">
+                      {file.name}
+                    </p>
+                    <p className="mt-1 text-stone-500">
+                      {file.type || "file"}{" "}
+                      {file.size ? `· ${fileSizeLabel(file.size)}` : ""}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs leading-5 text-stone-500">
+                  Upload flow diagrams or process documentation.
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </div>
       <ToolFooter module={module} />

@@ -139,19 +139,29 @@ export function PdEcrContentBlocks() {
                 PD-ECR 内容模块 · 点击展开查看详细内容与签字状态
               </p>
             </div>
-            <Button
-              variant="outline"
-              onClick={() =>
-                navigate({
-                  to: result.source === "history" ? "/pd-ecr/cases" : "/pd-ecr",
-                })
-              }
-              className="bg-white"
-              aria-label="返回 PD-ECR Platform"
-            >
-              <ArrowLeft className="size-4" />
-              返回平台
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                onClick={() => navigate({ to: "/pd-ecr/tasks" })}
+                className="bg-white"
+              >
+                <ClipboardList className="size-4" />
+                My Tasks
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  navigate({
+                    to: result.source === "history" ? "/pd-ecr/cases" : "/pd-ecr",
+                  })
+                }
+                className="bg-white"
+                aria-label="返回 PD-ECR Platform"
+              >
+                <ArrowLeft className="size-4" />
+                返回平台
+              </Button>
+            </div>
           </div>
         </header>
 
@@ -176,7 +186,7 @@ export function PdEcrContentBlocks() {
 
           <PdEcrModuleAccordion
             modules={result.modules}
-            caseId={result.currentCase?.id}
+            caseId={result.currentCase?.backendCaseId}
           />
         </section>
 

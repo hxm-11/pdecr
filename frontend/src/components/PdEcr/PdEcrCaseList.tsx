@@ -10,6 +10,7 @@ import {
   ListFilter,
   Printer,
   Share2,
+  Trash2,
   Upload,
   X,
 } from "lucide-react"
@@ -18,6 +19,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
+  deletePdEcrCase,
   getPdEcrCase,
   importHistoricalPdEcrCases,
   listPdEcrCases,
@@ -192,6 +194,24 @@ function buildCsv(rows: PdEcrCaseRow[]) {
   return [headers.map(escapeCsv).join(","), ...body].join("\n")
 }
 
+function errorMessage(error: unknown) {
+  if (!error || typeof error !== "object") return "Request failed"
+  const record = error as {
+    message?: string
+    response?: { status?: number; data?: unknown }
+  }
+  const detail =
+    record.response?.data && typeof record.response.data === "object"
+      ? (record.response.data as { detail?: unknown }).detail
+      : undefined
+  return [
+    record.response?.status ? `HTTP ${record.response.status}` : "",
+    typeof detail === "string" ? detail : record.message || "Request failed",
+  ]
+    .filter(Boolean)
+    .join(": ")
+}
+
 function ActionRail({
   onShowAll,
   onNew,
@@ -300,6 +320,11 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
   const [allRows, setAllRows] = useState<PdEcrCaseRow[]>(() =>
     isAllListView ? [] : buildPdEcrCaseRows(historyResult),
   )
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteNotice, setDeleteNotice] = useState<{
+    kind: "success" | "error"
+    message: string
+  } | null>(null)
   const rows = allRows
   const filteredRows = useMemo(
     () => sortRows(filterRows(rows, field, appliedQuery), sortState),
@@ -609,6 +634,59 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
     setStatus(`Print preview opened for ${targetRows.length} case(s).`)
   }
 
+  const deleteSelected = async () => {
+    if (!selectedRows.length) {
+      setStatus("Select database PD-ECR cases to delete.")
+      setDeleteNotice({
+        kind: "error",
+        message: "Select one or more database PD-ECR cases before deleting.",
+      })
+      return
+    }
+
+    const names = selectedRows.map((row) => row.id).join(", ")
+    const confirmed = window.confirm(
+      `Delete ${selectedRows.length} selected PD-ECR case(s)?\n\n${names}\n\nApproved, implementation, and closed cases are protected by the backend.`,
+    )
+    if (!confirmed) return
+
+    setIsDeleting(true)
+    setDeleteNotice(null)
+    setStatus(`Deleting ${selectedRows.length} case(s)...`)
+    const results = await Promise.allSettled(
+      selectedRows.map((row) => deletePdEcrCase(row.backendCaseId || row.id)),
+    )
+    const deletedIds = selectedRows
+      .filter((_, index) => results[index].status === "fulfilled")
+      .map((row) => row.id)
+    const failures = results.filter((result) => result.status === "rejected")
+
+    setAllRows((current) =>
+      current.filter((row) => !deletedIds.includes(row.id)),
+    )
+    setSelectedIds((current) =>
+      current.filter((id) => !deletedIds.includes(id)),
+    )
+    setIsDeleting(false)
+
+    if (failures.length) {
+      const firstFailure = failures[0]
+      const message = `Deleted ${deletedIds.length} case(s). ${failures.length} failed: ${
+          firstFailure.status === "rejected"
+            ? errorMessage(firstFailure.reason)
+            : "Unknown error"
+        }`
+      setStatus(message)
+      setDeleteNotice({ kind: "error", message })
+      if (deletedIds.length) await loadAllRealCases()
+      return
+    }
+    await loadAllRealCases()
+    const message = `Deleted ${deletedIds.length} case(s).`
+    setStatus(message)
+    setDeleteNotice({ kind: "success", message })
+  }
+
   const exportList = () => {
     downloadText(
       "pd-ecr-cases.csv",
@@ -730,6 +808,17 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
           />
 
           <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+            {deleteNotice ? (
+              <div
+                className={
+                  deleteNotice.kind === "success"
+                    ? "border-b border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"
+                    : "border-b border-rose-100 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-700"
+                }
+              >
+                {deleteNotice.message}
+              </div>
+            ) : null}
             {selectedIds.length ? (
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-100 bg-amber-50 px-4 py-3">
                 <div>
@@ -750,6 +839,16 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                   </Button>
                   <Button size="sm" variant="outline" onClick={shareSelected}>
                     Share
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-rose-200 bg-white text-rose-700 hover:bg-rose-50"
+                    onClick={deleteSelected}
+                    disabled={isDeleting}
+                  >
+                    <Trash2 className="size-4" />
+                    {isDeleting ? "Deleting..." : "Delete selected"}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={clearSelection}>
                     Clear selection
@@ -785,11 +884,11 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                         Customer <ArrowUpDown className="size-3" />
                       </button>
                     </th>
-                    <th className="hidden xl:table-cell px-3 py-3 font-semibold whitespace-nowrap">
-                      <button type="button" aria-label="Sort by reason" onClick={() => toggleSort("reasonForChange")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
-                        Reason for Change <ArrowUpDown className="size-3" />
-                      </button>
-                    </th>
+<th className="hidden xl:table-cell px-3 py-3 font-semibold whitespace-nowrap w-40">
+  <button type="button" aria-label="Sort by reason" onClick={() => toggleSort("reasonForChange")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
+    Reason for Change <ArrowUpDown className="size-3" />
+  </button>
+</th>
                     <th className="hidden lg:table-cell px-3 py-3 font-semibold whitespace-nowrap">Change Type</th>
                     <th className="px-3 py-3 font-semibold whitespace-nowrap">Sample Type</th>
                     <th className="px-3 py-3 font-semibold whitespace-nowrap">
@@ -820,7 +919,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       <td className="hidden lg:table-cell px-3 py-3 text-stone-700 text-xs">{row.dcNo || "-"}</td>
                       <td className="hidden lg:table-cell px-3 py-3 text-stone-700 text-xs">{row.createDate || "-"}</td>
                       <td className="px-3 py-3 text-stone-700 text-xs max-w-32 truncate">{row.customer}</td>
-                      <td className="hidden xl:table-cell px-3 py-3 text-stone-700 text-xs max-w-xs whitespace-normal wrap-break-word">{row.reasonForChange || "-"}</td>
+                      <td className="hidden xl:table-cell px-3 py-3 text-stone-700 text-xs max-w-xl whitespace-normal wrap-break-word w-20">{row.reasonForChange || "-"}</td>
                       <td className="hidden lg:table-cell px-3 py-3 text-stone-700 text-xs">{row.changeType || "-"}</td>
                       <td className="px-3 py-3 text-stone-700 text-xs max-w-28 truncate">{row.sampleType || "-"}</td>
                       <td className="px-3 py-3 text-center">
@@ -834,9 +933,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-1.5">
-                          <button type="button" onClick={() => openCase(row)} className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-stone-200 bg-white px-1.5 py-0.5 text-xs font-semibold text-stone-700 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700">
-                            Open modules
-                          </button>
+                         
                           {hasPdfForRow(row) ? (
                             <button type="button" onClick={() => openPdf(row)} className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-xs font-semibold text-amber-700 hover:bg-amber-100 transition">
                               <ExternalLink className="size-3" /> PDF

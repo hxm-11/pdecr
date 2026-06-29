@@ -41,6 +41,7 @@ from app.services.pd_ecr_case_service import (
     create_case,
     create_comment,
     create_task,
+    delete_case,
     ensure_case_manage_access,
     get_case_or_404,
     list_cases as list_db_cases,
@@ -81,6 +82,9 @@ from app.services.pd_ecr_case_loader import (
     load_historical_cases,
 )
 from app.services.pd_ecr_export import export_v1_draft
+from app.services.pd_ecr_four_module_generation import (
+    generate_modules_from_change_description,
+)
 from app.services.pd_ecr_generation import generate_grounded_draft, get_cached_draft
 from app.services.pd_ecr_import_service import import_historical_sources, ingest_uploaded_file
 from app.services.pd_ecr_realtime_service import pd_ecr_connection_manager
@@ -134,7 +138,6 @@ class PdEcrWorkflowSubmitPayload(BaseModel):
     assignees: Dict[str, Dict[str, Any]] | None = None
 
 
-
 class PdEcrPublishDepartmentsPayload(BaseModel):
     selected_departments: list[str]
 
@@ -157,6 +160,7 @@ class PdEcrExecutionCompletePayload(BaseModel):
     execution_result: str
     execution_note: str | None = None
     evidence_note: str | None = None
+
 
 class PdEcrDepartmentTaskConfirmPayload(BaseModel):
     impact_result: str
@@ -188,6 +192,11 @@ class PdEcrRetrievePayload(BaseModel):
     input: Dict[str, Any] | None = None
     top_k: int = 5
     filters: Dict[str, Any] | None = None
+
+
+class PdEcrGenerateFromChangeDescriptionPayload(BaseModel):
+    change_description: Dict[str, Any]
+    top_k: int = 5
 
 
 class PdEcrGenerateDraftPayload(BaseModel):
@@ -225,27 +234,32 @@ def get_draft_db_connection() -> sqlite3.Connection:
         CREATE TABLE IF NOT EXISTS pd_ecr_module_draft (
             record_id TEXT NOT NULL,
             module_id TEXT NOT NULL,
+            title TEXT NOT NULL DEFAULT '',
             data TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (record_id, module_id)
         )
         """
     )
-    # Migration: add title and created_at columns if they don't exist yet
-    for column, col_def in [
-        ("title", "TEXT NOT NULL DEFAULT ''"),
-        ("created_at", "TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP"),
-    ]:
-        try:
-            connection.execute(
-                f"ALTER TABLE pd_ecr_module_draft ADD COLUMN {column} {col_def}"
-            )
-        except sqlite3.OperationalError:
-            pass  # column already exists
-    # Backfill created_at for existing rows
+    columns = {
+        row["name"]
+        for row in connection.execute("PRAGMA table_info(pd_ecr_module_draft)")
+    }
+    if "title" not in columns:
+        connection.execute(
+            "ALTER TABLE pd_ecr_module_draft ADD COLUMN title TEXT NOT NULL DEFAULT ''"
+        )
+    if "created_at" not in columns:
+        connection.execute(
+            "ALTER TABLE pd_ecr_module_draft ADD COLUMN created_at TEXT"
+        )
     connection.execute(
-        "UPDATE pd_ecr_module_draft SET created_at = updated_at "
-        "WHERE created_at = '' OR created_at IS NULL"
+        """
+        UPDATE pd_ecr_module_draft
+        SET created_at = COALESCE(NULLIF(created_at, ''), updated_at, CURRENT_TIMESTAMP)
+        WHERE created_at = '' OR created_at IS NULL
+        """
     )
     return connection
 
@@ -1477,6 +1491,17 @@ def update_pd_ecr_case(
     }
 
 
+@router.delete("/cases/{case_id}")
+def delete_pd_ecr_case(
+    case_id: str,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    case = get_case_or_404(session=session, case_id=case_id)
+    deleted = delete_case(session=session, case=case, current_user=current_user)
+    return {"deleted": True, **deleted}
+
+
 @router.post("/cases/{case_id}/transition")
 def transition_pd_ecr_case(
     case_id: str,
@@ -1558,6 +1583,7 @@ def get_my_pd_ecr_workflow_tasks(
     current_user: CurrentUser,
 ):
     return list_my_workflow_tasks(session=session, current_user=current_user)
+
 
 @router.post("/workflow/execution-tasks/{task_id}/confirm-assignment")
 def confirm_pd_ecr_execution_assignment(
@@ -5645,6 +5671,22 @@ async def generate_pd_ecr_draft(
         raise HTTPException(status_code=422, detail=f"PD-ECR draft generation failed: {e}")
 
     return draft.model_dump(mode="json")
+
+
+@router.post("/generate-from-change-description")
+def generate_pd_ecr_from_change_description(
+    payload: PdEcrGenerateFromChangeDescriptionPayload,
+):
+    try:
+        return generate_modules_from_change_description(
+            payload.change_description,
+            top_k=payload.top_k,
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=422,
+            detail=f"PD-ECR four-module generation failed: {e}",
+        )
 
 
 @router.get("/drafts/{draft_id}/modules")

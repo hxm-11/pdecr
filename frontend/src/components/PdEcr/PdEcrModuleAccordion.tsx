@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronLeft, ChevronRight, FileText, UserCheck } from "lucide-react"
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
+import { type ReactNode, useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import type { PdEcrDisplayModule } from "./pdEcrState"
 import { PdEcrExecutionWorkflowPanel } from "./PdEcrExecutionWorkflowPanel"
@@ -16,99 +16,75 @@ const ACCORDION_MODULE_IDS = [
 const MODULE_LABELS: Record<string, { title: string; subtitle: string }> = {
   "change-description": { title: "变更描述", subtitle: "Change Description" },
   "impact-analysis": { title: "影响分析", subtitle: "Impact Analysis" },
-  "validation-plan": { title: "QAC & Validation plan", subtitle: "QAC & Validation Plan" },
-  "implementation-plan": { title: "实施与验证", subtitle: "Implementation & Plan" },
+  "validation-plan": { title: "QAC & 验证计划", subtitle: "QAC & Validation Plan" },
+  "implementation-plan": { title: "执行计划", subtitle: "Implementation & Plan" },
 }
 
-// ── Approval panel types & constants (shared with ImpactAnalysisView) ──
-type ApprovalRow = { person: string; date: string }
-const APPROVAL_DEPTS = ["Development", "Purchasing", "MFE", "Quality", "COS", "MOEx", "LOG"]
+type ConfirmationRow = { person: string; date: string }
+const CONFIRMATION_DEPTS = ["Development", "Purchasing", "MFE", "Quality", "COS", "MOEx", "LOG"]
 
-function defaultApproval(): ApprovalRow {
-  return { person: "", date: "" }
-}
-
-// ── Right-side fixed approval panel ──
-function ApprovalSignerPanel({ impactModule, onSubmit }: { impactModule?: PdEcrDisplayModule; onSubmit?: () => void }) {
-  const storageKey = impactModule
-    ? `pd-ecr-impact-analysis-${impactModule.id}`
-    : "pd-ecr-impact-analysis-fallback"
-
-  const [approvals, setApprovals] = useState<ApprovalRow[]>(() => {
-    try {
-      const raw = localStorage.getItem(storageKey)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        if (parsed?.approvals?.length === 7) return parsed.approvals
+function loadLocalConfirmations(): ConfirmationRow[] {
+  try {
+    const raw = localStorage.getItem("pd-ecr-local-confirmations")
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (parsed?.confirmations?.length === CONFIRMATION_DEPTS.length) {
+        return parsed.confirmations
       }
-    } catch { /* ignore */ }
-    return APPROVAL_DEPTS.map(() => defaultApproval())
-  })
+    }
+  } catch { /* ignore */ }
+  return CONFIRMATION_DEPTS.map(() => ({ person: "", date: "" }))
+}
 
-  const [saveStatus, setSaveStatus] = useState("")
-  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+function saveLocalConfirmations(confirmations: ConfirmationRow[]) {
+  localStorage.setItem("pd-ecr-local-confirmations", JSON.stringify({ confirmations }))
+}
 
-  // Auto-save on approval change (debounced 1s)
-  useEffect(() => {
-    const skip = !autoSaveTimer.current
-    if (skip) { autoSaveTimer.current = setTimeout(() => {}, 0); return }
-    setSaveStatus("Saving...")
-    clearTimeout(autoSaveTimer.current)
-    autoSaveTimer.current = setTimeout(() => {
-      let existing: Record<string, unknown> = {}
-      try {
-        const raw = localStorage.getItem(storageKey)
-        if (raw) existing = JSON.parse(raw)
-      } catch { /* ignore */ }
-      localStorage.setItem(storageKey, JSON.stringify({ ...existing, approvals }))
-      setSaveStatus("Auto-saved")
-      setTimeout(() => setSaveStatus(""), 2000)
-    }, 1000)
-    return () => clearTimeout(autoSaveTimer.current)
-  }, [approvals, storageKey])
+function LocalConfirmationPanel({ onSubmit }: { onSubmit?: () => void }) {
+  const [confirmations, setConfirmations] = useState<ConfirmationRow[]>(() =>
+    loadLocalConfirmations(),
+  )
+  const allConfirmed = confirmations.every((item) => item.person.trim())
 
-  const updateApproval = (i: number, field: keyof ApprovalRow, value: string) => {
-    setApprovals((prev) =>
-      prev.map((r, j) => {
-        if (j !== i) return r
-        const next = { ...r, [field]: value }
-        if (field === "person") {
-          if (value.trim()) {
-            const now = new Date()
-            next.date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
-          } else {
-            next.date = ""
-          }
+  const updateConfirmation = (index: number, value: string) => {
+    setConfirmations((prev) => {
+      const next = prev.map((item, itemIndex) => {
+        if (itemIndex !== index) return item
+        if (!value.trim()) return { person: "", date: "" }
+        const now = new Date()
+        return {
+          person: value,
+          date: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`,
         }
-        return next
       })
-    )
+      saveLocalConfirmations(next)
+      return next
+    })
   }
 
-  const allConfirmed = useMemo(
-    () => approvals.every((a) => a.person.trim()),
-    [approvals],
-  )
-
   return (
-    <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
-      {/* ── Approval signer inputs ── */}
+    <div className="sticky top-4 space-y-3" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
       <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
         <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
-          Change-Feasibility Review
+          可行性确认
+        </div>
+        <div className="border-b border-amber-100 bg-amber-50 px-4 py-2 text-xs text-amber-800">
+          当前内容未连接后端 case id，因此这里保留本地确认人记录；正式状态流请从已保存案例进入。
         </div>
         <div className="divide-y divide-stone-100">
-          {APPROVAL_DEPTS.map((dept, i) => (
+          {CONFIRMATION_DEPTS.map((dept, index) => (
             <div key={dept} className="px-4 py-2.5">
               <p className="text-xs font-semibold text-stone-700">{dept}</p>
               <input
-                value={approvals[i].person}
-                onChange={(e) => updateApproval(i, "person", e.target.value)}
+                value={confirmations[index].person}
+                onChange={(event) => updateConfirmation(index, event.target.value)}
                 className="mt-1 h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
                 placeholder="确认人..."
               />
-              {approvals[i].date ? (
-                <p className="mt-1 text-[10px] font-medium text-emerald-600">✓ {approvals[i].date}</p>
+              {confirmations[index].date ? (
+                <p className="mt-1 text-[10px] font-medium text-emerald-600">
+                  {confirmations[index].date}
+                </p>
               ) : (
                 <p className="mt-1 text-[10px] text-stone-300">待确认</p>
               )}
@@ -117,21 +93,15 @@ function ApprovalSignerPanel({ impactModule, onSubmit }: { impactModule?: PdEcrD
         </div>
       </div>
 
-      {/* ── Submit button when all confirmed ── */}
-      {allConfirmed && onSubmit && (
+      {allConfirmed && onSubmit ? (
         <Button
           type="button"
           className="w-full bg-emerald-600 hover:bg-emerald-700"
           onClick={onSubmit}
         >
-          全部确认完成，查看结果 →
+          全部确认完成，查看结果
         </Button>
-      )}
-
-      {/* ── Save indicator ── */}
-      {saveStatus && (
-        <p className="text-center text-[10px] text-stone-400">{saveStatus}</p>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -473,9 +443,6 @@ export function PdEcrModuleAccordion({
     .map((id) => modules.find((m) => m.id === id))
     .filter(Boolean) as PdEcrDisplayModule[]
 
-  // Find the impact-analysis module for the right approval panel
-  const impactModule = modules.find((m) => m.id === "impact-analysis")
-
   if (!filteredModules.length) {
     return (
       <div className="rounded-lg border border-stone-200 bg-white p-8 text-center text-stone-500">
@@ -534,7 +501,9 @@ export function PdEcrModuleAccordion({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <UserCheck className="size-4 text-amber-600" />
-                <p className="text-sm font-semibold text-stone-700">可行性确认</p>
+                <p className="text-sm font-semibold text-stone-700">
+                  {caseId ? "状态流 / Workflow" : "可行性确认"}
+                </p>
               </div>
               <button
                 type="button"
@@ -548,11 +517,27 @@ export function PdEcrModuleAccordion({
             {caseId ? (
               <PdEcrExecutionWorkflowPanel caseId={caseId} onComplete={() => setViewMode("result")} />
             ) : (
-              <ApprovalSignerPanel impactModule={impactModule} onSubmit={() => setViewMode("result")} />
+              <LocalConfirmationPanel onSubmit={() => setViewMode("result")} />
             )}
           </div>
         )}
       </div>
+
+      {showApproval && (
+        <div className="mt-5 xl:hidden">
+          <div className="mb-3 flex items-center gap-2">
+            <UserCheck className="size-4 text-amber-600" />
+            <p className="text-sm font-semibold text-stone-700">
+              {caseId ? "状态流 / Workflow" : "可行性确认"}
+            </p>
+          </div>
+          {caseId ? (
+            <PdEcrExecutionWorkflowPanel caseId={caseId} onComplete={() => setViewMode("result")} />
+          ) : (
+            <LocalConfirmationPanel onSubmit={() => setViewMode("result")} />
+          )}
+        </div>
+      )}
 
       {/* ── Floating toggle to show approval panel when hidden ── */}
       {!showApproval && (

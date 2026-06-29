@@ -44,6 +44,7 @@ export type PdEcrDisplayModule = {
 
 export type PdEcrPdEcrCaseRow = {
   id: string
+  backendCaseId?: string
   createDate: string
   productClass: string
   from: string
@@ -170,17 +171,17 @@ export const pdEcrModuleMeta: Partial<
   "change-description": {
     title: "Change Request description",
     backendKeys: ["basic_information", "basic_info", "change-description"],
-    subtitle: "Content 1 / 6",
+    subtitle: "Content 1 / 4",
   },
   "impact-analysis": {
     title: "Impact analysis",
     backendKeys: ["change_description", "impact-analysis", "affection_analysis"],
-    subtitle: "Content 2 / 6",
+    subtitle: "Content 2 / 4",
   },
   "validation-plan": {
     title: "Validation &trial run plan",
     backendKeys: ["reason_for_change", "validation-plan", "validation_plan"],
-    subtitle: "Content 3 / 6",
+    subtitle: "Content 3 / 4",
   },
   "execution-checklist": {
     title: "执行清单",
@@ -198,9 +199,15 @@ export const pdEcrModuleMeta: Partial<
     subtitle: "Content 4 / 6",
   },
   "implementation-plan": {
-    title: "Implementation task plan",
-    backendKeys: ["implementation_plan", "implementation-plan"],
-    subtitle: "Content 5 / 6",
+    title: "Implementation & Validation",
+    backendKeys: [
+      "implementation_plan",
+      "implementation-plan",
+      "approval_signoff_information",
+      "implementation-result",
+      "implementation_result",
+    ],
+    subtitle: "Content 4 / 4",
   },
   "implementation-result": {
     title: "Implementation result",
@@ -217,9 +224,7 @@ export const moduleOrder: PdEcrModuleId[] = [
   "change-description",
   "impact-analysis",
   "validation-plan",
-  "validation-result",
   "implementation-plan",
-  "implementation-result",
 ]
 
 const demoFallbackHistoryModules: PdEcrDisplayModule[] = [
@@ -255,9 +260,9 @@ const demoFallbackHistoryModules: PdEcrDisplayModule[] = [
     },
   },
   {
-    id: "execution-checklist",
-    title: "执行清单",
-    subtitle: "Historical execution checklist",
+    id: "implementation-plan",
+    title: "实施与验证",
+    subtitle: "Historical implementation and validation",
     summary: "历史案例执行项通常包括 BOM、供应商资料、导入日期和审批确认。",
     data: {
       历史摘要: "更新 BOM、供应商文件、质量检查项和导入计划。",
@@ -273,7 +278,7 @@ export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   {
     id: "change-description",
     title: "Change Request description",
-    subtitle: "Content 1 / 6",
+    subtitle: "Content 1 / 4",
     summary: "等待生成变更请求描述。",
     data: {
       状态: "尚未生成",
@@ -282,7 +287,7 @@ export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   {
     id: "impact-analysis",
     title: "Impact analysis",
-    subtitle: "Content 2 / 6",
+    subtitle: "Content 2 / 4",
     summary: "等待生成影响分析。",
     data: {
       状态: "尚未生成",
@@ -291,35 +296,17 @@ export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   {
     id: "validation-plan",
     title: "Validation &trial run plan",
-    subtitle: "Content 3 / 6",
+    subtitle: "Content 3 / 4",
     summary: "等待生成验证和试运行计划。",
     data: {
       状态: "尚未生成",
     },
   },
   {
-    id: "validation-result",
-    title: "Validation &Trial run plan result",
-    subtitle: "Content 4 / 6",
-    summary: "等待生成验证和试运行结果。",
-    data: {
-      状态: "尚未生成",
-    },
-  },
-  {
     id: "implementation-plan",
-    title: "Implementation task plan",
-    subtitle: "Content 5 / 6",
-    summary: "等待生成实施任务计划。",
-    data: {
-      状态: "尚未生成",
-    },
-  },
-  {
-    id: "implementation-result",
-    title: "Implementation result",
-    subtitle: "Content 6 / 6",
-    summary: "等待生成实施结果。",
+    title: "Implementation & Validation",
+    subtitle: "Content 4 / 4",
+    summary: "等待生成实施与验证。",
     data: {
       状态: "尚未生成",
     },
@@ -330,9 +317,7 @@ const v01ModuleOrder: PdEcrModuleId[] = [
   "change-description",
   "impact-analysis",
   "validation-plan",
-  "validation-result",
   "implementation-plan",
-  "implementation-result",
 ]
 
 const v01ModuleMeta: Partial<
@@ -391,15 +376,9 @@ const v01ModuleMeta: Partial<
     summary: "记录 validation result、trial run result、OK/NOK、签字和日期。",
   },
   "implementation-plan": {
-    title: "Implementation task plan",
-    subtitle: "Implementation task plan",
-    summary: "基于影响分析和历史 CASE 推荐可执行措施、责任人和计划日期。",
-  },
-  "implementation-result": {
-    title: "Implementation result",
-    subtitle: "Implementation result",
-    summary:
-      "跟踪措施执行结果，显示 Closed / Ongoing / Open 以及 overdue 状态。",
+    title: "Implementation & Validation",
+    subtitle: "Implementation & Validation",
+    summary: "基于影响分析和历史 CASE 推荐实施、验证、责任人与结果跟踪。",
   },
 }
 
@@ -458,18 +437,12 @@ function expandToV01Modules(
       byId.get("validation-plan") ||
       byId.get("reason_for_change") ||
       byId.get("validation-plan"),
-    "validation-result":
-      byId.get("validation-result") ||
-      byId.get("impact_analysis") ||
-      byId.get("implementation-result"),
     "implementation-plan":
       byId.get("implementation-plan") ||
       byId.get("implementation_plan") ||
-      byId.get("validation-plan") ||
-      executionModule,
-    "implementation-result":
       byId.get("implementation-result") ||
       byId.get("approval_signoff_information") ||
+      byId.get("validation-plan") ||
       executionModule,
   }
 
@@ -850,6 +823,7 @@ export function normalizePdEcrCaseRow(
 
   return {
     id,
+    backendCaseId: safePick(record, ["id", "case_id"]),
     createDate:
       safePick(record, ["createDate", "create_date", "date"]) ||
       safePick(metadata, ["createDate", "create_date", "date"]) ||

@@ -10,9 +10,10 @@ from app.models import (
     PdEcrDepartmentVisibility,
     PdEcrExecutionTask,
     PdEcrLeaderReviewTask,
+    PdEcrModule,
     User,
 )
-from app.services.pd_ecr_case_service import create_case
+from app.services.pd_ecr_case_service import create_case, delete_case
 from app.services.pd_ecr_workflow import (
     assign_execution_tasks,
     complete_execution_task,
@@ -333,11 +334,15 @@ def test_list_my_workflow_tasks_filters_by_assignee_and_reviewer(session):
     assert [task["checklist_row_id"] for task in assignee_tasks["execution_tasks"]] == [
         "quality-row"
     ]
+    assert assignee_tasks["execution_tasks"][0]["case_exists"] is True
+    assert assignee_tasks["execution_tasks"][0]["case"]["case_no"] == "PDECR-MY-TASKS-001"
     assert assignee_tasks["leader_review_tasks"] == []
     assert reviewer_tasks["execution_tasks"] == []
     assert [task["department"] for task in reviewer_tasks["leader_review_tasks"]] == [
         "quality"
     ]
+    assert reviewer_tasks["leader_review_tasks"][0]["case_exists"] is True
+    assert reviewer_tasks["leader_review_tasks"][0]["case"]["case_no"] == "PDECR-MY-TASKS-001"
 
 
 def test_list_my_workflow_tasks_manager_sees_all_tasks(session):
@@ -375,3 +380,56 @@ def test_list_my_workflow_tasks_manager_sees_all_tasks(session):
 
     assert len(tasks["execution_tasks"]) == 1
     assert len(tasks["leader_review_tasks"]) == 1
+    assert tasks["execution_tasks"][0]["case"]["case_no"] == "PDECR-MY-TASKS-002"
+    assert tasks["leader_review_tasks"][0]["case"]["case_no"] == "PDECR-MY-TASKS-002"
+
+
+def test_delete_case_removes_workflow_children(session):
+    manager = make_user(session, "cleanup-manager@example.com", role="pd_ecr_manager")
+    case = PdEcrCase(case_no="PDECR-CLEANUP-001", title="Cleanup draft")
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    session.add(
+        PdEcrModule(
+            case_id=case.id,
+            module_id="change-description",
+            title="Change Description",
+        )
+    )
+    session.add(
+        PdEcrExecutionTask(
+            case_id=case.id,
+            checklist_row_id="cleanup-row",
+            department="quality",
+            description="Cleanup task",
+            assignee_email="cleanup@example.com",
+        )
+    )
+    session.commit()
+
+    deleted = delete_case(session=session, case=case, current_user=manager)
+
+    assert deleted["case_no"] == "PDECR-CLEANUP-001"
+    assert session.get(PdEcrCase, case.id) is None
+    assert session.exec(select(PdEcrModule).where(PdEcrModule.case_id == case.id)).all() == []
+    assert session.exec(select(PdEcrExecutionTask).where(PdEcrExecutionTask.case_id == case.id)).all() == []
+
+
+def test_delete_case_rejects_approved_case(session):
+    manager = make_user(session, "cleanup-manager2@example.com", role="pd_ecr_manager")
+    case = PdEcrCase(
+        case_no="PDECR-CLEANUP-APPROVED-001",
+        title="Approved",
+        status="approved",
+    )
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    with pytest.raises(HTTPException) as exc:
+        delete_case(session=session, case=case, current_user=manager)
+
+    assert exc.value.status_code == 422
+    assert session.get(PdEcrCase, case.id) is not None

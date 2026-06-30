@@ -12,12 +12,15 @@ import {
   Plus,
   Search,
   Sparkles,
+  Trash2,
 } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
+  deletePdEcrCase,
+  deletePdEcrSourceDocument,
   getPdEcrCase,
   getPdEcrKnowledgeBaseStatus,
   listPdEcrCases,
@@ -97,6 +100,32 @@ function pickString(record: PdEcrCaseRecord, keys: string[]) {
     if (typeof value === "number") return String(value)
   }
   return ""
+}
+
+function errorMessage(error: unknown) {
+  if (!error || typeof error !== "object") return "Request failed"
+  const record = error as {
+    message?: string
+    response?: { status?: number; data?: unknown }
+  }
+  const detail =
+    record.response?.data && typeof record.response.data === "object"
+      ? (record.response.data as { detail?: unknown }).detail
+      : undefined
+  return [
+    record.response?.status ? `HTTP ${record.response.status}` : "",
+    typeof detail === "string" ? detail : record.message || "Request failed",
+  ]
+    .filter(Boolean)
+    .join(": ")
+}
+
+function deleteTargetId(item: DashboardCase) {
+  return item.row.backendCaseId || ""
+}
+
+function sourceDeleteTargetId(item: DashboardCase) {
+  return item.row.sourceDocumentId || ""
 }
 
 function isHistoricalCase(record: PdEcrCaseRecord) {
@@ -366,10 +395,11 @@ export function PdEcrCaseDashboard() {
   const [searchText, setSearchText] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [openingCaseId, setOpeningCaseId] = useState<string | null>(null)
+  const [deletingCaseId, setDeletingCaseId] = useState<string | null>(null)
   const [dashboardMessage, setDashboardMessage] = useState("")
   const [healthExpanded, setHealthExpanded] = useState(false)
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["pd-ecr-cases"],
     queryFn: listPdEcrCases,
     refetchOnWindowFocus: true,
@@ -454,6 +484,35 @@ export function PdEcrCaseDashboard() {
       )
     } finally {
       setOpeningCaseId(null)
+    }
+  }
+
+  const deleteCase = async (item: DashboardCase) => {
+    const caseId = deleteTargetId(item)
+    const sourceDocumentId = sourceDeleteTargetId(item)
+    if (!caseId && !sourceDocumentId) {
+      setDashboardMessage(
+        `${item.caseNo} does not have a database case ID. It may be a source/PDF knowledge row, so it cannot be deleted from the case dashboard.`,
+      )
+      return
+    }
+    const confirmed = window.confirm(
+      `Delete PD-ECR case ${item.caseNo}?\n\nApproved, implementation, and closed cases are protected by the backend.`,
+    )
+    if (!confirmed) return
+
+    setDeletingCaseId(item.id)
+    setDashboardMessage(`Deleting ${item.caseNo}...`)
+    try {
+      const result = caseId
+        ? await deletePdEcrCase(caseId)
+        : await deletePdEcrSourceDocument(sourceDocumentId)
+      await refetch()
+      setDashboardMessage(`Deleted ${"case_no" in result ? result.case_no : result.source_file || item.caseNo}.`)
+    } catch (error) {
+      setDashboardMessage(`Could not delete ${item.caseNo}: ${errorMessage(error)}`)
+    } finally {
+      setDeletingCaseId(null)
     }
   }
 
@@ -662,17 +721,32 @@ export function PdEcrCaseDashboard() {
                           </span>
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            className="h-8 bg-white"
-                            onClick={() => openCase(item)}
-                            disabled={openingCaseId === item.id}
-                          >
-                            {openingCaseId === item.id ? "Opening" : "Open"}
-                            <ArrowRight className="size-3" />
-                          </Button>
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="h-8 bg-white"
+                              onClick={() => openCase(item)}
+                              disabled={openingCaseId === item.id || deletingCaseId === item.id}
+                            >
+                              {openingCaseId === item.id ? "Opening" : "Open"}
+                              <ArrowRight className="size-3" />
+                            </Button>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              className="h-8 border-red-200 bg-white px-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              onClick={() => deleteCase(item)}
+                              disabled={deletingCaseId === item.id || openingCaseId === item.id}
+                              title="Delete case"
+                              aria-label={`Delete ${item.caseNo}`}
+                            >
+                              <Trash2 className="size-3.5" />
+                              {deletingCaseId === item.id ? "Deleting" : ""}
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     )

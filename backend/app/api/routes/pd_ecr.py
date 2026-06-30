@@ -1005,6 +1005,7 @@ def _serialize_case_with_source_pdf(session: SessionDep, case) -> dict[str, Any]
         pdf_path = _source_document_display_pdf_path(source_doc)
         if pdf_path is None:
             continue
+        payload["source_document_id"] = str(source_doc.id)
         payload["source_file"] = source_doc.source_file
         payload["pdf_file"] = pdf_path.name
         payload["pdf_url"] = f"/api/v1/pd-ecr/source-documents/{source_doc.id}/preview"
@@ -1054,6 +1055,27 @@ def get_historical_source_document_preview(source_doc_id: str, session: SessionD
         filename=pdf_path.name,
         content_disposition_type="inline",
     )
+
+
+@router.delete("/source-documents/{source_doc_id}")
+def delete_historical_source_document(source_doc_id: str, session: SessionDep):
+    try:
+        parsed_id = uuid.UUID(source_doc_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Source document not found")
+
+    source_doc = session.get(HistoricalSourceDocument, parsed_id)
+    if source_doc is None:
+        raise HTTPException(status_code=404, detail="Source document not found")
+
+    deleted = {
+        "id": str(source_doc.id),
+        "source_file": source_doc.source_file,
+        "case_id": str(source_doc.case_id) if source_doc.case_id else None,
+    }
+    session.delete(source_doc)
+    session.commit()
+    return {"deleted": True, **deleted}
 
 
 STRUCTURED_SIGNATURE_DIR = Path(__file__).resolve().parents[2] / "rag" / "knowledge"
@@ -5782,7 +5804,19 @@ def get_pd_ecr_draft_modules(draft_id: str):
 @router.post("/export")
 def export_pd_ecr_case(
     payload: PdEcrExportPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+    case_id: str | None = None,
 ):
+    if case_id:
+        case = get_case_or_404(session=session, case_id=case_id)
+        return export_case(
+            session=session,
+            case=case,
+            current_user=current_user,
+            export_format="json" if payload.format == "json" else "html",
+        )
+
     draft_id = payload.draft_id or (payload.draft or {}).get("draft_id")
     if not draft_id:
         raise HTTPException(status_code=422, detail="draft_id is required for V1 export")

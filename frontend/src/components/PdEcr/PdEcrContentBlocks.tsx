@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router"
 import {
+  AlertCircle,
   ArrowLeft,
   CheckCircle2,
   ClipboardList,
@@ -10,15 +11,27 @@ import {
   LockKeyhole,
   Sparkles,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { exportPdEcrDraft, resolvePdEcrAssetUrl } from "@/lib/pdEcrApi"
-import { PdEcrModuleAccordion, PdEcrResultModuleAccordion } from "./PdEcrModuleAccordion"
+import { exportPdEcrCase, exportPdEcrDraft, resolvePdEcrAssetUrl } from "@/lib/pdEcrApi"
+import { getModuleCompletionState, PdEcrModuleAccordion, PdEcrResultModuleAccordion } from "./PdEcrModuleAccordion"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import { buildPdEcrOnePageHtml, downloadText } from "./pdEcrExport"
 import { loadActiveResult, type PdEcrStoredResult } from "./pdEcrState"
-import { PdEcrFeasibilityConfirmation, PdEcrLeaderSigning } from "./PdEcrFeasibilityConfirmation"
+import {
+  isFeasibilityComplete,
+  loadFeasibilityState,
+  PdEcrFeasibilityConfirmation,
+  PdEcrLeaderSigning,
+} from "./PdEcrFeasibilityConfirmation"
+
+const PAGE1_MODULE_IDS = [
+  "change-description",
+  "impact-analysis",
+  "validation-plan",
+  "implementation-plan",
+] as const
 
 function compactValue(...values: unknown[]) {
   for (const value of values) {
@@ -42,6 +55,56 @@ function statusClassName(result: PdEcrStoredResult) {
     return "border-emerald-200 bg-emerald-50 text-emerald-800"
   }
   return "border-amber-200 bg-amber-50 text-amber-800"
+}
+
+function getPage2Gate(result: PdEcrStoredResult) {
+  if (result.source === "history") {
+    return {
+      locked: false,
+      blockers: [] as string[],
+      warning: "Historical cases are read-only references; Page 2 signing is disabled.",
+    }
+  }
+
+  const blockers: string[] = []
+  const moduleStates = PAGE1_MODULE_IDS.map((moduleId) => {
+    const module = result.modules.find((item) => item.id === moduleId)
+    if (!module) {
+      return { title: moduleId, label: "Empty", detail: "Module is missing" }
+    }
+    const state = getModuleCompletionState(module)
+    return { title: module.title, label: state.label, detail: state.detail }
+  })
+
+  moduleStates
+    .filter((item) => item.label !== "Complete")
+    .forEach((item) => blockers.push(`${item.title}: ${item.detail}`))
+
+  if (!isFeasibilityComplete(loadFeasibilityState())) {
+    blockers.push("Step 2 feasibility confirmation requires text, initiator confirmation, and at least one attachment.")
+  }
+
+  return {
+    locked: blockers.length > 0,
+    blockers,
+    warning: result.currentCase?.backendCaseId
+      ? ""
+      : "This draft is not linked to a backend case yet; formal workflow assignment requires a saved backend case.",
+  }
+}
+
+function HistoricalSigningNotice() {
+  return (
+    <div className="rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800">
+      <div className="flex items-start gap-2">
+        <LockKeyhole className="mt-0.5 size-4 shrink-0" />
+        <p>
+          Historical reference mode: result review is available, but leader
+          sign-off inputs are disabled for source records.
+        </p>
+      </div>
+    </div>
+  )
 }
 
 function CaseSummaryBar({ result }: { result: PdEcrStoredResult }) {
@@ -106,9 +169,51 @@ export function PdEcrContentBlocks() {
   const result = useMemo(() => loadActiveResult(), [])
   const [status, setStatus] = useState("Ready")
   const [activePage, setActivePage] = useState<"page1" | "page2">("page1")
+  const [gateRevision, setGateRevision] = useState(0)
   const reportUrl = resolvePdEcrAssetUrl(result.reportUrl)
+  const page2Gate = useMemo(() => getPage2Gate(result), [result, gateRevision])
+
+  useEffect(() => {
+    const refreshGate = () => setGateRevision((value) => value + 1)
+    const timer = window.setInterval(refreshGate, 1500)
+    window.addEventListener("storage", refreshGate)
+    window.addEventListener("pd-ecr-impacts-updated", refreshGate)
+    window.addEventListener("pd-ecr-feasibility-updated", refreshGate)
+    return () => {
+      window.clearInterval(timer)
+      window.removeEventListener("storage", refreshGate)
+      window.removeEventListener("pd-ecr-impacts-updated", refreshGate)
+      window.removeEventListener("pd-ecr-feasibility-updated", refreshGate)
+    }
+  }, [])
+
+  const openPage2 = () => {
+    if (page2Gate.locked) {
+      setStatus(`Page 2 is locked: ${page2Gate.blockers[0]}`)
+      return
+    }
+    setActivePage("page2")
+    if (page2Gate.warning) {
+      setStatus(page2Gate.warning)
+    }
+  }
 
   const exportOnePage = async () => {
+    const backendCaseId = result.currentCase?.backendCaseId
+    if (backendCaseId) {
+      try {
+        const response = await exportPdEcrCase(backendCaseId, "html")
+        const downloadUrl = resolvePdEcrAssetUrl(String(response.url || ""))
+        if (downloadUrl) {
+          window.open(downloadUrl, "_blank", "noopener,noreferrer")
+          setStatus("Exported official backend PD-ECR HTML report. Use browser Print to save as PDF.")
+          return
+        }
+      } catch {
+        setStatus("Backend case export failed. Trying draft/local export instead.")
+      }
+    }
+
     if (result.draftId) {
       try {
         const response = await exportPdEcrDraft(
@@ -140,7 +245,7 @@ export function PdEcrContentBlocks() {
         if (downloadUrl) {
           window.open(downloadUrl, "_blank", "noopener,noreferrer")
         }
-        setStatus("Exported backend PD-ECR V1 HTML report.")
+        setStatus("Exported backend PD-ECR V1 HTML report. Use browser Print to save as PDF.")
         return
       } catch {
         setStatus("Backend export failed. Downloaded local HTML instead.")
@@ -182,7 +287,7 @@ export function PdEcrContentBlocks() {
     setStatus("Exported PD-ECR module CSV.")
   }
 
-  const shareSharePointList = async () => {
+  const copyListSummary = async () => {
     const text = [
       `PD-ECR: ${result.currentCase?.id || result.reportUrl || "Generated content"}`,
       `Source: ${result.source}`,
@@ -192,17 +297,17 @@ export function PdEcrContentBlocks() {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: "PD-ECR SharePoint list item",
+          title: "PD-ECR list summary",
           text,
           url: window.location.href,
         })
       } else {
         await navigator.clipboard?.writeText(text)
       }
-      setStatus("Prepared SharePoint list content.")
+      setStatus("Prepared PD-ECR list summary.")
     } catch {
       await navigator.clipboard?.writeText(text)
-      setStatus("Copied SharePoint list content to clipboard.")
+      setStatus("Copied PD-ECR list summary to clipboard.")
     }
   }
 
@@ -284,18 +389,47 @@ export function PdEcrContentBlocks() {
           </button>
           <button
             type="button"
-            onClick={() => setActivePage("page2")}
+            onClick={openPage2}
             aria-pressed={activePage === "page2"}
+            aria-disabled={page2Gate.locked}
             className={`flex min-h-11 items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
               activePage === "page2"
                 ? "bg-stone-900 text-white shadow-sm"
+                : page2Gate.locked
+                  ? "cursor-not-allowed text-stone-400"
                 : "text-stone-500 hover:bg-stone-50 hover:text-stone-800"
             }`}
+            title={page2Gate.locked ? page2Gate.blockers.join("\n") : undefined}
           >
             <span className="flex size-6 items-center justify-center rounded-full border border-current text-xs">2</span>
+            {page2Gate.locked && <LockKeyhole className="size-4" />}
             <span>验证结果与领导签核</span>
           </button>
         </div>
+
+        {page2Gate.locked && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="mt-0.5 size-4 shrink-0" />
+              <div>
+                <p className="font-semibold">Page 2 暂未开放</p>
+                <p className="mt-1 text-xs leading-5">
+                  {page2Gate.blockers.slice(0, 2).join("；")}
+                  {page2Gate.blockers.length > 2 ? `；另有 ${page2Gate.blockers.length - 2} 项需要补齐` : ""}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!page2Gate.locked && page2Gate.warning && (
+          <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-800">
+            <div className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
+              <p>{page2Gate.warning}</p>
+            </div>
+          </div>
+        )}
 
         {/* ═══ Page 1: Accordion + Feasibility Confirmation ═══ */}
         {activePage === "page1" && (
@@ -376,13 +510,13 @@ export function PdEcrContentBlocks() {
             {/* RIGHT: Leader Signing (sticky) */}
             <div className="hidden xl:block">
               <div className="sticky top-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
-                <PdEcrLeaderSigning />
+                {result.source === "history" ? <HistoricalSigningNotice /> : <PdEcrLeaderSigning />}
               </div>
             </div>
 
             {/* Mobile: Leader Signing below */}
             <div className="xl:hidden">
-              <PdEcrLeaderSigning />
+              {result.source === "history" ? <HistoricalSigningNotice /> : <PdEcrLeaderSigning />}
             </div>
           </div>
         )}
@@ -405,7 +539,7 @@ export function PdEcrContentBlocks() {
             onClick={exportOnePage}
           >
             <Download className="size-4" />
-            Export PD-ECR One Page
+            Export official HTML/PDF
           </Button>
           {reportUrl ? (
             <Button asChild className="ml-auto bg-stone-800 hover:bg-stone-700">
@@ -417,10 +551,10 @@ export function PdEcrContentBlocks() {
             <Button
               type="button"
               className="ml-auto bg-stone-800 hover:bg-stone-700"
-              onClick={shareSharePointList}
+              onClick={copyListSummary}
             >
               <ClipboardList className="size-4" />
-              Copy SharePoint content
+              Copy list summary
             </Button>
           )}
           <Button

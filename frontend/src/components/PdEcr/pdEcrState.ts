@@ -46,6 +46,7 @@ export type PdEcrDisplayModule = {
 export type PdEcrPdEcrCaseRow = {
   id: string
   backendCaseId?: string
+  sourceDocumentId?: string
   createDate: string
   productClass: string
   from: string
@@ -835,17 +836,18 @@ export function normalizePdEcrCaseRow(
 
   const id =
     safePick(record, [
-      "case_id",
       "case_no",
       "caseNo",
       "pd_ecr_no",
       "pdEcrNo",
+      "dc_no",
       "document_name",
       "source",
       "source_file",
+      "case_id",
       "id",
     ]) ||
-    safePick(metadata, ["document_name", "source", "file_name"]) ||
+    safePick(metadata, ["case_no", "caseNo", "document_name", "source", "file_name", "case_id"]) ||
     `PD-ECR-${index + 1}`
   const rawLink = safePick(record, ["link"])
   const link = rawLink.toLowerCase().includes("pdf")
@@ -854,7 +856,10 @@ export function normalizePdEcrCaseRow(
 
   return {
     id,
-    backendCaseId: safePick(record, ["id", "case_id"]),
+    backendCaseId: safePick(record, ["id", "backend_case_id", "backendCaseId", "db_id", "uuid"]),
+    sourceDocumentId:
+      safePick(record, ["source_document_id", "sourceDocumentId", "source_doc_id"]) ||
+      safePick(metadata, ["source_document_id", "sourceDocumentId", "source_doc_id"]),
     createDate:
       safePick(record, ["createDate", "create_date", "date"]) ||
       safePick(metadata, ["createDate", "create_date", "date"]) ||
@@ -1090,6 +1095,26 @@ export function loadHistoryResult(): PdEcrStoredResult {
 
 export function loadActiveResult(): PdEcrStoredResult {
   return loadStoredResult(ACTIVE_STORAGE_KEY, loadGeneratedResult())
+}
+
+export function getPdEcrActiveRecordId(result: PdEcrStoredResult = loadActiveResult()): string {
+  const resolved =
+    result.currentCase?.backendCaseId ||
+    result.draftId ||
+    result.currentCase?.id ||
+    result.reportUrl ||
+    result.relatedCases[0] ||
+    result.source
+
+  if (resolved) return resolved
+
+  const draftKey = "pd-ecr-draft-record-id"
+  const existing = localStorage.getItem(draftKey)
+  if (existing) return existing
+
+  const newId = `draft-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+  localStorage.setItem(draftKey, newId)
+  return newId
 }
 
 function loadStoredResult(

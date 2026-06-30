@@ -545,6 +545,15 @@ export async function deletePdEcrCase(
   return res.data
 }
 
+export async function deletePdEcrSourceDocument(
+  sourceDocumentId: string,
+): Promise<{ deleted: boolean; id: string; source_file: string; case_id?: string | null }> {
+  const res = await pdEcrApi.delete<{ deleted: boolean; id: string; source_file: string; case_id?: string | null }>(
+    `/api/v1/pd-ecr/source-documents/${encodeURIComponent(sourceDocumentId)}`,
+  )
+  return res.data
+}
+
 export async function transitionPdEcrCase(
   caseId: string,
   status: PdEcrCaseStatus,

@@ -25,6 +25,7 @@ import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import { buildPdEcrOnePageHtml } from "./pdEcrExport"
 import {
   findModule,
+  getPdEcrActiveRecordId,
   loadActiveResult,
   loadGeneratedResult,
   loadHistoryResult,
@@ -118,32 +119,41 @@ function ToolFooter({ module }: { module?: PdEcrDisplayModule }) {
     URL.revokeObjectURL(url)
   }
 
-  const handleFileUpload = (files: FileList | null) => {
-    if (!files?.length) return
-    const names = Array.from(files).map((f) => f.name).join(", ")
-    alert(`Files selected: ${names}\n(Backend upload integration pending)`)
-  }
-
   return (
     <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-stone-200 pt-4">
-      <Button asChild type="button" variant="outline" className="bg-white cursor-pointer">
-        <label>
-          <Upload className="size-4" />
-          Upload files
-          <input type="file" multiple className="hidden" onChange={(e) => handleFileUpload(e.target.files)} />
-        </label>
+      <Button
+        type="button"
+        variant="outline"
+        className="bg-white"
+        disabled
+        title="Module attachment upload is outside the current MVP. Use Step 2 feasibility attachments for now."
+      >
+        <Upload className="size-4" />
+        Upload files
       </Button>
       <Button type="button" variant="outline" className="bg-white" onClick={exportCsv}>
-        Export PD-ECR excel file
+        Export module CSV
       </Button>
       <Button type="button" variant="outline" className="bg-white" onClick={exportOnePage}>
         Export PD-ECR One-page
       </Button>
-      <Button type="button" variant="outline" className="ml-auto bg-amber-50">
+      <Button
+        type="button"
+        variant="outline"
+        className="ml-auto bg-stone-50 text-stone-400"
+        disabled
+        title="RA SuperOPL integration is not connected in this MVP."
+      >
         <Link2 className="size-4" />
         RA SuperOPL link
       </Button>
-      <Button type="button" variant="outline" className="bg-amber-50">
+      <Button
+        type="button"
+        variant="outline"
+        className="bg-stone-50 text-stone-400"
+        disabled
+        title="Concession system integration is not connected in this MVP."
+      >
         Concession link
       </Button>
     </div>
@@ -881,31 +891,31 @@ function buildChangeDraft(module: PdEcrDisplayModule): ChangeDescriptionDraft {
 }
 
 function getActiveRecordId(): string {
-  const active = loadActiveResult()
-
-  const resolved =
-    active.currentCase?.id ||
-    active.reportUrl ||
-    active.relatedCases[0] ||
-    active.source
-
-  if (resolved) return resolved
-
-  // No case associated — use a persistent draft-id so multiple
-  // standalone drafts don't collide under a single fallback key.
-  const draftKey = "pd-ecr-draft-record-id"
-  const existing = localStorage.getItem(draftKey)
-  if (existing) return existing
-
-  const newId = `draft-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-  localStorage.setItem(draftKey, newId)
-  return newId
+  return getPdEcrActiveRecordId()
 }
 
 function changeDraftStorageKey(module: PdEcrDisplayModule) {
   const recordId = getActiveRecordId()
 
   return `pd-ecr-change-description-draft:${recordId}:${module.id}`
+}
+
+function backendDraftModuleId(module: PdEcrDisplayModule, mode: "plan" | "result" = "plan") {
+  return mode === "result" ? `${module.id}-results` : module.id
+}
+
+async function saveBackendModuleDraft(
+  recordId: string,
+  moduleId: string,
+  title: string,
+  data: Record<string, unknown>,
+) {
+  await savePdEcrModuleDraft({
+    record_id: recordId,
+    module_id: moduleId,
+    title,
+    data,
+  })
 }
 
 function attachmentStorageKey(module: PdEcrDisplayModule, side: "before" | "after" | "flow") {
@@ -1640,6 +1650,9 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const approvalDepts = ["Development", "Purchasing", "MFE", "Quality", "COS", "MOEx", "LOG"]
 
   const storageKey = `pd-ecr-impact-analysis-${module.id}`
+  const recordId = useMemo(() => getActiveRecordId(), [])
+  const backendModuleId = backendDraftModuleId(module)
+  const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
   type ImpactRow = { no: boolean; yes: boolean; confirmedBy: string; confirmedAt: string; desc: string }
   type DocRow = { no: boolean; yes: boolean; respPerson: string; dueDate: string }
   type ApprovalRow = { person: string; date: string }
@@ -1712,6 +1725,32 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const [saveStatus, setSaveStatus] = useState("Draft")
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
+  useEffect(() => {
+    if (hasLocalDraft.current) return
+    let cancelled = false
+    getPdEcrModuleDraft(recordId, backendModuleId)
+      .then((response) => {
+        const data = response.data
+        if (cancelled || !data) return
+        if (Array.isArray(data.impacts)) setImpacts(data.impacts as ImpactRow[])
+        if (Array.isArray(data.documents)) setDocuments(data.documents as DocRow[])
+        if (typeof data.mixedDeliveries === "string") setMixedDeliveries(data.mixedDeliveries)
+        if (typeof data.mixedDeliveryRemark === "string") setMixedDeliveryRemark(data.mixedDeliveryRemark)
+        if (typeof data.firstDeliveryAnswer === "string") setFirstDeliveryAnswer(data.firstDeliveryAnswer)
+        if (Array.isArray(data.stockDeliveryRows)) setStockDeliveryRows(data.stockDeliveryRows as StockDeliveryRow[])
+        if (Array.isArray(data.approvals)) setApprovals(data.approvals as ApprovalRow[])
+        if (typeof data.costNote === "string") setCostNote(data.costNote)
+        if (Array.isArray(data.customImpactItems)) setCustomImpactItems(data.customImpactItems as ImpactItemDefinition[])
+        setSaveStatus("Loaded backend draft")
+      })
+      .catch(() => {
+        // Local defaults remain usable when backend draft lookup is unavailable.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [backendModuleId, recordId])
+
   // Inner step expand/collapse state (multi-select)
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(() => new Set(["step-3.1"]))
   // Department expand/collapse inside impact analysis (default all expanded)
@@ -1753,11 +1792,14 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     setSaveStatus("Saving...")
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
-      localStorage.setItem(storageKey, JSON.stringify({
+      const payload = {
         impacts, documents, mixedDeliveries, mixedDeliveryRemark,
         firstDeliveryAnswer, stockDeliveryRows, approvals, costNote, customImpactItems,
-      }))
+      }
+      localStorage.setItem(storageKey, JSON.stringify(payload))
       setSaveStatus("Auto-saved")
+      void saveBackendModuleDraft(recordId, backendModuleId, module.title || "Impact Analysis", payload)
+        .catch(() => setSaveStatus("Saved locally"))
       // 通知 1.3 ValidationPlanView 刷新自定义措施
       window.dispatchEvent(new CustomEvent(IMPACT_ANALYSIS_UPDATED_EVENT, { detail: { moduleId: module.id, storageKey } }))
       setTimeout(() => setSaveStatus("Draft"), 2000)
@@ -2224,6 +2266,9 @@ export function ValidationPlanView({
   const storageKey = resultOnly
     ? `pd-ecr-validation-results-${module.id}`
     : `pd-ecr-validation-plan-${module.id}`
+  const recordId = useMemo(() => getActiveRecordId(), [])
+  const backendModuleId = backendDraftModuleId(module, resultOnly ? "result" : "plan")
+  const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
   type ValRow = { id: string; label: string; checked: boolean; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string }
   type CustomValRow = Pick<ValRow, "checked" | "finishDate" | "actualDate" | "respPerson" | "comments">
   const defaultCustomValRow = (): CustomValRow => ({ checked: true, finishDate: "", actualDate: "", respPerson: "", comments: "" })
@@ -2249,11 +2294,53 @@ export function ValidationPlanView({
   const [expanded, setExpanded] = useState(true)
   const [customExpanded, setCustomExpanded] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => {
+    if (hasLocalDraft.current) return
+    let cancelled = false
+    getPdEcrModuleDraft(recordId, backendModuleId)
+      .then((response) => {
+        const data = response.data
+        if (cancelled || !data) return
+        if (Array.isArray(data.rows)) setRows(data.rows as ValRow[])
+        if (data.customRows && typeof data.customRows === "object") {
+          setCustomRows(data.customRows as Record<string, CustomValRow>)
+        }
+        setSaveStatus("Loaded backend draft")
+      })
+      .catch(() => {
+        // Keep local/default rows when backend draft lookup fails.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [backendModuleId, recordId])
 
   // 读取 1.2.1 影响分析中 Yes + Measures 项 -> 1.3.2 自定义措施
   const customMeasures = useMemo(() => {
     return readImpactCustomMeasures()
   }, [refreshKey])
+
+  useEffect(() => {
+    const skip = !autoSaveTimer.current
+    if (skip) { autoSaveTimer.current = setTimeout(() => {}, 0); return }
+    setSaveStatus("Saving...")
+    clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => {
+      const payload = { rows, customRows }
+      localStorage.setItem(storageKey, JSON.stringify(payload))
+      setSaveStatus("Auto-saved")
+      void saveBackendModuleDraft(
+        recordId,
+        backendModuleId,
+        resultOnly ? "QAC & Validation results" : "QAC & Validation plan",
+        payload,
+      ).catch(() => setSaveStatus("Saved locally"))
+      setTimeout(() => setSaveStatus("Draft"), 2000)
+    }, 1000)
+    return () => clearTimeout(autoSaveTimer.current)
+  }, [backendModuleId, customRows, recordId, resultOnly, rows, storageKey])
 
   // 监听 1.2.1 影响分析自动保存事件，实时刷新自定义措施
   useEffect(() => {
@@ -2294,8 +2381,15 @@ export function ValidationPlanView({
     }))
   }
   const savePlan = () => {
-    localStorage.setItem(storageKey, JSON.stringify({ rows, customRows }))
+    const payload = { rows, customRows }
+    localStorage.setItem(storageKey, JSON.stringify(payload))
     setSaveStatus("Saved")
+    void saveBackendModuleDraft(
+      recordId,
+      backendModuleId,
+      resultOnly ? "QAC & Validation results" : "QAC & Validation plan",
+      payload,
+    ).catch(() => setSaveStatus("Saved locally"))
   }
 
   return (
@@ -2778,6 +2872,9 @@ export function ImplementationView({
   const storageKey = resultOnly
     ? `pd-ecr-implementation-results-${module.id}`
     : `pd-ecr-implementation-${module.id}`
+  const recordId = useMemo(() => getActiveRecordId(), [])
+  const backendModuleId = backendDraftModuleId(module, resultOnly ? "result" : "plan")
+  const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
 
   // ── State ──
   const [developmentConfirmation] = useState(() => {
@@ -2800,6 +2897,26 @@ export function ImplementationView({
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => {
+    if (hasLocalDraft.current) return
+    let cancelled = false
+    getPdEcrModuleDraft(recordId, backendModuleId)
+      .then((response) => {
+        const data = response.data
+        if (cancelled || !data) return
+        if (Array.isArray(data.checklistRows)) {
+          setChecklistRows((data.checklistRows as ImplRow[]).map((row) => row.id ? row : { ...row, id: nextImplRowId() }))
+        }
+        setSaveStatus("Loaded backend draft")
+      })
+      .catch(() => {
+        // Keep local/default checklist when backend draft lookup fails.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [backendModuleId, recordId])
 
   // Inner step expand/collapse
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(() => new Set(["step-6.1"]))
@@ -2840,10 +2957,17 @@ export function ImplementationView({
     setSaveStatus("Saving...")
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
-      localStorage.setItem(storageKey, JSON.stringify({
+      const payload = {
         developmentConfirmation, checklistRows, implementationDate,
-      }))
+      }
+      localStorage.setItem(storageKey, JSON.stringify(payload))
       setSaveStatus("Auto-saved")
+      void saveBackendModuleDraft(
+        recordId,
+        backendModuleId,
+        resultOnly ? "Implementation results" : "Implementation plan",
+        payload,
+      ).catch(() => setSaveStatus("Saved locally"))
       setTimeout(() => setSaveStatus("Draft"), 2000)
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)

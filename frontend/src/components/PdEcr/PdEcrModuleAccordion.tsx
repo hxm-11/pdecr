@@ -1,7 +1,7 @@
 import { AlertCircle, CheckCircle2, ChevronDown, ChevronLeft, ChevronRight, CircleDashed, FileText, UserCheck } from "lucide-react"
 import { type ReactNode, useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { loadActiveResult, type PdEcrDisplayModule } from "./pdEcrState"
+import { getPdEcrActiveRecordId, loadActiveResult, type PdEcrDisplayModule } from "./pdEcrState"
 import { PdEcrExecutionWorkflowPanel } from "./PdEcrExecutionWorkflowPanel"
 import { renderModuleBody } from "./PdEcrModuleDetail"
 
@@ -74,15 +74,7 @@ function hasGeneratedContent(module: PdEcrDisplayModule) {
 }
 
 function activeRecordIdForStatus() {
-  const active = loadActiveResult()
-  return (
-    active.currentCase?.id ||
-    active.reportUrl ||
-    active.relatedCases[0] ||
-    active.source ||
-    localStorage.getItem("pd-ecr-draft-record-id") ||
-    "generated"
-  )
+  return getPdEcrActiveRecordId(loadActiveResult())
 }
 
 function completionState(label: ModuleCompletionState["label"], detail: string): ModuleCompletionState {
@@ -219,7 +211,7 @@ function implementationPlanStatus(module: PdEcrDisplayModule) {
   return completionState("Complete", `${activeRows.length} implementation item${activeRows.length > 1 ? "s" : ""} ready`)
 }
 
-function getModuleCompletionState(module: PdEcrDisplayModule): ModuleCompletionState {
+export function getModuleCompletionState(module: PdEcrDisplayModule): ModuleCompletionState {
   if (module.needsHumanInput) {
     return completionState("Needs input", "AI marked this module for review")
   }

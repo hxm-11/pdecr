@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   deletePdEcrCase,
+  deletePdEcrSourceDocument,
   getPdEcrCase,
   importHistoricalPdEcrCases,
   listPdEcrCases,
@@ -210,6 +211,14 @@ function errorMessage(error: unknown) {
   ]
     .filter(Boolean)
     .join(": ")
+}
+
+function deleteTargetId(row: PdEcrCaseRow) {
+  return row.backendCaseId || ""
+}
+
+function sourceDeleteTargetId(row: PdEcrCaseRow) {
+  return row.sourceDocumentId || ""
 }
 
 function ActionRail({
@@ -414,7 +423,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
     setStatus(`Opening modules for ${row.id}...`)
 
     try {
-      const detail = await getPdEcrCase(row.id)
+      const detail = await getPdEcrCase(row.backendCaseId || row.id)
       const activeResult = {
         source: "history" as const,
         relatedCases: rows.map((item) => item.id),
@@ -644,19 +653,39 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
       return
     }
 
-    const names = selectedRows.map((row) => row.id).join(", ")
+    const deletableRows = selectedRows.filter((row) => deleteTargetId(row))
+    const sourceRows = selectedRows.filter((row) => !deleteTargetId(row) && sourceDeleteTargetId(row))
+    const skippedRows = selectedRows.filter((row) => !deleteTargetId(row) && !sourceDeleteTargetId(row))
+
+    if (!deletableRows.length && !sourceRows.length) {
+      const message =
+        "Selected rows do not have database case IDs. They may be source/PDF knowledge rows, so use source management rather than case deletion."
+      setStatus(message)
+      setDeleteNotice({ kind: "error", message })
+      return
+    }
+
+    const names = [...deletableRows, ...sourceRows].map((row) => row.id).join(", ")
     const confirmed = window.confirm(
-      `Delete ${selectedRows.length} selected PD-ECR case(s)?\n\n${names}\n\nApproved, implementation, and closed cases are protected by the backend.`,
+      `Delete ${deletableRows.length} PD-ECR case(s) and ${sourceRows.length} source document(s)?\n\n${names}\n\nApproved, implementation, and closed cases are protected by the backend. Source document deletion removes the database source record, not the physical original file.${
+        skippedRows.length
+          ? `\n\n${skippedRows.length} selected row(s) will be skipped because they do not have database IDs.`
+          : ""
+      }`,
     )
     if (!confirmed) return
 
     setIsDeleting(true)
     setDeleteNotice(null)
-    setStatus(`Deleting ${selectedRows.length} case(s)...`)
+    setStatus(`Deleting ${deletableRows.length} case(s) and ${sourceRows.length} source document(s)...`)
     const results = await Promise.allSettled(
-      selectedRows.map((row) => deletePdEcrCase(row.backendCaseId || row.id)),
+      [
+        ...deletableRows.map((row) => deletePdEcrCase(deleteTargetId(row))),
+        ...sourceRows.map((row) => deletePdEcrSourceDocument(sourceDeleteTargetId(row))),
+      ],
     )
-    const deletedIds = selectedRows
+    const attemptedRows = [...deletableRows, ...sourceRows]
+    const deletedIds = attemptedRows
       .filter((_, index) => results[index].status === "fulfilled")
       .map((row) => row.id)
     const failures = results.filter((result) => result.status === "rejected")
@@ -671,7 +700,9 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
 
     if (failures.length) {
       const firstFailure = failures[0]
-      const message = `Deleted ${deletedIds.length} case(s). ${failures.length} failed: ${
+      const message = `Deleted ${deletedIds.length} case(s). ${failures.length} failed${
+          skippedRows.length ? `, ${skippedRows.length} skipped` : ""
+        }: ${
           firstFailure.status === "rejected"
             ? errorMessage(firstFailure.reason)
             : "Unknown error"
@@ -682,7 +713,9 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
       return
     }
     await loadAllRealCases()
-    const message = `Deleted ${deletedIds.length} case(s).`
+    const message = `Deleted ${deletedIds.length} case(s).${
+      skippedRows.length ? ` Skipped ${skippedRows.length} row(s) without database IDs.` : ""
+    }`
     setStatus(message)
     setDeleteNotice({ kind: "success", message })
   }

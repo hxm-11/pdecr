@@ -1,5 +1,7 @@
 import { Check, FileText, Upload } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { getPdEcrModuleDraft, savePdEcrModuleDraft } from "@/lib/pdEcrApi"
+import { getPdEcrActiveRecordId } from "./pdEcrState"
 import type { PdEcrDisplayModule } from "./pdEcrState"
 
 // ── Types ──
@@ -14,7 +16,7 @@ type FeasibilitySignerRow = {
   date: string
 }
 
-type FeasibilityState = {
+export type FeasibilityState = {
   infoText: string
   initiatorConfirmed: boolean
   initiatorConfirmDate: string
@@ -33,29 +35,45 @@ const STORAGE_KEY = "pd-ecr-feasibility-confirmation"
 const SIGNER_STORAGE_KEY = "pd-ecr-feasibility-signers"
 
 // ── localStorage helpers ──
-function loadFeasibilityState(): FeasibilityState {
+function coerceFeasibilityState(value: Record<string, unknown> | null | undefined): FeasibilityState {
+  return {
+    infoText: String(value?.infoText || ""),
+    initiatorConfirmed: Boolean(value?.initiatorConfirmed),
+    initiatorConfirmDate: String(value?.initiatorConfirmDate || ""),
+    attachments: Array.isArray(value?.attachments) ? value.attachments as FeasibilityAttachment[] : [],
+  }
+}
+
+export function loadFeasibilityState(): FeasibilityState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) {
-      const parsed = JSON.parse(raw)
-      return {
-        infoText: parsed.infoText || "",
-        initiatorConfirmed: parsed.initiatorConfirmed || false,
-        initiatorConfirmDate: parsed.initiatorConfirmDate || "",
-        attachments: Array.isArray(parsed.attachments) ? parsed.attachments : [],
-      }
+      return coerceFeasibilityState(JSON.parse(raw))
     }
   } catch { /* ignore */ }
-  return {
-    infoText: "",
-    initiatorConfirmed: false,
-    initiatorConfirmDate: "",
-    attachments: [],
-  }
+  return coerceFeasibilityState(null)
 }
 
 export function saveFeasibilityState(state: FeasibilityState) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  window.dispatchEvent(new Event("pd-ecr-feasibility-updated"))
+}
+
+export function isFeasibilityComplete(state = loadFeasibilityState()) {
+  return (
+    state.infoText.trim().length > 0 &&
+    state.initiatorConfirmed &&
+    state.attachments.length > 0
+  )
+}
+
+async function saveFeasibilityBackend(moduleId: string, title: string, data: Record<string, unknown>) {
+  await savePdEcrModuleDraft({
+    record_id: getPdEcrActiveRecordId(),
+    module_id: moduleId,
+    title,
+    data,
+  })
 }
 
 // ── Component ──
@@ -69,10 +87,23 @@ export function PdEcrFeasibilityConfirmation({
   const [state, setState] = useState<FeasibilityState>(() => loadFeasibilityState())
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  const stepsComplete =
-    state.infoText.trim().length > 0 &&
-    state.initiatorConfirmed &&
-    state.attachments.length > 0
+  const stepsComplete = isFeasibilityComplete(state)
+
+  useEffect(() => {
+    if (localStorage.getItem(STORAGE_KEY)) return
+    let mounted = true
+    getPdEcrModuleDraft(getPdEcrActiveRecordId(), "feasibility-confirmation")
+      .then((draft) => {
+        if (!mounted || !draft.data) return
+        const next = coerceFeasibilityState(draft.data)
+        setState(next)
+        saveFeasibilityState(next)
+      })
+      .catch(() => undefined)
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   // Auto-save with 1s debounce
   useEffect(() => {
@@ -83,6 +114,7 @@ export function PdEcrFeasibilityConfirmation({
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
       saveFeasibilityState(state)
+      void saveFeasibilityBackend("feasibility-confirmation", "Feasibility Confirmation", state as unknown as Record<string, unknown>)
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)
   }, [state])
@@ -259,11 +291,29 @@ function loadSigners(): FeasibilitySignerRow[] {
 
 function saveSigners(signers: FeasibilitySignerRow[]) {
   localStorage.setItem(SIGNER_STORAGE_KEY, JSON.stringify({ signers }))
+  window.dispatchEvent(new Event("pd-ecr-leader-signing-updated"))
 }
 
 export function PdEcrLeaderSigning() {
   const [signers, setSigners] = useState<FeasibilitySignerRow[]>(() => loadSigners())
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => {
+    if (localStorage.getItem(SIGNER_STORAGE_KEY)) return
+    let mounted = true
+    getPdEcrModuleDraft(getPdEcrActiveRecordId(), "leader-signing-results")
+      .then((draft) => {
+        if (!mounted || !Array.isArray(draft.data?.signers)) return
+        const next = draft.data.signers as FeasibilitySignerRow[]
+        if (next.length !== SIGNER_ROLES.length) return
+        setSigners(next)
+        saveSigners(next)
+      })
+      .catch(() => undefined)
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   useEffect(() => {
     if (!autoSaveTimer.current) {
@@ -273,6 +323,7 @@ export function PdEcrLeaderSigning() {
     clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(() => {
       saveSigners(signers)
+      void saveFeasibilityBackend("leader-signing-results", "Leader Signing Results", { signers })
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)
   }, [signers])

@@ -28,6 +28,7 @@ export type PdEcrModuleId =
   | "validation-result"
   | "implementation-plan"
   | "implementation-result"
+  | "feasibility-confirmation"
 
 export type PdEcrDisplayModule = {
   id: PdEcrModuleId
@@ -218,6 +219,11 @@ export const pdEcrModuleMeta: Partial<
     ],
     subtitle: "Content 6 / 6",
   },
+  "feasibility-confirmation": {
+    title: "可行性确认",
+    backendKeys: ["feasibility_confirmation", "feasibility-confirmation"],
+    subtitle: "Feasibility Confirmation",
+  },
 }
 
 export const moduleOrder: PdEcrModuleId[] = [
@@ -225,6 +231,7 @@ export const moduleOrder: PdEcrModuleId[] = [
   "impact-analysis",
   "validation-plan",
   "implementation-plan",
+  "feasibility-confirmation",
 ]
 
 const demoFallbackHistoryModules: PdEcrDisplayModule[] = [
@@ -269,6 +276,15 @@ const demoFallbackHistoryModules: PdEcrDisplayModule[] = [
       责任部门: "Development / Purchasing / Quality / MFE",
     },
   },
+  {
+    id: "feasibility-confirmation",
+    title: "可行性确认",
+    subtitle: "Feasibility Confirmation",
+    summary: "发起人确认变更可行性信息，并上传相关附件。",
+    data: {
+      状态: "需要人工输入",
+    },
+  },
 ]
 
 export const fallbackHistoryModules: PdEcrDisplayModule[] =
@@ -295,20 +311,29 @@ export const fallbackGeneratedModules: PdEcrDisplayModule[] = [
   },
   {
     id: "validation-plan",
-    title: "Validation &trial run plan",
+    title: "Validation & Trial Run Results",
     subtitle: "Content 3 / 4",
-    summary: "等待生成验证和试运行计划。",
+    summary: "等待生成验证和试运行结果。",
     data: {
       状态: "尚未生成",
     },
   },
   {
     id: "implementation-plan",
-    title: "Implementation & Validation",
+    title: "Implementation & Validation Results",
     subtitle: "Content 4 / 4",
-    summary: "等待生成实施与验证。",
+    summary: "等待生成实施与验证结果。",
     data: {
       状态: "尚未生成",
+    },
+  },
+  {
+    id: "feasibility-confirmation",
+    title: "可行性确认",
+    subtitle: "Feasibility Confirmation",
+    summary: "发起人确认变更可行性信息并上传附件，部门领导签字确认。",
+    data: {
+      状态: "需要人工输入",
     },
   },
 ]
@@ -318,6 +343,7 @@ const v01ModuleOrder: PdEcrModuleId[] = [
   "impact-analysis",
   "validation-plan",
   "implementation-plan",
+  "feasibility-confirmation",
 ]
 
 const v01ModuleMeta: Partial<
@@ -379,6 +405,11 @@ const v01ModuleMeta: Partial<
     title: "Implementation & Validation",
     subtitle: "Implementation & Validation",
     summary: "基于影响分析和历史 CASE 推荐实施、验证、责任人与结果跟踪。",
+  },
+  "feasibility-confirmation": {
+    title: "可行性确认",
+    subtitle: "Feasibility Confirmation",
+    summary: "发起人确认变更可行性信息并上传附件，部门领导签字确认。",
   },
 }
 

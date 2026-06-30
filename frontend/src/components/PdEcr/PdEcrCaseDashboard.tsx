@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import {
   ArrowRight,
+  ChevronDown,
+  ChevronRight,
   Clock3,
   Database,
   FileText,
@@ -16,15 +18,25 @@ import { useMemo, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
+  getPdEcrCase,
   getPdEcrKnowledgeBaseStatus,
   listPdEcrCases,
   type PdEcrCaseRecord,
+  type PdEcrDbModule,
   type PdEcrKnowledgeBaseStatus,
 } from "@/lib/pdEcrApi"
+import {
+  fallbackHistoryModules,
+  normalizeModules,
+  normalizePdEcrCaseRow,
+  saveActiveResult,
+  type PdEcrPdEcrCaseRow,
+} from "./pdEcrState"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 
 type DashboardCase = {
   id: string
+  row: PdEcrPdEcrCaseRow
   caseNo: string
   title: string
   status: string
@@ -103,22 +115,63 @@ function normalizeStatus(record: PdEcrCaseRecord) {
   return pickString(record, ["status"]) || "draft"
 }
 
+function mapCaseModules(modules: PdEcrDbModule[]) {
+  return modules.map((module) => {
+    const contentJson = module.content_json || {}
+    const content = contentJson.content || module.content_md || module.title || ""
+    const warnings = Array.isArray(contentJson.warnings)
+      ? contentJson.warnings
+      : []
+
+    return {
+      id: module.module_id,
+      module_id: module.module_id,
+      title: module.title,
+      summary:
+        String(contentJson.summary || "") ||
+        module.content_md ||
+        module.title ||
+        module.module_id,
+      content,
+      data: {
+        ...contentJson,
+        content,
+        source_cases: module.source_cases || [],
+        source_files: module.source_files || [],
+        needs_human_input: module.needs_human_input || false,
+        warnings,
+        version: module.version,
+        status: module.status,
+      },
+      source_cases: module.source_cases || [],
+      source_files: module.source_files || [],
+      needs_human_input: module.needs_human_input || false,
+      warnings,
+    }
+  })
+}
+
 function normalizeCase(record: PdEcrCaseRecord, index: number): DashboardCase {
   const metadata =
     record.metadata && typeof record.metadata === "object"
       ? (record.metadata as PdEcrCaseRecord)
       : {}
   const merged = { ...metadata, ...record }
+  const row = normalizePdEcrCaseRow(record, index)
   const id =
+    row.backendCaseId ||
+    row.id ||
     pickString(merged, ["id", "case_id", "case_no", "source_file"]) ||
     `PD-ECR-${index + 1}`
-  const caseNo = pickString(merged, ["case_no", "case_id", "id"]) || id
+  const caseNo = row.id || pickString(merged, ["case_no", "case_id", "id"]) || id
   const title =
     pickString(merged, ["title", "reason_for_change", "change_reason"]) ||
+    row.reasonForChange ||
     caseNo
 
   return {
     id,
+    row,
     caseNo,
     title,
     status: normalizeStatus(merged),
@@ -196,10 +249,14 @@ function KnowledgeHealthPanel({
   status,
   isLoading,
   isError,
+  expanded,
+  onToggle,
 }: {
   status?: PdEcrKnowledgeBaseStatus
   isLoading: boolean
   isError: boolean
+  expanded: boolean
+  onToggle: () => void
 }) {
   const vectorReady = Boolean(
     status?.vector_store?.index_exists && status?.vector_store?.meta_exists,
@@ -220,66 +277,86 @@ function KnowledgeHealthPanel({
             RAG index, staged uploads, and parser capability checks.
           </p>
         </div>
-        <span
-          className={
-            vectorReady && rebuildOk !== false
-              ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700"
-              : "rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700"
-          }
-        >
-          {isLoading
-            ? "Checking"
-            : isError
-              ? "Unavailable"
-              : vectorReady
-                ? "Ready"
-                : "Needs rebuild"}
-        </span>
-      </div>
-
-      <div className="grid gap-3 p-4 md:grid-cols-4">
-        <MetricTile
-          label="Indexed docs"
-          value={isLoading ? "..." : totalDocuments}
-          hint={`${status?.knowledge_files_on_disk ?? 0} source files`}
-        />
-        <MetricTile
-          label="Vector chunks"
-          value={isLoading ? "..." : status?.vector_store?.chunk_files ?? 0}
-          hint={vectorReady ? "FAISS + metadata ready" : "Index missing"}
-        />
-        <MetricTile
-          label="Upload review"
-          value={isLoading ? "..." : pending}
-          hint={`${pending} pending review`}
-        />
-        <MetricTile
-          label="Last rebuild"
-          value={rebuildOk === false ? "Failed" : rebuildOk ? "OK" : "-"}
-          hint={formatStatusDate(status?.last_rebuild?.last_rebuild_at)}
-        />
-      </div>
-
-      <div className="flex flex-wrap gap-2 border-t border-stone-100 px-4 py-3">
-        {capabilities.length > 0 ? (
-          capabilities.map(([key, enabled]) => (
-            <span
-              key={key}
-              className={
-                enabled
-                  ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"
-                  : "rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-500"
-              }
-            >
-              {parserLabel(key)}
-            </span>
-          ))
-        ) : (
-          <span className="text-xs text-stone-500">
-            Parser capability status not available.
+        <div className="flex items-center gap-2">
+          <span
+            className={
+              vectorReady && rebuildOk !== false
+                ? "rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700"
+                : "rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700"
+            }
+          >
+            {isLoading
+              ? "Checking"
+              : isError
+                ? "Unavailable"
+                : vectorReady
+                  ? "Ready"
+                  : "Needs rebuild"}
           </span>
-        )}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 px-2 text-stone-600"
+            onClick={onToggle}
+          >
+            {expanded ? (
+              <ChevronDown className="size-4" />
+            ) : (
+              <ChevronRight className="size-4" />
+            )}
+            Details
+          </Button>
+        </div>
       </div>
+
+      {expanded ? (
+        <>
+          <div className="grid gap-3 p-4 md:grid-cols-4">
+            <MetricTile
+              label="Indexed docs"
+              value={isLoading ? "..." : totalDocuments}
+              hint={`${status?.knowledge_files_on_disk ?? 0} source files`}
+            />
+            <MetricTile
+              label="Vector chunks"
+              value={isLoading ? "..." : status?.vector_store?.chunk_files ?? 0}
+              hint={vectorReady ? "FAISS + metadata ready" : "Index missing"}
+            />
+            <MetricTile
+              label="Upload review"
+              value={isLoading ? "..." : pending}
+              hint={`${pending} pending review`}
+            />
+            <MetricTile
+              label="Last rebuild"
+              value={rebuildOk === false ? "Failed" : rebuildOk ? "OK" : "-"}
+              hint={formatStatusDate(status?.last_rebuild?.last_rebuild_at)}
+            />
+          </div>
+
+          <div className="flex flex-wrap gap-2 border-t border-stone-100 px-4 py-3">
+            {capabilities.length > 0 ? (
+              capabilities.map(([key, enabled]) => (
+                <span
+                  key={key}
+                  className={
+                    enabled
+                      ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"
+                      : "rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs font-semibold text-stone-500"
+                  }
+                >
+                  {parserLabel(key)}
+                </span>
+              ))
+            ) : (
+              <span className="text-xs text-stone-500">
+                Parser capability status not available.
+              </span>
+            )}
+          </div>
+        </>
+      ) : null}
     </section>
   )
 }
@@ -288,6 +365,9 @@ export function PdEcrCaseDashboard() {
   const navigate = useNavigate()
   const [searchText, setSearchText] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [openingCaseId, setOpeningCaseId] = useState<string | null>(null)
+  const [dashboardMessage, setDashboardMessage] = useState("")
+  const [healthExpanded, setHealthExpanded] = useState(false)
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["pd-ecr-cases"],
@@ -330,6 +410,9 @@ export function PdEcrCaseDashboard() {
       closed: allCases.filter((item) =>
         ["approved", "implementation", "closed"].includes(item.status),
       ).length,
+      active: allCases.filter((item) =>
+        !["historical", "closed", "cancelled"].includes(item.status),
+      ).length,
     }),
     [allCases],
   )
@@ -343,6 +426,36 @@ export function PdEcrCaseDashboard() {
     ["approved", "Approved"],
     ["closed", "Closed"],
   ]
+
+  const openCase = async (item: DashboardCase) => {
+    const caseId = item.row.backendCaseId || item.id || item.caseNo
+    setOpeningCaseId(item.id)
+    setDashboardMessage(`Opening ${item.caseNo}...`)
+
+    try {
+      const detail = await getPdEcrCase(caseId)
+      const modules = normalizeModules(
+        mapCaseModules(detail.modules),
+        fallbackHistoryModules,
+      )
+
+      saveActiveResult({
+        source: item.status === "historical" ? "history" : "generated",
+        draftStatus: detail.case.status,
+        relatedCases: allCases.map((caseItem) => caseItem.caseNo),
+        caseRows: allCases.map((caseItem) => caseItem.row),
+        currentCase: item.row,
+        modules,
+      })
+      navigate({ to: "/pd-ecr/content" })
+    } catch {
+      setDashboardMessage(
+        `Could not open ${item.caseNo}. Use All PD-ECR List if this is a PDF-only source row.`,
+      )
+    } finally {
+      setOpeningCaseId(null)
+    }
+  }
 
   return (
     <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
@@ -383,19 +496,21 @@ export function PdEcrCaseDashboard() {
 
         <section className="grid gap-3 md:grid-cols-5">
           <MetricTile label="Total" value={stats.total} hint="All loaded cases" />
+          <MetricTile label="Active" value={stats.active} hint="Drafts and workflow" />
           <MetricTile label="Historical" value={stats.historical} hint="Knowledge base" />
           <MetricTile label="Draft" value={stats.draft} hint="Editable work" />
           <MetricTile label="In Review" value={stats.inReview} hint="Open workflow" />
-          <MetricTile label="Ready" value={stats.closed} hint="Approved or closed" />
         </section>
 
         <KnowledgeHealthPanel
           status={knowledgeStatus}
           isLoading={isKnowledgeLoading}
           isError={isKnowledgeError}
+          expanded={healthExpanded}
+          onToggle={() => setHealthExpanded((current) => !current)}
         />
 
-        <section className="grid gap-3 lg:grid-cols-[1fr_18rem]">
+        <section className="grid gap-3 lg:grid-cols-[1fr_24rem]">
           <div className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">
             <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-center">
               <label className="relative block">
@@ -453,6 +568,12 @@ export function PdEcrCaseDashboard() {
             </Button>
           </div>
         </section>
+
+        {dashboardMessage ? (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">
+            {dashboardMessage}
+          </div>
+        ) : null}
 
         <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
@@ -546,11 +667,10 @@ export function PdEcrCaseDashboard() {
                             size="sm"
                             variant="outline"
                             className="h-8 bg-white"
-                            onClick={() =>
-                              navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
-                            }
+                            onClick={() => openCase(item)}
+                            disabled={openingCaseId === item.id}
                           >
-                            Open
+                            {openingCaseId === item.id ? "Opening" : "Open"}
                             <ArrowRight className="size-3" />
                           </Button>
                         </td>

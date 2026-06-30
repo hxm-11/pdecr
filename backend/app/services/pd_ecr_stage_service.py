@@ -569,8 +569,16 @@ def _build_source_extracted_metadata(
     doc: PdEcrStagedDocument,
 ) -> dict[str, Any]:
     """Persist staged structured JSON with the source document record."""
+    display_pdf_path = doc.preview_pdf_path or (
+        doc.original_file_path if doc.file_type == "pdf" else None
+    )
     return {
         **metadata,
+        "original_filename": doc.original_filename,
+        "original_file_path": doc.original_file_path,
+        "display_pdf_path": display_pdf_path,
+        "preview_pdf_path": display_pdf_path,
+        "pdf_file": Path(display_pdf_path).name if display_pdf_path else "",
         "sections_json": doc.sections_json,
         "tables_json": doc.tables_json,
         "controls_json": metadata.get("controls_json", []),

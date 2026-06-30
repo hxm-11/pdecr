@@ -87,7 +87,7 @@ V1_MODULE_IDS: tuple[PdEcrModuleId, ...] = (
 MODULE_TITLES: dict[PdEcrModuleId, str] = {
     PdEcrModuleId.BASIC_INFORMATION: "Change Request description",
     PdEcrModuleId.CHANGE_DESCRIPTION: "Affection analysis",
-    PdEcrModuleId.REASON_FOR_CHANGE: "Validation &trial run plan",
+    PdEcrModuleId.REASON_FOR_CHANGE: "Validation & Trial Run Results",
     PdEcrModuleId.IMPACT_ANALYSIS: "Validation &Trial run plan result",
     PdEcrModuleId.IMPLEMENTATION_PLAN: "Implementation task plan",
     PdEcrModuleId.APPROVAL_SIGNOFF_INFORMATION: "Implementation result",

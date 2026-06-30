@@ -282,8 +282,8 @@ def _validation_module(
     ]
     return _module(
         "validation-plan",
-        "QAC & Validation plan",
-        "QAC and validation plan generated from similar historical cases.",
+        "QAC & Validation Results",
+        "QAC and validation results generated from similar historical cases.",
         {"rows": rows},
         source_cases,
         source_files,
@@ -316,8 +316,8 @@ def _implementation_module(
     }
     return _module(
         "implementation-plan",
-        "实施与验证",
-        "Implementation and validation checklist generated from historical patterns.",
+        "实施与验证结果",
+        "Implementation and validation results checklist generated from historical patterns.",
         data,
         source_cases,
         source_files,

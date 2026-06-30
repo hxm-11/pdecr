@@ -133,15 +133,17 @@ function WorkPanel({
   title,
   icon,
   children,
+  className,
 }: {
   eyebrow: string
   title: string
   icon: ReactNode
   children: ReactNode
+  className?: string
 }) {
   return (
-    <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
-      <header className="flex items-center gap-3 border-b border-stone-200 px-5 py-4">
+    <section className={`flex flex-col rounded-lg border border-stone-200 bg-white shadow-sm ${className ?? ""}`}>
+      <header className="flex items-center gap-3 border-b border-stone-200 px-5 py-4 shrink-0">
         <div className="flex size-10 items-center justify-center rounded-lg bg-stone-100 text-stone-700">
           {icon}
         </div>
@@ -154,7 +156,7 @@ function WorkPanel({
           </h2>
         </div>
       </header>
-      <div className="p-5">{children}</div>
+      <div className="min-h-0 flex-1 p-5">{children}</div>
     </section>
   )
 }
@@ -451,6 +453,7 @@ export function PdEcrPlatform() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const [isUploadExpanded, setIsUploadExpanded] = useState(true)
 
   const uploadMutation = useMutation({
     mutationFn: (file: File) => uploadAndStageDocument(file),
@@ -480,8 +483,8 @@ export function PdEcrPlatform() {
   }
 
   return (
-    <div className="h-[calc(100vh-7rem)] overflow-hidden bg-stone-50 text-stone-900">
-      <div className="flex h-full w-full min-w-0 flex-col gap-4">
+    <div className="flex h-full min-h-0 flex-1 flex-col bg-stone-50 text-stone-900">
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-4">
         <header className="shrink-0 rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
@@ -506,62 +509,9 @@ export function PdEcrPlatform() {
           </div>
         </header>
 
-        <main className="grid min-h-0 flex-1 gap-4 overflow-y-auto xl:grid-cols-2">
+        <main className="grid min-h-0 flex-1 gap-4 overflow-y-auto xl:grid-cols-[1fr_2fr]">
           {/* ═══ LEFT COLUMN — Upload + AI Search ═══ */}
-          <div className="flex min-h-0 flex-col gap-4">
-            {/* ── File Upload Panel ── */}
-            <WorkPanel
-              eyebrow="Upload"
-              title="文件上传"
-              icon={<Upload className="size-5" />}
-            >
-              <label
-                className={`relative block rounded-lg border-2 border-dashed p-4 text-center transition cursor-pointer ${
-                  isDragging
-                    ? "border-amber-500 bg-amber-50"
-                    : "border-stone-300 bg-stone-50 hover:border-amber-400 hover:bg-amber-50/50"
-                }`}
-                onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
-                onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
-                onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileDrop(e.dataTransfer.files) }}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".xlsx,.xls,.xlsm,.pdf,.docx,.doc"
-                  className="absolute inset-0 cursor-pointer opacity-0"
-                  onChange={(e) => handleFileDrop(e.target.files)}
-                />
-                {uploadMutation.isPending ? (
-                  <div className="flex items-center justify-center gap-2 text-amber-700">
-                    <span className="inline-block size-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
-                    <span className="text-sm font-semibold">解析文件中...</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center gap-3 text-stone-500">
-                    <Upload className="size-5" />
-                    <span className="text-sm">
-                      拖拽 Excel / PDF 文件到此处，或点击上传
-                    </span>
-                  </div>
-                )}
-              </label>
-
-              {uploadStatus && (
-                <p
-                  className={`mt-2 text-xs ${
-                    uploadStatus.startsWith("✅")
-                      ? "text-green-700"
-                      : uploadStatus.startsWith("❌")
-                        ? "text-red-600"
-                        : "text-amber-700"
-                  }`}
-                >
-                  {uploadStatus}
-                </p>
-              )}
-            </WorkPanel>
-
+          <div className="flex flex-col gap-4">
             {/* ── AI Search Panel ── */}
             <WorkPanel
               eyebrow="AI Search"
@@ -598,16 +548,88 @@ export function PdEcrPlatform() {
                 </div>
               </div>
             </WorkPanel>
+
+            {/* ── File Upload Panel ── */}
+            <WorkPanel
+              eyebrow="Upload"
+              title="文件上传"
+              icon={<Upload className="size-5" />}
+              className="max-xl:shrink-0"
+            >
+              <button
+                type="button"
+                onClick={() => setIsUploadExpanded(!isUploadExpanded)}
+                className="mb-3 w-full text-left text-sm text-stone-500 hover:text-stone-700"
+              >
+                <span className="flex items-center justify-between">
+                  上传文件后自动解析并纳入知识库
+                  <span className="text-xs text-stone-400">
+                    {isUploadExpanded ? "收起 ▲" : "展开 ▼"}
+                  </span>
+                </span>
+              </button>
+              {isUploadExpanded && (
+                <>
+                  <label
+                    className={`relative block rounded-lg border-2 border-dashed p-4 text-center transition cursor-pointer ${
+                      isDragging
+                        ? "border-amber-500 bg-amber-50"
+                        : "border-stone-300 bg-stone-50 hover:border-amber-400 hover:bg-amber-50/50"
+                    }`}
+                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+                    onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
+                    onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileDrop(e.dataTransfer.files) }}
+                  >
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".xlsx,.xls,.xlsm,.pdf,.docx,.doc"
+                      className="absolute inset-0 cursor-pointer opacity-0"
+                      onChange={(e) => handleFileDrop(e.target.files)}
+                    />
+                    {uploadMutation.isPending ? (
+                      <div className="flex items-center justify-center gap-2 text-amber-700">
+                        <span className="inline-block size-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
+                        <span className="text-sm font-semibold">解析文件中...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-3 text-stone-500">
+                        <Upload className="size-5" />
+                        <span className="text-sm">
+                          拖拽 Excel / PDF 文件到此处，或点击上传
+                        </span>
+                      </div>
+                    )}
+                  </label>
+
+                  {uploadStatus && (
+                    <p
+                      className={`mt-2 text-xs ${
+                        uploadStatus.startsWith("✅")
+                          ? "text-green-700"
+                          : uploadStatus.startsWith("❌")
+                            ? "text-red-600"
+                            : "text-amber-700"
+                      }`}
+                    >
+                      {uploadStatus}
+                    </p>
+                  )}
+                </>
+              )}
+            </WorkPanel>
           </div>
 
           {/* ═══ RIGHT COLUMN — New Change Form ═══ */}
-          <WorkPanel
-            eyebrow="New creation"
-            title="新建变更"
-            icon={<Sparkles className="size-5" />}
-          >
-            {/* 产品 & 客户 — 最优先 */}
-            <div className="grid gap-3 sm:grid-cols-2">
+          <div className="flex flex-col">
+            <WorkPanel
+              eyebrow="New creation"
+              title="新建变更"
+              icon={<Sparkles className="size-5" />}
+              className="flex-1"
+            >
+            {/* 产品 + 客户 + 变更发起人 */}
+            <div className="grid gap-3 sm:grid-cols-3">
               <FormField
                 label="产品"
                 value={newChange.product}
@@ -618,10 +640,15 @@ export function PdEcrPlatform() {
                 value={newChange.customer}
                 onChange={(value) => updateNewChange("customer", value)}
               />
+              <FormField
+                label="变更发起人"
+                value={newChange.initiator}
+                onChange={(value) => updateNewChange("initiator", value)}
+              />
             </div>
 
             {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
-            <div className="mt-3 space-y-2">
+            <div className="mt-5 space-y-2">
               <span className="text-sm font-semibold text-stone-700">
                 变更来源
               </span>
@@ -663,7 +690,8 @@ export function PdEcrPlatform() {
                 )
               })()}
             </div>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-2">
               <FormField
                 label="变更背景原因"
                 value={newChange.reason}
@@ -674,11 +702,9 @@ export function PdEcrPlatform() {
                 value={newChange.department}
                 onChange={(value) => updateNewChange("department", value)}
               />
-              <FormField
-                label="变更发起人"
-                value={newChange.initiator}
-                onChange={(value) => updateNewChange("initiator", value)}
-              />
+            </div>
+
+            <div className="mt-7 grid gap-3 sm:grid-cols-4">
               <FormField
                 label="变更发起日期"
                 value={newChange.date}
@@ -694,10 +720,6 @@ export function PdEcrPlatform() {
                 value={newChange.description}
                 onChange={(value) => updateNewChange("description", value)}
               />
-            </div>
-
-            {/* Target Close date & 影响的部门 */}
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className="space-y-2">
                 <span className="text-sm font-semibold text-stone-700">
                   Target Close date
@@ -711,32 +733,28 @@ export function PdEcrPlatform() {
               </label>
             </div>
 
-            {/* 影响的部门 */}
-            <fieldset className="mt-4 rounded-lg border border-stone-200 bg-stone-50 p-4">
-              <legend className="px-2 text-sm font-semibold text-stone-700">
-                影响的部门有
-              </legend>
-              <div className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                {departmentOptions.map((dept) => (
-                  <label key={dept} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={newChange.departments.includes(dept)}
-                      onChange={(event) =>
-                        toggleDepartment(dept, event.target.checked)
-                      }
-                      className="accent-amber-600"
-                    />
-                    {dept}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-
-            <div className="mt-4 flex items-center justify-end gap-3 rounded-lg border border-stone-200 bg-stone-50 px-4 py-3">
-              <span className="text-sm text-stone-500">
-                填写完成后进入变更描述模块，AI 将根据历史相似案例辅助填写
-              </span>
+            {/* 影响的部门 + 操作按钮 — 同一行 */}
+            <div className="mt-7 flex items-center gap-3">
+              <fieldset className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2">
+                <legend className="px-1 text-sm font-semibold text-stone-700">
+                  影响的部门
+                </legend>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                  {departmentOptions.map((dept) => (
+                    <label key={dept} className="flex items-center gap-1.5">
+                      <input
+                        type="checkbox"
+                        checked={newChange.departments.includes(dept)}
+                        onChange={(event) =>
+                          toggleDepartment(dept, event.target.checked)
+                        }
+                        className="accent-amber-600"
+                      />
+                      {dept}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
               <Button
                 type="button"
                 onClick={handleNextStep}
@@ -748,6 +766,7 @@ export function PdEcrPlatform() {
               </Button>
             </div>
           </WorkPanel>
+          </div>
         </main>
 
         <footer className="shrink-0 flex flex-wrap items-center gap-3 pb-1">

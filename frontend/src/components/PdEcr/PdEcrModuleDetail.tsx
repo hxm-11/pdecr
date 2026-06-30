@@ -34,6 +34,7 @@ import {
   type PdEcrDisplayModule,
   type PdEcrModuleId,
 } from "./pdEcrState"
+import { PdEcrFeasibilityConfirmation } from "./PdEcrFeasibilityConfirmation"
 
 function textValue(module: PdEcrDisplayModule, keys: string[], fallback = "-") {
   for (const key of keys) {
@@ -1501,17 +1502,86 @@ function SourceTracePanel({ module }: { module: PdEcrDisplayModule }) {
   )
 }
 
-export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisplayModule; hideApproval?: boolean }) {
-  const impactItems = [
-    { en: "Function & Performance will be influenced?", zh: "产品功能性能影响?" },
-    { en: "Interface and Appearance will be influenced?", zh: "接口和外观影响?" },
-    { en: "Reliability and robustness will be influenced?", zh: "产品可靠性、鲁棒性影响?" },
-    { en: "Other components will be influenced?", zh: "其他零部件影响?" },
-    { en: "Manufactory / assembly / testing will be influenced?", zh: "加工、装配、测试影响?" },
-    { en: "Influence on supplier part?", zh: "供应商零件影响?" },
-    { en: "Influence on System / HW / SW / Calibration / Mechanical?", zh: "系统/硬件/软件/标定/机械影响?" },
-    { en: "Influence on cost?", zh: "对成本的影响?" },
+const IMPACT_DEPTS = ["Development", "Manufacturing", "Purchasing", "Initiator"] as const
+type ImpactDept = (typeof IMPACT_DEPTS)[number]
+type ImpactItemDefinition = {
+  id?: string
+  en: string
+  zh: string
+  dept: ImpactDept
+  custom?: boolean
+}
+
+const IMPACT_ITEMS: ImpactItemDefinition[] = [
+    { en: "Function & Performance will be influenced?", zh: "产品功能性能影响?", dept: "Development" },
+    { en: "Interface and Appearance will be influenced?", zh: "接口和外观影响?", dept: "Development" },
+    { en: "Reliability and robustness will be influenced?", zh: "产品可靠性、鲁棒性影响?", dept: "Development" },
+    { en: "Other components will be influenced?", zh: "其他零部件影响?", dept: "Development" },
+    { en: "Influence on System / HW / SW / Calibration / Mechanical?", zh: "系统/硬件/软件/标定/机械影响?", dept: "Development" },
+    { en: "Manufactory / assembly / testing will be influenced?", zh: "加工、装配、测试影响?", dept: "Manufacturing" },
+    { en: "Influence on supplier part?", zh: "供应商零件影响?", dept: "Purchasing" },
+
+    { en: "Influence on cost?", zh: "对成本的影响?", dept: "Initiator" },
   ]
+
+const IMPACT_ANALYSIS_MODULE_ID = "impact-analysis"
+const IMPACT_ANALYSIS_STORAGE_KEY = `pd-ecr-impact-analysis-${IMPACT_ANALYSIS_MODULE_ID}`
+const IMPACT_ANALYSIS_UPDATED_EVENT = "pd-ecr-impacts-updated"
+
+type ImpactAnalysisDraftRow = {
+  yes?: boolean
+  desc?: string
+  confirmedBy?: string
+  confirmedAt?: string
+}
+
+type ImpactCustomMeasure = {
+  idx: number
+  desc: string
+  confirmedBy?: string
+  confirmedAt?: string
+  area?: ImpactItemDefinition
+}
+
+function normalizeCustomImpactItems(value: unknown): ImpactItemDefinition[] {
+  if (!Array.isArray(value)) return []
+
+  return value
+    .map((item, index) => {
+      const raw = item as Partial<ImpactItemDefinition>
+      const dept = IMPACT_DEPTS.includes(raw.dept as ImpactDept) ? raw.dept as ImpactDept : "Development"
+      return {
+        id: raw.id || `custom-impact-${index}`,
+        en: String(raw.en || "").trim(),
+        zh: String(raw.zh || "").trim(),
+        dept,
+        custom: true,
+      }
+    })
+}
+
+function readImpactCustomMeasures(): ImpactCustomMeasure[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(IMPACT_ANALYSIS_STORAGE_KEY) || "")
+    if (!Array.isArray(raw?.impacts)) return []
+    const impactItems = [...IMPACT_ITEMS, ...normalizeCustomImpactItems(raw.customImpactItems)]
+
+    return raw.impacts
+      .map((impact: ImpactAnalysisDraftRow, idx: number) => ({
+        idx,
+        desc: String(impact.desc || "").trim(),
+        confirmedBy: impact.confirmedBy,
+        confirmedAt: impact.confirmedAt,
+        area: impactItems[idx],
+        yes: Boolean(impact.yes),
+      }))
+      .filter((impact: ImpactCustomMeasure & { yes: boolean }) => impact.yes && impact.desc)
+  } catch {
+    return []
+  }
+}
+
+export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisplayModule; hideApproval?: boolean }) {
   const docItems = [
     "Interface FMEA relevant / IFMEA",
     "Product FMEA relevant / DFMEA",
@@ -1584,9 +1654,28 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const defaultImpact = (): ImpactRow => ({ no: true, yes: false, confirmedBy: "", confirmedAt: "", desc: "" })
   const defaultDoc = (): DocRow => ({ no: true, yes: false, respPerson: "", dueDate: "" })
   const defaultApproval = (): ApprovalRow => ({ person: "", date: "" })
+  const readStoredDraft = () => {
+    try {
+      return JSON.parse(localStorage.getItem(storageKey) || "")
+    } catch {
+      return {}
+    }
+  }
+
+  const [customImpactItems, setCustomImpactItems] = useState<ImpactItemDefinition[]>(() =>
+    normalizeCustomImpactItems(readStoredDraft().customImpactItems),
+  )
+  const impactItems = useMemo(() => [...IMPACT_ITEMS, ...customImpactItems], [customImpactItems])
+  const [newImpactDept, setNewImpactDept] = useState<ImpactDept>("Development")
 
   const [impacts, setImpacts] = useState<ImpactRow[]>(() => {
-    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.impacts?.length === 8) return p.impacts } catch {}
+    const saved = readStoredDraft().impacts
+    if (Array.isArray(saved) && saved.length) {
+      return [
+        ...saved,
+        ...Array.from({ length: Math.max(impactItems.length - saved.length, 0) }, () => defaultImpact()),
+      ]
+    }
     return impactItems.map(() => defaultImpact())
   })
   const [documents, setDocuments] = useState<DocRow[]>(() => {
@@ -1625,6 +1714,8 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
 
   // Inner step expand/collapse state (multi-select)
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(() => new Set(["step-3.1"]))
+  // Department expand/collapse inside impact analysis (default all expanded)
+  const [expandedImpactDepts, setExpandedImpactDepts] = useState<Set<string>>(() => new Set(IMPACT_DEPTS))
 
   const toggleStep = (stepId: string) => {
     setExpandedSteps((prev) => {
@@ -1635,6 +1726,26 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     })
   }
 
+  const toggleImpactDept = (dept: string) => {
+    setExpandedImpactDepts((prev) => {
+      const next = new Set(prev)
+      if (next.has(dept)) next.delete(dept)
+      else next.add(dept)
+      return next
+    })
+  }
+
+  useEffect(() => {
+    setImpacts((prev) => {
+      if (prev.length >= impactItems.length) return prev
+      return [
+        ...prev,
+        ...Array.from({ length: impactItems.length - prev.length }, () => defaultImpact()),
+      ]
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [impactItems.length])
+
   // Auto-save on data change (debounced 1s, skips initial render)
   useEffect(() => {
     const skip = !autoSaveTimer.current
@@ -1644,14 +1755,16 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     autoSaveTimer.current = setTimeout(() => {
       localStorage.setItem(storageKey, JSON.stringify({
         impacts, documents, mixedDeliveries, mixedDeliveryRemark,
-        firstDeliveryAnswer, stockDeliveryRows, approvals, costNote,
+        firstDeliveryAnswer, stockDeliveryRows, approvals, costNote, customImpactItems,
       }))
       setSaveStatus("Auto-saved")
+      // 通知 1.3 ValidationPlanView 刷新自定义措施
+      window.dispatchEvent(new CustomEvent(IMPACT_ANALYSIS_UPDATED_EVENT, { detail: { moduleId: module.id, storageKey } }))
       setTimeout(() => setSaveStatus("Draft"), 2000)
     }, 1000)
     return () => clearTimeout(autoSaveTimer.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [impacts, documents, mixedDeliveries, mixedDeliveryRemark, firstDeliveryAnswer, stockDeliveryRows, approvals, costNote])
+  }, [impacts, documents, mixedDeliveries, mixedDeliveryRemark, firstDeliveryAnswer, stockDeliveryRows, approvals, costNote, customImpactItems])
 
   const navigate = useNavigate()
 
@@ -1668,6 +1781,24 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   }
   const toggleImpact = (i: number, field: "no" | "yes") =>
     setImpacts((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  const addImpactItem = (dept: ImpactDept) => {
+    const id = `custom-impact-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
+    setCustomImpactItems((prev) => [...prev, { id, en: "", zh: "", dept, custom: true }])
+    setImpacts((prev) => [...prev, defaultImpact()])
+    setExpandedImpactDepts((prev) => new Set(prev).add(dept))
+  }
+  const updateCustomImpactItem = (impactIndex: number, field: "en" | "zh" | "dept", value: string) => {
+    const customIndex = impactIndex - IMPACT_ITEMS.length
+    if (customIndex < 0) return
+    setCustomImpactItems((prev) => prev.map((item, index) => {
+      if (index !== customIndex) return item
+      if (field === "dept") {
+        const dept = IMPACT_DEPTS.includes(value as ImpactDept) ? value as ImpactDept : item.dept
+        return { ...item, dept }
+      }
+      return { ...item, [field]: value }
+    }))
+  }
   const toggleDoc = (i: number, field: "no" | "yes") =>
     setDocuments((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
   const updateDoc = (i: number, f: keyof DocRow, v: string) =>
@@ -1717,72 +1848,154 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
             onClick={() => toggleStep("step-3.1")}
             className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
           >
-            <span><span className="mr-2 text-amber-400">Step 3.1</span>Impact Analysis / 影响分析</span>
+            <span><span className="mr-2 text-amber-400">1.2.1</span>Impact Analysis / 影响分析</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.1") && (
           <>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-                  <th className="w-8 px-3 py-2.5">#</th>
-                  <th className="px-3 py-2.5">Influence area / 影响范围</th>
-                  <th className="w-12 px-2 py-2.5 text-center">No</th>
-                  <th className="w-12 px-2 py-2.5 text-center">Yes</th>
-                  <th className="w-64 px-3 py-2.5">Measures / 措施</th>
-                  <th className="w-40 px-3 py-2.5">Confirmed by / 确认人</th>
-                </tr>
-              </thead>
-              <tbody>
-                {impacts.map((row, i) => (
-                  <tr key={impactItems[i].en} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                    <td className="px-3 py-2.5 text-xs text-stone-400">{i + 1}</td>
-                    <td className="px-3 py-2.5">
-                      <p className="text-sm font-medium text-stone-800">{impactItems[i].en}</p>
-                      <p className="text-xs text-stone-400">{impactItems[i].zh}</p>
-                    </td>
-                    <td className="px-2 py-2.5 text-center">
-                      <input type="checkbox" checked={row.no} onChange={() => toggleImpact(i, "no")} className="accent-stone-500 size-4" />
-                    </td>
-                    <td className="px-2 py-2.5 text-center">
-                      <input type="checkbox" checked={row.yes} onChange={() => toggleImpact(i, "yes")} className="accent-amber-600 size-4" />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <input value={row.desc} onChange={(e) => updateImpact(i, "desc", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                        placeholder="Remark / 备注" />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <div>
-                        <input value={row.confirmedBy} onChange={(e) => updateImpact(i, "confirmedBy", e.target.value)}
-                          className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Name" />
-                        {row.confirmedAt && <p className="mt-0.5 text-[10px] text-stone-400">{new Date(row.confirmedAt).toLocaleString()}</p>}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Impact table grouped by department — collapsible like 1.4 */}
+          <div className="divide-y divide-stone-200">
+            {IMPACT_DEPTS.map((dept) => {
+              const deptIndices = impactItems
+                .map((item, idx) => (item.dept === dept ? idx : -1))
+                .filter((idx) => idx >= 0)
+              const deptCount = deptIndices.length
+              const isDeptExpanded = expandedImpactDepts.has(dept)
+              return (
+                <div key={dept}>
+                  {/* Department header bar */}
+                  <button
+                    type="button"
+                    onClick={() => toggleImpactDept(dept)}
+                    className="flex w-full items-center gap-2 bg-stone-100 px-4 py-2 text-left hover:bg-stone-200 transition cursor-pointer"
+                  >
+                    <ChevronDown className={`size-3.5 text-stone-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
+                    <span className="text-sm font-semibold text-stone-800">{dept}</span>
+                    <span className="text-xs text-stone-400">({deptCount} items)</span>
+                  </button>
+                  {/* Department mini-table */}
+                  {isDeptExpanded && (
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[56rem] table-fixed text-left text-sm">
+                        <colgroup>
+                          <col className="w-10" />
+                          <col className="w-[34%]" />
+                          <col className="w-14" />
+                          <col className="w-14" />
+                          <col className="w-[28%]" />
+                          <col className="w-[18%]" />
+                        </colgroup>
+                        <thead>
+                          <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                            <th className="w-8 px-2 py-2 text-center">#</th>
+                            <th className="px-4 py-2">Influence area / 影响范围</th>
+                            <th className="px-2 py-2 text-center">No</th>
+                            <th className="px-2 py-2 text-center">Yes</th>
+                            <th className="px-4 py-2">Measures / 措施</th>
+                            <th className="px-4 py-2">Confirmed by / 确认人</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {deptIndices.map((i) => {
+                            const row = impacts[i] || defaultImpact()
+                            const item = impactItems[i]
+                            const isCostRow = item.dept === "Initiator" && !item.custom
+                            return (
+                              <tr key={item.id || item.en || `impact-${i}`} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                                <td className="px-2 py-3 text-center text-xs text-stone-400 align-middle">{i + 1}</td>
+                                <td className="px-4 py-3 align-middle">
+                                  {item.custom ? (
+                                    <div className="space-y-1">
+                                      <input
+                                        value={item.en}
+                                        onChange={(e) => updateCustomImpactItem(i, "en", e.target.value)}
+                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs font-medium text-stone-800 outline-none focus:border-amber-400"
+                                        placeholder="Influence area"
+                                      />
+                                      <input
+                                        value={item.zh}
+                                        onChange={(e) => updateCustomImpactItem(i, "zh", e.target.value)}
+                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs text-stone-600 outline-none focus:border-amber-400"
+                                        placeholder="影响范围"
+                                      />
+                                      <select
+                                        value={item.dept}
+                                        onChange={(e) => updateCustomImpactItem(i, "dept", e.target.value)}
+                                        className="h-8 rounded border border-stone-200 bg-white px-2 text-xs text-stone-600 outline-none focus:border-amber-400"
+                                      >
+                                        {IMPACT_DEPTS.map((option) => (
+                                          <option key={option} value={option}>{option}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <p className="text-sm font-medium text-stone-800">{item.en}</p>
+                                      <p className="text-xs text-stone-400">{item.zh}</p>
+                                    </>
+                                  )}
+                                </td>
+                                <td className="px-2 py-3 text-center align-middle">
+                                  <input type="checkbox" checked={row.no} onChange={() => toggleImpact(i, "no")} className="accent-stone-500 size-4" />
+                                </td>
+                                <td className="px-2 py-3 text-center align-middle">
+                                  <input type="checkbox" checked={row.yes} onChange={() => toggleImpact(i, "yes")} className="accent-amber-600 size-4" />
+                                </td>
+                                <td className="px-4 py-3 align-middle">
+                                  {isCostRow ? (
+                                    <div className="space-y-2">
+                                      <div className="flex flex-wrap items-center gap-3">
+                                        {["Increase", "Decrease", "No change"].map((opt) => (
+                                          <label key={opt} className="flex items-center gap-1.5 text-xs whitespace-nowrap">
+                                            <input type="radio" name={`cost-${module.id}`} value={opt} checked={costNote === opt}
+                                              onChange={(e) => setCostNote(e.target.value)} className="accent-amber-600" />{opt}
+                                          </label>
+                                        ))}
+                                      </div>
+                                      <input value={costNote && !["Increase","Decrease","No change"].includes(costNote) ? costNote : ""}
+                                        onChange={(e) => setCostNote(e.target.value)}
+                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Cost remark / 成本备注" />
+                                    </div>
+                                  ) : (
+                                      <input value={row.desc} onChange={(e) => updateImpact(i, "desc", e.target.value)}
+                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                        placeholder="Validation measures / 验证措施" />
+                                  )}
+                                </td>
+                                <td className="px-4 py-3 align-middle">
+                                  <input value={row.confirmedBy} onChange={(e) => updateImpact(i, "confirmedBy", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Name" />
+                                  {row.confirmedAt && <p className="mt-0.5 text-[10px] text-stone-400">{new Date(row.confirmedAt).toLocaleString()}</p>}
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                      <button type="button" onClick={() => addImpactItem(dept)}
+                        className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+                        + 添加 {dept} 影响项
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
-          <button type="button" onClick={() => setImpacts((p) => [...p, defaultImpact()])}
-            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
-            + 添加影响项
-          </button>
-          {/* Cost note (item 8) */}
-          <div className="border-t border-stone-200 bg-amber-50/30 px-4 py-3">
-            <p className="text-sm font-semibold text-stone-700">8. Influence on cost / 对成本的影响</p>
-            <div className="mt-2 flex flex-wrap items-center gap-4">
-              {["Increase", "Decrease", "No change"].map((opt) => (
-                <label key={opt} className="flex items-center gap-1.5 text-sm">
-                  <input type="radio" name={`cost-${module.id}`} value={opt} checked={costNote === opt}
-                    onChange={(e) => setCostNote(e.target.value)} className="accent-amber-600" />{opt}
-                </label>
+          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 bg-stone-50/50 px-3 py-2">
+            <select
+              value={newImpactDept}
+              onChange={(e) => setNewImpactDept(e.target.value as ImpactDept)}
+              className="h-8 rounded border border-stone-200 bg-white px-2 text-xs text-stone-700 outline-none focus:border-amber-400"
+            >
+              {IMPACT_DEPTS.map((dept) => (
+                <option key={dept} value={dept}>{dept}</option>
               ))}
-              <input value={costNote && !["Increase","Decrease","No change"].includes(costNote) ? costNote : ""}
-                onChange={(e) => setCostNote(e.target.value)}
-                className="h-8 flex-1 rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注说明..." />
-            </div>
+            </select>
+            <button type="button" onClick={() => addImpactItem(newImpactDept)}
+              className="inline-flex h-8 items-center justify-center rounded border border-stone-200 bg-white px-3 text-xs text-stone-500 hover:bg-stone-100 hover:text-stone-700 transition">
+              + 添加影响项
+            </button>
           </div>
           </>
           )}
@@ -1795,7 +2008,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
             onClick={() => toggleStep("step-3.1.9")}
             className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
           >
-            <span><span className="mr-2 text-amber-400">Step 3.1.9</span>Stock / Delivery Treatment / 库存发货处理</span>
+            <span><span className="mr-2 text-amber-400">1.2.2</span>Stock / Delivery Treatment / 库存发货处理</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1.9") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.1.9") && (
@@ -1886,7 +2099,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
             onClick={() => toggleStep("step-3.3")}
             className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
           >
-            <span><span className="mr-2 text-amber-400">Step 3.3</span>Affected Documents Check / 受影响文件检查</span>
+            <span><span className="mr-2 text-amber-400">1.2.3</span>Affected Documents Check / 受影响文件检查</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.3") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.3") && (
@@ -1895,30 +2108,30 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-                  <th className="w-8 px-3 py-2.5">#</th>
-                  <th className="px-3 py-2.5">Document / 文件</th>
-                  <th className="w-12 px-2 py-2.5 text-center">No</th>
-                  <th className="w-12 px-2 py-2.5 text-center">Yes</th>
-                  <th className="w-28 px-3 py-2.5">Resp. person</th>
-                  <th className="w-36 px-3 py-2.5">Due date</th>
+                  <th className="w-8 px-2 py-2.5 text-center">#</th>
+                  <th className="px-4 py-2.5">Document / 文件</th>
+                  <th className="w-14 px-2 py-2.5 text-center">No</th>
+                  <th className="w-14 px-2 py-2.5 text-center">Yes</th>
+                  <th className="px-4 py-2.5" style={{ minWidth: "10rem" }}>Resp. person</th>
+                  <th className="px-4 py-2.5" style={{ minWidth: "9rem" }}>Due date</th>
                 </tr>
               </thead>
               <tbody>
                 {documents.map((row, i) => (
                   <tr key={i} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                    <td className="px-3 py-2.5 text-xs text-stone-400">{i + 1}</td>
-                    <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{docItems[i]}</td>
-                    <td className="px-2 py-2.5 text-center">
+                    <td className="px-2 py-3 text-center text-xs text-stone-400 align-middle">{i + 1}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-stone-800 align-middle">{docItems[i]}</td>
+                    <td className="px-2 py-3 text-center align-middle">
                       <input type="checkbox" checked={row.no} onChange={() => toggleDoc(i, "no")} className="accent-stone-500 size-4" />
                     </td>
-                    <td className="px-2 py-2.5 text-center">
+                    <td className="px-2 py-3 text-center align-middle">
                       <input type="checkbox" checked={row.yes} onChange={() => toggleDoc(i, "yes")} className="accent-amber-600 size-4" />
                     </td>
-                    <td className="px-3 py-2.5">
+                    <td className="px-4 py-3 align-middle">
                       <input value={row.respPerson} onChange={(e) => updateDoc(i, "respPerson", e.target.value)}
                         className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
                     </td>
-                    <td className="px-3 py-2.5">
+                    <td className="px-4 py-3 align-middle">
                       <input type="date" value={row.dueDate} onChange={(e) => updateDoc(i, "dueDate", e.target.value)}
                         className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
                     </td>
@@ -1972,12 +2185,12 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
               {impacts.filter((r) => r.confirmedBy).length === 0 && (
                 <p className="text-xs text-stone-400">左侧填写确认人后自动显示</p>
               )}
-              {impacts.filter((r) => r.confirmedBy).map((r, i) => (
-                <div key={i} className="rounded border border-amber-100 bg-white px-2 py-1 text-xs">
-                  <span className="font-medium text-stone-700">{impactItems[i].en.slice(0, 40)}...</span>
+              {impacts.map((row, idx) => ({ row, idx })).filter(({ row }) => row.confirmedBy).map(({ row, idx }) => (
+                <div key={idx} className="rounded border border-amber-100 bg-white px-2 py-1 text-xs">
+                  <span className="font-medium text-stone-700">{(impactItems[idx]?.en || impactItems[idx]?.zh || "Custom impact").slice(0, 40)}...</span>
                   <div className="mt-0.5 flex items-center justify-between text-stone-500">
-                    <span>{r.confirmedBy}</span>
-                    <span className="text-[10px]">{r.confirmedAt ? new Date(r.confirmedAt).toLocaleString() : ""}</span>
+                    <span>{row.confirmedBy}</span>
+                    <span className="text-[10px]">{row.confirmedAt ? new Date(row.confirmedAt).toLocaleString() : ""}</span>
                   </div>
                 </div>
               ))}
@@ -1997,29 +2210,91 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   )
 }
 
-export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
+export function ValidationPlanView({
+  module,
+  resultOnly = false,
+}: {
+  module: PdEcrDisplayModule
+  resultOnly?: boolean
+}) {
   const rowLabels = [
     "Try run", "Capability Studies CMK", "Capability Studies MSA", "MAE release",
     "Cleanness test", "QZ test", "200h PDL", "BOM check", "Test report", "PAV release", "Other",
   ]
-  const storageKey = `pd-ecr-validation-plan-${module.id}`
-  type ValRow = { id: string; label: string; checked: boolean; criteria: string; finishDate: string; respPerson: string; comments: string }
+  const storageKey = resultOnly
+    ? `pd-ecr-validation-results-${module.id}`
+    : `pd-ecr-validation-plan-${module.id}`
+  type ValRow = { id: string; label: string; checked: boolean; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string }
+  type CustomValRow = Pick<ValRow, "checked" | "finishDate" | "actualDate" | "respPerson" | "comments">
+  const defaultCustomValRow = (): CustomValRow => ({ checked: true, finishDate: "", actualDate: "", respPerson: "", comments: "" })
 
   const [rows, setRows] = useState<ValRow[]>(() => {
     const raw = localStorage.getItem(storageKey)
     if (raw) {
       try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
     }
-    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, criteria: "AI suggested criteria", finishDate: "", respPerson: "", comments: "" }))
+    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, criteria: "AI suggested criteria", finishDate: "", actualDate: "", respPerson: "", comments: "" }))
+  })
+  const [customRows, setCustomRows] = useState<Record<string, CustomValRow>>(() => {
+    const raw = localStorage.getItem(storageKey)
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw)
+        if (parsed.customRows && typeof parsed.customRows === "object") return parsed.customRows
+      } catch {}
+    }
+    return {}
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
+  const [expanded, setExpanded] = useState(true)
+  const [customExpanded, setCustomExpanded] = useState(true)
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  // 读取 1.2.1 影响分析中 Yes + Measures 项 -> 1.3.2 自定义措施
+  const customMeasures = useMemo(() => {
+    return readImpactCustomMeasures()
+  }, [refreshKey])
+
+  // 监听 1.2.1 影响分析自动保存事件，实时刷新自定义措施
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const customEvent = event as CustomEvent<{ moduleId?: string; storageKey?: string }>
+      if (
+        customEvent.detail?.moduleId === IMPACT_ANALYSIS_MODULE_ID ||
+        customEvent.detail?.storageKey === IMPACT_ANALYSIS_STORAGE_KEY
+      ) {
+        setRefreshKey((k) => k + 1)
+      }
+    }
+    const storageHandler = (event: StorageEvent) => {
+      if (event.key === IMPACT_ANALYSIS_STORAGE_KEY) setRefreshKey((k) => k + 1)
+    }
+    window.addEventListener(IMPACT_ANALYSIS_UPDATED_EVENT, handler)
+    window.addEventListener("storage", storageHandler)
+    return () => {
+      window.removeEventListener(IMPACT_ANALYSIS_UPDATED_EVENT, handler)
+      window.removeEventListener("storage", storageHandler)
+    }
+  }, [])
 
   const toggleCheck = (index: number) => setRows((prev) => prev.map((r, i) => i === index ? { ...r, checked: !r.checked } : r))
   const updateField = (index: number, field: keyof Omit<ValRow, "label" | "checked">, value: string) => {
     setRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
   }
+  const customMeasureKey = (measure: ImpactCustomMeasure) => `impact-${measure.idx}`
+  const customMeasureRow = (measure: ImpactCustomMeasure) => customRows[customMeasureKey(measure)] || defaultCustomValRow()
+  const updateCustomMeasureField = (measure: ImpactCustomMeasure, field: keyof CustomValRow, value: string | boolean) => {
+    const key = customMeasureKey(measure)
+    setCustomRows((prev) => ({
+      ...prev,
+      [key]: {
+        ...(prev[key] || defaultCustomValRow()),
+        [field]: value,
+      },
+    }))
+  }
   const savePlan = () => {
-    localStorage.setItem(storageKey, JSON.stringify({ rows }))
+    localStorage.setItem(storageKey, JSON.stringify({ rows, customRows }))
     setSaveStatus("Saved")
   }
 
@@ -2033,17 +2308,29 @@ export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
       </div>
 
       <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white">
-          <span><span className="mr-2 text-amber-400">Step 3.2</span>QAC &amp; Validation plan</span>
-        </div>
+        <button
+          type="button"
+          onClick={() => setExpanded((p) => !p)}
+          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+        >
+          {resultOnly ? (
+            <span><span className="mr-2 text-amber-400">3.1</span>QAC &amp; Validation results</span>
+          ) : (
+            <span><span className="mr-2 text-amber-400">1.3.1</span>QAC &amp; Validation plan</span>
+          )}
+          <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
+        </button>
+        {expanded && (
+        <>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
                 <th className="w-8 px-3 py-2.5">☑</th>
                 <th className="px-3 py-2.5">Validation / 验证项目</th>
-                <th className="w-32 px-3 py-2.5">Plan finish date</th>
                 <th className="w-28 px-3 py-2.5">Resp. person</th>
+                <th className="w-32 px-3 py-2.5">Plan finish date</th>
+                {resultOnly && <th className="w-32 px-3 py-2.5">Actual date</th>}
                 <th className="px-3 py-2.5">Comments / 备注</th>
               </tr>
             </thead>
@@ -2055,13 +2342,19 @@ export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
                   </td>
                   <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{row.label}</td>
                   <td className="px-3 py-2.5">
-                    <input type="date" value={row.finishDate} onChange={(e) => updateField(i, "finishDate", e.target.value)}
-                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
-                  </td>
-                  <td className="px-3 py-2.5">
                     <input value={row.respPerson} onChange={(e) => updateField(i, "respPerson", e.target.value)}
                       className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
                   </td>
+                  <td className="px-3 py-2.5">
+                    <input type="date" value={row.finishDate} onChange={(e) => updateField(i, "finishDate", e.target.value)}
+                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                  </td>
+                  {resultOnly && (
+                    <td className="px-3 py-2.5">
+                      <input type="date" value={row.actualDate} onChange={(e) => updateField(i, "actualDate", e.target.value)}
+                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                    </td>
+                  )}
                   <td className="px-3 py-2.5">
                     <input value={row.comments} onChange={(e) => updateField(i, "comments", e.target.value)}
                       className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注" />
@@ -2071,10 +2364,111 @@ export function ValidationPlanView({ module }: { module: PdEcrDisplayModule }) {
             </tbody>
           </table>
         </div>
-        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, criteria: "", finishDate: "", respPerson: "", comments: "" }])}
+
+        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, criteria: "", finishDate: "", actualDate: "", respPerson: "", comments: "" }])}
           className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
           + 添加验证项
         </button>
+        </>
+        )}
+
+        {/* 1.3.2 自定义措施：自动从 1.2.1 影响分析中 Yes + Measures 填入 */}
+        <div className="overflow-hidden rounded-lg border border-amber-300 bg-white shadow-sm">
+          <button
+            type="button"
+            onClick={() => setCustomExpanded((p) => !p)}
+            className="flex w-full items-center justify-between bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 transition"
+          >
+            <span>
+              <span className="mr-2 text-white">
+                {resultOnly ? "3.1.2" : "1.3.2"}
+              </span>
+              自定义措施
+            </span>
+            <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${customExpanded ? "rotate-180" : ""}`} />
+          </button>
+          {customExpanded && (
+            customMeasures.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-amber-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                      <th className="w-8 px-3 py-2.5">☑</th>
+                      <th className="px-3 py-2.5">VALIDATION / 验证项目</th>
+                      <th className="w-28 px-3 py-2.5">Resp. person</th>
+                      <th className="w-32 px-3 py-2.5">Plan finish date</th>
+                      {resultOnly && <th className="w-32 px-3 py-2.5">Actual date</th>}
+                      <th className="px-3 py-2.5">Comments / 备注</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {customMeasures.map((cm) => {
+                      const row = customMeasureRow(cm)
+                      return (
+                      <tr key={`custom-measure-${cm.idx}`} className="border-b border-amber-100 even:bg-amber-50/30 hover:bg-amber-50/60 transition-colors">
+                        <td className="px-3 py-2.5 text-center">
+                          <input
+                            type="checkbox"
+                            checked={row.checked}
+                            onChange={(e) => updateCustomMeasureField(cm, "checked", e.target.checked)}
+                            className="accent-amber-600 size-4"
+                          />
+                        </td>
+                        <td className="px-3 py-2.5 align-middle">
+                          <p className="text-sm font-medium text-stone-800">
+                            {cm.desc}
+                          </p>
+                          <p className="mt-0.5 text-xs text-stone-400">
+                            {cm.area?.en || cm.area?.zh || "影响范围未指定"}
+                          </p>
+                        </td>
+                        <td className="px-3 py-2.5 align-middle">
+                          <input
+                            value={row.respPerson}
+                            onChange={(e) => updateCustomMeasureField(cm, "respPerson", e.target.value)}
+                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            placeholder="Resp."
+                          />
+                        </td>
+                        <td className="px-3 py-2.5 align-middle">
+                          <input
+                            type="date"
+                            value={row.finishDate}
+                            onChange={(e) => updateCustomMeasureField(cm, "finishDate", e.target.value)}
+                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                          />
+                        </td>
+                        {resultOnly && (
+                          <td className="px-3 py-2.5 align-middle">
+                            <input
+                              type="date"
+                              value={row.actualDate}
+                              onChange={(e) => updateCustomMeasureField(cm, "actualDate", e.target.value)}
+                              className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            />
+                          </td>
+                        )}
+                        <td className="px-3 py-2.5 align-middle">
+                          <input
+                            value={row.comments}
+                            onChange={(e) => updateCustomMeasureField(cm, "comments", e.target.value)}
+                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            placeholder="备注"
+                          />
+                        </td>
+                      </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="border-t border-amber-200 bg-amber-50/30 px-4 py-4 text-sm text-stone-500">
+                1.2.1 中选择 Yes 并填写 Measures 后，这里会自动显示对应措施。
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   )
@@ -2325,63 +2719,65 @@ export function ValidationResultFunctionalView({
 
 export function ImplementationView({
   module,
-  resultOnly: _resultOnly = false,
+  resultOnly = false,
 }: {
   module: PdEcrDisplayModule
   resultOnly?: boolean
 }) {
   // ── Data definitions matching Excel template ──
-  type ImplRow = { id: string; department: string; yn: string; description: string; responsible: string; dueDate: string; result?: string; resultNote?: string }
+  type ImplRow = { id: string; department: string; yn: string; description: string; responsible: string; dueDate: string; actualDate: string; result?: string; resultNote?: string }
   let _implRowId = 0
   const nextImplRowId = () => `impl-${Date.now()}-${_implRowId++}-${Math.random().toString(36).slice(2, 6)}`
 
   const defaultChecklist: ImplRow[] = [
     // Development
-    { id: nextImplRowId(), department: "Development", yn: "N", description: "Documents release (drawing, offer drawing, BOM, Spec., ...)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Documents release (drawing, offer drawing, BOM, Spec., ...)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Change BOMs & Drawings & Documents in POE system", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Inform documents update (check work-on can met requirements)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "Y", description: "Update Offer drawing, TCD, D-FMEA", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "Norm, WB, HF...", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Development", yn: "N", description: "MoC, IMDS", responsible: "", dueDate: "", actualDate: "" },
     // Manufacturing
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) equipment be ready on site", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) program be ready", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Related (Production/Testing) tooling / cutting / fixture etc. be ready", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old tooling / cutting / fixture disposal", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Old materials disposal", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Planner update the planning sheet", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update FMEA", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update CP/FC (Control Plan/Flow Chart)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Update WI/PDS (Include attachments.)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Inside Package)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "First batch Mark, Special Mark (Outside Package)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Manufacturing", yn: "Y", description: "Training", responsible: "", dueDate: "", actualDate: "" },
     // COS
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the storage of old parts and coordinate the introduction date for new parts", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the delivery date of old parts and first delivery of new parts (FG)", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Check sample orders which affected: material order of CKD", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm production scheduling according to the alignment, any changes share the information", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Confirm the old stock / do prioritize delivery and inventory handling", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "COS", yn: "Y", description: "Inform the first delivery to PMO", responsible: "", dueDate: "", actualDate: "" },
     // Purchasing
-    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Check sample orders which affected: material order of purchasing parts", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Inform internal related departments (COS, MFE, MOEx) with following requirements", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Purchasing", yn: "Y", description: "Update incoming inspection plan", responsible: "", dueDate: "", actualDate: "" },
     // Quality
-    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update testing program on testing equipment", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "Quality", yn: "Y", description: "Update inspection plan for CKD parts", responsible: "", dueDate: "", actualDate: "" },
     // CPjM
-    { id: nextImplRowId(), department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "CPjM", yn: "Y", description: "Distribute the Offer drawing, TCD to customer", responsible: "", dueDate: "", actualDate: "" },
     // LOP
-    { id: nextImplRowId(), department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "LOP", yn: "Y", description: "Check 10 digit material order", responsible: "", dueDate: "", actualDate: "" },
     // PMO
-    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "" },
-    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Check sample orders which affected: Customer order", responsible: "", dueDate: "", actualDate: "" },
+    { id: nextImplRowId(), department: "PMO", yn: "Y", description: "Inform Customer the first delivery information", responsible: "", dueDate: "", actualDate: "" },
     // Others
-    { id: nextImplRowId(), department: "Others", yn: "", description: "", responsible: "", dueDate: "" },
+    { id: nextImplRowId(), department: "Others", yn: "", description: "", responsible: "", dueDate: "", actualDate: "" },
   ]
 
-  const storageKey = `pd-ecr-implementation-${module.id}`
+  const storageKey = resultOnly
+    ? `pd-ecr-implementation-results-${module.id}`
+    : `pd-ecr-implementation-${module.id}`
 
   // ── State ──
   const [developmentConfirmation] = useState(() => {
@@ -2426,7 +2822,7 @@ export function ImplementationView({
   }
   const addChecklistItem = (dept: string) => {
     setChecklistRows((prev) => {
-      const newRow: ImplRow = { id: nextImplRowId(), department: dept, yn: "", description: "", responsible: "", dueDate: "", result: "", resultNote: "" }
+      const newRow: ImplRow = { id: nextImplRowId(), department: dept, yn: "", description: "", responsible: "", dueDate: "", actualDate: "", result: "", resultNote: "" }
       // Insert after the last item of this department
       const lastIndex = prev.map((r) => r.department).lastIndexOf(dept)
       if (lastIndex >= 0) {
@@ -2460,14 +2856,18 @@ export function ImplementationView({
         <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
       </div>
 
-      {/* ── Step 6.1: Implementation check list ── */}
+      {/* ── Step 6.1: Implementation plan/results ── */}
       <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
         <button
           type="button"
           onClick={() => toggleStep("step-6.1")}
           className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
         >
-          <span><span className="mr-2 text-amber-400">Step 6.1</span>Implementation check list / 导入清单</span>
+          {resultOnly ? (
+            <span><span className="mr-2 text-amber-400"> 3.2 </span>Implementation results</span>
+          ) : (
+            <span><span className="mr-2 text-amber-400">1.4.1</span>Implementation check list / 导入清单</span>
+          )}
           <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-6.1") ? "rotate-180" : ""}`} />
         </button>
         {expandedSteps.has("step-6.1") && (
@@ -2504,9 +2904,10 @@ export function ImplementationView({
                           <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
                             <th className="w-8 px-2 py-2 text-center">#</th>
                             <th className="px-3 py-2">Description</th>
-                            <th className="w-14 px-2 py-2 text-center">Y/N</th>
                             <th className="w-36 px-3 py-2">Responsible</th>
+                            <th className="w-14 px-2 py-2 text-center">Y/N</th>
                             <th className="w-32 px-3 py-2">Due date</th>
+                            {resultOnly && <th className="w-32 px-3 py-2">Actual date</th>}
                             <th className="w-28 px-3 py-2">STATUS</th>
                             <th className="w-40 px-3 py-2">Result</th>
                           </tr>
@@ -2522,6 +2923,14 @@ export function ImplementationView({
                                 <td className="px-3 py-2 text-xs leading-5 text-stone-700">
                                   {row.description || "-"}
                                 </td>
+                                <td className="px-3 py-2">
+                                  <input
+                                    value={row.responsible}
+                                    onChange={(e) => updateChecklist(globalIndex, "responsible", e.target.value)}
+                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    placeholder="Resp."
+                                  />
+                                </td>
                                 <td className="px-2 py-2 text-center">
                                   <select
                                     value={row.yn}
@@ -2535,20 +2944,22 @@ export function ImplementationView({
                                 </td>
                                 <td className="px-3 py-2">
                                   <input
-                                    value={row.responsible}
-                                    onChange={(e) => updateChecklist(globalIndex, "responsible", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                                    placeholder="Resp."
-                                  />
-                                </td>
-                                <td className="px-3 py-2">
-                                  <input
                                     type="date"
                                     value={row.dueDate}
                                     onChange={(e) => updateChecklist(globalIndex, "dueDate", e.target.value)}
                                     className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
                                   />
                                 </td>
+                                {resultOnly && (
+                                  <td className="px-3 py-2">
+                                    <input
+                                      type="date"
+                                      value={row.actualDate}
+                                      onChange={(e) => updateChecklist(globalIndex, "actualDate", e.target.value)}
+                                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    />
+                                  </td>
+                                )}
                                 <td className="px-3 py-2">
                                   <select
                                     value={row.result || ""}
@@ -2639,7 +3050,11 @@ export function FallbackView({ module }: { module: PdEcrDisplayModule }) {
   )
 }
 
-export function renderModuleBody(module: PdEcrDisplayModule, hideApproval?: boolean) {
+export function renderModuleBody(
+  module: PdEcrDisplayModule,
+  hideApproval?: boolean,
+  mode: "plan" | "result" = "plan",
+) {
   switch (module.id) {
     case "change_description":
     case "change-description":
@@ -2647,13 +3062,15 @@ export function renderModuleBody(module: PdEcrDisplayModule, hideApproval?: bool
     case "impact-analysis":
       return <ImpactAnalysisView module={module} hideApproval={hideApproval} />
     case "validation-plan":
-      return <ValidationPlanView module={module} />
+      return <ValidationPlanView module={module} resultOnly={mode === "result"} />
     case "validation-result":
       return <ValidationResultFunctionalView module={module} />
     case "implementation-plan":
-      return <ImplementationView module={module} resultOnly={false} />
+      return <ImplementationView module={module} resultOnly={mode === "result"} />
     case "implementation-result":
       return <ImplementationView module={module} resultOnly={true} />
+    case "feasibility-confirmation":
+      return <PdEcrFeasibilityConfirmation module={module} hideApproval={hideApproval} />
     default:
       return (
         <div className="space-y-5">

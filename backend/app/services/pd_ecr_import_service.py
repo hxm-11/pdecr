@@ -145,6 +145,79 @@ def source_kind(path: Path) -> str:
     return "unknown"
 
 
+def _extract_pdecr_case_code(name: str) -> str:
+    match = re.search(r"(PDECR\d{2}[_-]\d{3})", str(name or ""), re.I)
+    if not match:
+        return ""
+    return match.group(1).upper().replace("-", "_")
+
+
+def infer_display_pdf_path(path: Path, metadata: dict[str, Any] | None = None) -> Path | None:
+    """Find the PDF users should see for a source file.
+
+    The parsed Markdown/JSON can go to the knowledge base, but the UI should
+    open this display PDF so historical cases keep their original layout.
+    """
+    if path.suffix.lower() == ".pdf" and path.exists():
+        return path
+
+    metadata = metadata or {}
+    explicit_path = metadata.get("display_pdf_path") or metadata.get("preview_pdf_path")
+    if explicit_path:
+        candidate = Path(str(explicit_path))
+        if candidate.suffix.lower() == ".pdf" and candidate.exists():
+            return candidate
+
+    requested_stems = {
+        path.stem.lower(),
+        str(metadata.get("case_no") or "").strip().lower(),
+        str(metadata.get("dc_no") or "").strip().lower(),
+    }
+    requested_codes = {
+        _extract_pdecr_case_code(path.name).lower(),
+        _extract_pdecr_case_code(str(metadata.get("case_no") or "")).lower(),
+        _extract_pdecr_case_code(str(metadata.get("dc_no") or "")).lower(),
+    }
+    requested_stems.discard("")
+    requested_codes.discard("")
+
+    for search_dir in (
+        path.parent,
+        APP_DIR / "uploads" / "previews",
+        Path.cwd() / "uploads" / "previews",
+        RAG_DIR / "PDECR_JIE_JIM",
+        RAG_DIR / "jie_jim_knowledge_pdf",
+    ):
+        if not search_dir.exists():
+            continue
+        for pdf_path in sorted(search_dir.rglob("*.pdf")):
+            pdf_stem = pdf_path.stem.lower()
+            pdf_code = _extract_pdecr_case_code(pdf_path.name).lower()
+            if pdf_stem in requested_stems or pdf_code in requested_codes:
+                return pdf_path
+            if any(stem and (pdf_stem.startswith(stem) or stem in pdf_stem) for stem in requested_stems):
+                return pdf_path
+
+    return None
+
+
+def with_display_pdf_metadata(
+    metadata: dict[str, Any],
+    *,
+    source_path: Path,
+    display_pdf_path: Path | None,
+    original_filename: str | None = None,
+) -> dict[str, Any]:
+    enriched = dict(metadata)
+    enriched.setdefault("original_filename", original_filename or source_path.name)
+    enriched.setdefault("original_file_path", str(source_path))
+    if display_pdf_path:
+        enriched["display_pdf_path"] = str(display_pdf_path)
+        enriched["preview_pdf_path"] = str(display_pdf_path)
+        enriched["pdf_file"] = display_pdf_path.name
+    return enriched
+
+
 def get_or_create_case(
     *,
     session: Session,
@@ -224,6 +297,12 @@ def upsert_source_document(
     current_user: User,
 ) -> bool:
     digest = file_hash(path)
+    display_pdf_path = infer_display_pdf_path(path, metadata)
+    metadata = with_display_pdf_metadata(
+        metadata,
+        source_path=path,
+        display_pdf_path=display_pdf_path,
+    )
     existing = session.exec(
         select(HistoricalSourceDocument).where(
             HistoricalSourceDocument.source_path == str(path),
@@ -233,6 +312,15 @@ def upsert_source_document(
     if existing:
         if existing.case_id is None:
             existing.case_id = case.id
+        existing_metadata = dict(existing.extracted_metadata or {})
+        changed = False
+        for key, value in metadata.items():
+            if value and not existing_metadata.get(key):
+                existing_metadata[key] = value
+                changed = True
+        if changed:
+            existing.extracted_metadata = existing_metadata
+            session.add(existing)
         return False
     session.add(
         HistoricalSourceDocument(
@@ -365,6 +453,7 @@ def ingest_uploaded_file(
     parsed_by = ""
     table_metadata: dict[str, str] = {}
     excel_metadata: dict[str, str] = {}
+    display_pdf_path: Path | None = file_path if suffix == ".pdf" else None
 
     # ---- Parse file ----
     if suffix in (".xlsx", ".xlsm", ".xls"):
@@ -377,6 +466,8 @@ def ingest_uploaded_file(
         try:
             from app.rag.excel_to_pdf import convert_excel_to_pdf
             pdf_path = convert_excel_to_pdf(file_path)
+            if pdf_path:
+                display_pdf_path = pdf_path
             if pdf_path and shutil.which("mineru") is not None:
                 from app.rag.pdf_to_markdown import run_mineru, write_pdf_markdown
                 mineru_md_path = run_mineru(pdf_path, backend="pipeline")
@@ -429,6 +520,12 @@ def ingest_uploaded_file(
         parsed_text,
         table_metadata=table_metadata,
         excel_metadata=excel_metadata,
+    )
+    metadata = with_display_pdf_metadata(
+        metadata,
+        source_path=file_path,
+        display_pdf_path=display_pdf_path,
+        original_filename=original_filename,
     )
     case_no = metadata["case_no"]
 

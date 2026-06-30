@@ -26,6 +26,7 @@ from sqlmodel import select
 from app.rag.retriever import retrieve_pd_ecr_context, retrieve_pd_ecr_results
 from app.api.deps import CurrentUser, SessionDep
 from app.models import (
+    HistoricalSourceDocument,
     PdEcrCaseCreate,
     PdEcrCaseUpdate,
     PdEcrActivity,
@@ -863,7 +864,7 @@ def list_pd_ecr_cases(
             limit=10000,
         )
         _add_cases(
-            [serialize_case(case) for case in db_cases],
+            [_serialize_case_with_source_pdf(session, case) for case in db_cases],
             "database",
         )
     except Exception as e:
@@ -961,6 +962,59 @@ def _find_pdf_fuzzy(requested_name: str, *search_dirs: Path) -> Path | None:
     return None
 
 
+def _source_document_display_pdf_path(source_doc: HistoricalSourceDocument) -> Path | None:
+    metadata = source_doc.extracted_metadata or {}
+    for key in (
+        "display_pdf_path",
+        "preview_pdf_path",
+        "canonical_pdf_path",
+        "original_pdf_path",
+    ):
+        raw_path = metadata.get(key)
+        if not raw_path:
+            continue
+        candidate = Path(str(raw_path))
+        if candidate.suffix.lower() == ".pdf" and candidate.exists():
+            return candidate
+
+    source_path = Path(source_doc.source_path)
+    if source_path.suffix.lower() == ".pdf" and source_path.exists():
+        return source_path
+
+    return _find_pdf_fuzzy(
+        source_doc.source_file,
+        source_path.parent,
+        Path(__file__).resolve().parents[2] / "uploads" / "previews",
+        Path.cwd() / "uploads" / "previews",
+        PDECR_JIE_JIM_PDF_DIR,
+        JIE_JIM_METADATA_DIR,
+    )
+
+
+def _serialize_case_with_source_pdf(session: SessionDep, case) -> dict[str, Any]:
+    payload = serialize_case(case)
+    source_docs = list(
+        session.exec(
+            select(HistoricalSourceDocument)
+            .where(HistoricalSourceDocument.case_id == case.id)
+            .order_by(HistoricalSourceDocument.imported_at.desc())
+        ).all()
+    )
+
+    for source_doc in source_docs:
+        pdf_path = _source_document_display_pdf_path(source_doc)
+        if pdf_path is None:
+            continue
+        payload["source_file"] = source_doc.source_file
+        payload["pdf_file"] = pdf_path.name
+        payload["pdf_url"] = f"/api/v1/pd-ecr/source-documents/{source_doc.id}/preview"
+        payload["link"] = "Open PDF"
+        payload["from"] = payload.get("from") or "Historical Source"
+        break
+
+    return payload
+
+
 @router.get("/pdf/{filename}")
 def get_pdecr_jie_jim_pdf(filename: str):
     safe_name = Path(filename).name
@@ -970,6 +1024,29 @@ def get_pdecr_jie_jim_pdf(filename: str):
 
     if pdf_path is None:
         raise HTTPException(status_code=404, detail=f"PD-ECR PDF not found: {safe_name}")
+
+    return FileResponse(
+        pdf_path,
+        media_type="application/pdf",
+        filename=pdf_path.name,
+        content_disposition_type="inline",
+    )
+
+
+@router.get("/source-documents/{source_doc_id}/preview")
+def get_historical_source_document_preview(source_doc_id: str, session: SessionDep):
+    try:
+        parsed_id = uuid.UUID(source_doc_id)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="Source document not found")
+
+    source_doc = session.get(HistoricalSourceDocument, parsed_id)
+    if source_doc is None:
+        raise HTTPException(status_code=404, detail="Source document not found")
+
+    pdf_path = _source_document_display_pdf_path(source_doc)
+    if pdf_path is None:
+        raise HTTPException(status_code=404, detail="Preview PDF not available")
 
     return FileResponse(
         pdf_path,
@@ -1683,7 +1760,7 @@ def review_pd_ecr_leader_task(
 def list_pd_ecr_case_modules_v1(case_id: str, session: SessionDep):
     case = get_case_or_404(session=session, case_id=case_id)
     return {
-        "case": serialize_case(case),
+        "case": _serialize_case_with_source_pdf(session, case),
         "modules": [
             serialize_module(module)
             for module in list_modules(session=session, case_id=case.id)
@@ -6113,7 +6190,7 @@ def get_pd_ecr_case_detail(case_id: str, session: SessionDep):
 
     case = get_case_or_404(session=session, case_id=case_id)
     return {
-        "case": serialize_case(case),
+        "case": _serialize_case_with_source_pdf(session, case),
         "modules": [
             serialize_module(module)
             for module in list_modules(session=session, case_id=case.id)

@@ -111,6 +111,7 @@ test("uses PD-ECR dashboard as the real dashboard and removes project management
   await expect(page.getByText("项目管理")).not.toBeVisible()
   await expect(page.getByText("3 total cases")).toBeVisible()
   await expect(page.getByText("Knowledge Base Health")).toBeVisible()
+  await page.getByRole("button", { name: /Details/ }).click()
   await expect(page.getByText("128")).toBeVisible()
   await expect(page.getByText("2 pending review")).toBeVisible()
   await expect(page.getByText("XLSX controls")).toBeVisible()
@@ -122,4 +123,23 @@ test("uses PD-ECR dashboard as the real dashboard and removes project management
   await expect(
     page.getByRole("heading", { name: "PD-ECR Dashboard" }),
   ).toBeVisible()
+})
+
+test("keeps new change entry as draft enrichment instead of approval submit", async ({
+  page,
+}) => {
+  await page.goto("/pd-ecr")
+
+  await expect(page.getByRole("heading", { name: "PD-ECR Platform" })).toBeVisible()
+  await expect(page.getByLabel("变更名称")).toBeVisible()
+  await expect(page.getByRole("heading", { name: "变更评审会 / 参与人" })).toBeVisible()
+  await expect(page.getByText("发起人可在新建阶段先拉会")).toBeVisible()
+  await expect(page.getByRole("button", { name: "需要上会" })).toBeVisible()
+  await expect(page.getByRole("button", { name: /下一步：补充变更描述/ })).toBeVisible()
+  await expect(page.getByRole("button", { name: /提交审批/ })).toHaveCount(0)
+
+  await page.getByRole("button", { name: /下一步：补充变更描述/ }).click()
+  await expect(page.getByText("请先填写变更名称")).toBeVisible()
+  await page.getByLabel("变更名称").fill("JIM 493 supplier change")
+  await expect(page.getByText("请先填写变更名称")).toHaveCount(0)
 })

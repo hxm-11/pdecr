@@ -829,11 +829,13 @@ def write_version(
 
 
 def serialize_case(case: PdEcrCase) -> dict[str, Any]:
+    display_status = "historical" if case.is_historical else case.status
     return {
         "id": str(case.id),
         "case_no": case.case_no,
         "title": case.title,
-        "status": case.status,
+        "status": display_status,
+        "raw_status": case.status,
         "source_type": case.source_type,
         "is_historical": case.is_historical,
         "created_by_id": str(case.created_by_id) if case.created_by_id else None,

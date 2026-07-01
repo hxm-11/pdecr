@@ -1,6 +1,5 @@
-import { useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router";
 import {
-  AlertCircle,
   ArrowLeft,
   CheckCircle2,
   ClipboardList,
@@ -9,141 +8,113 @@ import {
   FileText,
   Home,
   LockKeyhole,
+  PlayCircle,
   Sparkles,
-} from "lucide-react"
-import { useEffect, useMemo, useState } from "react"
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { exportPdEcrCase, exportPdEcrDraft, resolvePdEcrAssetUrl } from "@/lib/pdEcrApi"
-import { getModuleCompletionState, PdEcrModuleAccordion, PdEcrResultModuleAccordion } from "./PdEcrModuleAccordion"
-import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
-import { buildPdEcrOnePageHtml, downloadText } from "./pdEcrExport"
-import { loadActiveResult, type PdEcrStoredResult } from "./pdEcrState"
+import { Button } from "@/components/ui/button";
+import useAuth from "@/hooks/useAuth";
 import {
-  isFeasibilityComplete,
-  loadFeasibilityState,
-  PdEcrFeasibilityConfirmation,
-  PdEcrLeaderSigning,
-} from "./PdEcrFeasibilityConfirmation"
-
-const PAGE1_MODULE_IDS = [
-  "change-description",
-  "impact-analysis",
-  "validation-plan",
-  "implementation-plan",
-] as const
+  exportPdEcrCase,
+  exportPdEcrDraft,
+  resolvePdEcrAssetUrl,
+  transitionPdEcrCase,
+} from "@/lib/pdEcrApi";
+import { PdEcrModuleAccordion } from "./PdEcrModuleAccordion";
+import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow";
+import { buildPdEcrOnePageHtml, downloadText } from "./pdEcrExport";
+import { loadActiveResult, type PdEcrStoredResult } from "./pdEcrState";
 
 function compactValue(...values: unknown[]) {
   for (const value of values) {
-    const text = String(value ?? "").trim()
-    if (text) return text
+    const text = String(value ?? "").trim();
+    if (text) return text;
   }
-  return "-"
+  return "-";
 }
 
 function prettyStatus(value: string | undefined, isHistory: boolean) {
-  if (isHistory) return "Read only"
-  const normalized = compactValue(value, "draft").replace(/_/g, " ")
-  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+  if (isHistory) return "Read only";
+  const normalized = compactValue(value, "draft").replace(/_/g, " ");
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
 function statusClassName(result: PdEcrStoredResult) {
   if (result.source === "history") {
-    return "border-sky-200 bg-sky-50 text-sky-800"
+    return "border-sky-200 bg-sky-50 text-sky-800";
   }
-  if (["approved", "closed", "implementation"].includes(String(result.draftStatus || "").toLowerCase())) {
-    return "border-emerald-200 bg-emerald-50 text-emerald-800"
+  if (
+    ["approved", "closed", "implementation"].includes(
+      String(result.draftStatus || "").toLowerCase(),
+    )
+  ) {
+    return "border-emerald-200 bg-emerald-50 text-emerald-800";
   }
-  return "border-amber-200 bg-amber-50 text-amber-800"
-}
-
-function getPage2Gate(result: PdEcrStoredResult) {
-  if (result.source === "history") {
-    return {
-      locked: false,
-      blockers: [] as string[],
-      warning: "Historical cases are read-only references; Page 2 signing is disabled.",
-    }
-  }
-
-  const blockers: string[] = []
-  const moduleStates = PAGE1_MODULE_IDS.map((moduleId) => {
-    const module = result.modules.find((item) => item.id === moduleId)
-    if (!module) {
-      return { title: moduleId, label: "Empty", detail: "Module is missing" }
-    }
-    const state = getModuleCompletionState(module)
-    return { title: module.title, label: state.label, detail: state.detail }
-  })
-
-  moduleStates
-    .filter((item) => item.label !== "Complete")
-    .forEach((item) => blockers.push(`${item.title}: ${item.detail}`))
-
-  if (!isFeasibilityComplete(loadFeasibilityState())) {
-    blockers.push("Step 2 feasibility confirmation requires text, initiator confirmation, and at least one attachment.")
-  }
-
-  return {
-    locked: blockers.length > 0,
-    blockers,
-    warning: result.currentCase?.backendCaseId
-      ? ""
-      : "This draft is not linked to a backend case yet; formal workflow assignment requires a saved backend case.",
-  }
-}
-
-function HistoricalSigningNotice() {
-  return (
-    <div className="rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800">
-      <div className="flex items-start gap-2">
-        <LockKeyhole className="mt-0.5 size-4 shrink-0" />
-        <p>
-          Historical reference mode: result review is available, but leader
-          sign-off inputs are disabled for source records.
-        </p>
-      </div>
-    </div>
-  )
+  return "border-amber-200 bg-amber-50 text-amber-800";
 }
 
 function CaseSummaryBar({ result }: { result: PdEcrStoredResult }) {
-  const row = result.currentCase
-  const snapshot = result.inputSnapshot || {}
+  const row = result.currentCase;
+  const snapshot = result.inputSnapshot || {};
   const completeModules = result.modules.filter((module) => {
-    const hasData = Object.keys(module.data || {}).length > 0
-    return hasData || Boolean(module.summary?.trim())
-  }).length
+    const hasData = Object.keys(module.data || {}).length > 0;
+    return hasData || Boolean(module.summary?.trim());
+  }).length;
   const sourceCount = new Set(
     result.modules.flatMap((module) => [
       ...(module.sourceCases || []),
       ...(module.sourceFiles || []),
     ]),
-  ).size
+  ).size;
 
   const items = [
     ["Case No.", compactValue(row?.dcNo, row?.mcrNo, row?.id, result.draftId)],
-    ["Part No.", compactValue(row?.partNumber, row?.productNo, snapshot.part_number, snapshot.product_no)],
-    ["Project", compactValue(row?.project, row?.customer, snapshot.project, snapshot.customer_project)],
+    [
+      "Part No.",
+      compactValue(
+        row?.partNumber,
+        row?.productNo,
+        snapshot.part_number,
+        snapshot.product_no,
+      ),
+    ],
+    [
+      "Project",
+      compactValue(
+        row?.project,
+        row?.customer,
+        snapshot.project,
+        snapshot.customer_project,
+      ),
+    ],
     ["Change Type", compactValue(row?.changeType, snapshot.change_type)],
     ["Owner", compactValue(row?.initiator, snapshot.initiator)],
     ["Modules", `${completeModules}/${result.modules.length || 4}`],
-  ]
+  ];
 
   return (
-    <div className="sticky top-0 z-20 border-y border-stone-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur">
+    <div className="sticky top-0 z-20 border-y border-stone-200/60 bg-white/85 px-4 py-3 shadow-sm backdrop-blur">
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${statusClassName(result)}`}>
-            {result.source === "history" ? <LockKeyhole className="size-3.5" /> : <Clock3 className="size-3.5" />}
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold shadow-sm ${statusClassName(result)}`}
+          >
+            {result.source === "history" ? (
+              <LockKeyhole className="size-3.5" />
+            ) : (
+              <Clock3 className="size-3.5" />
+            )}
             {prettyStatus(result.draftStatus, result.source === "history")}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-semibold text-stone-600">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-semibold text-stone-600 shadow-sm">
             <FileText className="size-3.5" />
-            {result.source === "history" ? "Historical PDF/parsed case" : "Editable PD-ECR draft"}
+            {result.source === "history"
+              ? "Historical PDF/parsed case"
+              : "Editable PD-ECR draft"}
           </span>
           {sourceCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800 shadow-sm">
               <CheckCircle2 className="size-3.5" />
               {sourceCount} source reference{sourceCount > 1 ? "s" : ""}
             </span>
@@ -151,9 +122,17 @@ function CaseSummaryBar({ result }: { result: PdEcrStoredResult }) {
         </div>
         <dl className="grid min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3 xl:max-w-5xl xl:grid-cols-6">
           {items.map(([label, value]) => (
-            <div key={label} className="min-w-0 rounded-md border border-stone-200 bg-stone-50 px-3 py-2">
-              <dt className="text-[10px] font-semibold uppercase text-stone-400">{label}</dt>
-              <dd className="mt-0.5 truncate text-sm font-semibold text-stone-800" title={value}>
+            <div
+              key={label}
+              className="min-w-0 rounded-md border border-stone-200 bg-stone-50 px-3 py-2"
+            >
+              <dt className="text-[10px] font-semibold uppercase text-stone-400">
+                {label}
+              </dt>
+              <dd
+                className="mt-0.5 truncate text-sm font-semibold text-stone-800"
+                title={value}
+              >
                 {value}
               </dd>
             </div>
@@ -161,56 +140,329 @@ function CaseSummaryBar({ result }: { result: PdEcrStoredResult }) {
         </dl>
       </div>
     </div>
-  )
+  );
+}
+
+const LEADER_SIGNOFF_ROLES = [
+  "leader of initiator",
+  "Section manager of function",
+  "HOD/TCR",
+] as const;
+
+type LeaderSignoffState = Record<string, string>;
+
+type PdEcrActor = {
+  email?: string | null;
+  full_name?: string | null;
+  display_name?: string | null;
+  department?: string | null;
+  pd_ecr_role?: string | null;
+};
+
+function normalizeActorText(value?: string | null) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function currentUserMatchesInitiator(
+  user: PdEcrActor | null | undefined,
+  initiator: string,
+) {
+  const target = normalizeActorText(initiator);
+  if (!target) return false;
+  return [user?.email, user?.display_name, user?.full_name].some(
+    (candidate) => normalizeActorText(candidate) === target,
+  );
+}
+
+function inferDepartmentFromInitiator(initiator: string) {
+  const text = normalizeActorText(initiator);
+  const emailDepartment = text.match(/^([a-z]+)[._-]/)?.[1];
+  if (emailDepartment) return emailDepartment;
+  for (const department of [
+    "design",
+    "system",
+    "purchasing",
+    "manufacturing",
+    "quality",
+    "pm",
+    "catalyst",
+  ]) {
+    if (text.includes(department)) return department;
+  }
+  return "";
+}
+
+function canConfirmInitiatorLeader(
+  user: PdEcrActor | null | undefined,
+  initiator: string,
+) {
+  if (user?.pd_ecr_role !== "department_leader") return false;
+  if (currentUserMatchesInitiator(user, initiator)) return false;
+  const initiatorDepartment = inferDepartmentFromInitiator(initiator);
+  if (!initiatorDepartment) return true;
+  return normalizeActorText(user.department) === initiatorDepartment;
+}
+
+function leaderSignoffStorageKey(recordId: string) {
+  return `pd-ecr-leader-signoff-buttons:${recordId}`;
+}
+
+function leaderExecutionStorageKey(recordId: string) {
+  return `pd-ecr-leader-execution-start:${recordId}`;
+}
+
+function loadLeaderSignoffs(recordId: string): LeaderSignoffState {
+  const raw = localStorage.getItem(leaderSignoffStorageKey(recordId));
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw) as LeaderSignoffState;
+  } catch {
+    return {};
+  }
+}
+
+function LeaderSignOffButtons({
+  recordId,
+  caseId,
+  initiator,
+}: {
+  recordId: string;
+  caseId?: string;
+  initiator: string;
+}) {
+  const { user } = useAuth();
+  const currentUser = user as PdEcrActor | null | undefined;
+  const [signed, setSigned] = useState<LeaderSignoffState>(() =>
+    loadLeaderSignoffs(recordId),
+  );
+  const [isStartingExecution, setIsStartingExecution] = useState(false);
+  const [executionStarted, setExecutionStarted] = useState(
+    () => localStorage.getItem(leaderExecutionStorageKey(recordId)) !== null,
+  );
+  const [executionMessage, setExecutionMessage] = useState(() =>
+    localStorage.getItem(leaderExecutionStorageKey(recordId))
+      ? "已进入执行分配阶段。"
+      : "",
+  );
+
+  const allSigned = LEADER_SIGNOFF_ROLES.every((role) => signed[role]);
+  const signedCount = LEADER_SIGNOFF_ROLES.filter(
+    (role) => signed[role],
+  ).length;
+  const nextUnsignedIndex = LEADER_SIGNOFF_ROLES.findIndex(
+    (role) => !signed[role],
+  );
+
+  const toggleSigned = (role: string) => {
+    if (!canCurrentUserSignRole(role)) return;
+    setSigned((current) => {
+      const next = { ...current };
+      if (next[role]) {
+        delete next[role];
+      } else {
+        next[role] = new Date().toLocaleString();
+      }
+      localStorage.setItem(
+        leaderSignoffStorageKey(recordId),
+        JSON.stringify(next),
+      );
+      return next;
+    });
+  };
+
+  const canCurrentUserSignRole = (role: string) => {
+    if (role === "leader of initiator") {
+      return canConfirmInitiatorLeader(currentUser, initiator);
+    }
+    return ["department_leader", "pd_ecr_manager"].includes(
+      currentUser?.pd_ecr_role || "",
+    );
+  };
+
+  const startExecutionAssignment = async () => {
+    if (!allSigned || isStartingExecution || executionStarted) return;
+
+    setIsStartingExecution(true);
+    setExecutionMessage("");
+    try {
+      if (caseId) {
+        await transitionPdEcrCase(caseId, "execution_assignment");
+      }
+      localStorage.setItem(
+        leaderExecutionStorageKey(recordId),
+        JSON.stringify({
+          status: "execution_assignment",
+          startedAt: new Date().toISOString(),
+        }),
+      );
+      setExecutionStarted(true);
+      setExecutionMessage(
+        caseId
+          ? "已进入执行分配阶段，后续可分派 1.4 执行计划任务。"
+          : "已记录进入执行分配阶段，生成正式 case 后可同步到后端流程。",
+      );
+      window.dispatchEvent(new Event("pd-ecr-workflow-updated"));
+    } catch {
+      setExecutionMessage("进入执行分配失败，请稍后重试。");
+    } finally {
+      setIsStartingExecution(false);
+    }
+  };
+
+  return (
+    <section className="enterprise-panel overflow-hidden">
+      <div className="flex flex-col justify-between gap-3 border-b border-slate-200 bg-slate-50/70 px-5 py-4 lg:flex-row lg:items-center">
+        <div>
+          <p className="enterprise-section-title">Approval gate</p>
+          <h2 className="mt-1 text-lg font-semibold text-slate-900">
+            领导签字与执行准入
+          </h2>
+          <p className="mt-1 text-sm leading-6 text-slate-500">
+            三方签字完成后，流程进入 1.4 执行计划分配。
+          </p>
+        </div>
+        <span
+          className={`inline-flex w-fit items-center rounded-md border px-3 py-1.5 text-sm font-semibold ${
+            allSigned
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-blue-200 bg-blue-50 text-blue-700"
+          }`}
+        >
+          {signedCount}/{LEADER_SIGNOFF_ROLES.length} signed
+        </span>
+      </div>
+
+      <div className="grid gap-3 p-5 lg:grid-cols-3">
+        {LEADER_SIGNOFF_ROLES.map((role) => {
+          const signedAt = signed[role];
+          const index = LEADER_SIGNOFF_ROLES.indexOf(role);
+          const isCurrent = !signedAt && index === nextUnsignedIndex;
+          const canSign = canCurrentUserSignRole(role);
+          return (
+            <button
+              key={role}
+              type="button"
+              disabled={!canSign}
+              onClick={() => toggleSigned(role)}
+              title={
+                canSign
+                  ? undefined
+                  : role === "leader of initiator"
+                    ? "只能由发起人所在部门的 department_leader 签字。"
+                    : "只能由 department_leader 或 pd_ecr_manager 签字。"
+              }
+              className={`flex min-h-28 flex-col items-start justify-between rounded-md border px-4 py-3 text-left transition ${
+                signedAt
+                  ? "border-emerald-300 bg-emerald-50 text-emerald-900"
+                  : !canSign
+                    ? "cursor-not-allowed border-slate-200 bg-slate-50/70 text-slate-400 opacity-70"
+                    : isCurrent
+                    ? "border-blue-300 bg-blue-50 text-blue-900"
+                    : "border-slate-200 bg-slate-50/70 text-slate-700 hover:border-blue-300 hover:bg-white"
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <span
+                  className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
+                    signedAt
+                      ? "bg-emerald-600 text-white"
+                      : isCurrent
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {signedAt ? <CheckCircle2 className="size-4" /> : index + 1}
+                </span>
+                <span className="text-base font-semibold">{role}</span>
+              </span>
+              <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium">
+                {signedAt
+                  ? `Signed · ${signedAt}`
+                  : !canSign
+                    ? "No permission"
+                    : isCurrent
+                    ? "Current approval"
+                    : "Waiting"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="border-t border-slate-200 bg-white px-5 py-4">
+        <div className="flex flex-col gap-3 rounded-md border border-blue-100 bg-blue-50/70 p-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-blue-900">
+              三方签字完成后进入执行分配
+            </p>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              下一步会把流程推进到 execution assignment，用 1.4
+              执行计划生成执行任务。
+            </p>
+            {executionMessage ? (
+              <p className="mt-2 text-sm font-medium text-blue-800">
+                {executionMessage}
+              </p>
+            ) : null}
+          </div>
+          <Button
+            type="button"
+            disabled={!allSigned || isStartingExecution || executionStarted}
+            onClick={startExecutionAssignment}
+            className={
+              executionStarted
+                ? "bg-emerald-600 hover:bg-emerald-600"
+                : "bg-blue-700 hover:bg-blue-800"
+            }
+          >
+            {executionStarted ? (
+              <CheckCircle2 className="size-4" />
+            ) : (
+              <PlayCircle className="size-4" />
+            )}
+            {executionStarted
+              ? "Execution assignment started"
+              : isStartingExecution
+                ? "Starting..."
+                : "Start execution assignment"}
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export function PdEcrContentBlocks() {
-  const navigate = useNavigate()
-  const result = useMemo(() => loadActiveResult(), [])
-  const [status, setStatus] = useState("Ready")
-  const [activePage, setActivePage] = useState<"page1" | "page2">("page1")
-  const [gateRevision, setGateRevision] = useState(0)
-  const reportUrl = resolvePdEcrAssetUrl(result.reportUrl)
-  const page2Gate = useMemo(() => getPage2Gate(result), [result, gateRevision])
-
-  useEffect(() => {
-    const refreshGate = () => setGateRevision((value) => value + 1)
-    const timer = window.setInterval(refreshGate, 1500)
-    window.addEventListener("storage", refreshGate)
-    window.addEventListener("pd-ecr-impacts-updated", refreshGate)
-    window.addEventListener("pd-ecr-feasibility-updated", refreshGate)
-    return () => {
-      window.clearInterval(timer)
-      window.removeEventListener("storage", refreshGate)
-      window.removeEventListener("pd-ecr-impacts-updated", refreshGate)
-      window.removeEventListener("pd-ecr-feasibility-updated", refreshGate)
-    }
-  }, [])
-
-  const openPage2 = () => {
-    if (page2Gate.locked) {
-      setStatus(`Page 2 is locked: ${page2Gate.blockers[0]}`)
-      return
-    }
-    setActivePage("page2")
-    if (page2Gate.warning) {
-      setStatus(page2Gate.warning)
-    }
-  }
+  const navigate = useNavigate();
+  const result = useMemo(() => loadActiveResult(), []);
+  const [status, setStatus] = useState("Ready");
+  const reportUrl = resolvePdEcrAssetUrl(result.reportUrl);
+  const recordId =
+    result.currentCase?.backendCaseId ||
+    result.draftId ||
+    result.currentCase?.id ||
+    "active-draft";
 
   const exportOnePage = async () => {
-    const backendCaseId = result.currentCase?.backendCaseId
+    const backendCaseId = result.currentCase?.backendCaseId;
     if (backendCaseId) {
       try {
-        const response = await exportPdEcrCase(backendCaseId, "html")
-        const downloadUrl = resolvePdEcrAssetUrl(String(response.url || ""))
+        const response = await exportPdEcrCase(backendCaseId, "html");
+        const downloadUrl = resolvePdEcrAssetUrl(String(response.url || ""));
         if (downloadUrl) {
-          window.open(downloadUrl, "_blank", "noopener,noreferrer")
-          setStatus("Exported official backend PD-ECR HTML report. Use browser Print to save as PDF.")
-          return
+          window.open(downloadUrl, "_blank", "noopener,noreferrer");
+          setStatus(
+            "Exported official backend PD-ECR HTML report. Use browser Print to save as PDF.",
+          );
+          return;
         }
       } catch {
-        setStatus("Backend case export failed. Trying draft/local export instead.")
+        setStatus(
+          "Backend case export failed. Trying draft/local export instead.",
+        );
       }
     }
 
@@ -238,17 +490,19 @@ export function PdEcrContentBlocks() {
             generated_at: new Date().toISOString(),
           },
           "html",
-        )
+        );
         const downloadUrl = resolvePdEcrAssetUrl(
           String(response.download_url || ""),
-        )
+        );
         if (downloadUrl) {
-          window.open(downloadUrl, "_blank", "noopener,noreferrer")
+          window.open(downloadUrl, "_blank", "noopener,noreferrer");
         }
-        setStatus("Exported backend PD-ECR V1 HTML report. Use browser Print to save as PDF.")
-        return
+        setStatus(
+          "Exported backend PD-ECR V1 HTML report. Use browser Print to save as PDF.",
+        );
+        return;
       } catch {
-        setStatus("Backend export failed. Downloaded local HTML instead.")
+        setStatus("Backend export failed. Downloaded local HTML instead.");
       }
     }
 
@@ -259,9 +513,9 @@ export function PdEcrContentBlocks() {
         result,
       }),
       "text/html;charset=utf-8",
-    )
-    setStatus("Exported PD-ECR one-page HTML.")
-  }
+    );
+    setStatus("Exported PD-ECR one-page HTML.");
+  };
 
   const exportExcelCsv = () => {
     const rows = [
@@ -273,7 +527,7 @@ export function PdEcrContentBlocks() {
           typeof value === "string" ? value : JSON.stringify(value),
         ]),
       ),
-    ]
+    ];
 
     const csv = rows
       .map((row) =>
@@ -281,18 +535,18 @@ export function PdEcrContentBlocks() {
           .map((value) => `"${String(value ?? "").replace(/"/g, '""')}"`)
           .join(","),
       )
-      .join("\n")
+      .join("\n");
 
-    downloadText("pd-ecr-modules.csv", csv, "text/csv;charset=utf-8")
-    setStatus("Exported PD-ECR module CSV.")
-  }
+    downloadText("pd-ecr-modules.csv", csv, "text/csv;charset=utf-8");
+    setStatus("Exported PD-ECR module CSV.");
+  };
 
   const copyListSummary = async () => {
     const text = [
       `PD-ECR: ${result.currentCase?.id || result.reportUrl || "Generated content"}`,
       `Source: ${result.source}`,
       ...result.modules.map((module) => `${module.title}: ${module.summary}`),
-    ].join("\n")
+    ].join("\n");
 
     try {
       if (navigator.share) {
@@ -300,42 +554,42 @@ export function PdEcrContentBlocks() {
           title: "PD-ECR list summary",
           text,
           url: window.location.href,
-        })
+        });
       } else {
-        await navigator.clipboard?.writeText(text)
+        await navigator.clipboard?.writeText(text);
       }
-      setStatus("Prepared PD-ECR list summary.")
+      setStatus("Prepared PD-ECR list summary.");
     } catch {
-      await navigator.clipboard?.writeText(text)
-      setStatus("Copied PD-ECR list summary to clipboard.")
+      await navigator.clipboard?.writeText(text);
+      setStatus("Copied PD-ECR list summary to clipboard.");
     }
-  }
+  };
 
   return (
-    <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
+    <div className="page-shell">
       <div className="w-full min-w-0 space-y-6">
-        <header className="rounded-lg border border-stone-200 bg-white px-6 py-5 shadow-sm">
+        <header className="enterprise-panel px-5 py-4">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-semibold tracking-normal text-stone-900">
+                <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
                   {result.currentCase?.id || "PD-ECR AI"}
                 </h1>
-                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+                <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
                   {result.source === "history"
                     ? "Historical case"
                     : "Generated content"}
                 </span>
               </div>
-              <p className="mt-2 text-sm text-stone-500">
-                PD-ECR 内容模块 · 点击展开查看详细内容与签字状态
+              <p className="mt-2 text-sm text-slate-500">
+                PD-ECR 内容模块 · 影响分析、验证计划、执行计划与签核准入
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button
                 variant="outline"
                 onClick={() => navigate({ to: "/pd-ecr/tasks" })}
-                className="bg-white"
+                className="bg-white hover:border-blue-300 hover:bg-blue-50"
               >
                 <ClipboardList className="size-4" />
                 My Tasks
@@ -344,10 +598,11 @@ export function PdEcrContentBlocks() {
                 variant="outline"
                 onClick={() =>
                   navigate({
-                    to: result.source === "history" ? "/pd-ecr/cases" : "/pd-ecr",
+                    to:
+                      result.source === "history" ? "/pd-ecr/cases" : "/pd-ecr",
                   })
                 }
-                className="bg-white"
+                className="bg-white hover:border-blue-300 hover:bg-blue-50"
                 aria-label="返回 PD-ECR Platform"
               >
                 <ArrowLeft className="size-4" />
@@ -364,169 +619,58 @@ export function PdEcrContentBlocks() {
             <div className="flex items-start gap-2">
               <LockKeyhole className="mt-0.5 size-4 shrink-0" />
               <p>
-                Historical cases are opened as read-only references. You can review
-                the preserved content and export/copy references, while workflow
-                assignment and approval actions stay disabled for source records.
+                Historical cases are opened as read-only references. You can
+                review the preserved content and export/copy references, while
+                workflow assignment and approval actions stay disabled for
+                source records.
               </p>
             </div>
           </div>
         )}
 
-        {/* ═══ Page Tabs ═══ */}
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-stone-200 bg-white p-1 shadow-sm">
-          <button
-            type="button"
-            onClick={() => setActivePage("page1")}
-            aria-pressed={activePage === "page1"}
-            className={`flex min-h-11 items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
-              activePage === "page1"
-                ? "bg-stone-900 text-white shadow-sm"
-                : "text-stone-500 hover:bg-stone-50 hover:text-stone-800"
-            }`}
-          >
-            <span className="flex size-6 items-center justify-center rounded-full border border-current text-xs">1</span>
-            <span>变更描述与可行性确认</span>
-          </button>
-          <button
-            type="button"
-            onClick={openPage2}
-            aria-pressed={activePage === "page2"}
-            aria-disabled={page2Gate.locked}
-            className={`flex min-h-11 items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition ${
-              activePage === "page2"
-                ? "bg-stone-900 text-white shadow-sm"
-                : page2Gate.locked
-                  ? "cursor-not-allowed text-stone-400"
-                : "text-stone-500 hover:bg-stone-50 hover:text-stone-800"
-            }`}
-            title={page2Gate.locked ? page2Gate.blockers.join("\n") : undefined}
-          >
-            <span className="flex size-6 items-center justify-center rounded-full border border-current text-xs">2</span>
-            {page2Gate.locked && <LockKeyhole className="size-4" />}
-            <span>验证结果与领导签核</span>
-          </button>
-        </div>
-
-        {page2Gate.locked && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            <div className="flex items-start gap-2">
-              <AlertCircle className="mt-0.5 size-4 shrink-0" />
-              <div>
-                <p className="font-semibold">Page 2 暂未开放</p>
-                <p className="mt-1 text-xs leading-5">
-                  {page2Gate.blockers.slice(0, 2).join("；")}
-                  {page2Gate.blockers.length > 2 ? `；另有 ${page2Gate.blockers.length - 2} 项需要补齐` : ""}
-                </p>
-              </div>
+        <section className="enterprise-panel p-5">
+          <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
+            <div>
+              <p className="enterprise-section-title text-blue-700">Step 2</p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight text-slate-900">
+                Impact, QAC validation and implementation
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 rounded-md border border-blue-100 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700">
+              <Sparkles className="size-4" />
+              <span>
+                {result.source === "history"
+                  ? "Reference view"
+                  : "AI-assisted editable draft"}
+              </span>
             </div>
           </div>
-        )}
+          <p className="mb-4 text-sm text-slate-500" role="status">
+            {status}
+          </p>
 
-        {!page2Gate.locked && page2Gate.warning && (
-          <div className="rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-800">
-            <div className="flex items-start gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
-              <p>{page2Gate.warning}</p>
-            </div>
-          </div>
-        )}
+          <PdEcrModuleAccordion
+            modules={result.modules}
+            caseId={result.currentCase?.backendCaseId}
+            workflowEnabled={result.source !== "history"}
+          />
+        </section>
 
-        {/* ═══ Page 1: Accordion + Feasibility Confirmation ═══ */}
-        {activePage === "page1" && (
-          <>
-            <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-              <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">
-                    Step 1
-                  </p>
-                  <h2 className="text-xl font-bold tracking-normal text-sky-900">
-                    Change description
-                  </h2>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-amber-800">
-                  <Sparkles className="size-4" />
-                  <span>
-                    {result.source === "history"
-                      ? "Reference view"
-                      : "AI-assisted editable draft"}
-                  </span>
-                </div>
-              </div>
-              <p className="mb-4 text-sm text-stone-500" role="status">
-                {status}
-              </p>
-
-              <PdEcrModuleAccordion
-                modules={result.modules}
-                caseId={result.currentCase?.backendCaseId}
-                workflowEnabled={result.source !== "history"}
-              />
-            </section>
-
-            {/* Feasibility Confirmation (Step 2) */}
-            <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-              <div className="mb-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">
-                  Step 2
-                </p>
-                <h2 className="text-xl font-bold tracking-normal text-sky-900">
-                  Change feasibility confirmation
-                </h2>
-              </div>
-              <PdEcrFeasibilityConfirmation
-                module={{
-                  id: "feasibility-confirmation",
-                  title: "变更可行性确认",
-                  subtitle: "Feasibility Confirmation",
-                  summary: "",
-                  data: {},
-                }}
-              />
-            </section>
-          </>
-        )}
-
-        {/* ═══ Page 2: Results (left) + Leader Signing (right) ═══ */}
-        {activePage === "page2" && (
-          <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
-            {/* LEFT: Validation & Implementation Results — same format as Page 1 modules */}
-            <div className="min-w-0 space-y-5">
-              <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
-                <div className="border-b border-stone-200 px-5 py-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">
-                    Step 3
-                  </p>
-                  <h2 className="text-xl font-bold tracking-normal text-sky-900">
-                    QAC & Implementation Results
-                  </h2>
-                </div>
-                <div className="p-5">
-                  <PdEcrResultModuleAccordion modules={result.modules} />
-                </div>
-              </section>
-            </div>
-
-            {/* RIGHT: Leader Signing (sticky) */}
-            <div className="hidden xl:block">
-              <div className="sticky top-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
-                {result.source === "history" ? <HistoricalSigningNotice /> : <PdEcrLeaderSigning />}
-              </div>
-            </div>
-
-            {/* Mobile: Leader Signing below */}
-            <div className="xl:hidden">
-              {result.source === "history" ? <HistoricalSigningNotice /> : <PdEcrLeaderSigning />}
-            </div>
-          </div>
-        )}
+        <LeaderSignOffButtons
+          recordId={recordId}
+          caseId={result.currentCase?.backendCaseId}
+          initiator={compactValue(
+            result.currentCase?.initiator,
+            result.inputSnapshot?.initiator,
+          )}
+        />
 
         <footer className="flex flex-wrap items-center gap-3 pb-2">
           <PdEcrProcessFlowButton />
           <Button
             type="button"
             variant="outline"
-            className="bg-white"
+            className="bg-white hover:border-blue-300 hover:bg-blue-50"
             onClick={exportExcelCsv}
           >
             <Download className="size-4" />
@@ -535,14 +679,14 @@ export function PdEcrContentBlocks() {
           <Button
             type="button"
             variant="outline"
-            className="bg-white"
+            className="bg-white hover:border-blue-300 hover:bg-blue-50"
             onClick={exportOnePage}
           >
             <Download className="size-4" />
             Export official HTML/PDF
           </Button>
           {reportUrl ? (
-            <Button asChild className="ml-auto bg-stone-800 hover:bg-stone-700">
+            <Button asChild className="ml-auto bg-blue-700 hover:bg-blue-800">
               <a href={reportUrl} target="_blank" rel="noreferrer">
                 打开完整报告
               </a>
@@ -550,7 +694,7 @@ export function PdEcrContentBlocks() {
           ) : (
             <Button
               type="button"
-              className="ml-auto bg-stone-800 hover:bg-stone-700"
+              className="ml-auto bg-blue-700 hover:bg-blue-800"
               onClick={copyListSummary}
             >
               <ClipboardList className="size-4" />
@@ -567,5 +711,5 @@ export function PdEcrContentBlocks() {
         </footer>
       </div>
     </div>
-  )
+  );
 }

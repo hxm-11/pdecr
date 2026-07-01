@@ -418,6 +418,28 @@ class PdEcrLeaderReviewTask(PdEcrLeaderReviewTaskBase, table=True):
     updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
 
 
+# ── Manager approval task (P0: initiator → manager approve → AI generate) ──
+
+
+class PdEcrApprovalTaskBase(SQLModel):
+    """Tracks manager approval for a submitted PD-ECR case."""
+    status: str = Field(default="pending", index=True, max_length=32)  # pending | approved | rejected
+    approver_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
+    approver_email: str | None = Field(default=None, max_length=255)
+    approver_name: str | None = Field(default=None, max_length=255)
+    rejection_reason: str | None = Field(default=None, sa_column=Column(Text))
+    approved_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
+
+
+class PdEcrApprovalTask(PdEcrApprovalTaskBase, table=True):
+    __tablename__ = "pd_ecr_approval_task"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    case_id: uuid.UUID = Field(foreign_key="pd_ecr_case.id", index=True, nullable=False)
+    created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+    updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
+
+
 class PdEcrCommentBase(SQLModel):
     target_type: str = Field(default="case", index=True, max_length=32)
     target_id: str | None = Field(default=None, index=True, max_length=255)

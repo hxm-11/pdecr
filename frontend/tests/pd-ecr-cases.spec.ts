@@ -26,6 +26,7 @@ test.beforeEach(async ({ page }) => {
         results: [
           {
             rank: 1,
+            case_no: "LL-0001",
             case_id: "LL-0001",
             dc_no: "DC-0001",
             change_type: "Supplier change",
@@ -40,6 +41,7 @@ test.beforeEach(async ({ page }) => {
           },
           {
             rank: 2,
+            case_no: "LL-0002",
             case_id: "LL-0002",
             dc_no: "DC-0002",
             change_type: "Design optimization",
@@ -54,6 +56,7 @@ test.beforeEach(async ({ page }) => {
           },
           {
             rank: 3,
+            case_no: "LL-0003",
             case_id: "LL-0003",
             dc_no: "DC-0003",
             change_type: "Validation update",
@@ -125,6 +128,7 @@ test("opens PDF history rows as modules and shows rendered template markdown", a
         message: "PDECR_JIE_JIM PDF metadata 检索成功",
         results: [
           {
+            case_no: "PDECR25_084",
             id: "PDECR25_084",
             case_id: "PDECR25_084",
             source_file: "PDECR25_084_JIM_493.pdf",
@@ -175,14 +179,14 @@ test("opens PDF history rows as modules and shows rendered template markdown", a
   await page.goto("/pd-ecr")
   await page.getByLabel("AI Search").fill("压差支架取消卡夹")
   await page.getByRole("button", { name: "Run" }).click()
-  await page.getByRole("button", { name: "Open modules" }).click()
+  await page.getByLabel("Select PDECR25_084").check()
+  await page.getByRole("button", { name: "Edit selected" }).click()
 
   await expect(page).toHaveURL(/\/pd-ecr\/content$/)
-  await page.getByRole("button", { name: /Implementation task plan/ }).click()
-  await expect(
-    page.getByRole("heading", { name: /Step 6 Implementation Plan/ }),
-  ).toBeVisible()
-  await expect(page.getByText("RAG retrieval results")).toBeVisible()
+  await page.getByRole("button", { name: /1\.4 执行计划/ }).click()
+  await expect(page.getByRole("heading", { name: "1.4 执行计划" })).toBeVisible()
+  await expect(page.getByText("Step 6 Implementation Plan")).toBeVisible()
+  await expect(page.getByText("Documents release")).toBeVisible()
 })
 
 test("keeps the PD-ECR platform on one desktop viewport", async ({ page }) => {

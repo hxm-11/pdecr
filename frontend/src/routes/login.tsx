@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { KeyRound, LogIn } from "lucide-react"
-import { useState } from "react"
+import { Building2, KeyRound, LogIn, ShieldCheck, UserRound } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 import { AuthLayout } from "@/components/Common/AuthLayout"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -8,16 +8,54 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PasswordInput } from "@/components/ui/password-input"
-import useAuth from "@/hooks/useAuth"
+import useAuth, { isLoggedIn } from "@/hooks/useAuth"
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
 })
 
-const validationUsers = [
-  "manager-validation@example.com",
-  "assignee-validation@example.com",
-  "leader-validation@example.com",
+const seededPassword = "PdecrPeople123!"
+const defaultAutoLoginEmail = "design.engineer@example.com"
+const shouldAutoLogin =
+  import.meta.env.DEV && import.meta.env.VITE_AUTO_LOGIN === "true"
+
+const peopleAccounts = [
+  {
+    email: "pdecr.manager@example.com",
+    name: "PD-ECR Manager",
+    department: "PM",
+    role: "Full access",
+  },
+  {
+    email: "design.leader@example.com",
+    name: "Design Leader",
+    department: "Design",
+    role: "Department leader",
+  },
+  {
+    email: "design.engineer@example.com",
+    name: "Design Engineer",
+    department: "Design",
+    role: "Department member",
+  },
+  {
+    email: "quality.leader@example.com",
+    name: "Quality Leader",
+    department: "Quality",
+    role: "Department leader",
+  },
+  {
+    email: "quality.engineer@example.com",
+    name: "Quality Engineer",
+    department: "Quality",
+    role: "Department member",
+  },
+  {
+    email: "pdecr.reviewer@example.com",
+    name: "Reviewer",
+    department: "Quality",
+    role: "Reviewer",
+  },
 ]
 
 function loginErrorMessage(error: unknown) {
@@ -36,8 +74,32 @@ function loginErrorMessage(error: unknown) {
 
 function LoginPage() {
   const { loginMutation } = useAuth()
-  const [email, setEmail] = useState("assignee-validation@example.com")
-  const [password, setPassword] = useState("PdecrValidation123!")
+  const autoLoginAttemptedRef = useRef(false)
+  const [email, setEmail] = useState(
+    import.meta.env.VITE_AUTO_LOGIN_EMAIL || defaultAutoLoginEmail,
+  )
+  const [password, setPassword] = useState(
+    import.meta.env.VITE_AUTO_LOGIN_PASSWORD || seededPassword,
+  )
+
+  useEffect(() => {
+    if (!shouldAutoLogin || autoLoginAttemptedRef.current || isLoggedIn()) return
+
+    autoLoginAttemptedRef.current = true
+    loginMutation.mutate({
+      username: email.trim(),
+      password,
+      grant_type: "password",
+      scope: "",
+      client_id: null,
+      client_secret: null,
+    })
+  }, [email, loginMutation, password])
+
+  const selectAccount = (account: (typeof peopleAccounts)[number]) => {
+    setEmail(account.email)
+    setPassword(seededPassword)
+  }
 
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -53,36 +115,49 @@ function LoginPage() {
 
   return (
     <AuthLayout>
-      <form className="space-y-5" onSubmit={submit}>
-        <div className="space-y-2">
-          <div className="flex size-10 items-center justify-center rounded-md bg-amber-100 text-amber-700">
-            <KeyRound className="size-5" />
+      <form className="space-y-6" onSubmit={submit}>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="flex size-11 items-center justify-center rounded-md bg-blue-50 text-blue-700 ring-1 ring-blue-100">
+              <KeyRound className="size-5" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                BOSCH PD-ECR
+              </p>
+              <h1 className="text-2xl font-semibold text-slate-950">
+                Sign in
+              </h1>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground">Sign in</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Use one validation account to test the PD-ECR workflow.
-            </p>
-          </div>
+          <p className="text-sm leading-6 text-slate-600">
+            Select a seeded people account or enter another user to continue.
+          </p>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+        <div className="space-y-2.5">
+          <Label htmlFor="email" className="text-slate-700">
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
             autoComplete="username"
+            className="h-11 bg-white"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+        <div className="space-y-2.5">
+          <Label htmlFor="password" className="text-slate-700">
+            Password
+          </Label>
           <PasswordInput
             id="password"
             autoComplete="current-password"
+            className="h-11 bg-white"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
@@ -100,28 +175,51 @@ function LoginPage() {
 
         <Button
           type="submit"
-          className="w-full"
+          className="h-11 w-full bg-blue-700 text-white hover:bg-blue-800"
           disabled={loginMutation.isPending || !email.trim() || !password}
         >
           <LogIn className="size-4" />
           {loginMutation.isPending ? "Signing in..." : "Sign in"}
         </Button>
 
-        <div className="rounded-md border bg-muted/40 p-3 text-xs text-muted-foreground">
-          <p className="font-medium text-foreground">Validation users</p>
-          <div className="mt-2 space-y-1">
-            {validationUsers.map((user) => (
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+              <ShieldCheck className="size-4 text-blue-700" />
+              Seeded people accounts
+            </div>
+            <span className="rounded bg-white px-2 py-1 text-[11px] font-medium text-slate-600 ring-1 ring-slate-200">
+              {peopleAccounts.length} users
+            </span>
+          </div>
+          <div className="mt-3 grid gap-2">
+            {peopleAccounts.map((account) => (
               <button
-                key={user}
+                key={account.email}
                 type="button"
-                className="block w-full rounded px-2 py-1 text-left hover:bg-background"
-                onClick={() => setEmail(user)}
+                className="group flex w-full items-center gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-blue-200 hover:bg-blue-50"
+                onClick={() => selectAccount(account)}
               >
-                {user}
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600 group-hover:bg-white group-hover:text-blue-700">
+                  <UserRound className="size-4" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium text-slate-900">
+                    {account.name}
+                  </span>
+                  <span className="mt-0.5 flex min-w-0 items-center gap-1.5 text-xs text-slate-500">
+                    <Building2 className="size-3.5 shrink-0" />
+                    <span className="truncate">
+                      {account.department} · {account.role}
+                    </span>
+                  </span>
+                </span>
               </button>
             ))}
           </div>
-          <p className="mt-2">Password: PdecrValidation123!</p>
+          <p className="mt-3 rounded border border-dashed border-slate-300 bg-white px-3 py-2 text-xs text-slate-600">
+            Shared seed password: <span className="font-mono">{seededPassword}</span>
+          </p>
         </div>
       </form>
     </AuthLayout>

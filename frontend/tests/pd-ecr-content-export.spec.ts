@@ -104,13 +104,13 @@ test.beforeEach(async ({ page }) => {
   }, generatedResult)
 })
 
-test("exports generated one-page package with all six V1 modules and sources", async ({
+test("exports generated one-page package with the four MVP modules and sources", async ({
   page,
 }) => {
   await page.goto("/pd-ecr/content")
 
   const downloadPromise = page.waitForEvent("download")
-  await page.getByRole("button", { name: "Export PD-ECR One Page" }).click()
+  await page.getByRole("button", { name: "Export official HTML/PDF" }).click()
   const download = await downloadPromise
   const htmlPath = await download.path()
   expect(htmlPath).toBeTruthy()
@@ -125,9 +125,10 @@ test("exports generated one-page package with all six V1 modules and sources", a
   expect(content).not.toContain("# Step 3.1")
   expect(content).not.toContain("| Field / 字段 |")
   expect(content).toContain("Validation &amp;trial run plan")
-  expect(content).toContain("Validation &amp;Trial run plan result")
-  expect(content).toContain("Implementation task plan")
-  expect(content).toContain("Implementation result")
+  expect(content).toContain("Implementation &amp; Validation")
+  expect(content).toContain("可行性确认")
+  expect(content).not.toContain("Validation &amp;Trial run plan result")
+  expect(content).not.toContain("Implementation result")
   expect(content).not.toContain("pilot_supplier_change.md")
   expect(content).toContain("PDECR26-001")
   expect(content).toContain("Generated supplier change description.")
@@ -146,10 +147,10 @@ test("impact module hides markdown file names and shows stock delivery checklist
   await expect(page.getByText("pilot_supplier_change.md")).toHaveCount(0)
   await expect(page.getByText("# Step 3.1")).toHaveCount(0)
   await expect(page.getByText("| Field / 字段 |")).toHaveCount(0)
+  await expect(page.getByText("Function & Performance will be influenced?")).toBeVisible()
 
-  await expect(
-    page.getByRole("columnheader", { name: /Remark/ }).first(),
-  ).toBeVisible()
+  await page.getByRole("button", { name: /1\.2\.2Stock/ }).click()
+  await expect(page.getByRole("columnheader", { name: /Remark/ }).first()).toBeVisible()
   await expect(
     page.getByText("How to deal with 1st delivery after change?"),
   ).toBeVisible()

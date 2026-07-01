@@ -47,6 +47,7 @@ export type PdEcrPdEcrCaseRow = {
   id: string
   backendCaseId?: string
   sourceDocumentId?: string
+  isHistorical?: boolean
   createDate: string
   productClass: string
   from: string
@@ -68,6 +69,8 @@ export type PdEcrPdEcrCaseRow = {
   reasonForChange?: string
   similarity?: number
   matchedKeywords?: string[]
+  status?: string
+  rawStatus?: string
 }
 
 export type PdEcrApprovalSuggestion = {
@@ -699,6 +702,17 @@ function safePick(record: Record<string, unknown>, keys: string[]): string {
   return ""
 }
 
+function truthyPick(record: Record<string, unknown>, keys: string[]): boolean {
+  for (const key of keys) {
+    const value = record[key]
+    if (value === true) return true
+    if (typeof value === "string" && ["true", "1", "yes"].includes(value.trim().toLowerCase())) {
+      return true
+    }
+  }
+  return false
+}
+
 const approvalFields: { role: string; field: string }[] = [
   { role: "Development", field: "approval_development_person" },
   { role: "Purchasing", field: "approval_purchasing_person" },
@@ -833,6 +847,14 @@ export function normalizePdEcrCaseRow(
 
   const record = item as Record<string, unknown>
   const metadata = (record.metadata || {}) as Record<string, unknown>
+  const isHistorical =
+    truthyPick(record, ["is_historical", "isHistorical"]) ||
+    truthyPick(metadata, ["is_historical", "isHistorical"])
+  const rawStatus =
+    safePick(record, ["raw_status", "rawStatus"]) ||
+    safePick(metadata, ["raw_status", "rawStatus"]) ||
+    safePick(record, ["status", "draft_status", "case_status"]) ||
+    safePick(metadata, ["status", "draft_status", "case_status"])
 
   const id =
     safePick(record, [
@@ -857,6 +879,7 @@ export function normalizePdEcrCaseRow(
   return {
     id,
     backendCaseId: safePick(record, ["id", "backend_case_id", "backendCaseId", "db_id", "uuid"]),
+    isHistorical,
     sourceDocumentId:
       safePick(record, ["source_document_id", "sourceDocumentId", "source_doc_id"]) ||
       safePick(metadata, ["source_document_id", "sourceDocumentId", "source_doc_id"]),
@@ -954,6 +977,8 @@ export function normalizePdEcrCaseRow(
         : Array.isArray(record.matched_fields)
           ? (record.matched_fields as string[])
           : undefined,
+    status: isHistorical ? "historical" : rawStatus,
+    rawStatus,
     link,
   }
 }

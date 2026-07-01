@@ -1,129 +1,124 @@
-import axios from "axios"
+import axios from "axios";
+import { getAccessToken } from "./authToken";
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8000"
+  import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 export function resolvePdEcrAssetUrl(url?: string) {
-  if (!url) return ""
+  if (!url) return "";
 
   if (/^(https?:)?\/\//i.test(url) || url.startsWith("data:")) {
-    return url
+    return url;
   }
 
-  return `${API_BASE_URL.replace(/\/$/, "")}/${url.replace(/^\//, "")}`
-}
-
-function getAccessToken() {
-  return (
-    localStorage.getItem("access_token") ||
-    localStorage.getItem("accessToken") ||
-    localStorage.getItem("token")
-  )
+  return `${API_BASE_URL.replace(/\/$/, "")}/${url.replace(/^\//, "")}`;
 }
 
 const pdEcrApi = axios.create({
   baseURL: API_BASE_URL,
-})
+});
 
 pdEcrApi.interceptors.request.use((config) => {
-  const token = getAccessToken()
+  const token = getAccessToken();
 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  return config
-})
+  return config;
+});
 
 export type PdEcrInput = {
-  dc_no?: string
-  date?: string
-  customer_project?: string
-  mcr_no?: string
-  product_no?: string
-  part_no?: string
-  component_no?: string
-  change_type?: string
-  initiator?: string
-  change_source?: string
-  reason?: string
-  change_reason?: string
-  change_description?: string
-  target_close_date?: string
-  current_design?: string
-  change_proposal?: string
-  remarks?: string
-  top_k?: number
-}
+  title?: string;
+  dc_no?: string;
+  date?: string;
+  customer_project?: string;
+  mcr_no?: string;
+  product_no?: string;
+  part_no?: string;
+  component_no?: string;
+  sample_type?: string;
+  change_type?: string;
+  initiator?: string;
+  change_source?: string;
+  reason?: string;
+  change_reason?: string;
+  change_description?: string;
+  target_close_date?: string;
+  current_design?: string;
+  change_proposal?: string;
+  remarks?: string;
+  top_k?: number;
+};
 
 export type PdEcrModule = {
-  id?: string
-  module_id?: string
-  title?: string
-  subtitle?: string
-  summary?: string
-  description?: string
-  content?: unknown
-  source_cases?: string[]
-  source_files?: string[]
-  needs_human_input?: boolean
-  warnings?: string[]
-  data?: Record<string, unknown>
-}
+  id?: string;
+  module_id?: string;
+  title?: string;
+  subtitle?: string;
+  summary?: string;
+  description?: string;
+  content?: unknown;
+  source_cases?: string[];
+  source_files?: string[];
+  needs_human_input?: boolean;
+  warnings?: string[];
+  data?: Record<string, unknown>;
+};
 
-export type PdEcrModules = Record<string, PdEcrModule | undefined>
+export type PdEcrModules = Record<string, PdEcrModule | undefined>;
 
 export type PdEcrHistoryResponse = {
-  message?: string
-  results_count?: number
-  approval_results_count?: number
-  approval_test_result?: Record<string, unknown>
-  approval_debug_lines?: string[]
-  results?: unknown[]
-  approval_results?: unknown[]
-  related_cases?: string[]
-  matched_files?: string[]
-  rag_context?: string
-  rag_context_preview?: string
-  modules?: PdEcrModules | PdEcrModule[]
-}
+  message?: string;
+  results_count?: number;
+  approval_results_count?: number;
+  approval_test_result?: Record<string, unknown>;
+  approval_debug_lines?: string[];
+  results?: unknown[];
+  approval_results?: unknown[];
+  related_cases?: string[];
+  matched_files?: string[];
+  rag_context?: string;
+  rag_context_preview?: string;
+  modules?: PdEcrModules | PdEcrModule[];
+};
 
-export type PdEcrCaseRecord = Record<string, unknown>
+export type PdEcrCaseRecord = Record<string, unknown>;
 
 export type PdEcrCaseListResponse = {
-  source?: "database" | string
-  cases?: PdEcrCaseRecord[]
-}
+  source?: "database" | string;
+  cases?: PdEcrCaseRecord[];
+};
 
 export type PdEcrKnowledgeBaseStatus = {
-  knowledge_files_on_disk: number
-  knowledge_dir: string
+  knowledge_files_on_disk: number;
+  knowledge_dir: string;
   vector_store: {
-    index_path: string
-    meta_path: string
-    index_exists: boolean
-    meta_exists: boolean
-    index_size_bytes?: number
-    meta_size_bytes?: number
-    index_updated_at?: string | null
-    meta_updated_at?: string | null
-    chunk_files: number
-  }
+    index_path: string;
+    meta_path: string;
+    index_exists: boolean;
+    meta_exists: boolean;
+    index_size_bytes?: number;
+    meta_size_bytes?: number;
+    index_updated_at?: string | null;
+    meta_updated_at?: string | null;
+    chunk_files: number;
+  };
   staged_documents: {
-    pending: number
-    confirmed: number
-    total: number
-    rejected?: number
-    [key: string]: number | undefined
-  }
-  parser_capabilities: Record<string, boolean>
+    pending: number;
+    confirmed: number;
+    total: number;
+    rejected?: number;
+    [key: string]: number | undefined;
+  };
+  parser_capabilities: Record<string, boolean>;
   last_rebuild?: {
-    last_rebuild_at?: string
-    success?: boolean
-    total_documents?: number
-    error?: string
-  } | null
-}
+    last_rebuild_at?: string;
+    success?: boolean;
+    total_documents?: number;
+    error?: string;
+  } | null;
+};
 
 export type PdEcrCaseStatus =
   | "draft"
@@ -140,344 +135,364 @@ export type PdEcrCaseStatus =
   | "approved"
   | "implementation"
   | "closed"
-  | "cancelled"
+  | "cancelled";
 
 export type PdEcrCase = {
-  id: string
-  case_no: string
-  title?: string
-  status: PdEcrCaseStatus
-  source_type?: string
-  is_historical?: boolean
-  dc_no?: string | null
-  mcr_no?: string | null
-  customer_project?: string | null
-  product_no?: string | null
-  part_no?: string | null
-  component_no?: string | null
-  change_type?: string | null
-  sample_type?: string | null
-  initiator?: string | null
-  target_close_date?: string | null
-  created_at?: string | null
-  updated_at?: string | null
-  closed_at?: string | null
-}
+  id: string;
+  case_no: string;
+  title?: string;
+  status: PdEcrCaseStatus;
+  source_type?: string;
+  is_historical?: boolean;
+  dc_no?: string | null;
+  mcr_no?: string | null;
+  customer_project?: string | null;
+  product_no?: string | null;
+  part_no?: string | null;
+  component_no?: string | null;
+  change_type?: string | null;
+  sample_type?: string | null;
+  initiator?: string | null;
+  target_close_date?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  closed_at?: string | null;
+};
 
 export type PdEcrCurrentUser = {
-  id: string
-  email: string
-  is_active?: boolean
-  is_superuser?: boolean
-  full_name?: string | null
-  display_name?: string | null
-  department?: string | null
-  pd_ecr_role?: string | null
-}
+  id: string;
+  email: string;
+  is_active?: boolean;
+  is_superuser?: boolean;
+  full_name?: string | null;
+  display_name?: string | null;
+  department?: string | null;
+  pd_ecr_role?: string | null;
+};
 
 export type PdEcrPermissionFlags = {
-  can_edit?: boolean
-  can_assign?: boolean
-  can_regenerate?: boolean
-  can_send_reminder?: boolean
-  can_review?: boolean
-  can_close?: boolean
-}
+  can_edit?: boolean;
+  can_assign?: boolean;
+  can_regenerate?: boolean;
+  can_send_reminder?: boolean;
+  can_review?: boolean;
+  can_close?: boolean;
+};
 
 export type PdEcrDbModule = {
-  id: string
-  case_id: string
-  module_id: string
-  title?: string
-  content_json?: Record<string, unknown>
-  content_md?: string | null
-  source_cases?: string[]
-  source_files?: string[]
-  needs_human_input?: boolean
-  status?: string
-  version: number
-  assignee_id?: string | null
-  assignee_email?: string | null
-  assignee_name?: string | null
-  department?: string | null
-  due_date?: string | null
-  reminder_policy?: Record<string, unknown>
-  last_reminded_at?: string | null
-  permissions?: PdEcrPermissionFlags
-  data?: Record<string, unknown>
-}
+  id: string;
+  case_id: string;
+  module_id: string;
+  title?: string;
+  content_json?: Record<string, unknown>;
+  content_md?: string | null;
+  source_cases?: string[];
+  source_files?: string[];
+  needs_human_input?: boolean;
+  status?: string;
+  version: number;
+  assignee_id?: string | null;
+  assignee_email?: string | null;
+  assignee_name?: string | null;
+  department?: string | null;
+  due_date?: string | null;
+  reminder_policy?: Record<string, unknown>;
+  last_reminded_at?: string | null;
+  permissions?: PdEcrPermissionFlags;
+  data?: Record<string, unknown>;
+};
 
 export type PdEcrCaseDetailResponse = {
-  case: PdEcrCase
-  modules: PdEcrDbModule[]
-}
+  case: PdEcrCase;
+  modules: PdEcrDbModule[];
+};
 
 export type PdEcrCaseCreatePayload = {
-  case_no: string
-  title?: string
-  status?: PdEcrCaseStatus
-  source_type?: string
-  is_historical?: boolean
-  dc_no?: string
-  mcr_no?: string
-  customer_project?: string
-  product_no?: string
-  part_no?: string
-  change_type?: string
-  sample_type?: string
-  initiator?: string
-  target_close_date?: string
-}
+  case_no: string;
+  title?: string;
+  status?: PdEcrCaseStatus;
+  source_type?: string;
+  is_historical?: boolean;
+  dc_no?: string;
+  mcr_no?: string;
+  customer_project?: string;
+  product_no?: string;
+  part_no?: string;
+  change_type?: string;
+  sample_type?: string;
+  initiator?: string;
+  target_close_date?: string;
+};
 
 export type PdEcrModuleUpdatePayload = {
-  title?: string
-  content_json?: Record<string, unknown>
-  content_md?: string
-  source_cases?: string[]
-  source_files?: string[]
-  needs_human_input?: boolean
-  status?: string
-  expected_version?: number
-}
+  title?: string;
+  content_json?: Record<string, unknown>;
+  content_md?: string;
+  source_cases?: string[];
+  source_files?: string[];
+  needs_human_input?: boolean;
+  status?: string;
+  expected_version?: number;
+};
 
 export type PdEcrImportResponse = {
-  sources_seen: number
-  created_cases: number
-  updated_sources: number
-  skipped_sources: number
-  warnings_by_file: Record<string, string[]>
-}
+  sources_seen: number;
+  created_cases: number;
+  updated_sources: number;
+  skipped_sources: number;
+  warnings_by_file: Record<string, string[]>;
+};
 
 export type PdEcrRetrieveResponse = {
-  query_input: Record<string, unknown>
-  top_k: number
-  results: PdEcrSimilarCase[]
-}
+  query_input: Record<string, unknown>;
+  top_k: number;
+  results: PdEcrSimilarCase[];
+};
 
 export type PdEcrGenerateResponse = {
-  message?: string
-  url?: string
-  draft_id?: string
-  draft_status?: string
-  input_snapshot?: Record<string, unknown>
-  similar_cases?: PdEcrSimilarCase[]
-  generated_at?: string
-  modules?: PdEcrModules | PdEcrModule[]
-  llm_result?: Record<string, unknown>
-  approval_lead_days?: number
-  impact?: string
-  implementation?: string
-  example_of_affected_actions?: string
-  revision_history?: string
-}
+  message?: string;
+  url?: string;
+  draft_id?: string;
+  draft_status?: string;
+  input_snapshot?: Record<string, unknown>;
+  similar_cases?: PdEcrSimilarCase[];
+  generated_at?: string;
+  modules?: PdEcrModules | PdEcrModule[];
+  llm_result?: Record<string, unknown>;
+  approval_lead_days?: number;
+  impact?: string;
+  implementation?: string;
+  example_of_affected_actions?: string;
+  revision_history?: string;
+};
 
 export type PdEcrSimilarCase = {
-  rank?: number
-  case_id?: string
-  dc_no?: string
-  change_type?: string
-  matched_fields?: string[]
-  similarity_score?: number
-  similarity_reason?: string
-  source_file?: string
-  module_summary?: string
-  source_cases?: string[]
-  source_files?: string[]
-  retrieval_mode?: string
-  retrieval_context?: Record<string, unknown>
-}
+  rank?: number;
+  case_id?: string;
+  dc_no?: string;
+  change_type?: string;
+  matched_fields?: string[];
+  similarity_score?: number;
+  similarity_reason?: string;
+  source_file?: string;
+  module_summary?: string;
+  source_cases?: string[];
+  source_files?: string[];
+  retrieval_mode?: string;
+  retrieval_context?: Record<string, unknown>;
+};
 
 export type PdEcrModuleDraftPayload = {
-  record_id: string
-  module_id: string
-  data: Record<string, unknown>
-  title?: string
-}
+  record_id: string;
+  module_id: string;
+  data: Record<string, unknown>;
+  title?: string;
+};
 
 export type PdEcrModuleDraftResponse = {
-  id?: string
-  record_id: string
-  module_id: string
-  title?: string
-  data: Record<string, unknown> | null
-  created_at?: string | null
-  updated_at?: string | null
-}
+  id?: string;
+  record_id: string;
+  module_id: string;
+  title?: string;
+  data: Record<string, unknown> | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+};
 
 export type PdEcrDraftListItem = {
-  record_id: string
-  module_id: string
-  title: string
-  data: Record<string, unknown> | null
-  created_at?: string | null
-  updated_at?: string | null
-}
+  record_id: string;
+  module_id: string;
+  title: string;
+  data: Record<string, unknown> | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+};
 
 export type PdEcrDraftListResponse = {
-  drafts: PdEcrDraftListItem[]
-}
+  drafts: PdEcrDraftListItem[];
+};
 
 export type PdEcrGeneratedCaseResponse = {
-  case: PdEcrCase
-  modules: PdEcrDbModule[]
-  draft_id?: string
-  draft_status?: string
-  warnings?: string[]
-  redirect_to?: string
-}
+  case: PdEcrCase;
+  modules: PdEcrDbModule[];
+  draft_id?: string;
+  draft_status?: string;
+  warnings?: string[];
+  redirect_to?: string;
+};
 
 export type PdEcrGeneratedModulePreview = {
-  case_id: string
-  module_id: string
-  title?: string
-  content_md: string
-  content_json?: Record<string, unknown>
-  source_cases?: string[]
-  source_files?: string[]
-  needs_human_input?: boolean
-}
+  case_id: string;
+  module_id: string;
+  title?: string;
+  content_md: string;
+  content_json?: Record<string, unknown>;
+  source_cases?: string[];
+  source_files?: string[];
+  needs_human_input?: boolean;
+};
 
 export type PdEcrChangeDescriptionDraftInput = {
-  source?: string
-  reason?: string
-  department?: string
-  initiator?: string
-  date?: string
-  product?: string
-  customer?: string
-  partNumber?: string
-  title?: string
-  changeSummary?: string
-  notChange?: string
-  departments?: string[]
-}
+  source?: string;
+  reason?: string;
+  department?: string;
+  initiator?: string;
+  date?: string;
+  product?: string;
+  customer?: string;
+  partNumber?: string;
+  title?: string;
+  changeSummary?: string;
+  notChange?: string;
+  departments?: string[];
+};
 
 export type PdEcrGenerateFromChangeDescriptionResponse = {
-  input_snapshot?: Record<string, unknown>
-  similar_cases?: PdEcrSimilarCase[]
-  generated_module_ids: string[]
-  modules: PdEcrModule[]
-}
+  input_snapshot?: Record<string, unknown>;
+  similar_cases?: PdEcrSimilarCase[];
+  generated_module_ids: string[];
+  modules: PdEcrModule[];
+};
 
 export type PdEcrModuleAssignmentPayload = {
-  assignee_id?: string | null
-  assignee_email?: string | null
-  assignee_name?: string | null
-  department?: string | null
-  due_date?: string | null
-  reminder_policy?: Record<string, unknown>
-  send_assignment_email?: boolean
-}
+  assignee_id?: string | null;
+  assignee_email?: string | null;
+  assignee_name?: string | null;
+  department?: string | null;
+  due_date?: string | null;
+  reminder_policy?: Record<string, unknown>;
+  send_assignment_email?: boolean;
+};
+
+export type PdEcrTaskTarget = {
+  task_type?: string | null;
+  task_bucket?: string | null;
+  module_id?: string | null;
+  field_path?: string | null;
+  anchor_id?: string | null;
+  action_url?: string | null;
+};
 
 export type PdEcrDepartmentWorkflowTask = {
-  id: string
-  case_id: string
-  department: string
-  status: string
-  assignee_id?: string | null
-  assignee_email?: string | null
-  assignee_name?: string | null
-  impact_result?: string | null
-  impact_remark?: string | null
-  action_required?: string | null
-  confirmed_by_id?: string | null
-  confirmed_by_name?: string | null
-  confirmed_at?: string | null
-  due_date?: string | null
-}
+  id: string;
+  case_id: string;
+  department: string;
+  status: string;
+  assignee_id?: string | null;
+  assignee_email?: string | null;
+  assignee_name?: string | null;
+  impact_result?: string | null;
+  impact_remark?: string | null;
+  action_required?: string | null;
+  confirmed_by_id?: string | null;
+  confirmed_by_name?: string | null;
+  confirmed_at?: string | null;
+  due_date?: string | null;
+  case?: PdEcrCase | null;
+  case_exists?: boolean;
+} & PdEcrTaskTarget;
 
 export type PdEcrDepartmentVisibility = {
-  id: string
-  case_id: string
-  department: string
-  visible_to_department: boolean
-  published_by_id?: string | null
-  published_at?: string | null
-}
+  id: string;
+  case_id: string;
+  department: string;
+  visible_to_department: boolean;
+  published_by_id?: string | null;
+  published_at?: string | null;
+};
 
 export type PdEcrExecutionWorkflowTask = {
-  id: string
-  case_id: string
-  case?: PdEcrCase | null
-  case_exists?: boolean
-  checklist_row_id: string
-  department: string
-  description: string
-  status: "pending_confirmation" | "confirmed" | "in_progress" | "completed" | "changes_requested" | string
-  assignee_id?: string | null
-  assignee_email?: string | null
-  assignee_name?: string | null
-  due_date?: string | null
-  execution_result?: string | null
-  execution_note?: string | null
-  evidence_note?: string | null
-  completed_by_id?: string | null
-  completed_by_name?: string | null
-  completed_at?: string | null
-  review_comment?: string | null
-}
+  id: string;
+  case_id: string;
+  case?: PdEcrCase | null;
+  case_exists?: boolean;
+  checklist_row_id: string;
+  department: string;
+  description: string;
+  status:
+    | "pending_confirmation"
+    | "confirmed"
+    | "in_progress"
+    | "completed"
+    | "changes_requested"
+    | string;
+  assignee_id?: string | null;
+  assignee_email?: string | null;
+  assignee_name?: string | null;
+  due_date?: string | null;
+  execution_result?: string | null;
+  execution_note?: string | null;
+  evidence_note?: string | null;
+  completed_by_id?: string | null;
+  completed_by_name?: string | null;
+  completed_at?: string | null;
+  review_comment?: string | null;
+} & PdEcrTaskTarget;
 
 export type PdEcrExecutionAssignmentInput = {
-  checklist_row_id: string
-  department: string
-  description: string
-  assignee_id?: string | null
-  assignee_email: string
-  assignee_name?: string | null
-  due_date?: string | null
-}
+  checklist_row_id: string;
+  department: string;
+  description: string;
+  assignee_id?: string | null;
+  assignee_email: string;
+  assignee_name?: string | null;
+  due_date?: string | null;
+};
 
 export type PdEcrLeaderReviewWorkflowTask = {
-  id: string
-  case_id: string
-  case?: PdEcrCase | null
-  case_exists?: boolean
-  department: string
-  status: string
-  reviewer_id?: string | null
-  reviewer_email?: string | null
-  reviewer_name?: string | null
-  review_comment?: string | null
-  signature_name?: string | null
-  reviewed_at?: string | null
-}
+  id: string;
+  case_id: string;
+  case?: PdEcrCase | null;
+  case_exists?: boolean;
+  department: string;
+  status: string;
+  reviewer_id?: string | null;
+  reviewer_email?: string | null;
+  reviewer_name?: string | null;
+  review_comment?: string | null;
+  signature_name?: string | null;
+  reviewed_at?: string | null;
+} & PdEcrTaskTarget;
 
 export type PdEcrWorkflowState = {
-  case: PdEcrCase
-  department_visibility: PdEcrDepartmentVisibility[]
-  execution_tasks: PdEcrExecutionWorkflowTask[]
-  department_tasks: PdEcrDepartmentWorkflowTask[]
-  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
-}
+  case: PdEcrCase;
+  department_visibility: PdEcrDepartmentVisibility[];
+  execution_tasks: PdEcrExecutionWorkflowTask[];
+  department_tasks: PdEcrDepartmentWorkflowTask[];
+  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[];
+};
 
 export type PdEcrMyWorkflowTasks = {
-  execution_tasks: PdEcrExecutionWorkflowTask[]
-  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[]
-}
+  execution_tasks: PdEcrExecutionWorkflowTask[];
+  leader_review_tasks: PdEcrLeaderReviewWorkflowTask[];
+  approval_tasks?: PdEcrApprovalTask[];
+  submitted_approval_tasks?: PdEcrApprovalTask[];
+  department_tasks?: PdEcrDepartmentWorkflowTask[];
+};
 
 export type PdEcrWorkflowSubmitPayload = {
-  selected_departments: string[]
+  selected_departments: string[];
   assignees: Record<
     string,
     {
-      assignee_id?: string | null
-      assignee_email: string
-      assignee_name?: string | null
+      assignee_id?: string | null;
+      assignee_email: string;
+      assignee_name?: string | null;
     }
-  >
-}
+  >;
+};
 
 export type PdEcrDepartmentTaskConfirmPayload = {
-  impact_result: string
-  impact_remark?: string | null
-  action_required?: string | null
-}
+  impact_result: string;
+  impact_remark?: string | null;
+  action_required?: string | null;
+};
 
 export type PdEcrLeaderTaskReviewPayload = {
-  decision: "approved" | "rejected" | "changes_requested"
-  review_comment?: string | null
-  signature_name?: string | null
-}
+  decision: "approved" | "rejected" | "changes_requested";
+  review_comment?: string | null;
+  signature_name?: string | null;
+};
 
 export async function searchPdEcrHistory(
   data: PdEcrInput,
@@ -485,20 +500,20 @@ export async function searchPdEcrHistory(
   const res = await pdEcrApi.post<PdEcrHistoryResponse>(
     "/api/v1/pd-ecr/history/search",
     data,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function listPdEcrCases(): Promise<PdEcrCaseListResponse> {
-  const res = await pdEcrApi.get<PdEcrCaseListResponse>("/api/v1/pd-ecr/cases")
-  return res.data
+  const res = await pdEcrApi.get<PdEcrCaseListResponse>("/api/v1/pd-ecr/cases");
+  return res.data;
 }
 
 export async function getPdEcrKnowledgeBaseStatus(): Promise<PdEcrKnowledgeBaseStatus> {
   const res = await pdEcrApi.get<PdEcrKnowledgeBaseStatus>(
     "/api/v1/pd-ecr/knowledge-base/status",
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function createPdEcrCase(
@@ -507,8 +522,8 @@ export async function createPdEcrCase(
   const res = await pdEcrApi.post<PdEcrCaseDetailResponse>(
     "/api/v1/pd-ecr/cases",
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function getPdEcrCase(
@@ -516,13 +531,33 @@ export async function getPdEcrCase(
 ): Promise<PdEcrCaseDetailResponse> {
   const res = await pdEcrApi.get<PdEcrCaseDetailResponse>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`,
-  )
-  return res.data
+  );
+  return res.data;
+}
+
+export type PdEcrMember = {
+  id: string;
+  display_name: string | null;
+  email: string;
+  department: string | null;
+  pd_ecr_role: string | null;
+};
+
+export async function searchPdEcrMembers(
+  department: string,
+  q?: string,
+): Promise<PdEcrMember[]> {
+  const params = new URLSearchParams({ department });
+  if (q) params.set("q", q);
+  const res = await pdEcrApi.get<{ members: PdEcrMember[] }>(
+    `/api/v1/pd-ecr/members/search?${params.toString()}`,
+  );
+  return res.data.members;
 }
 
 export async function getPdEcrCurrentUser(): Promise<PdEcrCurrentUser> {
-  const res = await pdEcrApi.get<PdEcrCurrentUser>("/api/v1/users/me")
-  return res.data
+  const res = await pdEcrApi.get<PdEcrCurrentUser>("/api/v1/users/me");
+  return res.data;
 }
 
 export async function updatePdEcrCase(
@@ -532,26 +567,36 @@ export async function updatePdEcrCase(
   const res = await pdEcrApi.patch<{ case: PdEcrCase }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function deletePdEcrCase(
   caseId: string,
 ): Promise<{ deleted: boolean; id: string; case_no: string }> {
-  const res = await pdEcrApi.delete<{ deleted: boolean; id: string; case_no: string }>(
-    `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`,
-  )
-  return res.data
+  const res = await pdEcrApi.delete<{
+    deleted: boolean;
+    id: string;
+    case_no: string;
+  }>(`/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}`);
+  return res.data;
 }
 
 export async function deletePdEcrSourceDocument(
   sourceDocumentId: string,
-): Promise<{ deleted: boolean; id: string; source_file: string; case_id?: string | null }> {
-  const res = await pdEcrApi.delete<{ deleted: boolean; id: string; source_file: string; case_id?: string | null }>(
-    `/api/v1/pd-ecr/source-documents/${encodeURIComponent(sourceDocumentId)}`,
-  )
-  return res.data
+): Promise<{
+  deleted: boolean;
+  id: string;
+  source_file: string;
+  case_id?: string | null;
+}> {
+  const res = await pdEcrApi.delete<{
+    deleted: boolean;
+    id: string;
+    source_file: string;
+    case_id?: string | null;
+  }>(`/api/v1/pd-ecr/source-documents/${encodeURIComponent(sourceDocumentId)}`);
+  return res.data;
 }
 
 export async function transitionPdEcrCase(
@@ -561,8 +606,8 @@ export async function transitionPdEcrCase(
   const res = await pdEcrApi.post<{ case: PdEcrCase }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/transition`,
     { status },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function updatePdEcrModule(
@@ -573,8 +618,8 @@ export async function updatePdEcrModule(
   const res = await pdEcrApi.patch<{ module: PdEcrDbModule }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function importHistoricalPdEcrCases(
@@ -583,26 +628,24 @@ export async function importHistoricalPdEcrCases(
   const res = await pdEcrApi.post<PdEcrImportResponse>(
     "/api/v1/pd-ecr/import/historical",
     { limit },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export type PdEcrUploadResult = {
-  status: string
-  filename: string
-  case_id: string
-  case_no: string
-  is_new: boolean
-  parsed_by: string
-  metadata: Record<string, unknown>
-  content_preview: string
-}
+  status: string;
+  filename: string;
+  case_id: string;
+  case_no: string;
+  is_new: boolean;
+  parsed_by: string;
+  metadata: Record<string, unknown>;
+  content_preview: string;
+};
 
-export async function uploadPdEcrFile(
-  file: File,
-): Promise<PdEcrUploadResult> {
-  const formData = new FormData()
-  formData.append("file", file)
+export async function uploadPdEcrFile(file: File): Promise<PdEcrUploadResult> {
+  const formData = new FormData();
+  formData.append("file", file);
 
   const res = await pdEcrApi.post<PdEcrUploadResult>(
     "/api/v1/pd-ecr/cases/upload-file",
@@ -610,8 +653,8 @@ export async function uploadPdEcrFile(
     {
       headers: { "Content-Type": "multipart/form-data" },
     },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function retrievePdEcrSimilarCases(
@@ -621,19 +664,23 @@ export async function retrievePdEcrSimilarCases(
   const res = await pdEcrApi.post<PdEcrRetrieveResponse>(
     "/api/v1/pd-ecr/retrieve",
     { input, top_k: topK },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function createPdEcrRequest(
   input: Record<string, unknown>,
-): Promise<{ request_id: string; input: Record<string, unknown>; missing_fields: string[] }> {
+): Promise<{
+  request_id: string;
+  input: Record<string, unknown>;
+  missing_fields: string[];
+}> {
   const res = await pdEcrApi.post<{
-    request_id: string
-    input: Record<string, unknown>
-    missing_fields: string[]
-  }>("/api/v1/pd-ecr/requests", input)
-  return res.data
+    request_id: string;
+    input: Record<string, unknown>;
+    missing_fields: string[];
+  }>("/api/v1/pd-ecr/requests", input);
+  return res.data;
 }
 
 export async function generatePdEcrDraft(
@@ -643,8 +690,8 @@ export async function generatePdEcrDraft(
   const res = await pdEcrApi.post<PdEcrGenerateResponse>(
     "/api/v1/pd-ecr/generate-draft",
     { input, similar_cases: similarCases },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function generatePdEcrFromChangeDescription(
@@ -654,8 +701,8 @@ export async function generatePdEcrFromChangeDescription(
   const res = await pdEcrApi.post<PdEcrGenerateFromChangeDescriptionResponse>(
     "/api/v1/pd-ecr/generate-from-change-description",
     { change_description: changeDescription, top_k: topK },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function generatePdEcrEditableCase(
@@ -665,8 +712,8 @@ export async function generatePdEcrEditableCase(
   const res = await pdEcrApi.post<PdEcrGeneratedCaseResponse>(
     "/api/v1/pd-ecr/cases/generate-from-ai",
     { input, similar_cases: similarCases },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function regeneratePdEcrModule(
@@ -677,8 +724,8 @@ export async function regeneratePdEcrModule(
   const res = await pdEcrApi.post<PdEcrGeneratedModulePreview>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}/regenerate`,
     { instruction },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function applyGeneratedPdEcrModule(
@@ -690,8 +737,8 @@ export async function applyGeneratedPdEcrModule(
   const res = await pdEcrApi.post<{ module: PdEcrDbModule }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}/apply-generated`,
     { generated, expected_version: expectedVersion },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function assignPdEcrModule(
@@ -699,17 +746,17 @@ export async function assignPdEcrModule(
   moduleId: string,
   payload: PdEcrModuleAssignmentPayload,
 ): Promise<{
-  module: PdEcrDbModule
-  notification?: Record<string, unknown> | null
+  module: PdEcrDbModule;
+  notification?: Record<string, unknown> | null;
 }> {
   const res = await pdEcrApi.patch<{
-    module: PdEcrDbModule
-    notification?: Record<string, unknown> | null
+    module: PdEcrDbModule;
+    notification?: Record<string, unknown> | null;
   }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}/assignment`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function sendPdEcrModuleReminder(
@@ -718,8 +765,8 @@ export async function sendPdEcrModuleReminder(
 ): Promise<{ notification: Record<string, unknown> }> {
   const res = await pdEcrApi.post<{ notification: Record<string, unknown> }>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/modules/${encodeURIComponent(moduleId)}/send-reminder`,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function getPdEcrWorkflow(
@@ -727,8 +774,8 @@ export async function getPdEcrWorkflow(
 ): Promise<PdEcrWorkflowState> {
   const res = await pdEcrApi.get<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow`,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function submitPdEcrWorkflow(
@@ -738,8 +785,8 @@ export async function submitPdEcrWorkflow(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/submit`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function publishPdEcrDepartments(
@@ -749,8 +796,8 @@ export async function publishPdEcrDepartments(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/publish-departments`,
     { selected_departments: selectedDepartments },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function assignPdEcrExecution(
@@ -760,8 +807,8 @@ export async function assignPdEcrExecution(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/workflow/assign-execution`,
     { assignments },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function confirmPdEcrExecutionAssignment(
@@ -769,19 +816,23 @@ export async function confirmPdEcrExecutionAssignment(
 ): Promise<PdEcrWorkflowState> {
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/confirm-assignment`,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function completePdEcrExecutionTask(
   taskId: string,
-  payload: { execution_result: string; execution_note?: string; evidence_note?: string },
+  payload: {
+    execution_result: string;
+    execution_note?: string;
+    evidence_note?: string;
+  },
 ): Promise<PdEcrWorkflowState> {
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/complete`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function requestPdEcrExecutionChanges(
@@ -791,15 +842,81 @@ export async function requestPdEcrExecutionChanges(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/execution-tasks/${encodeURIComponent(taskId)}/request-changes`,
     { comment },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function listMyPdEcrWorkflowTasks(): Promise<PdEcrMyWorkflowTasks> {
   const res = await pdEcrApi.get<PdEcrMyWorkflowTasks>(
     "/api/v1/pd-ecr/workflow/my-tasks",
-  )
-  return res.data
+  );
+  return res.data;
+}
+
+export type PdEcrApprovalTask = {
+  id: string;
+  case_id: string;
+  status: string;
+  approver_id: string | null;
+  approver_email: string | null;
+  approver_name: string | null;
+  rejection_reason: string | null;
+  approved_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  case?: PdEcrCase | null;
+  case_exists?: boolean;
+} & PdEcrTaskTarget;
+
+export type PdEcrSubmitForApprovalPayload = {
+  title: string;
+  initiator?: string;
+  customer_project?: string;
+  product_no?: string;
+  part_no?: string;
+  target_close_date?: string;
+  form_data?: Record<string, unknown>;
+  approver_email?: string;
+  approver_name?: string;
+};
+
+export async function submitPdEcrForApproval(
+  payload: PdEcrSubmitForApprovalPayload,
+): Promise<{
+  case: PdEcrCase;
+  approval_task: {
+    id: string;
+    status: string;
+    approver_email: string | null;
+    approver_name: string | null;
+  };
+}> {
+  const res = await pdEcrApi.post(
+    "/api/v1/pd-ecr/cases/submit-for-approval",
+    payload,
+  );
+  return res.data;
+}
+
+export async function approvePdEcrCase(
+  caseId: string,
+): Promise<{ case: PdEcrCase; message: string }> {
+  const res = await pdEcrApi.post(
+    `/api/v1/pd-ecr/cases/${caseId}/manager-approve`,
+    {},
+  );
+  return res.data;
+}
+
+export async function rejectPdEcrCase(
+  caseId: string,
+  rejectionReason?: string,
+): Promise<{ case: PdEcrCase; message: string }> {
+  const res = await pdEcrApi.post(
+    `/api/v1/pd-ecr/cases/${caseId}/manager-reject`,
+    { rejection_reason: rejectionReason },
+  );
+  return res.data;
 }
 
 export async function confirmPdEcrDepartmentTask(
@@ -809,8 +926,8 @@ export async function confirmPdEcrDepartmentTask(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/department-tasks/${encodeURIComponent(taskId)}/confirm`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function requestPdEcrDepartmentChanges(
@@ -820,8 +937,8 @@ export async function requestPdEcrDepartmentChanges(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/department-tasks/${encodeURIComponent(taskId)}/request-changes`,
     { comment },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function reviewPdEcrLeaderTask(
@@ -831,8 +948,8 @@ export async function reviewPdEcrLeaderTask(
   const res = await pdEcrApi.post<PdEcrWorkflowState>(
     `/api/v1/pd-ecr/workflow/leader-tasks/${encodeURIComponent(taskId)}/review`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function exportPdEcrDraft(
@@ -843,8 +960,8 @@ export async function exportPdEcrDraft(
   const res = await pdEcrApi.post<Record<string, unknown>>(
     "/api/v1/pd-ecr/export",
     { draft_id: draftId, draft, format },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function exportPdEcrCase(
@@ -855,17 +972,17 @@ export async function exportPdEcrCase(
     "/api/v1/pd-ecr/export",
     { format },
     { params: { case_id: caseId } },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export function buildPdEcrCollaborationUrl(caseId: string, userLabel: string) {
-  const wsBase = API_BASE_URL.replace(/^http/i, "ws").replace(/\/$/, "")
+  const wsBase = API_BASE_URL.replace(/^http/i, "ws").replace(/\/$/, "");
   const params = new URLSearchParams({
     session_id: crypto.randomUUID(),
     user_label: userLabel,
-  })
-  return `${wsBase}/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/collaboration?${params}`
+  });
+  return `${wsBase}/api/v1/pd-ecr/cases/${encodeURIComponent(caseId)}/collaboration?${params}`;
 }
 
 export async function generatePdEcrReport(
@@ -874,8 +991,8 @@ export async function generatePdEcrReport(
   const res = await pdEcrApi.post<PdEcrGenerateResponse>(
     "/api/v1/pd-ecr/generate-report",
     data,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function getPdEcrModuleDraft(
@@ -890,8 +1007,8 @@ export async function getPdEcrModuleDraft(
         module_id: moduleId,
       },
     },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function savePdEcrModuleDraft(
@@ -900,8 +1017,8 @@ export async function savePdEcrModuleDraft(
   const res = await pdEcrApi.post<PdEcrModuleDraftResponse>(
     "/api/v1/pd-ecr/module-drafts",
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function listPdEcrModuleDrafts(
@@ -910,8 +1027,8 @@ export async function listPdEcrModuleDrafts(
   const res = await pdEcrApi.get<PdEcrDraftListResponse>(
     "/api/v1/pd-ecr/module-drafts/list",
     { params: recordId ? { record_id: recordId } : {} },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function deletePdEcrModuleDraft(
@@ -921,68 +1038,68 @@ export async function deletePdEcrModuleDraft(
   const res = await pdEcrApi.delete<{ deleted: boolean }>(
     "/api/v1/pd-ecr/module-drafts",
     { params: { record_id: recordId, module_id: moduleId } },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 // ── Staged Document Review Flow ──
 
 export type PdEcrStagedSection = {
-  index: number
-  heading: string
-  level: number
-  content: string
-  page_no: number
-}
+  index: number;
+  heading: string;
+  level: number;
+  content: string;
+  page_no: number;
+};
 
 export type PdEcrStagedTable = {
-  index: number
-  caption: string
-  headers: string[]
-  rows: string[][]
-  page_no: number
-}
+  index: number;
+  caption: string;
+  headers: string[];
+  rows: string[][];
+  page_no: number;
+};
 
 export type PdEcrStagedDocument = {
-  id: string
-  status: string
-  original_filename: string
-  file_type: string
-  preview_pdf_url: string | null
-  parsed_text: string
-  metadata: Record<string, unknown>
-  sections: PdEcrStagedSection[]
-  tables: PdEcrStagedTable[]
-  created_at: string | null
-  updated_at: string | null
-}
+  id: string;
+  status: string;
+  original_filename: string;
+  file_type: string;
+  preview_pdf_url: string | null;
+  parsed_text: string;
+  metadata: Record<string, unknown>;
+  sections: PdEcrStagedSection[];
+  tables: PdEcrStagedTable[];
+  created_at: string | null;
+  updated_at: string | null;
+};
 
 export type PdEcrStagedDocumentUpdate = {
-  metadata_json?: Record<string, unknown>
-  sections_json?: PdEcrStagedSection[]
-  tables_json?: PdEcrStagedTable[]
-}
+  metadata_json?: Record<string, unknown>;
+  sections_json?: PdEcrStagedSection[];
+  tables_json?: PdEcrStagedTable[];
+};
 
 export type PdEcrConfirmResponse = {
-  status: string
-  case_id: string
-  case_no: string
-  is_new_case: boolean
-  chunks_created: number
-  indexing: { pending: boolean; message: string }
-}
+  status: string;
+  case_id: string;
+  case_no: string;
+  is_new_case: boolean;
+  chunks_created: number;
+  indexing: { pending: boolean; message: string };
+};
 
 export async function uploadAndStageDocument(
   file: File,
 ): Promise<PdEcrStagedDocument> {
-  const formData = new FormData()
-  formData.append("file", file)
+  const formData = new FormData();
+  formData.append("file", file);
   const res = await pdEcrApi.post<PdEcrStagedDocument>(
     "/api/v1/pd-ecr/documents/upload",
     formData,
     { headers: { "Content-Type": "multipart/form-data" } },
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function getStagedDocument(
@@ -990,8 +1107,8 @@ export async function getStagedDocument(
 ): Promise<PdEcrStagedDocument> {
   const res = await pdEcrApi.get<PdEcrStagedDocument>(
     `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}`,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function updateStagedDocument(
@@ -1001,8 +1118,8 @@ export async function updateStagedDocument(
   const res = await pdEcrApi.patch<PdEcrStagedDocument>(
     `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}`,
     payload,
-  )
-  return res.data
+  );
+  return res.data;
 }
 
 export async function confirmStagedDocument(
@@ -1010,6 +1127,6 @@ export async function confirmStagedDocument(
 ): Promise<PdEcrConfirmResponse> {
   const res = await pdEcrApi.post<PdEcrConfirmResponse>(
     `/api/v1/pd-ecr/documents/${encodeURIComponent(docId)}/confirm`,
-  )
-  return res.data
+  );
+  return res.data;
 }

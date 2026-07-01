@@ -1,14 +1,7 @@
 import axios from "axios"
+import { getAccessToken } from "./authToken"
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"
-
-function getAccessToken() {
-  return (
-    localStorage.getItem("access_token") ||
-    localStorage.getItem("accessToken") ||
-    localStorage.getItem("token")
-  )
-}
 
 const projectApi = axios.create({
   baseURL: API_BASE_URL,

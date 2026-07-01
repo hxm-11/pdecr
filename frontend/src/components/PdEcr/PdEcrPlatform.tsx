@@ -1,131 +1,273 @@
-import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
+  ClipboardList,
   Database,
   FolderKanban,
-  Search,
   Sparkles,
   Upload,
-} from "lucide-react"
-import { type ReactNode, useEffect, useId, useRef, useState } from "react"
+} from "lucide-react";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import useAuth from "@/hooks/useAuth";
 import {
+  approvePdEcrCase,
   createPdEcrCase,
   generatePdEcrReport,
+  getPdEcrCase,
+  rejectPdEcrCase,
+  submitPdEcrForApproval,
+  type PdEcrCaseDetailResponse,
   type PdEcrInput,
   type PdEcrModule,
-  searchPdEcrHistory,
-  uploadAndStageDocument,
-} from "@/lib/pdEcrApi"
-import { departmentOptions } from "./PdEcrModuleDetail"
-import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
+} from "@/lib/pdEcrApi";
+import { departmentOptions } from "./PdEcrModuleDetail";
+import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow";
 import {
   buildGeneratedResult,
-  buildHistoryResult,
   CHANGE_SOURCE_OPTIONS,
-  fallbackHistoryModules,
-  loadActiveResult,
   loadGeneratedResult,
-  loadHistoryResult,
-  moduleOrder,
   saveGeneratedResult,
-  saveHistoryResult,
-} from "./pdEcrState"
+} from "./pdEcrState";
+
+const SAMPLE_TYPE_OPTIONS = ["A", "B", "C", "FD"];
+
+type ChangeAttachment = {
+  name: string;
+  type: string;
+  size: number;
+  previewUrl?: string;
+};
 
 type NewChangeForm = {
-  product: string
-  customer: string
-  source: string
-  sourceNote: string
-  reason: string
-  department: string
-  initiator: string
-  date: string
-  partNumber: string
-  description: string
-  targetCloseDate: string
-  departments: string[]
-}
-
-const defaultSearchText = ""
+  title: string;
+  product: string;
+  productNo: string;
+  customer: string;
+  source: string;
+  sourceNote: string;
+  reason: string;
+  initiator: string;
+  date: string;
+  partNumber: string;
+  sampleType: string;
+  description: string;
+  targetCloseDate: string;
+  departments: string[];
+  beforeAttachmentNote: string;
+  afterAttachmentNote: string;
+  initiatorConfirmed: boolean;
+  leaderConfirmed: boolean;
+};
 
 const defaultNewChange: NewChangeForm = {
+  title: "",
   product: "",
+  productNo: "",
   customer: "",
   source: "",
   sourceNote: "",
   reason: "",
-  department: "",
   initiator: "",
   date: new Date().toISOString().slice(0, 10),
   partNumber: "",
+  sampleType: "",
   description: "",
   targetCloseDate: "",
   departments: [],
+  beforeAttachmentNote: "",
+  afterAttachmentNote: "",
+  initiatorConfirmed: false,
+  leaderConfirmed: false,
+};
+
+type PdEcrActor = {
+  email?: string | null;
+  full_name?: string | null;
+  display_name?: string | null;
+  department?: string | null;
+  pd_ecr_role?: string | null;
+};
+
+function normalizeActorText(value?: string | null) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
-function buildSearchInput(query: string): PdEcrInput {
-  return {
-    dc_no: "PD-ECR-search",
-    date: new Date().toISOString().slice(0, 10),
-    customer_project: "PD-ECR Platform",
-    reason: query,
-    change_proposal: query,
-    remarks: "AI Search historical PD-ECR cases",
+function actorDisplayName(user?: PdEcrActor | null) {
+  return user?.display_name || user?.full_name || user?.email || "";
+}
+
+function requestErrorMessage(error: unknown, fallback: string) {
+  if (!error || typeof error !== "object") return fallback;
+  const record = error as {
+    message?: string;
+    response?: { status?: number; data?: unknown };
+  };
+  const detail =
+    record.response?.data && typeof record.response.data === "object"
+      ? (record.response.data as { detail?: unknown }).detail
+      : undefined;
+  return [
+    record.response?.status ? `HTTP ${record.response.status}` : "",
+    typeof detail === "string" ? detail : record.message || fallback,
+  ]
+    .filter(Boolean)
+    .join(": ");
+}
+
+function currentUserMatchesInitiator(
+  user: PdEcrActor | null | undefined,
+  initiator: string,
+) {
+  const target = normalizeActorText(initiator);
+  if (!target) return false;
+  return [user?.email, user?.display_name, user?.full_name].some(
+    (candidate) => normalizeActorText(candidate) === target,
+  );
+}
+
+function inferDepartmentFromInitiator(initiator: string) {
+  const text = normalizeActorText(initiator);
+  for (const department of departmentOptions) {
+    const normalized = normalizeActorText(department);
+    if (normalized && text.includes(normalized)) return normalized;
   }
+  const emailDepartment = text.match(/^([a-z]+)[._-]/)?.[1];
+  return emailDepartment || "";
+}
+
+function canConfirmInitiatorLeader(
+  user: PdEcrActor | null | undefined,
+  initiator: string,
+) {
+  if (user?.pd_ecr_role !== "department_leader") return false;
+  if (currentUserMatchesInitiator(user, initiator)) return false;
+  const initiatorDepartment = inferDepartmentFromInitiator(initiator);
+  if (!initiatorDepartment) return true;
+  return normalizeActorText(user.department) === initiatorDepartment;
 }
 
 function buildGenerationInput(form: NewChangeForm): PdEcrInput {
+  const title = form.title.trim();
   return {
+    title,
     dc_no: `PD-ECR-${Date.now()}`,
     date: form.date || new Date().toISOString().slice(0, 10),
     customer_project: form.customer || "PD-ECR Platform",
-    product_no: form.product,
+    product_no: form.productNo || form.product,
     part_no: form.partNumber,
     component_no: form.partNumber,
+    sample_type: form.sampleType,
     initiator: form.initiator || form.source,
     change_source: form.source,
     reason: form.reason,
     change_description: form.description,
     target_close_date: form.targetCloseDate,
     remarks: [
+      `Title: ${title}`,
+      `Product: ${form.product}`,
+      `Product No.: ${form.productNo}`,
+      `Sample type: ${form.sampleType}`,
       `Source: ${form.source}`,
       `Source notes: ${form.sourceNote}`,
-      `Department: ${form.department}`,
       `Affected departments: ${form.departments.join(", ")}`,
       `Target Close date: ${form.targetCloseDate}`,
+      `Before attachment note: ${form.beforeAttachmentNote}`,
+      `After attachment note: ${form.afterAttachmentNote}`,
+      `Initiator confirmed: ${form.initiatorConfirmed ? "Yes" : "No"}`,
+      `Leader confirmed: ${form.leaderConfirmed ? "Yes" : "No"}`,
     ]
       .filter(Boolean)
       .join("\n"),
-  }
+  };
 }
 
-function MetricCard({
-  label,
-  value,
-  tone = "default",
-}: {
-  label: string
-  value: string | number
-  tone?: "default" | "accent"
-}) {
-  return (
-    <div className="rounded-lg border border-stone-200 bg-white px-4 py-3 text-center">
-      <p
-        className={
-          tone === "accent"
-            ? "text-lg font-semibold text-amber-600"
-            : "text-lg font-semibold text-stone-900"
-        }
-      >
-        {value}
-      </p>
-      <p className="text-xs text-stone-500">{label}</p>
-    </div>
-  )
+function recordText(data: Record<string, unknown>, keys: string[], fallback = "") {
+  for (const key of keys) {
+    const value = data[key];
+    if (value !== undefined && value !== null && String(value).trim()) {
+      return String(value);
+    }
+  }
+  return fallback;
+}
+
+function recordBoolean(data: Record<string, unknown>, keys: string[], fallback = false) {
+  for (const key of keys) {
+    const value = data[key];
+    if (typeof value === "boolean") return value;
+    if (typeof value === "string" && value.trim()) {
+      return ["true", "yes", "1", "confirmed"].includes(value.trim().toLowerCase());
+    }
+  }
+  return fallback;
+}
+
+function recordStringList(data: Record<string, unknown>, keys: string[]) {
+  for (const key of keys) {
+    const value = data[key];
+    if (Array.isArray(value)) {
+      return value.map((item) => String(item)).filter(Boolean);
+    }
+    if (typeof value === "string" && value.trim()) {
+      return value
+        .split(/[,;，；]/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+  }
+  return [];
+}
+
+function recordAttachments(data: Record<string, unknown>, keys: string[]): ChangeAttachment[] {
+  for (const key of keys) {
+    const value = data[key];
+    if (!Array.isArray(value)) continue;
+    return value
+      .filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === "object")
+      .map((item) => ({
+        name: recordText(item, ["name", "fileName", "filename"], "attachment"),
+        type: recordText(item, ["type", "contentType"], "application/octet-stream"),
+        size: Number(item.size || 0),
+      }));
+  }
+  return [];
+}
+
+function changeFormFromCaseDetail(detail: PdEcrCaseDetailResponse): NewChangeForm {
+  const changeModule = detail.modules.find((module) => module.module_id === "change-description");
+  const data = {
+    ...(changeModule?.content_json || {}),
+    ...(changeModule?.data || {}),
+  };
+  const caseRecord = detail.case;
+
+  return {
+    title: recordText(data, ["changeTitle", "title", "change_title"], caseRecord.title || ""),
+    product: recordText(data, ["product", "product_name"], caseRecord.product_no || ""),
+    productNo: recordText(data, ["product_no", "productNo"], caseRecord.product_no || ""),
+    customer: recordText(data, ["customer", "customer_project"], caseRecord.customer_project || ""),
+    source: recordText(data, ["source", "change_source"]),
+    sourceNote: recordText(data, ["sourceNote", "source_note"]),
+    reason: recordText(data, ["reason", "change_reason"]),
+    initiator: recordText(data, ["initiator", "owner"], caseRecord.initiator || ""),
+    date: recordText(data, ["date", "create_date"], caseRecord.created_at?.slice(0, 10) || new Date().toISOString().slice(0, 10)),
+    partNumber: recordText(data, ["partNumber", "part_no", "component_no", "part_number"], caseRecord.part_no || caseRecord.component_no || ""),
+    sampleType: recordText(data, ["sample_type", "sampleType"], caseRecord.sample_type || ""),
+    description: recordText(data, ["changeSummary", "change_proposal", "change_description", "summary", "content"], changeModule?.content_md || ""),
+    targetCloseDate: recordText(data, ["target_close_date", "targetCloseDate"], caseRecord.target_close_date?.slice(0, 10) || ""),
+    departments: recordStringList(data, ["departments", "affected_departments"]),
+    beforeAttachmentNote: recordText(data, ["beforeAttachmentNote", "before_attachment_note"]),
+    afterAttachmentNote: recordText(data, ["afterAttachmentNote", "after_attachment_note"]),
+    initiatorConfirmed: recordBoolean(data, ["initiatorConfirmed", "initiator_confirmed"]),
+    leaderConfirmed: recordBoolean(data, ["leaderConfirmed", "leader_confirmed"]),
+  };
 }
 
 function WorkPanel({
@@ -135,114 +277,394 @@ function WorkPanel({
   children,
   className,
 }: {
-  eyebrow: string
-  title: string
-  icon: ReactNode
-  children: ReactNode
-  className?: string
+  eyebrow: string;
+  title: string;
+  icon: ReactNode;
+  children: ReactNode;
+  className?: string;
 }) {
   return (
-    <section className={`flex flex-col rounded-lg border border-stone-200 bg-white shadow-sm ${className ?? ""}`}>
-      <header className="flex items-center gap-3 border-b border-stone-200 px-5 py-4 shrink-0">
-        <div className="flex size-10 items-center justify-center rounded-lg bg-stone-100 text-stone-700">
+    <section
+      className={`enterprise-panel flex flex-col overflow-hidden ${className ?? ""}`}
+    >
+      <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-slate-50/70 px-4 py-3">
+        <div className="flex size-9 items-center justify-center rounded-md bg-blue-50 text-blue-700 ring-1 ring-blue-100">
           {icon}
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
-            {eyebrow}
-          </p>
-          <h2 className="text-xl font-semibold tracking-normal text-stone-900">
+          <p className="enterprise-section-title">{eyebrow}</p>
+          <h2 className="text-lg font-semibold tracking-normal text-slate-900">
             {title}
           </h2>
         </div>
       </header>
-      <div className="min-h-0 flex-1 p-5">{children}</div>
+      <div className="min-h-0 flex-1 p-4">{children}</div>
     </section>
-  )
+  );
+}
+
+function FormSectionHeader({
+  eyebrow,
+  title,
+  description,
+  className,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`border-b border-slate-200 pb-3 ${className ?? ""}`}>
+      <p className="enterprise-section-title">{eyebrow}</p>
+      <h3 className="mt-1 text-base font-semibold text-slate-900">{title}</h3>
+      {description ? (
+        <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p>
+      ) : null}
+    </div>
+  );
 }
 
 function FormField({
   label,
   value,
   onChange,
+  placeholder,
+  className,
 }: {
-  label: string
-  value: string
-  onChange: (value: string) => void
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
 }) {
-  const inputId = useId()
+  const inputId = useId();
 
   return (
-    <label className="space-y-2" htmlFor={inputId}>
-      <span className="text-sm font-semibold text-stone-700">{label}</span>
+    <label className={`space-y-2 ${className ?? ""}`} htmlFor={inputId}>
+      <span className="enterprise-field-label">{label}</span>
       <Input
         id={inputId}
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 border-stone-300 bg-white text-stone-900 shadow-none"
+        placeholder={placeholder}
+        className="h-10 rounded-md border-slate-300 bg-white text-sm text-slate-900 shadow-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
       />
     </label>
-  )
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  placeholder = "请选择",
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+  placeholder?: string;
+}) {
+  const inputId = useId();
+
+  return (
+    <label className="space-y-2" htmlFor={inputId}>
+      <span className="enterprise-field-label">{label}</span>
+      <select
+        id={inputId}
+        aria-label={label}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+      >
+        <option value="">{placeholder}</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function DepartmentCheckboxGroup({
+  selected,
+  onChange,
+}: {
+  selected: string[];
+  onChange: (value: string[]) => void;
+}) {
+  const toggleDepartment = (department: string, checked: boolean) => {
+    onChange(
+      checked
+        ? Array.from(new Set([...selected, department]))
+        : selected.filter((item) => item !== department),
+    );
+  };
+
+  return (
+    <fieldset className="mt-4 rounded-md border border-slate-200 bg-slate-50/70 px-3 py-3">
+      <legend className="px-1 text-sm font-semibold text-slate-600">
+        影响部门
+      </legend>
+      <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-700">
+        {departmentOptions.map((department) => (
+          <label key={department} className="flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={selected.includes(department)}
+              onChange={(event) =>
+                toggleDepartment(department, event.target.checked)
+              }
+              className="accent-blue-600"
+            />
+            {department}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+function ConfirmationBox({
+  title,
+  description,
+  checked,
+  onChange,
+  tone,
+  disabled,
+  disabledReason,
+}: {
+  title: string;
+  description: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  tone: "amber" | "emerald";
+  disabled?: boolean;
+  disabledReason?: string;
+}) {
+  const styles =
+    tone === "emerald"
+      ? {
+          active:
+            "border-emerald-300 bg-emerald-50 shadow-[inset_4px_0_0_#059669]",
+          inactive:
+            "border-slate-200 bg-slate-50/60 hover:border-emerald-200 hover:bg-white",
+          accent: "accent-emerald-600",
+          text: "text-emerald-800",
+        }
+      : {
+          active: "border-blue-300 bg-blue-50 shadow-[inset_4px_0_0_#2563eb]",
+          inactive:
+            "border-slate-200 bg-slate-50/60 hover:border-blue-200 hover:bg-white",
+          accent: "accent-blue-600",
+          text: "text-blue-800",
+        };
+
+  return (
+    <label
+      className={`flex items-start gap-3 rounded-md border p-4 transition ${
+        disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+      } ${checked ? styles.active : styles.inactive}`}
+      title={disabled ? disabledReason : undefined}
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => {
+          if (disabled) return;
+          onChange(event.target.checked);
+        }}
+        className={`mt-1 ${styles.accent}`}
+      />
+      <span className="min-w-0">
+        <span className={`block text-base font-semibold ${styles.text}`}>
+          {title}
+        </span>
+        <span className="mt-1 block text-sm leading-6 text-slate-600">
+          {description}
+        </span>
+        {disabled && disabledReason ? (
+          <span className="mt-2 block text-xs font-medium text-slate-500">
+            {disabledReason}
+          </span>
+        ) : null}
+      </span>
+    </label>
+  );
+}
+
+function fileSizeLabel(size: number) {
+  if (!size) return "";
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`;
+  return `${(size / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function persistedAttachments(attachments: ChangeAttachment[]) {
+  return attachments.map(({ name, type, size }) => ({ name, type, size }));
+}
+
+function NewChangeAttachmentPanel({
+  title,
+  attachments,
+  note,
+  onAdd,
+  onRemove,
+  onNoteChange,
+}: {
+  title: string;
+  attachments: ChangeAttachment[];
+  note: string;
+  onAdd: (files: FileList | null) => void;
+  onRemove: (index: number) => void;
+  onNoteChange: (value: string) => void;
+}) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h4 className="text-base font-semibold text-slate-800">{title}</h4>
+          <p className="mt-1 text-sm text-slate-500">
+            上传图片、PDF、Excel 或其他支持材料
+          </p>
+        </div>
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+          <Upload className="size-4" />
+          上传文件
+          <input
+            type="file"
+            multiple
+            className="sr-only"
+            onChange={(event) => {
+              onAdd(event.target.files);
+              event.target.value = "";
+            }}
+          />
+        </label>
+      </div>
+
+      {attachments.length > 0 ? (
+        <div className="mt-3 grid gap-2">
+          {attachments.map((file, index) => (
+            <div
+              key={`${file.name}-${file.size}-${file.type}`}
+              className="flex min-w-0 items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2"
+            >
+              {file.previewUrl ? (
+                <img
+                  src={file.previewUrl}
+                  alt={file.name}
+                  className="size-10 rounded-md object-cover"
+                />
+              ) : (
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-md bg-white text-sm font-semibold text-slate-500">
+                  FILE
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-slate-800">
+                  {file.name}
+                </p>
+                <p className="truncate text-sm text-slate-500">
+                  {file.type || "file"}{" "}
+                  {file.size ? `· ${fileSizeLabel(file.size)}` : ""}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => onRemove(index)}
+                className="rounded-md px-2 py-1 text-sm font-semibold text-slate-500 hover:bg-white hover:text-red-600"
+              >
+                删除
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-3 rounded-md border border-dashed border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-500">
+          暂无附件
+        </p>
+      )}
+
+      <label className="mt-3 block space-y-2">
+        <span className="text-sm font-semibold text-slate-600">发起人备注</span>
+        <textarea
+          value={note}
+          onChange={(event) => onNoteChange(event.target.value)}
+          placeholder="补充说明该附件与变更前后状态的关系、重点差异或需要审批人关注的点。"
+          className="min-h-20 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        />
+      </label>
+    </div>
+  );
 }
 
 function parseSourceNotes(raw: string): Record<string, string> {
-  if (!raw) return {}
+  if (!raw) return {};
   try {
-    const obj = JSON.parse(raw)
+    const obj = JSON.parse(raw);
     return typeof obj === "object" && obj !== null && !Array.isArray(obj)
-      ? obj as Record<string, string>
-      : {}
+      ? (obj as Record<string, string>)
+      : {};
   } catch {
     // Legacy: plain text stored as single note → assign to first source
-    return {}
+    return {};
   }
 }
 
 function serializeSourceNotes(notes: Record<string, string>): string {
-  const filtered: Record<string, string> = {}
+  const filtered: Record<string, string> = {};
   for (const [k, v] of Object.entries(notes)) {
-    if (v.trim()) filtered[k] = v.trim()
+    if (v.trim()) filtered[k] = v.trim();
   }
-  return Object.keys(filtered).length > 0 ? JSON.stringify(filtered) : ""
+  return Object.keys(filtered).length > 0 ? JSON.stringify(filtered) : "";
 }
 
 function SourceMultiSelect({
   selected,
   onChange,
 }: {
-  selected: string
-  onChange: (value: string) => void
+  selected: string;
+  onChange: (value: string) => void;
 }) {
-  const [open, setOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false)
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
       }
-    }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
-  })
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  });
 
   const selectedSet = new Set(
     selected
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean),
-  )
+  );
 
   const toggle = (value: string) => {
     const next = selectedSet.has(value)
       ? [...selectedSet].filter((s) => s !== value)
-      : [...selectedSet, value]
-    onChange(next.join(", "))
-  }
+      : [...selectedSet, value];
+    onChange(next.join(", "));
+  };
 
-  const selectedList = [...selectedSet]
+  const selectedList = [...selectedSet];
 
   return (
     <div ref={containerRef} className="relative">
@@ -250,12 +672,14 @@ function SourceMultiSelect({
         type="button"
         onClick={() => setOpen(!open)}
         className={`flex w-full items-center justify-between rounded-lg border bg-white px-3 py-2 text-left text-sm shadow-none transition ${
-          open
-            ? "border-amber-500 ring-2 ring-amber-100"
-            : "border-stone-300"
+          open ? "border-blue-500 ring-2 ring-blue-100" : "border-slate-300"
         }`}
       >
-        <span className={selectedList.length > 0 ? "text-stone-900 flex-1" : "text-stone-400"}>
+        <span
+          className={
+            selectedList.length > 0 ? "text-slate-900 flex-1" : "text-slate-400"
+          }
+        >
           {selectedList.length > 0
             ? selectedList.map((v) => (
                 <span key={v} className="block text-sm leading-6">
@@ -264,20 +688,20 @@ function SourceMultiSelect({
               ))
             : "请选择变更来源..."}
         </span>
-        <span className="ml-2 shrink-0 self-start text-stone-400">▼</span>
+        <span className="ml-2 shrink-0 self-start text-slate-400">▼</span>
       </button>
       {open && (
-        <div className="absolute z-20 mt-1 w-full rounded-lg border border-stone-200 bg-white py-1 shadow-lg">
+        <div className="absolute z-20 mt-1 w-full rounded-md border border-slate-200 bg-white py-1 shadow-lg">
           {CHANGE_SOURCE_OPTIONS.map((opt) => (
             <label
               key={opt.value}
-              className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-amber-50"
+              className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-blue-50"
             >
               <input
                 type="checkbox"
                 checked={selectedSet.has(opt.value)}
                 onChange={() => toggle(opt.value)}
-                className="accent-amber-600"
+                className="accent-blue-600"
               />
               {opt.label}
             </label>
@@ -285,494 +709,807 @@ function SourceMultiSelect({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export function PdEcrPlatform() {
-  const navigate = useNavigate()
-  const [searchText, setSearchText] = useState(defaultSearchText)
-  const [newChange, setNewChange] = useState(defaultNewChange)
-  const [relatedCasesCount, setRelatedCasesCount] = useState(
-    () => {
-      const activeResult = loadActiveResult()
-      const historyResult = loadHistoryResult()
-      return activeResult.relatedCases.length || historyResult.relatedCases.length
-    },
-  )
-  const [modulesCount] = useState(
-    () => loadActiveResult().modules.length || moduleOrder.length,
-  )
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const currentUser = user as PdEcrActor | null | undefined;
+  const [newChange, setNewChange] = useState(defaultNewChange);
+  const [beforeAttachments, setBeforeAttachments] = useState<
+    ChangeAttachment[]
+  >([]);
+  const [afterAttachments, setAfterAttachments] = useState<ChangeAttachment[]>(
+    [],
+  );
+  const [isAttachmentExpanded, setIsAttachmentExpanded] = useState(false);
+  const [draftStatus, setDraftStatus] = useState<string | null>(null);
+  const [leaderSubmitMessage, setLeaderSubmitMessage] = useState("");
+  const [reviewCaseId, setReviewCaseId] = useState<string | null>(null);
+  const [reviewTaskId, setReviewTaskId] = useState<string | null>(null);
+  const [reviewCaseStatus, setReviewCaseStatus] = useState<string | null>(null);
+  const [reviewMessage, setReviewMessage] = useState("");
+  const loadedReviewCaseRef = useRef("");
+  const canContinue = newChange.initiatorConfirmed && newChange.leaderConfirmed;
+  const isReviewClosed = Boolean(reviewCaseId && reviewCaseStatus && reviewCaseStatus !== "submitted");
+  const initiatorName = newChange.initiator.trim();
+  const userLabel = actorDisplayName(currentUser);
+  const canConfirmInitiator = currentUserMatchesInitiator(currentUser, initiatorName);
+  const canConfirmLeader = canConfirmInitiatorLeader(currentUser, initiatorName);
 
-  const historyMutation = useMutation({
-    mutationFn: () => searchPdEcrHistory(buildSearchInput(searchText)),
-    onSuccess: (response) => {
-      const result = buildHistoryResult(response)
-      saveHistoryResult(result)
-      setRelatedCasesCount(result.relatedCases.length)
-      navigate({ to: "/pd-ecr/cases", search: { view: "similar" } })
-    },
-    onError: () => {
-      const fallback = {
-        source: "history" as const,
-        relatedCases: [],
-        caseRows: [],
-        modules: fallbackHistoryModules,
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get("caseId");
+    const taskId = params.get("taskId");
+    if (!caseId || loadedReviewCaseRef.current === caseId) return;
+
+    loadedReviewCaseRef.current = caseId;
+    setReviewCaseId(caseId);
+    setReviewTaskId(taskId);
+    setReviewMessage("Loading submitted change request...");
+    getPdEcrCase(caseId)
+      .then((detail) => {
+        const changeModule = detail.modules.find((module) => module.module_id === "change-description");
+        const data = {
+          ...(changeModule?.content_json || {}),
+          ...(changeModule?.data || {}),
+        };
+        setNewChange(changeFormFromCaseDetail(detail));
+        setReviewCaseStatus(detail.case.status);
+        setBeforeAttachments(recordAttachments(data, ["beforeAttachments", "before_attachments"]));
+        setAfterAttachments(recordAttachments(data, ["afterAttachments", "after_attachments"]));
+        if (detail.case.status === "submitted") {
+          setDraftStatus("领导审批模式：正在查看发起人提交的新建变更表单。");
+          setReviewMessage("");
+        } else {
+          setDraftStatus("该领导审批已处理，当前为只读查看。");
+          setReviewMessage(`该审批已处理，当前 case 状态为 ${detail.case.status}。`);
+        }
+      })
+      .catch((error) => {
+        setReviewMessage(requestErrorMessage(error, "加载提交的变更失败"));
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!userLabel || newChange.initiator.trim()) return;
+    setNewChange((current) => ({ ...current, initiator: userLabel }));
+  }, [newChange.initiator, userLabel]);
+
+  const addAttachments = (side: "before" | "after", files: FileList | null) => {
+    const incoming = Array.from(files ?? []).map((file) => ({
+      name: file.name,
+      type: file.type || "application/octet-stream",
+      size: file.size,
+      previewUrl: file.type.startsWith("image/")
+        ? URL.createObjectURL(file)
+        : undefined,
+    }));
+    if (!incoming.length) return;
+
+    if (side === "before") {
+      setBeforeAttachments((current) => [...current, ...incoming]);
+    } else {
+      setAfterAttachments((current) => [...current, ...incoming]);
+    }
+  };
+
+  const removeAttachment = (side: "before" | "after", index: number) => {
+    if (side === "before") {
+      setBeforeAttachments((current) =>
+        current.filter((_, itemIndex) => itemIndex !== index),
+      );
+    } else {
+      setAfterAttachments((current) =>
+        current.filter((_, itemIndex) => itemIndex !== index),
+      );
+    }
+  };
+
+  const persistBeforeAfterAttachments = (recordId: string) => {
+    localStorage.setItem(
+      `pd-ecr-before-after-attachments:${recordId}:change-description:before`,
+      JSON.stringify(persistedAttachments(beforeAttachments)),
+    );
+    localStorage.setItem(
+      `pd-ecr-before-after-attachments:${recordId}:change-description:after`,
+      JSON.stringify(persistedAttachments(afterAttachments)),
+    );
+  };
+
+  const submitLeaderApprovalMutation = useMutation({
+    mutationFn: () => {
+      const title = newChange.title.trim();
+      if (!title) {
+        throw new Error("请先填写变更名称");
       }
-      saveHistoryResult(fallback)
-      setRelatedCasesCount(0)
-      navigate({ to: "/pd-ecr/cases", search: { view: "similar" } })
+      if (!newChange.initiatorConfirmed) {
+        throw new Error("请先由发起人本人完成确认");
+      }
+      return submitPdEcrForApproval({
+        title,
+        initiator: newChange.initiator,
+        customer_project: newChange.customer || "PD-ECR Platform",
+        product_no: newChange.productNo || newChange.product || undefined,
+        part_no: newChange.partNumber || undefined,
+        target_close_date: newChange.targetCloseDate || undefined,
+        form_data: {
+          title,
+          changeTitle: title,
+          source: newChange.source,
+          change_source: newChange.source,
+          reason: newChange.reason,
+          change_reason: newChange.reason,
+          department: currentUser?.department || "",
+          initiator: newChange.initiator,
+          date: newChange.date,
+          product: newChange.product,
+          product_no: newChange.productNo || newChange.product,
+          customer: newChange.customer,
+          customer_project: newChange.customer,
+          component_no: newChange.partNumber,
+          part_no: newChange.partNumber,
+          partNumber: newChange.partNumber,
+          sample_type: newChange.sampleType,
+          changeSummary: newChange.description,
+          change_proposal: newChange.description,
+          departments: newChange.departments,
+          affected_departments: newChange.departments.join(", "),
+          target_close_date: newChange.targetCloseDate,
+          initiatorConfirmed: newChange.initiatorConfirmed,
+          initiator_confirmed: newChange.initiatorConfirmed,
+          leaderConfirmed: false,
+          leader_confirmed: false,
+          before_attachments: persistedAttachments(beforeAttachments),
+          beforeAttachments: persistedAttachments(beforeAttachments),
+          after_attachments: persistedAttachments(afterAttachments),
+          afterAttachments: persistedAttachments(afterAttachments),
+          before_attachment_note: newChange.beforeAttachmentNote,
+          beforeAttachmentNote: newChange.beforeAttachmentNote,
+          after_attachment_note: newChange.afterAttachmentNote,
+          afterAttachmentNote: newChange.afterAttachmentNote,
+        },
+      });
     },
-  })
+    onSuccess: (response) => {
+      setLeaderSubmitMessage(
+        response.approval_task.approver_email
+          ? `已提交给 ${response.approval_task.approver_name || response.approval_task.approver_email}，对方可在 My Tasks 的 Manager Approvals 中确认。`
+          : "已提交领导确认，但未解析到审批人；请检查发起人部门是否配置 department_leader。",
+      );
+      setDraftStatus("已提交给发起人领导确认，等待领导在 My Tasks 审批。");
+    },
+    onError: (error) => {
+      setLeaderSubmitMessage(
+        error instanceof Error ? error.message : "提交给领导确认失败",
+      );
+    },
+  });
+
+  const approveReviewMutation = useMutation({
+    mutationFn: () => {
+      if (!reviewCaseId) throw new Error("未找到审批 case");
+      return approvePdEcrCase(reviewCaseId);
+    },
+    onSuccess: () => {
+      updateNewChange("leaderConfirmed", true);
+      setReviewCaseStatus("generated");
+      setReviewMessage("已完成领导审批。你可以回到 My Tasks 查看状态。");
+      setDraftStatus("领导审批已通过。");
+    },
+    onError: (error) => {
+      setReviewMessage(requestErrorMessage(error, "审批失败"));
+    },
+  });
+
+  const rejectReviewMutation = useMutation({
+    mutationFn: (reason: string) => {
+      if (!reviewCaseId) throw new Error("未找到审批 case");
+      return rejectPdEcrCase(reviewCaseId, reason);
+    },
+    onSuccess: () => {
+      setReviewCaseStatus("changes_requested");
+      setReviewMessage("已退回给发起人补充。你可以回到 My Tasks 查看状态。");
+      setDraftStatus("领导审批已退回。");
+    },
+    onError: (error) => {
+      setReviewMessage(requestErrorMessage(error, "退回失败"));
+    },
+  });
+
+  const rejectSubmittedChange = () => {
+    const reason = window.prompt("请输入退回原因", "请补充变更说明或附件");
+    if (reason === null) return;
+    rejectReviewMutation.mutate(reason);
+  };
 
   const handleNextStep = () => {
-    // 1. Write form data directly to change-description localStorage draft
-    //    so ChangeDescriptionView picks it up immediately with zero transformation
+    const title = newChange.title.trim();
+    if (!title) {
+      setDraftStatus("请先填写变更名称");
+      return;
+    }
+    if (!canContinue) {
+      setDraftStatus("请先完成发起人确认和发起人的领导确认");
+      return;
+    }
+
+    // Write form data to localStorage (existing draft save)
     const draftData = {
+      title,
+      changeTitle: title,
       source: newChange.source,
       reason: newChange.reason,
-      department: newChange.department,
+      department: "",
       initiator: newChange.initiator,
       date: newChange.date,
       product: newChange.product,
+      productNo: newChange.productNo,
       customer: newChange.customer,
       partNumber: newChange.partNumber,
-      title: newChange.description || "New PD-ECR Change Request",
+      sampleType: newChange.sampleType,
       changeSummary: newChange.description,
       notChange: "",
       departments: newChange.departments,
-    }
-    // Use a stable record id so the draft key is predictable
-    const recordId = `pd-ecr-${Date.now()}`
+      initiatorConfirmed: newChange.initiatorConfirmed,
+      leaderConfirmed: newChange.leaderConfirmed,
+      beforeAttachments: persistedAttachments(beforeAttachments),
+      afterAttachments: persistedAttachments(afterAttachments),
+      beforeAttachmentNote: newChange.beforeAttachmentNote,
+      afterAttachmentNote: newChange.afterAttachmentNote,
+    };
+    const recordId = `pd-ecr-${Date.now()}`;
     localStorage.setItem(
       `pd-ecr-change-description-draft:${recordId}:change-description`,
       JSON.stringify(draftData),
-    )
+    );
 
-    // 2. Also save as generated result so the content page loads
+    // Save seed result (existing pattern)
     const seedData: Record<string, unknown> = {
       source: newChange.source,
       change_source: newChange.source,
+      title,
+      change_title: title,
       reason: newChange.reason,
       change_reason: newChange.reason,
-      product_no: newChange.product,
+      product: newChange.product,
+      product_no: newChange.productNo || newChange.product,
       customer: newChange.customer,
       customer_project: newChange.customer,
       component_no: newChange.partNumber,
       part_no: newChange.partNumber,
+      sample_type: newChange.sampleType,
       initiator: newChange.initiator,
-      department: newChange.department,
       date: newChange.date,
       change_proposal: newChange.description,
       affected_departments: newChange.departments.join(", "),
       target_close_date: newChange.targetCloseDate,
-    }
+      initiator_confirmed: newChange.initiatorConfirmed,
+      leader_confirmed: newChange.leaderConfirmed,
+      before_attachments: persistedAttachments(beforeAttachments),
+      after_attachments: persistedAttachments(afterAttachments),
+      before_attachment_note: newChange.beforeAttachmentNote,
+      after_attachment_note: newChange.afterAttachmentNote,
+    };
     const seedModule: PdEcrModule = {
       id: "change-description",
       title: "Change Description",
-      summary: newChange.description || "",
+      summary: newChange.description || title,
       data: seedData,
-    }
+    };
     const seedResult = buildGeneratedResult({
       message: "seed",
       draft_id: recordId,
       modules: [seedModule],
       url: undefined,
       approval_lead_days: 12,
-    })
-    // Ensure recordId is used as the draft lookup key by getActiveRecordId
-    seedResult.relatedCases = [recordId, ...seedResult.relatedCases]
-    saveGeneratedResult(seedResult)
-    setRelatedCasesCount(seedResult.relatedCases.length)
+    });
+    seedResult.relatedCases = [recordId, ...seedResult.relatedCases];
+    saveGeneratedResult(seedResult);
+    persistBeforeAfterAttachments(recordId);
 
-    // 3. Navigate immediately — ChangeDescriptionView loads the draft
-    navigate({ to: "/pd-ecr/content/$moduleId", params: { moduleId: "change-description" } })
-
-    // 4. Fire AI generation in background — updates modules when done
-    generateMutation.mutate()
-  }
+    setDraftStatus("Draft prepared. Continue with impact and execution plan.");
+    navigate({ to: "/pd-ecr/content" });
+  };
 
   const generateMutation = useMutation({
     mutationFn: () => generatePdEcrReport(buildGenerationInput(newChange)),
     onSuccess: (response) => {
-      const result = buildGeneratedResult(response)
+      const result = buildGeneratedResult(response);
       // Preserve pre-filled change-description data — user input takes priority over AI markdown
       try {
-        const prev = loadGeneratedResult()
-        const prevCd = prev?.modules?.find((m: { id: string }) => m.id === "change-description")
+        const prev = loadGeneratedResult();
+        const prevCd = prev?.modules?.find(
+          (m: { id: string }) => m.id === "change-description",
+        );
         if (prevCd?.data) {
-          const aiCd = result.modules.find((m) => m.id === "change-description")
+          const aiCd = result.modules.find(
+            (m) => m.id === "change-description",
+          );
           if (aiCd) {
-            aiCd.data = { ...aiCd.data, ...prevCd.data }
+            aiCd.data = { ...aiCd.data, ...prevCd.data };
           }
         }
-      } catch { /* best effort */ }
-      saveGeneratedResult(result)
-      setRelatedCasesCount(result.relatedCases.length)
+      } catch {
+        /* best effort */
+      }
+      saveGeneratedResult(result);
 
       // Create DB case in background (non-blocking)
-      const caseNo = response.draft_id || `PD-ECR-${Date.now()}`
+      const caseNo = response.draft_id || `PD-ECR-${Date.now()}`;
       createPdEcrCase({
         case_no: caseNo,
-        title: newChange.description || "New PD-ECR Change Request",
+        title:
+          newChange.title.trim() ||
+          newChange.description ||
+          "New PD-ECR Change Request",
         status: "draft",
         source_type: "ai_generated",
         dc_no: `PD-ECR-${Date.now()}`,
         initiator: newChange.initiator || newChange.source || "AI Generated",
         customer_project: newChange.customer || "PD-ECR Platform",
-        product_no: newChange.product || undefined,
+        product_no: newChange.productNo || newChange.product || undefined,
         part_no: newChange.partNumber || undefined,
+        sample_type: newChange.sampleType || undefined,
         target_close_date: newChange.targetCloseDate || undefined,
         change_type: "Engineering Change",
       }).catch(() => {
         // Case creation is non-blocking — draft is already saved locally
-      })
+      });
     },
     onError: () => {
       const result = buildGeneratedResult({
         message: "fallback",
         modules: undefined,
-      })
-      saveGeneratedResult(result)
-      setRelatedCasesCount(result.relatedCases.length)
+      });
+      saveGeneratedResult(result);
     },
-  })
+  });
 
-  const updateNewChange = (key: keyof NewChangeForm, value: string) => {
-    setNewChange((current) => ({ ...current, [key]: value }))
-  }
-
-  const toggleDepartment = (dept: string, checked: boolean) => {
-    setNewChange((current) => ({
-      ...current,
-      departments: checked
-        ? [...current.departments, dept]
-        : current.departments.filter((d) => d !== dept),
-    }))
-  }
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [isUploadExpanded, setIsUploadExpanded] = useState(true)
-
-  const uploadMutation = useMutation({
-    mutationFn: (file: File) => uploadAndStageDocument(file),
-    onSuccess: (staged) => {
-      setUploadStatus(`✅ ${staged.original_filename} 解析完成，进入审核`)
-      // Navigate to the review page instead of auto-filling the form
-      navigate({
-        to: "/pd-ecr/documents/$docId",
-        params: { docId: staged.id },
-      })
-    },
-    onError: (error: Error) => {
-      setUploadStatus(`❌ 上传失败: ${error.message}`)
-    },
-  })
-
-  const handleFileDrop = (files: FileList | null) => {
-    const file = files?.[0]
-    if (!file) return
-    const suffix = file.name.split(".").pop()?.toLowerCase()
-    if (!suffix || !["xlsx", "xls", "xlsm", "pdf", "docx", "doc"].includes(suffix)) {
-      setUploadStatus("❌ 仅支持 .xlsx / .xls / .pdf / .docx 文件")
-      return
+  const updateNewChange = <K extends keyof NewChangeForm>(
+    key: K,
+    value: NewChangeForm[K],
+  ) => {
+    if (
+      key === "title" &&
+      typeof value === "string" &&
+      value.trim() &&
+      draftStatus === "请先填写变更名称"
+    ) {
+      setDraftStatus(null);
     }
-    setUploadStatus(`⏳ 正在解析 ${file.name}...`)
-    uploadMutation.mutate(file)
-  }
+    if (
+      (key === "initiatorConfirmed" || key === "leaderConfirmed") &&
+      value === true &&
+      draftStatus === "请先完成发起人确认和发起人的领导确认"
+    ) {
+      setDraftStatus(null);
+    }
+    setNewChange((current) => {
+      const next = { ...current, [key]: value };
+      if (key === "initiator" && value !== current.initiator) {
+        next.initiatorConfirmed = false;
+        next.leaderConfirmed = false;
+      }
+      return next;
+    });
+  };
 
   return (
-    <div className="flex h-full min-h-0 flex-1 flex-col bg-stone-50 text-stone-900">
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-4">
-        <header className="shrink-0 rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+    <div className="page-shell flex h-full min-h-0 flex-1 flex-col">
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3">
+        <header className="enterprise-panel shrink-0 px-4 py-3">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-semibold tracking-normal text-stone-900">
-                  PD-ECR Platform
+                <h1 className="text-xl font-semibold tracking-tight text-slate-900">
+                  New PD-ECR Change
                 </h1>
-                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-                  AI + Knowledge Base
+                <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                  Step 1 · Initiation
                 </span>
               </div>
-              {/* <p className="mt-1 text-sm text-stone-500">
-                {user?.full_name || "Fan Xiaofeng"} · RBCD/ETC6 · Engineering
-                change workflow
-              </p> */}
+              <p className="mt-1 text-sm text-slate-500">
+                Capture request data, evidence and initial approval before
+                impact planning.
+              </p>
             </div>
-            <div className="grid grid-cols-3 gap-3">
-              <MetricCard label="Related cases" value={relatedCasesCount} />
-              <MetricCard label="Modules" value={modulesCount} />
-              <MetricCard label="Status" value="Ready" tone="accent" />
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
+                onClick={() => navigate({ to: "/pd-ecr/tasks" })}
+              >
+                <ClipboardList className="size-4" />
+                My Tasks
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
+                onClick={() =>
+                  navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
+                }
+              >
+                <Database className="size-4" />
+                All Cases
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
+                onClick={() => navigate({ to: "/pd-ecr/dashboard" })}
+              >
+                <FolderKanban className="size-4" />
+                Dashboard
+              </Button>
             </div>
           </div>
         </header>
 
-        <main className="grid min-h-0 flex-1 gap-4 overflow-y-auto xl:grid-cols-[1fr_2fr]">
-          {/* ═══ LEFT COLUMN — Upload + AI Search ═══ */}
-          <div className="flex flex-col gap-4">
-            {/* ── AI Search Panel ── */}
-            <WorkPanel
-              eyebrow="AI Search"
-              title="历史数据检索"
-              icon={<Database className="size-5" />}
-            >
-              <div className="space-y-4">
-                <label className="space-y-2">
-                  <span className="text-sm font-semibold text-stone-700">
-                    AI Search
-                  </span>
-                  <textarea
-                    aria-label="AI Search"
-                    value={searchText}
-                    onChange={(event) => setSearchText(event.target.value)}
-                    placeholder="输入变更原因、变更描述等关键词进行模糊搜索..."
-                    className="min-h-24 w-full resize-none rounded-lg border border-stone-300 bg-white px-4 py-3 text-base leading-7 text-stone-900 shadow-none outline-none placeholder:text-stone-400 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
-                  />
-                </label>
-
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-100 bg-amber-50 px-4 py-3">
-                  <p className="text-sm text-amber-800">
-                    点击 Run 后进入数据库相似 CASE 列表页。
-                  </p>
-                  <Button
-                    type="button"
-                    onClick={() => historyMutation.mutate()}
-                    disabled={historyMutation.isPending}
-                    className="h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
-                  >
-                    <Search className="size-4" />
-                    {historyMutation.isPending ? "Running" : "Run"}
-                  </Button>
-                </div>
-              </div>
-            </WorkPanel>
-
-            {/* ── File Upload Panel ── */}
-            <WorkPanel
-              eyebrow="Upload"
-              title="文件上传"
-              icon={<Upload className="size-5" />}
-              className="max-xl:shrink-0"
-            >
-              <button
-                type="button"
-                onClick={() => setIsUploadExpanded(!isUploadExpanded)}
-                className="mb-3 w-full text-left text-sm text-stone-500 hover:text-stone-700"
-              >
-                <span className="flex items-center justify-between">
-                  上传文件后自动解析并纳入知识库
-                  <span className="text-xs text-stone-400">
-                    {isUploadExpanded ? "收起 ▲" : "展开 ▼"}
-                  </span>
-                </span>
-              </button>
-              {isUploadExpanded && (
-                <>
-                  <label
-                    className={`relative block rounded-lg border-2 border-dashed p-4 text-center transition cursor-pointer ${
-                      isDragging
-                        ? "border-amber-500 bg-amber-50"
-                        : "border-stone-300 bg-stone-50 hover:border-amber-400 hover:bg-amber-50/50"
-                    }`}
-                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
-                    onDragLeave={(e) => { e.preventDefault(); setIsDragging(false) }}
-                    onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleFileDrop(e.dataTransfer.files) }}
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".xlsx,.xls,.xlsm,.pdf,.docx,.doc"
-                      className="absolute inset-0 cursor-pointer opacity-0"
-                      onChange={(e) => handleFileDrop(e.target.files)}
-                    />
-                    {uploadMutation.isPending ? (
-                      <div className="flex items-center justify-center gap-2 text-amber-700">
-                        <span className="inline-block size-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
-                        <span className="text-sm font-semibold">解析文件中...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-3 text-stone-500">
-                        <Upload className="size-5" />
-                        <span className="text-sm">
-                          拖拽 Excel / PDF 文件到此处，或点击上传
-                        </span>
-                      </div>
-                    )}
-                  </label>
-
-                  {uploadStatus && (
-                    <p
-                      className={`mt-2 text-xs ${
-                        uploadStatus.startsWith("✅")
-                          ? "text-green-700"
-                          : uploadStatus.startsWith("❌")
-                            ? "text-red-600"
-                            : "text-amber-700"
-                      }`}
-                    >
-                      {uploadStatus}
-                    </p>
-                  )}
-                </>
-              )}
-            </WorkPanel>
-          </div>
-
-          {/* ═══ RIGHT COLUMN — New Change Form ═══ */}
-          <div className="flex flex-col">
+        <main className="min-h-0 flex-1 overflow-y-auto">
+          <div className="flex min-w-0 flex-col">
             <WorkPanel
               eyebrow="New creation"
-              title="新建变更"
+              title="新建变更申请"
               icon={<Sparkles className="size-5" />}
               className="flex-1"
             >
-            {/* 产品 + 客户 + 变更发起人 */}
-            <div className="grid gap-3 sm:grid-cols-3">
-              <FormField
-                label="产品"
-                value={newChange.product}
-                onChange={(value) => updateNewChange("product", value)}
+              <FormSectionHeader
+                eyebrow="Section 01"
+                title="Basic information"
+                description="用于识别 case、产品范围和发起人责任人。"
               />
-              <FormField
-                label="客户"
-                value={newChange.customer}
-                onChange={(value) => updateNewChange("customer", value)}
-              />
-              <FormField
-                label="变更发起人"
-                value={newChange.initiator}
-                onChange={(value) => updateNewChange("initiator", value)}
-              />
-            </div>
-
-            {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
-            <div className="mt-5 space-y-2">
-              <span className="text-sm font-semibold text-stone-700">
-                变更来源
-              </span>
-              <SourceMultiSelect
-                selected={newChange.source}
-                onChange={(value) => updateNewChange("source", value)}
-              />
-              {(() => {
-                const selectedValues = newChange.source
-                  .split(",")
-                  .map((s) => s.trim())
-                  .filter(Boolean)
-                if (!selectedValues.length) return null
-                const notes = parseSourceNotes(newChange.sourceNote)
-                return (
-                  <div className="mt-2 space-y-2 rounded-lg border border-stone-200 bg-stone-50 p-3">
-                    {selectedValues.map((val) => {
-                      const label =
-                        CHANGE_SOURCE_OPTIONS.find((o) => o.value === val)?.label || val
-                      return (
-                        <div key={val} className="flex items-center gap-3">
-                          <span className="w-40 shrink-0 text-sm font-medium text-stone-700 truncate">
-                            {label}
-                          </span>
-                          <input
-                            type="text"
-                            placeholder="备注..."
-                            value={notes[val] || ""}
-                            onChange={(e) => {
-                              const next = { ...notes, [val]: e.target.value }
-                              updateNewChange("sourceNote", serializeSourceNotes(next))
-                            }}
-                            className="h-9 flex-1 rounded-lg border border-stone-300 bg-white px-3 text-sm text-stone-900 shadow-none outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
-                          />
-                        </div>
-                      )
-                    })}
-                  </div>
-                )
-              })()}
-            </div>
-
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              <FormField
-                label="变更背景原因"
-                value={newChange.reason}
-                onChange={(value) => updateNewChange("reason", value)}
-              />
-              <FormField
-                label="变更发起部门"
-                value={newChange.department}
-                onChange={(value) => updateNewChange("department", value)}
-              />
-            </div>
-
-            <div className="mt-7 grid gap-3 sm:grid-cols-4">
-              <FormField
-                label="变更发起日期"
-                value={newChange.date}
-                onChange={(value) => updateNewChange("date", value)}
-              />
-              <FormField
-                label="零部件号"
-                value={newChange.partNumber}
-                onChange={(value) => updateNewChange("partNumber", value)}
-              />
-              <FormField
-                label="变更描述"
-                value={newChange.description}
-                onChange={(value) => updateNewChange("description", value)}
-              />
-              <label className="space-y-2">
-                <span className="text-sm font-semibold text-stone-700">
-                  Target Close date
-                </span>
-                <input
-                  type="date"
-                  value={newChange.targetCloseDate}
-                  onChange={(e) => updateNewChange("targetCloseDate", e.target.value)}
-                  className="h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-sm text-stone-900 shadow-none outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+              <div className="grid gap-3 sm:grid-cols-3">
+                <FormField
+                  label="产品"
+                  value={newChange.product}
+                  onChange={(value) => updateNewChange("product", value)}
                 />
-              </label>
-            </div>
+                <FormField
+                  label="客户/平台"
+                  value={newChange.customer}
+                  onChange={(value) => updateNewChange("customer", value)}
+                />
+                <FormField
+                  label="变更发起人"
+                  value={newChange.initiator}
+                  onChange={(value) => updateNewChange("initiator", value)}
+                />
+              </div>
 
-            {/* 影响的部门 + 操作按钮 — 同一行 */}
-            <div className="mt-7 flex items-center gap-3">
-              <fieldset className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2">
-                <legend className="px-1 text-sm font-semibold text-stone-700">
-                  影响的部门
-                </legend>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                  {departmentOptions.map((dept) => (
-                    <label key={dept} className="flex items-center gap-1.5">
-                      <input
-                        type="checkbox"
-                        checked={newChange.departments.includes(dept)}
-                        onChange={(event) =>
-                          toggleDepartment(dept, event.target.checked)
-                        }
-                        className="accent-amber-600"
-                      />
-                      {dept}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              <Button
-                type="button"
-                onClick={handleNextStep}
-                disabled={generateMutation.isPending}
-                className="h-10 shrink-0 bg-amber-600 px-6 text-white hover:bg-amber-700"
-              >
-                {generateMutation.isPending ? "生成中..." : "下一步"}
-                <ArrowRight className="size-4" />
-              </Button>
-            </div>
-          </WorkPanel>
+              <FormField
+                label="变更名称"
+                value={newChange.title}
+                onChange={(value) => updateNewChange("title", value)}
+                placeholder="例如：JIM 493 C-sample release / 螺栓供应商切换"
+                className="mt-5"
+              />
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                <FormField
+                  label="产品号"
+                  value={newChange.productNo}
+                  onChange={(value) => updateNewChange("productNo", value)}
+                />
+                <FormField
+                  label="零部件号"
+                  value={newChange.partNumber}
+                  onChange={(value) => updateNewChange("partNumber", value)}
+                />
+                <SelectField
+                  label="样品类型"
+                  value={newChange.sampleType}
+                  onChange={(value) => updateNewChange("sampleType", value)}
+                  options={SAMPLE_TYPE_OPTIONS}
+                />
+              </div>
+
+              {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
+              <FormSectionHeader
+                eyebrow="Section 02"
+                title="Change details"
+                description="描述变更来源、原因、影响部门和 before / after 证据。"
+                className="mt-8"
+              />
+              <div className="mt-5 space-y-2">
+                <span className="enterprise-field-label">变更来源</span>
+                <SourceMultiSelect
+                  selected={newChange.source}
+                  onChange={(value) => updateNewChange("source", value)}
+                />
+                {(() => {
+                  const selectedValues = newChange.source
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                  if (!selectedValues.length) return null;
+                  const notes = parseSourceNotes(newChange.sourceNote);
+                  return (
+                    <div className="mt-2 space-y-2 rounded-md border border-slate-200 bg-slate-50/70 p-3">
+                      {selectedValues.map((val) => {
+                        const label =
+                          CHANGE_SOURCE_OPTIONS.find((o) => o.value === val)
+                            ?.label || val;
+                        return (
+                          <div key={val} className="flex items-center gap-3">
+                            <span className="w-40 shrink-0 truncate text-sm font-medium text-slate-700">
+                              {label}
+                            </span>
+                            <input
+                              type="text"
+                              placeholder="备注..."
+                              value={notes[val] || ""}
+                              onChange={(e) => {
+                                const next = {
+                                  ...notes,
+                                  [val]: e.target.value,
+                                };
+                                updateNewChange(
+                                  "sourceNote",
+                                  serializeSourceNotes(next),
+                                );
+                              }}
+                              className="h-10 flex-1 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
+              </div>
+
+              <div className="mt-7 grid gap-3 lg:grid-cols-2">
+                <FormField
+                  label="变更背景原因"
+                  value={newChange.reason}
+                  onChange={(value) => updateNewChange("reason", value)}
+                />
+                <label className="space-y-2">
+                  <span className="enterprise-field-label">
+                    Target Close date
+                  </span>
+                  <input
+                    type="date"
+                    value={newChange.targetCloseDate}
+                    onChange={(e) =>
+                      updateNewChange("targetCloseDate", e.target.value)
+                    }
+                    className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  />
+                </label>
+              </div>
+
+              <DepartmentCheckboxGroup
+                selected={newChange.departments}
+                onChange={(value) => updateNewChange("departments", value)}
+              />
+
+              <section className="mt-7 space-y-3">
+                <label className="block space-y-2">
+                  <span className="enterprise-field-label">变更描述</span>
+                  <textarea
+                    value={newChange.description}
+                    onChange={(event) =>
+                      updateNewChange("description", event.target.value)
+                    }
+                    placeholder="请描述当前状态、拟变更内容、变更原因、影响范围和期望结果。"
+                    className="min-h-32 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  />
+                </label>
+              </section>
+
+              <section className="mt-4 rounded-md border border-slate-200 bg-slate-50/70 p-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAttachmentExpanded((value) => !value)}
+                  className="flex w-full flex-col gap-2 rounded-lg px-1 py-1 text-left transition hover:bg-white sm:flex-row sm:items-center sm:justify-between"
+                  aria-expanded={isAttachmentExpanded}
+                >
+                  <div>
+                    <h3 className="text-base font-semibold text-slate-800">
+                      Before / After 附件
+                    </h3>
+                    <p className="mt-1 text-sm text-slate-500">
+                      {beforeAttachments.length} before ·{" "}
+                      {afterAttachments.length} after
+                    </p>
+                  </div>
+                  <span className="rounded-sm border border-slate-200 bg-white px-2.5 py-1 text-sm font-semibold text-slate-600">
+                    {isAttachmentExpanded ? "收起" : "展开"}
+                  </span>
+                </button>
+
+                {isAttachmentExpanded ? (
+                  <div className="mt-3 grid gap-3 lg:grid-cols-2">
+                    <NewChangeAttachmentPanel
+                      title="Before"
+                      attachments={beforeAttachments}
+                      note={newChange.beforeAttachmentNote}
+                      onAdd={(files) => addAttachments("before", files)}
+                      onRemove={(index) => removeAttachment("before", index)}
+                      onNoteChange={(value) =>
+                        updateNewChange("beforeAttachmentNote", value)
+                      }
+                    />
+                    <NewChangeAttachmentPanel
+                      title="After"
+                      attachments={afterAttachments}
+                      note={newChange.afterAttachmentNote}
+                      onAdd={(files) => addAttachments("after", files)}
+                      onRemove={(index) => removeAttachment("after", index)}
+                      onNoteChange={(value) =>
+                        updateNewChange("afterAttachmentNote", value)
+                      }
+                    />
+                  </div>
+                ) : null}
+              </section>
+
+              <FormSectionHeader
+                eyebrow="Section 03"
+                title="Initiator approval gate"
+                description="两个确认完成后，case 才能进入影响分析、验证计划和执行计划。"
+                className="mt-8"
+              />
+              <section className="mt-4 grid gap-3 lg:grid-cols-2">
+                <ConfirmationBox
+                  title="发起人确认"
+                  description="发起人已确认变更描述、影响部门、Before/After 附件和基础信息真实完整。"
+                  checked={newChange.initiatorConfirmed}
+                  tone="amber"
+                  disabled={!canConfirmInitiator}
+                  disabledReason={
+                    initiatorName
+                      ? `只能由发起人本人确认。当前登录用户：${userLabel || "未登录"}`
+                      : "请先填写变更发起人。"
+                  }
+                  onChange={(checked) =>
+                    updateNewChange("initiatorConfirmed", checked)
+                  }
+                />
+                <ConfirmationBox
+                  title="发起人的领导确认"
+                  description="发起人的直属领导已确认该变更可以进入后续 PD-ECR 流程。"
+                  checked={newChange.leaderConfirmed}
+                  tone="emerald"
+                  disabled={!canConfirmLeader}
+                  disabledReason={
+                    initiatorName
+                      ? "只能由发起人所在部门的 department_leader 确认，且不能由发起人本人确认。"
+                      : "请先填写变更发起人。"
+                  }
+                  onChange={(checked) =>
+                    updateNewChange("leaderConfirmed", checked)
+                  }
+                />
+              </section>
+
+              {reviewCaseId ? (
+                <section className="mt-4 rounded-md border border-emerald-100 bg-emerald-50/70 p-4">
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-900">
+                        领导审批当前新建变更表单
+                      </p>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        当前打开的是发起人提交的原始新建变更界面，请核对表单内容和 Before/After 附件说明后审批。
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        Case: {reviewCaseId}{reviewTaskId ? ` · Task: ${reviewTaskId}` : ""}{reviewCaseStatus ? ` · Status: ${reviewCaseStatus}` : ""}
+                      </p>
+                      {reviewMessage ? (
+                        <p className="mt-2 text-sm font-medium text-emerald-800">
+                          {reviewMessage}
+                        </p>
+                      ) : null}
+                    </div>
+                    {isReviewClosed ? (
+                      <div className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600">
+                        已处理，只读查看
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-2 sm:flex-row">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="border-rose-200 text-rose-700 hover:bg-rose-50"
+                          disabled={approveReviewMutation.isPending || rejectReviewMutation.isPending}
+                          onClick={rejectSubmittedChange}
+                        >
+                          退回补充
+                        </Button>
+                        <Button
+                          type="button"
+                          className="bg-emerald-700 hover:bg-emerald-800"
+                          disabled={
+                            approveReviewMutation.isPending ||
+                            rejectReviewMutation.isPending ||
+                            !newChange.leaderConfirmed
+                          }
+                          onClick={() => approveReviewMutation.mutate()}
+                        >
+                          {approveReviewMutation.isPending ? "Approving..." : "确认通过"}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              ) : (
+                <section className="mt-4 rounded-md border border-blue-100 bg-blue-50/70 p-4">
+                  <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-blue-900">
+                        提交给发起人领导确认
+                      </p>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        发起人确认后，点击这里生成领导审批待办。领导登录后到 My Tasks 的 Manager Approvals 中确认。
+                      </p>
+                      {leaderSubmitMessage ? (
+                        <p className="mt-2 text-sm font-medium text-blue-800">
+                          {leaderSubmitMessage}
+                        </p>
+                      ) : null}
+                    </div>
+                    <Button
+                      type="button"
+                      className="w-full bg-blue-700 hover:bg-blue-800 lg:w-fit"
+                      disabled={
+                        submitLeaderApprovalMutation.isPending ||
+                        !newChange.initiatorConfirmed ||
+                        !canConfirmInitiator
+                      }
+                      onClick={() => submitLeaderApprovalMutation.mutate()}
+                    >
+                      {submitLeaderApprovalMutation.isPending
+                        ? "Submitting..."
+                        : "Submit to leader"}
+                    </Button>
+                  </div>
+                </section>
+              )}
+
+              {/* 操作按钮 */}
+              <div className="sticky bottom-0 -mx-4 mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur">
+                {draftStatus ? (
+                  <p
+                    className={`text-sm font-medium ${
+                      draftStatus === "请先填写变更名称" ||
+                      draftStatus === "请先完成发起人确认和发起人的领导确认"
+                        ? "text-red-600"
+                        : "text-blue-700"
+                    }`}
+                  >
+                    {draftStatus}
+                  </p>
+                ) : !canContinue ? (
+                  <p className="text-sm font-medium text-slate-500">
+                    勾选发起人确认和领导确认后，才能进入后续流程。
+                  </p>
+                ) : (
+                  <span />
+                )}
+                <Button
+                  type="button"
+                  onClick={handleNextStep}
+                  disabled={generateMutation.isPending || !canContinue}
+                  className="h-10 shrink-0 rounded-md bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700 transition-all active:scale-[0.98]"
+                >
+                  {generateMutation.isPending ? "处理中..." : "下一步"}
+                  <ArrowRight className="size-4" />
+                </Button>
+              </div>
+            </WorkPanel>
           </div>
         </main>
 
         <footer className="shrink-0 flex flex-wrap items-center gap-3 pb-1">
           <Button
             variant="outline"
-            className="bg-white"
+            className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
             onClick={() => navigate({ to: "/pd-ecr/dashboard" })}
           >
             <FolderKanban className="size-4" />
@@ -780,8 +1517,10 @@ export function PdEcrPlatform() {
           </Button>
           <Button
             variant="outline"
-            className="bg-white"
-            onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}
+            className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
+            onClick={() =>
+              navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
+            }
           >
             All Pd-ECR list
           </Button>
@@ -789,5 +1528,5 @@ export function PdEcrPlatform() {
         </footer>
       </div>
     </div>
-  )
+  );
 }

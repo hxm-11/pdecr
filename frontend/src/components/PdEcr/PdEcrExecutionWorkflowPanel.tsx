@@ -288,6 +288,25 @@ export function PdEcrExecutionWorkflowPanel({
   const allApproved = workflow?.leader_review_tasks.length
     ? workflow.leader_review_tasks.every((task) => task.status === "approved")
     : false
+  const gateBlockers = useMemo(() => {
+    const blockers: string[] = []
+    const selectedDepartments = WORKFLOW_DEPTS.filter((dept) => selected[dept.id])
+    if (!selectedDepartments.length) {
+      blockers.push("Select at least one involved department before publishing.")
+    }
+    if (!hasPublishedDepartments && workflow?.case.status !== "draft") {
+      blockers.push("Publish involved departments before assigning execution tasks.")
+    }
+    const missingOwnerRows = yRows.filter((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())
+    if (missingOwnerRows.length) {
+      blockers.push(`${missingOwnerRows.length} Y checklist item(s) still need owner.`)
+    }
+    const missingDueRows = yRows.filter((row) => !row.dueDate)
+    if (missingDueRows.length) {
+      blockers.push(`${missingDueRows.length} Y checklist item(s) still need due date.`)
+    }
+    return blockers
+  }, [assignmentEmails, hasPublishedDepartments, selected, workflow?.case.status, yRows])
 
   return (
     <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
@@ -299,10 +318,28 @@ export function PdEcrExecutionWorkflowPanel({
           <p className="text-xs text-stone-500" role="status">{statusText}</p>
           {workflow && (
             <>
-              <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold ${workflowBadgeClass(workflow.case.status)}`}>
+              <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold shadow-sm ${workflowBadgeClass(workflow.case.status)}`}>
                 {workflow.case.status}
               </span>
               <WorkflowProgress status={workflow.case.status} />
+              <div className={
+                gateBlockers.length
+                  ? "rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800"
+                  : "rounded border border-emerald-200 bg-emerald-50 p-2 text-xs text-emerald-800"
+              }>
+                <p className="font-semibold">
+                  {gateBlockers.length ? "Gate needs input" : "Gate ready"}
+                </p>
+                {gateBlockers.length ? (
+                  <ul className="mt-1 list-disc space-y-1 pl-4">
+                    {gateBlockers.slice(0, 3).map((blocker) => (
+                      <li key={blocker}>{blocker}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-1">Workflow prerequisites are complete for the next action.</p>
+                )}
+              </div>
             </>
           )}
           {canManageWorkflow && !hasExecutionTasks ? (
@@ -325,7 +362,8 @@ export function PdEcrExecutionWorkflowPanel({
                   !workflowReady ||
                   !hasPublishedDepartments ||
                   !yRows.length ||
-                  yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim())
+                  yRows.some((row) => !(assignmentEmails[row.id] || row.responsible || "").trim()) ||
+                  yRows.some((row) => !row.dueDate)
                 }
               />
             </>
@@ -418,13 +456,13 @@ function DepartmentPublishStep({
           />
           <span className="font-semibold text-stone-700">{dept.label}</span>
           {publishedDepartments.has(dept.id) && (
-            <span className="ml-auto rounded-full border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">
+            <span className="ml-auto rounded-full border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 shadow-sm">
               visible
             </span>
           )}
         </label>
       ))}
-      <Button type="button" className="w-full bg-stone-800 hover:bg-stone-700" onClick={onSubmit} disabled={disabled}>
+      <Button type="button" className="w-full bg-stone-800 hover:bg-stone-700 transition-colors" onClick={onSubmit} disabled={disabled}>
         Publish to departments
       </Button>
     </div>
@@ -455,7 +493,7 @@ function ExecutionAssignmentStep({
             <input
               value={assignmentEmails[row.id] || ""}
               onChange={(event) => setAssignmentEmails((prev) => ({ ...prev, [row.id]: event.target.value }))}
-              className="mt-2 h-8 w-full rounded border border-stone-200 px-2 outline-none focus:border-amber-400"
+              className="mt-2 h-8 w-full rounded border border-stone-200 px-2 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
               placeholder={row.responsible || "assignee@email.com"}
             />
           </label>
@@ -463,7 +501,7 @@ function ExecutionAssignmentStep({
       ) : (
         <p className="rounded border border-stone-100 bg-stone-50 p-2 text-xs text-stone-500">No Y checklist rows</p>
       )}
-      <Button type="button" className="w-full bg-amber-600 hover:bg-amber-700" onClick={onSubmit} disabled={disabled}>
+      <Button type="button" className="w-full bg-amber-600 hover:bg-amber-700 transition-all active:scale-[0.98]" onClick={onSubmit} disabled={disabled}>
         Assign execution tasks
       </Button>
     </div>
@@ -517,7 +555,7 @@ function ExecutionTaskCard({
     <div className="rounded border border-stone-200 bg-white p-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-stone-800">{task.department}</p>
-        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${workflowBadgeClass(task.status)}`}>
+        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold shadow-sm ${workflowBadgeClass(task.status)}`}>
           {task.status}
         </span>
       </div>
@@ -541,19 +579,19 @@ function ExecutionTaskCard({
           <input
             value={result}
             onChange={(event) => setResult(event.target.value)}
-            className="h-8 w-full rounded border border-stone-200 px-2 text-xs outline-none focus:border-amber-400"
+            className="h-8 w-full rounded border border-stone-200 px-2 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
             placeholder="Execution result"
           />
           <textarea
             value={note}
             onChange={(event) => setNote(event.target.value)}
-            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-400"
+            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
             placeholder="Execution note / 执行结果"
           />
           <textarea
             value={evidence}
             onChange={(event) => setEvidence(event.target.value)}
-            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-400"
+            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
             placeholder="Evidence note / 验证记录"
           />
           {error && <p className="text-xs text-rose-600">{error}</p>}
@@ -608,7 +646,7 @@ function LeaderReviewCard({
     <div className="rounded border border-stone-200 bg-white p-3">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold capitalize text-stone-800">{task.department}</p>
-        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${workflowBadgeClass(task.status)}`}>
+        <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold shadow-sm ${workflowBadgeClass(task.status)}`}>
           {task.status}
         </span>
       </div>
@@ -625,13 +663,13 @@ function LeaderReviewCard({
           <input
             value={signature}
             onChange={(event) => setSignature(event.target.value)}
-            className="h-8 w-full rounded border border-stone-200 px-2 text-xs outline-none focus:border-amber-400"
+            className="h-8 w-full rounded border border-stone-200 px-2 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
             placeholder="Signature name / 签核人"
           />
           <textarea
             value={comment}
             onChange={(event) => setComment(event.target.value)}
-            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-400"
+            className="min-h-14 w-full rounded border border-stone-200 px-2 py-1.5 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
             placeholder="Review comment / 审核意见"
           />
           {error && <p className="text-xs text-rose-600">{error}</p>}
@@ -639,7 +677,7 @@ function LeaderReviewCard({
             <Button type="button" size="sm" className="bg-emerald-600 hover:bg-emerald-700" onClick={() => review("approved")} disabled={isSaving || !signature.trim()}>
               Approve
             </Button>
-            <Button type="button" size="sm" variant="outline" className="bg-white" onClick={() => review("changes_requested")} disabled={isSaving}>
+            <Button type="button" size="sm" variant="outline" className="bg-white hover:bg-amber-50 hover:border-amber-300" onClick={() => review("changes_requested")} disabled={isSaving}>
               退回
             </Button>
           </div>

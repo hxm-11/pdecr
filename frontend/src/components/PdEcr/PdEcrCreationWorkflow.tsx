@@ -698,7 +698,7 @@ export function StepTemplatePreview({
 
   if (title.includes("Close status")) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-stone-50 p-5">
+      <div className="rounded-xl border border-stone-200/60 bg-stone-50/80 p-5">
         <p className="text-sm font-semibold text-stone-800">Close summary</p>
         <p className="mt-2 text-sm leading-6 text-stone-600">
           Final implementation evidence, approval records, and open measures are summarized here before PD-ECR closure.
@@ -1028,14 +1028,14 @@ export function PdEcrCreationWorkflow() {
   return (
     <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
       <div className="w-full min-w-0 space-y-5">
-        <header className="rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+        <header className="rounded-lg border border-stone-200/60 glass-header px-5 py-4 shadow-sm">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-semibold tracking-normal">
+                <h1 className="text-2xl font-semibold tracking-normal">
                   New creation
                 </h1>
-                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800">
+                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-800 shadow-sm">
                   V1 MVP draft workflow
                 </span>
               </div>
@@ -1047,7 +1047,7 @@ export function PdEcrCreationWorkflow() {
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
-                className="bg-white"
+                className="bg-white hover:bg-amber-50 hover:border-amber-300"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <ArrowLeft className="size-4" />
@@ -1085,7 +1085,7 @@ export function PdEcrCreationWorkflow() {
             </div>
           </aside>
 
-          <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+          <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
             <header className="border-b border-stone-200 px-5 py-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
                 {currentStep.eyebrow}
@@ -1129,7 +1129,7 @@ export function PdEcrCreationWorkflow() {
                               ) : fieldIsLong(field) ? (
                                 <textarea id={fieldId} value={data[field]}
                                   onChange={(e) => updateField(field, e.target.value)}
-                                  className={`min-h-24 w-full resize-y rounded-lg border px-4 py-3 text-sm leading-6 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100 ${highlighted ? "border-amber-300 bg-amber-50 text-stone-900" : "border-stone-300 bg-white text-stone-900"}`}
+                                  className={`min-h-24 w-full resize-y rounded-lg border px-4 py-3 text-sm leading-6 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80 ${highlighted ? "border-amber-300 bg-amber-50 text-stone-900" : "border-stone-300 bg-white text-stone-900"}`}
                                 />
                               ) : (
                                 <Input id={fieldId} value={data[field]}
@@ -1172,7 +1172,7 @@ export function PdEcrCreationWorkflow() {
                         <h3 className="text-lg font-semibold text-amber-900">检索相似历史案例</h3>
                         <p className="mt-1 text-sm text-amber-700">基于 Step 1 填写的信息在 {20} 个历史案例中模糊匹配，按相关性排序。</p>
                         <Button type="button" onClick={() => searchMutation.mutate()} disabled={searchMutation.isPending}
-                          className="mt-4 h-11 bg-amber-600 px-6 text-white hover:bg-amber-700"
+                          className="mt-4 h-11 bg-amber-600 px-6 text-white hover:bg-amber-700 transition-all active:scale-[0.98]"
                         >
                           <Search className="size-4" />
                           {searchMutation.isPending ? "搜索中..." : "搜索相似案例"}
@@ -1182,12 +1182,12 @@ export function PdEcrCreationWorkflow() {
                   </div>
 
                   {showSimilarCases ? (
-                    <div className="rounded-lg border border-stone-200 bg-stone-50 p-4">
+                    <div className="rounded-xl border border-stone-200/60 bg-stone-50/80 p-4">
                       <div className="mb-3 flex items-center justify-between gap-3">
                         <p className="text-sm font-semibold text-stone-800">
                           匹配到 {relatedCases.length} 个相似历史案例
                         </p>
-                        <Button type="button" variant="outline" className="h-8 bg-white"
+                        <Button type="button" variant="outline" className="h-8 bg-white hover:bg-amber-50 hover:border-amber-300"
                           onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}>
                           Open list
                         </Button>
@@ -1252,7 +1252,7 @@ export function PdEcrCreationWorkflow() {
                           <h3 className="text-lg font-semibold text-stone-900">AI 一键生成 4 模块</h3>
                           <p className="mt-1 text-sm text-stone-500">基于以上相似案例，AI 生成当前 PD-ECR 四模块（变更描述、影响分析、验证计划、实施计划）。</p>
                           <Button type="button" onClick={() => generateMutation.mutate()} disabled={generateMutation.isPending}
-                            className="mt-4 h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
+                            className="mt-4 h-11 bg-stone-800 px-6 text-white hover:bg-stone-700 transition-colors"
                           >
                             <Sparkles className="size-4" />
                             {generateMutation.isPending ? "AI 生成中..." : "AI 一键生成"}
@@ -1263,7 +1263,7 @@ export function PdEcrCreationWorkflow() {
                   ) : null}
 
                   {showUploadedFiles ? (
-                    <div className="rounded-lg border border-stone-200 bg-stone-50 p-4">
+                    <div className="rounded-xl border border-stone-200/60 bg-stone-50/80 p-4">
                       <p className="text-sm font-semibold text-stone-800">Uploaded file references</p>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {uploadedFiles.map((name) => (
@@ -1289,9 +1289,13 @@ export function PdEcrCreationWorkflow() {
                             source: "generated",
                             modules: generatedModules,
                           })
-                          navigate({ to: "/pd-ecr/content/$moduleId", params: { moduleId: mod.id } })
+                          navigate({
+                            to: "/pd-ecr/content/$moduleId",
+                            params: { moduleId: mod.id },
+                            search: { field: undefined, anchor: undefined, taskId: undefined },
+                          })
                         }}
-                          className="rounded-lg border border-stone-200 bg-stone-50 p-4 text-left transition hover:border-amber-300 hover:shadow-sm"
+                          className="rounded-xl border border-stone-200/60 bg-stone-50/80 p-4 text-left transition hover:border-amber-300 hover:shadow-sm"
                         >
                           <p className="text-xs font-semibold uppercase text-stone-400">{mod.subtitle}</p>
                           <p className="mt-1 font-semibold text-stone-800">{mod.title}</p>
@@ -1305,10 +1309,10 @@ export function PdEcrCreationWorkflow() {
 
                   {generatedModules.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
-                      <Button variant="outline" className="bg-white" onClick={() => navigate({ to: "/pd-ecr/content" })}>
+                      <Button variant="outline" className="bg-white hover:bg-amber-50 hover:border-amber-300" onClick={() => navigate({ to: "/pd-ecr/content" })}>
                         <FileCheck2 className="size-4" /> 查看全部模块
                       </Button>
-                      <Button variant="outline" className="bg-white" onClick={() => {
+                      <Button variant="outline" className="bg-white hover:bg-amber-50 hover:border-amber-300" onClick={() => {
                         downloadText("pd-ecr-modules.csv",
                           [["Module","Field","Value"], ...generatedModules.flatMap(m => Object.entries(m.data).map(([k,v]) => [m.title, k, typeof v === "string" ? v : JSON.stringify(v)]))]
                             .map(r => r.map(c => `"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n"),
@@ -1330,7 +1334,7 @@ export function PdEcrCreationWorkflow() {
                   asChild
                   type="button"
                   variant="outline"
-                  className="bg-white"
+                  className="bg-white hover:bg-amber-50 hover:border-amber-300"
                 >
                   <label>
                     <Upload className="size-4" />
@@ -1348,7 +1352,7 @@ export function PdEcrCreationWorkflow() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="bg-white"
+                  className="bg-white hover:bg-amber-50 hover:border-amber-300"
                   onClick={previousStep}
                   disabled={step === 0}
                 >
@@ -1357,7 +1361,7 @@ export function PdEcrCreationWorkflow() {
                 </Button>
                 <Button
                   type="button"
-                  className="bg-stone-800 hover:bg-stone-700"
+                  className="bg-stone-800 hover:bg-stone-700 transition-colors"
                   onClick={nextStep}
                   disabled={step === stepConfigs.length - 1}
                 >
@@ -1369,14 +1373,14 @@ export function PdEcrCreationWorkflow() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="bg-white"
+                  className="bg-white hover:bg-amber-50 hover:border-amber-300"
                   onClick={() => navigate({ to: "/pd-ecr/content" })}
                 >
                   Open modules
                 </Button>
                 <Button
                   type="button"
-                  className="bg-amber-700 hover:bg-amber-700"
+                  className="bg-amber-700 hover:bg-amber-700 transition-all active:scale-[0.98]"
                   onClick={() => generateMutation.mutate()}
                   disabled={generateMutation.isPending}
                 >

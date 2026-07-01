@@ -115,6 +115,14 @@ def _execution_tasks(session: Session, case_id: uuid.UUID) -> list[PdEcrExecutio
 
 
 def _serialize_department_task(task: PdEcrDepartmentTask) -> dict[str, Any]:
+    target = _target_payload(
+        task_type="department_confirmation",
+        task_bucket=_bucket_for_status(task.status, "confirmation"),
+        module_id="impact-analysis",
+        field_path=f"department_confirmation.{task.department}",
+        anchor_id=_task_anchor(task.department, prefix="impact-department"),
+        case_id=task.case_id,
+    )
     return {
         "id": str(task.id),
         "case_id": str(task.case_id),
@@ -132,6 +140,7 @@ def _serialize_department_task(task: PdEcrDepartmentTask) -> dict[str, Any]:
         "due_date": task.due_date.isoformat() if task.due_date else None,
         "created_at": task.created_at.isoformat() if task.created_at else None,
         "updated_at": task.updated_at.isoformat() if task.updated_at else None,
+        **target,
     }
 
 
@@ -152,11 +161,63 @@ def _case_summary(case: PdEcrCase | None) -> dict[str, Any] | None:
     return serialize_case(case)
 
 
+def _task_anchor(value: str | None, *, prefix: str) -> str:
+    raw = str(value or "").strip().lower()
+    cleaned = "".join(ch if ch.isalnum() else "-" for ch in raw).strip("-")
+    return f"{prefix}-{cleaned or 'target'}"
+
+
+def _target_payload(
+    *,
+    task_type: str,
+    task_bucket: str,
+    module_id: str,
+    field_path: str | None = None,
+    anchor_id: str | None = None,
+    case_id: uuid.UUID | str | None = None,
+) -> dict[str, Any]:
+    action_url = None
+    if case_id:
+        query = f"?caseId={case_id}"
+        if field_path:
+            query += f"&field={field_path}"
+        if anchor_id:
+            query += f"&anchor={anchor_id}"
+        action_url = f"/pd-ecr/content/{module_id}{query}"
+
+    return {
+        "task_type": task_type,
+        "task_bucket": task_bucket,
+        "module_id": module_id,
+        "field_path": field_path,
+        "anchor_id": anchor_id,
+        "action_url": action_url,
+    }
+
+
+def _bucket_for_status(status_value: str, default_bucket: str) -> str:
+    status_text = str(status_value or "").strip().lower()
+    if status_text in {"changes_requested", "rejected"}:
+        return "supplement"
+    return default_bucket
+
+
 def _serialize_execution_task(
     task: PdEcrExecutionTask,
     *,
     case: PdEcrCase | None = None,
 ) -> dict[str, Any]:
+    target = _target_payload(
+        task_type="execution",
+        task_bucket=_bucket_for_status(
+            task.status,
+            "confirmation" if task.status == "pending_confirmation" else "execution",
+        ),
+        module_id="implementation-plan",
+        field_path=f"checklistRows.{task.checklist_row_id}",
+        anchor_id=_task_anchor(task.checklist_row_id, prefix="implementation-task"),
+        case_id=task.case_id,
+    )
     return {
         "id": str(task.id),
         "case_id": str(task.case_id),
@@ -179,6 +240,7 @@ def _serialize_execution_task(
         "review_comment": task.review_comment,
         "created_at": task.created_at.isoformat() if task.created_at else None,
         "updated_at": task.updated_at.isoformat() if task.updated_at else None,
+        **target,
     }
 
 
@@ -187,6 +249,14 @@ def _serialize_leader_task(
     *,
     case: PdEcrCase | None = None,
 ) -> dict[str, Any]:
+    target = _target_payload(
+        task_type="leader_review",
+        task_bucket=_bucket_for_status(task.status, "signoff"),
+        module_id="validation-plan",
+        field_path=f"leader_review.{task.department}",
+        anchor_id=_task_anchor(task.department, prefix="leader-review"),
+        case_id=task.case_id,
+    )
     return {
         "id": str(task.id),
         "case_id": str(task.case_id),
@@ -202,6 +272,31 @@ def _serialize_leader_task(
         "reviewed_at": task.reviewed_at.isoformat() if task.reviewed_at else None,
         "created_at": task.created_at.isoformat() if task.created_at else None,
         "updated_at": task.updated_at.isoformat() if task.updated_at else None,
+        **target,
+    }
+
+
+def _serialize_approval_task(task: Any) -> dict[str, Any]:
+    target = _target_payload(
+        task_type="manager_approval",
+        task_bucket=_bucket_for_status(task.status, "signoff"),
+        module_id="change-description",
+        field_path="manager_approval",
+        anchor_id="manager-approval",
+        case_id=task.case_id,
+    )
+    return {
+        "id": str(task.id),
+        "case_id": str(task.case_id),
+        "status": task.status,
+        "approver_id": str(task.approver_id) if task.approver_id else None,
+        "approver_email": task.approver_email,
+        "approver_name": task.approver_name,
+        "rejection_reason": task.rejection_reason,
+        "approved_at": task.approved_at.isoformat() if task.approved_at else None,
+        "created_at": task.created_at.isoformat() if task.created_at else None,
+        "updated_at": task.updated_at.isoformat() if task.updated_at else None,
+        **target,
     }
 
 
@@ -231,9 +326,13 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
     execution_statement = select(PdEcrExecutionTask).order_by(
         PdEcrExecutionTask.department,
         PdEcrExecutionTask.checklist_row_id,
+    ).where(
+        PdEcrExecutionTask.status.notin_(["completed", "cancelled"]),
     )
     leader_statement = select(PdEcrLeaderReviewTask).order_by(
         PdEcrLeaderReviewTask.department,
+    ).where(
+        PdEcrLeaderReviewTask.status != "approved",
     )
     if not current_user.is_superuser and getattr(current_user, "pd_ecr_role", None) != "pd_ecr_manager":
         execution_statement = execution_statement.where(
@@ -257,6 +356,42 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
         ).all()
         cases_by_id = {case.id: case for case in cases}
 
+    # — Approval tasks —
+    from app.models import PdEcrApprovalTask
+    approval_statement = select(PdEcrApprovalTask).where(
+        PdEcrApprovalTask.approver_id == current_user.id,
+    ).order_by(PdEcrApprovalTask.created_at.desc())
+    approval_tasks_raw = session.exec(approval_statement).all()
+    approval_case_ids = list({t.case_id for t in approval_tasks_raw})
+    approval_cases: dict[uuid.UUID, dict[str, Any]] = {}
+    if approval_case_ids:
+        case_statement = select(PdEcrCase).where(PdEcrCase.id.in_(approval_case_ids))
+        approval_cases = {c.id: serialize_case(c) for c in session.exec(case_statement).all()}
+
+    submitted_case_statement = select(PdEcrCase).where(
+        (PdEcrCase.created_by_id == current_user.id) | (PdEcrCase.owner_id == current_user.id)
+    )
+    submitted_cases_raw = session.exec(submitted_case_statement).all()
+    submitted_cases = {case.id: serialize_case(case) for case in submitted_cases_raw}
+    submitted_approval_tasks_raw = []
+    if submitted_cases:
+        submitted_approval_statement = select(PdEcrApprovalTask).where(
+            PdEcrApprovalTask.case_id.in_(list(submitted_cases.keys()))  # type: ignore[attr-defined]
+        ).order_by(PdEcrApprovalTask.created_at.desc())
+        submitted_approval_tasks_raw = session.exec(submitted_approval_statement).all()
+
+    # — Department tasks —
+    dept_statement = select(PdEcrDepartmentTask).where(
+        PdEcrDepartmentTask.assignee_id == current_user.id,
+        PdEcrDepartmentTask.status.notin_(["confirmed"]),
+    ).order_by(PdEcrDepartmentTask.created_at.desc())
+    department_tasks_raw = session.exec(dept_statement).all()
+    dept_case_ids = list({t.case_id for t in department_tasks_raw})
+    dept_cases: dict[uuid.UUID, dict[str, Any]] = {}
+    if dept_case_ids:
+        cs = select(PdEcrCase).where(PdEcrCase.id.in_(dept_case_ids))
+        dept_cases = {c.id: serialize_case(c) for c in session.exec(cs).all()}
+
     return {
         "execution_tasks": [
             _serialize_execution_task(task, case=cases_by_id.get(task.case_id))
@@ -265,6 +400,30 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
         "leader_review_tasks": [
             _serialize_leader_task(task, case=cases_by_id.get(task.case_id))
             for task in leader_tasks
+        ],
+        "approval_tasks": [
+            {
+                **_serialize_approval_task(t),
+                "case": approval_cases.get(t.case_id),
+                "case_exists": t.case_id in approval_cases,
+            }
+            for t in approval_tasks_raw
+        ],
+        "submitted_approval_tasks": [
+            {
+                **_serialize_approval_task(t),
+                "case": submitted_cases.get(t.case_id),
+                "case_exists": t.case_id in submitted_cases,
+            }
+            for t in submitted_approval_tasks_raw
+        ],
+        "department_tasks": [
+            {
+                **_serialize_department_task(t),
+                "case": dept_cases.get(t.case_id),
+                "case_exists": t.case_id in dept_cases,
+            }
+            for t in department_tasks_raw
         ],
     }
 
@@ -871,3 +1030,81 @@ def review_leader_task(
     session.commit()
     session.refresh(case)
     return get_workflow_state(session=session, case=case)
+
+
+def create_approval_task(
+    *,
+    session: Session,
+    case: Any,
+    approver_id: uuid.UUID | None = None,
+    approver_email: str | None = None,
+    approver_name: str | None = None,
+) -> Any:
+    """Create a manager approval task for a submitted case."""
+    from app.models import PdEcrApprovalTask
+    task = PdEcrApprovalTask(
+        case_id=case.id,
+        approver_id=approver_id,
+        approver_email=approver_email,
+        approver_name=approver_name,
+        status="pending",
+    )
+    session.add(task)
+    session.commit()
+    session.refresh(task)
+    return task
+
+
+def approve_case(
+    *,
+    session: Session,
+    case: Any,
+    approval_task: Any,
+    current_user: Any,
+) -> Any:
+    """Approve a case — transition to generated and trigger AI."""
+    from app.models import PdEcrCase, PdEcrApprovalTask
+    from app.models import get_datetime_utc
+
+    now = get_datetime_utc()
+
+    # Update approval task
+    approval_task.status = "approved"
+    approval_task.approved_at = now
+    approval_task.updated_at = now
+    session.add(approval_task)
+
+    # Update case status
+    case.status = "generated"
+    case.updated_at = now
+    session.add(case)
+
+    session.commit()
+    session.refresh(case)
+    return case
+
+
+def reject_case(
+    *,
+    session: Session,
+    case: Any,
+    approval_task: Any,
+    rejection_reason: str | None = None,
+) -> Any:
+    """Reject a case — send back to draft."""
+    from app.models import PdEcrCase, PdEcrApprovalTask
+
+    now = get_datetime_utc()
+
+    approval_task.status = "rejected"
+    approval_task.rejection_reason = rejection_reason
+    approval_task.updated_at = now
+    session.add(approval_task)
+
+    case.status = "draft"
+    case.updated_at = now
+    session.add(case)
+
+    session.commit()
+    session.refresh(case)
+    return case

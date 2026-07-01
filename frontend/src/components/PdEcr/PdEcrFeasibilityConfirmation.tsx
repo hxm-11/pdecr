@@ -1,7 +1,8 @@
 import { Check, FileText, Upload } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import useAuth from "@/hooks/useAuth"
 import { getPdEcrModuleDraft, savePdEcrModuleDraft } from "@/lib/pdEcrApi"
-import { getPdEcrActiveRecordId } from "./pdEcrState"
+import { getPdEcrActiveRecordId, loadActiveResult } from "./pdEcrState"
 import type { PdEcrDisplayModule } from "./pdEcrState"
 
 // ── Types ──
@@ -33,6 +34,30 @@ const SIGNER_ROLES = [
 // ── Constants ──
 const STORAGE_KEY = "pd-ecr-feasibility-confirmation"
 const SIGNER_STORAGE_KEY = "pd-ecr-feasibility-signers"
+
+type PdEcrActor = {
+  email?: string | null
+  full_name?: string | null
+  display_name?: string | null
+}
+
+function normalizeActorText(value?: string | null) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+}
+
+function currentUserMatchesInitiator(
+  user: PdEcrActor | null | undefined,
+  initiator: string,
+) {
+  const target = normalizeActorText(initiator)
+  if (!target) return false
+  return [user?.email, user?.display_name, user?.full_name].some(
+    (candidate) => normalizeActorText(candidate) === target,
+  )
+}
 
 // ── localStorage helpers ──
 function coerceFeasibilityState(value: Record<string, unknown> | null | undefined): FeasibilityState {
@@ -78,16 +103,27 @@ async function saveFeasibilityBackend(moduleId: string, title: string, data: Rec
 
 // ── Component ──
 export function PdEcrFeasibilityConfirmation({
-  module: _module,
+  module,
   hideApproval: _hideApproval,
 }: {
   module: PdEcrDisplayModule
   hideApproval?: boolean
 }) {
+  const { user } = useAuth()
+  const currentUser = user as PdEcrActor | null | undefined
   const [state, setState] = useState<FeasibilityState>(() => loadFeasibilityState())
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const stepsComplete = isFeasibilityComplete(state)
+  const activeResult = loadActiveResult()
+  const initiator = String(
+    activeResult.currentCase?.initiator ||
+    activeResult.inputSnapshot?.initiator ||
+    module.data.initiator ||
+    module.data.owner ||
+    "",
+  )
+  const canConfirmInitiator = currentUserMatchesInitiator(currentUser, initiator)
 
   useEffect(() => {
     if (localStorage.getItem(STORAGE_KEY)) return
@@ -142,7 +178,7 @@ export function PdEcrFeasibilityConfirmation({
   return (
     <div className="space-y-6">
       {/* Step 1: Info Text + Initiator Confirmation */}
-      <div className="rounded-lg border border-stone-200 bg-white p-5">
+      <div className="rounded-xl border border-stone-200/60 bg-white p-5">
         <h3 className="text-sm font-semibold text-stone-700 mb-3">
           2.1  变更可行性确认信息
         </h3>
@@ -166,7 +202,9 @@ export function PdEcrFeasibilityConfirmation({
             <input
               type="checkbox"
               checked={state.initiatorConfirmed}
+              disabled={!canConfirmInitiator}
               onChange={(e) => {
+                if (!canConfirmInitiator) return
                 const checked = e.target.checked
                 setState((prev) => ({
                   ...prev,
@@ -185,6 +223,11 @@ export function PdEcrFeasibilityConfirmation({
               <p className="text-xs text-stone-500 mt-0.5">
                 本人作为变更发起人，已确认上述可行性信息真实有效。
               </p>
+              {!canConfirmInitiator ? (
+                <p className="mt-1 text-xs font-medium text-stone-500">
+                  只能由发起人本人确认。当前发起人：{initiator || "未填写"}
+                </p>
+              ) : null}
             </div>
           </label>
           {state.initiatorConfirmDate && (
@@ -196,7 +239,7 @@ export function PdEcrFeasibilityConfirmation({
       </div>
 
       {/* Step 2: File Upload */}
-      <div className="rounded-lg border border-stone-200 bg-white p-5">
+      <div className="rounded-xl border border-stone-200/60 bg-white p-5">
         <h3 className="text-sm font-semibold text-stone-700 mb-3">
           2.2:  附件上传
         </h3>
@@ -345,7 +388,7 @@ export function PdEcrLeaderSigning() {
   }
 
   return (
-    <div className="rounded-lg border border-stone-200 bg-white p-5">
+    <div className="rounded-xl border border-stone-200/60 bg-white p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-sky-700 mb-1">
         Step 4
       </p>

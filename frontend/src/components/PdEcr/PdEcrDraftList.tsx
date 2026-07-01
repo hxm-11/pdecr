@@ -273,6 +273,7 @@ export function PdEcrDraftList() {
     navigate({
       to: "/pd-ecr/content/$moduleId",
       params: { moduleId: draft.module_id },
+      search: { field: undefined, anchor: undefined, taskId: undefined },
     })
   }
 
@@ -284,14 +285,14 @@ export function PdEcrDraftList() {
     <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
       <div className="w-full min-w-0 space-y-5">
         {/* Header */}
-        <header className="rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+        <header className="rounded-lg border border-stone-200/60 glass-header px-5 py-4 shadow-sm">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-3xl font-semibold tracking-normal text-stone-900">
+                <h1 className="text-2xl font-semibold tracking-normal text-stone-900">
                   草稿箱
                 </h1>
-                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 shadow-sm">
                   Drafts
                 </span>
               </div>
@@ -302,14 +303,14 @@ export function PdEcrDraftList() {
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
-                className="bg-white"
+                className="bg-white hover:bg-amber-50 hover:border-amber-300"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <ArrowLeft className="size-4" />
                 返回平台
               </Button>
               <Button
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-amber-600 hover:bg-amber-700 transition-all active:scale-[0.98]"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <Plus className="size-4" />
@@ -320,7 +321,7 @@ export function PdEcrDraftList() {
         </header>
 
         {/* Draft Table */}
-        <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
           {isLoading ? (
             <div className="flex items-center justify-center py-20 text-stone-400">
               <Sparkles className="size-5 animate-pulse" />
@@ -332,7 +333,7 @@ export function PdEcrDraftList() {
               {drafts.length > 0 ? (
                 <p className="text-xs">已展示 {drafts.length} 个本地草稿</p>
               ) : (
-                <Button variant="outline" onClick={() => navigate({ to: "/pd-ecr" })}>
+                <Button variant="outline" className="hover:bg-amber-50 hover:border-amber-300" onClick={() => navigate({ to: "/pd-ecr" })}>
                   返回平台
                 </Button>
               )}
@@ -343,7 +344,7 @@ export function PdEcrDraftList() {
               <p>暂无草稿</p>
               <p className="text-xs">在 PD-ECR 平台填写模块内容后，草稿会自动出现在这里</p>
               <Button
-                className="bg-amber-600 hover:bg-amber-700"
+                className="bg-amber-600 hover:bg-amber-700 transition-all active:scale-[0.98]"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <Plus className="size-4" />
@@ -380,7 +381,7 @@ export function PdEcrDraftList() {
 
                       {/* Module type badge */}
                       <td className="px-4 py-3">
-                        <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                        <span className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 shadow-sm">
                           {moduleTitle}
                         </span>
                       </td>
@@ -388,11 +389,11 @@ export function PdEcrDraftList() {
                       {/* Storage location */}
                       <td className="px-4 py-3 text-stone-500 hidden md:table-cell">
                         {isLocal ? (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-stone-100 px-2 py-0.5 text-xs text-stone-500">
+                          <span className="inline-flex items-center gap-1 rounded-full border border-stone-200 bg-stone-100 px-2 py-0.5 text-xs text-stone-500 shadow-sm">
                             本地
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700">
+                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700 shadow-sm">
                             服务器
                           </span>
                         )}
@@ -416,7 +417,7 @@ export function PdEcrDraftList() {
                             type="button"
                             size="sm"
                             variant="outline"
-                            className="h-8 bg-white"
+                            className="h-8 bg-white hover:bg-amber-50 hover:border-amber-300"
                             onClick={() => handleContinue(draft)}
                           >
                             <FileText className="size-3" />

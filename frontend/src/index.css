@@ -5,7 +5,7 @@
 
 @theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Lora", ui-serif, Georgia, serif;
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -45,117 +45,98 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/*
- * ── Warm Business Palette ──────────────────────────────────────────
- * "Amber & Walnut" — a precision engineering workspace that feels
- * warm and human, like a well-lit design studio with wooden desks
- * and copper lamps.
- *
- * Light mode: warm paper whites, rich espresso text, copper accents.
- * Dark mode:  deep walnut tones, muted amber, warm bronze glow.
- */
-
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
   /* Page */
-  --background: oklch(0.985 0.005 84);
-  --foreground: oklch(0.18 0.02 60);
+  --background: oklch(0.975 0.006 252);
+  --foreground: oklch(0.22 0.025 255);
 
   /* Cards & surfaces */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 60);
+  --card-foreground: oklch(0.22 0.025 255);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 60);
+  --popover-foreground: oklch(0.22 0.025 255);
 
-  /* Primary — burnished copper */
-  --primary: oklch(0.62 0.17 55);
+  /* Primary — Bosch-style business blue */
+  --primary: oklch(0.49 0.17 255);
   --primary-foreground: oklch(0.99 0 0);
 
-  /* Secondary — warm sand */
-  --secondary: oklch(0.955 0.01 82);
-  --secondary-foreground: oklch(0.25 0.02 60);
+  /* Secondary — cool enterprise surface */
+  --secondary: oklch(0.955 0.01 252);
+  --secondary-foreground: oklch(0.28 0.03 255);
 
-  /* Muted — warm parchment */
-  --muted: oklch(0.955 0.01 82);
-  --muted-foreground: oklch(0.52 0.03 70);
+  /* Muted */
+  --muted: oklch(0.955 0.01 252);
+  --muted-foreground: oklch(0.52 0.025 255);
 
-  /* Accent — warm clay */
-  --accent: oklch(0.94 0.02 78);
-  --accent-foreground: oklch(0.25 0.02 60);
+  /* Accent */
+  --accent: oklch(0.94 0.018 252);
+  --accent-foreground: oklch(0.28 0.03 255);
 
-  /* Destructive — warm red (kept red, tuned warmer) */
-  --destructive: oklch(0.55 0.22 25);
+  --destructive: oklch(0.57 0.22 25);
 
-  /* Borders & inputs — warm clay */
-  --border: oklch(0.89 0.02 80);
-  --input: oklch(0.89 0.02 80);
+  --border: oklch(0.89 0.012 252);
+  --input: oklch(0.89 0.012 252);
 
-  /* Focus ring — copper glow */
-  --ring: oklch(0.65 0.16 55);
+  --ring: oklch(0.56 0.17 255);
 
-  /* Charts — warm spectrum */
-  --chart-1: oklch(0.62 0.17 55);
-  --chart-2: oklch(0.70 0.16 85);
-  --chart-3: oklch(0.45 0.05 50);
-  --chart-4: oklch(0.58 0.15 35);
-  --chart-5: oklch(0.78 0.08 90);
+  --chart-1: oklch(0.52 0.17 255);
+  --chart-2: oklch(0.64 0.15 155);
+  --chart-3: oklch(0.7 0.16 75);
+  --chart-4: oklch(0.62 0.19 25);
+  --chart-5: oklch(0.55 0.12 285);
 
-  /* Sidebar — deep walnut */
-  --sidebar: oklch(0.25 0.02 50);
-  --sidebar-foreground: oklch(0.94 0.005 84);
-  --sidebar-primary: oklch(0.64 0.17 55);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.28 0.03 255);
+  --sidebar-primary: oklch(0.49 0.17 255);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.29 0.02 50);
-  --sidebar-accent-foreground: oklch(0.94 0.005 84);
-  --sidebar-border: oklch(0.31 0.02 50);
-  --sidebar-ring: oklch(0.64 0.17 55);
+  --sidebar-accent: oklch(0.955 0.012 252);
+  --sidebar-accent-foreground: oklch(0.24 0.04 255);
+  --sidebar-border: oklch(0.89 0.012 252);
+  --sidebar-ring: oklch(0.56 0.17 255);
 }
 
-/*
- * ── Dark Mode — dimly lit boardroom ────────────────────────────────
- */
-
 .dark {
-  --background: oklch(0.18 0.01 60);
-  --foreground: oklch(0.92 0.005 84);
+  --background: oklch(0.18 0.015 255);
+  --foreground: oklch(0.92 0.006 252);
 
-  --card: oklch(0.22 0.01 60);
-  --card-foreground: oklch(0.92 0.005 84);
-  --popover: oklch(0.22 0.01 60);
-  --popover-foreground: oklch(0.92 0.005 84);
+  --card: oklch(0.22 0.018 255);
+  --card-foreground: oklch(0.92 0.006 252);
+  --popover: oklch(0.22 0.018 255);
+  --popover-foreground: oklch(0.92 0.006 252);
 
-  --primary: oklch(0.68 0.18 55);
-  --primary-foreground: oklch(0.12 0.02 60);
+  --primary: oklch(0.68 0.17 255);
+  --primary-foreground: oklch(0.12 0.02 255);
 
-  --secondary: oklch(0.25 0.01 60);
-  --secondary-foreground: oklch(0.92 0.005 84);
+  --secondary: oklch(0.26 0.018 255);
+  --secondary-foreground: oklch(0.92 0.006 252);
 
-  --muted: oklch(0.25 0.01 60);
-  --muted-foreground: oklch(0.65 0.02 74);
+  --muted: oklch(0.26 0.018 255);
+  --muted-foreground: oklch(0.68 0.02 252);
 
-  --accent: oklch(0.25 0.01 60);
-  --accent-foreground: oklch(0.92 0.005 84);
+  --accent: oklch(0.28 0.02 255);
+  --accent-foreground: oklch(0.92 0.006 252);
 
   --destructive: oklch(0.62 0.22 22);
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
 
-  --ring: oklch(0.65 0.16 55);
+  --ring: oklch(0.68 0.17 255);
 
-  --chart-1: oklch(0.62 0.18 55);
-  --chart-2: oklch(0.72 0.17 85);
-  --chart-3: oklch(0.78 0.08 90);
-  --chart-4: oklch(0.60 0.16 35);
-  --chart-5: oklch(0.50 0.06 50);
+  --chart-1: oklch(0.68 0.17 255);
+  --chart-2: oklch(0.7 0.15 155);
+  --chart-3: oklch(0.76 0.16 75);
+  --chart-4: oklch(0.68 0.19 25);
+  --chart-5: oklch(0.66 0.13 285);
 
-  --sidebar: oklch(0.15 0.01 60);
-  --sidebar-foreground: oklch(0.92 0.005 84);
-  --sidebar-primary: oklch(0.68 0.18 55);
-  --sidebar-primary-foreground: oklch(0.12 0.02 60);
-  --sidebar-accent: oklch(0.21 0.01 60);
-  --sidebar-accent-foreground: oklch(0.92 0.005 84);
+  --sidebar: oklch(0.18 0.015 255);
+  --sidebar-foreground: oklch(0.92 0.006 252);
+  --sidebar-primary: oklch(0.68 0.17 255);
+  --sidebar-primary-foreground: oklch(0.12 0.02 255);
+  --sidebar-accent: oklch(0.24 0.018 255);
+  --sidebar-accent-foreground: oklch(0.92 0.006 252);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.65 0.16 55);
 }
@@ -179,10 +160,31 @@
   [role="button"] {
     cursor: pointer;
   }
+}
 
-  /* Page headings use serif for warmth */
-  h1,
-  h2 {
-    font-family: var(--font-serif);
-  }
+.page-shell {
+  @apply min-h-[calc(100vh-7rem)] space-y-4 bg-slate-50 text-slate-900;
+}
+
+.card-hover {
+  @apply transition-colors duration-150;
+}
+.card-hover:hover {
+  @apply border-slate-300;
+}
+
+.glass-header {
+  @apply border-slate-200 bg-white;
+}
+
+.enterprise-panel {
+  @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+}
+
+.enterprise-section-title {
+  @apply text-[11px] font-semibold uppercase tracking-wide text-slate-500;
+}
+
+.enterprise-field-label {
+  @apply text-sm font-semibold text-slate-700;
 }

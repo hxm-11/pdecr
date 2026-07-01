@@ -39,3 +39,7 @@ def test_find_case_resolves_by_case_id_and_detail_has_modules():
     assert detail["case_id"] == case.case_id
     assert len(detail["modules"]) == 6
     assert detail["case"]["case_no"] == case.case_id
+
+
+def test_find_case_does_not_treat_database_uuid_as_historical_case():
+    assert find_historical_case("3e1a1897-d24e-459b-b157-70bdb9dd078a") is None

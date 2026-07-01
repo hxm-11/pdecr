@@ -42,6 +42,8 @@ import {
   type PdEcrStoredResult,
   saveActiveResult,
 } from "./pdEcrState"
+import { PdEcrCaseStatusFlow } from "./PdEcrCaseStatusFlow"
+import { getPdEcrCaseWorkbenchState } from "./PdEcrWorkflowRules"
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
@@ -265,7 +267,7 @@ function ActionRail({
         <Button
           key={label}
           variant="outline"
-          className="h-10 justify-start bg-white text-sm lg:w-full"
+          className="h-10 justify-start bg-white text-sm lg:w-full hover:bg-amber-50 hover:border-amber-300"
           type="button"
           onClick={onClick}
           disabled={requiresSelection && !hasSelection}
@@ -740,13 +742,13 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
   return (
     <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
       <div className="w-full min-w-0 space-y-4">
-        <header className="rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+        <header className="rounded-lg border border-stone-200/60 glass-header px-5 py-4 shadow-sm">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-amber-600">
                 Knowledge base
               </p>
-              <h1 className="text-3xl font-semibold tracking-normal text-stone-900">
+              <h1 className="text-2xl font-semibold tracking-normal text-stone-900">
                 ALL PD-ECR List
               </h1>
               <p className="mt-1 text-sm text-stone-500">
@@ -757,7 +759,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
-                className="bg-white"
+                className="bg-white hover:bg-amber-50 hover:border-amber-300"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <ArrowLeft className="size-4" />
@@ -766,7 +768,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
               <PdEcrProcessFlowButton />
               <Button
                 variant="outline"
-                className="bg-white"
+                className="bg-white hover:bg-amber-50 hover:border-amber-300"
                 onClick={importHistoricalCases}
                 disabled={isImporting}
               >
@@ -805,7 +807,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
               className="h-11 border-stone-300 bg-white shadow-none"
             />
             <Button
-              className="h-11 bg-stone-800 px-6 text-white hover:bg-stone-700"
+              className="h-11 bg-stone-800 px-6 text-white hover:bg-stone-700 transition-colors"
               onClick={applyFilter}
             >
               Run
@@ -813,7 +815,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
           </div>
           {appliedQuery.trim() ? (
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+              <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700 shadow-sm">
                 {displayFieldLabel(field)}: {appliedQuery}
               </span>
               <Button
@@ -840,7 +842,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
             hasSelection={selectedIds.length > 0}
           />
 
-          <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+          <section className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
             {deleteNotice ? (
               <div
                 className={
@@ -865,7 +867,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                 <div className="flex flex-wrap items-center gap-2">
                   <Button
                     size="sm"
-                    className="bg-amber-600 text-white hover:bg-amber-700"
+                    className="bg-amber-600 text-white hover:bg-amber-700 transition-all active:scale-[0.98]"
                     onClick={editSelected}
                   >
                     Edit selected
@@ -899,7 +901,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
               </p>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-180 border-collapse table-fixed text-left text-sm">
+              <table className="w-full min-w-[124rem] border-collapse table-fixed text-left text-sm">
                 <thead>
                   <tr className="bg-stone-800 text-white">
                     <th className="sticky left-0 z-20 w-12 bg-stone-800 px-3 py-3 font-semibold">
@@ -923,17 +925,27 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
   </button>
 </th>
                     <th className="hidden lg:table-cell px-3 py-3 font-semibold whitespace-nowrap">Change Type</th>
-                    <th className="px-3 py-3 font-semibold whitespace-nowrap">Sample Type</th>
-                    <th className="px-3 py-3 font-semibold whitespace-nowrap">
+                    <th className="w-28 px-3 py-3 font-semibold whitespace-nowrap">Sample Type</th>
+                    <th className="w-24 px-3 py-3 font-semibold whitespace-nowrap">
                       <button type="button" aria-label="Sort by score" onClick={() => toggleSort("similarity")} className="inline-flex items-center gap-1 rounded-sm text-left hover:text-amber-100">
                         Score <ArrowUpDown className="size-3" />
                       </button>
                     </th>
-                    <th className="px-3 py-3 font-semibold whitespace-nowrap">Actions</th>
+                    <th className="w-28 px-3 py-3 font-semibold whitespace-nowrap">Actions</th>
+                    <th className="w-[22rem] px-3 py-3 font-semibold whitespace-nowrap">Status flow</th>
+                    <th className="w-40 px-3 py-3 font-semibold whitespace-nowrap">Owner</th>
+                    <th className="w-36 px-3 py-3 font-semibold whitespace-nowrap">Gate</th>
+                    <th className="w-28 px-3 py-3 font-semibold whitespace-nowrap">Risk</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredRows.map((row, index) => (
+                  {filteredRows.map((row, index) => {
+                    const workbench = getPdEcrCaseWorkbenchState({
+                      row,
+                      status: row.status,
+                      source: view === "similar" ? "history" : row.from,
+                    })
+                    return (
                     <tr
                       key={row.id}
                       data-testid="case-row"
@@ -957,7 +969,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                       <td className="px-3 py-3 text-stone-700 text-xs max-w-28 truncate">{row.sampleType || "-"}</td>
                       <td className="px-3 py-3 text-center">
                         {typeof row.similarity === "number" && row.similarity > 0 ? (
-                          <span className="inline-flex items-center justify-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800 min-w-10">
+                          <span className="inline-flex items-center justify-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-800 min-w-10 shadow-sm">
                             {Math.round(row.similarity)}
                           </span>
                         ) : (
@@ -974,11 +986,52 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
                           ) : null}
                         </div>
                       </td>
+                      <td className="px-3 py-3">
+                        <PdEcrCaseStatusFlow
+                          status={row.status}
+                          source={view === "similar" ? "history" : row.from}
+                          compact
+                        />
+                      </td>
+                      <td className="px-3 py-3 text-xs text-stone-700">
+                        <span className="block truncate" title={workbench.owner}>{workbench.owner}</span>
+                      </td>
+                      <td className="px-3 py-3">
+                        <span
+                          className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold ${
+                            workbench.gate.tone === "ready"
+                              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                              : workbench.gate.tone === "blocked"
+                                ? "border-rose-200 bg-rose-50 text-rose-700"
+                                : workbench.gate.tone === "readonly"
+                                  ? "border-sky-200 bg-sky-50 text-sky-700"
+                                  : "border-amber-200 bg-amber-50 text-amber-700"
+                          }`}
+                          title={workbench.gate.detail}
+                        >
+                          {workbench.gate.label}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3">
+                        <span
+                          className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold ${
+                            workbench.risk === "High"
+                              ? "border-rose-200 bg-rose-50 text-rose-700"
+                              : workbench.risk === "Medium"
+                                ? "border-amber-200 bg-amber-50 text-amber-700"
+                                : workbench.risk === "Low"
+                                  ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                  : "border-stone-200 bg-stone-50 text-stone-500"
+                          }`}
+                        >
+                          {workbench.risk}
+                        </span>
+                      </td>
                     </tr>
-                  ))}
+                  )})}
                   {!filteredRows.length ? (
                     <tr>
-                      <td className="px-4 py-8 text-center text-sm text-stone-500" colSpan={10}>
+                      <td className="px-4 py-8 text-center text-sm text-stone-500" colSpan={14}>
                         No matching PD-ECR cases. Use Show all to reset.
                       </td>
                     </tr>
@@ -994,18 +1047,18 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
         <footer className="flex flex-wrap items-center gap-3 pb-2">
           <Button
             variant="outline"
-            className="bg-white"
+            className="bg-white hover:bg-amber-50 hover:border-amber-300"
             onClick={() => navigate({ to: "/pd-ecr" })}
           >
             <Home className="size-4" />
             Main UI
           </Button>
-          <Button variant="outline" className="bg-white" onClick={exportList}>
+          <Button variant="outline" className="bg-white hover:bg-amber-50 hover:border-amber-300" onClick={exportList}>
             Export list
           </Button>
           <Button
             variant="outline"
-            className="bg-white"
+            className="bg-white hover:bg-amber-50 hover:border-amber-300"
             onClick={exportOnePage}
           >
             Export PD-ECR one page

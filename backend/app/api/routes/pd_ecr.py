@@ -21,7 +21,7 @@ from jinja2 import BaseLoader, Environment
 import markdown
 from openai import AsyncOpenAI
 from pydantic import BaseModel
-from sqlmodel import select
+from sqlmodel import col, or_, select
 
 from app.rag.retriever import retrieve_pd_ecr_context, retrieve_pd_ecr_results
 from app.api.deps import CurrentUser, SessionDep
@@ -36,6 +36,7 @@ from app.models import (
     PdEcrStagedDocumentUpdate,
     PdEcrTaskCreate,
     PdEcrVersion,
+    User,
 )
 from app.services.pd_ecr_case_service import (
     assign_module,
@@ -177,6 +178,31 @@ class PdEcrLeaderReviewPayload(BaseModel):
     decision: str
     review_comment: str | None = None
     signature_name: str | None = None
+
+
+class PdEcrSubmitForApprovalPayload(BaseModel):
+    """P0: Submit a case for manager approval."""
+    title: str = ""
+    initiator: str | None = None
+    customer_project: str | None = None
+    product_no: str | None = None
+    part_no: str | None = None
+    target_close_date: str | None = None
+    # Form data for AI generation after approval
+    form_data: Dict[str, Any] | None = None
+    # Approver override (if not set, system resolves from members or dept leader)
+    approver_email: str | None = None
+    approver_name: str | None = None
+
+
+class PdEcrApprovePayload(BaseModel):
+    """P0: Manager approves a submitted case."""
+    pass
+
+
+class PdEcrRejectPayload(BaseModel):
+    """P0: Manager rejects a submitted case."""
+    rejection_reason: str | None = None
 
 
 class PdEcrImportPayload(BaseModel):
@@ -1570,6 +1596,242 @@ def create_pd_ecr_case_from_ai(
         )
 
 
+# ── P0: Manager approval chain ──────────────────────────────────────
+
+
+@router.post("/cases/submit-for-approval")
+def submit_for_approval(
+    payload: PdEcrSubmitForApprovalPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Submit a PD-ECR case for manager approval before AI generation."""
+    from app.models import PdEcrApprovalTask, PdEcrCase, PdEcrModule, User
+
+    # 1. Create the case in "submitted" status
+    case_no = f"PD-ECR-{uuid.uuid4().hex[:8].upper()}"
+    case = PdEcrCase(
+        case_no=case_no,
+        title=payload.title or "PD-ECR Change Request",
+        status="submitted",
+        source_type="manual",
+        initiator=payload.initiator or (current_user.display_name or current_user.email),
+        created_by_id=current_user.id,
+        owner_id=current_user.id,
+        customer_project=payload.customer_project,
+        product_no=payload.product_no,
+        part_no=payload.part_no,
+        target_close_date=datetime.fromisoformat(payload.target_close_date) if payload.target_close_date else None,
+    )
+    session.add(case)
+    session.flush()
+
+    form_data = payload.form_data or {}
+    module_data = {
+        **form_data,
+        "title": payload.title or form_data.get("title") or "PD-ECR Change Request",
+        "changeTitle": form_data.get("changeTitle") or payload.title,
+        "initiator": payload.initiator or form_data.get("initiator") or (current_user.display_name or current_user.email),
+        "customer_project": payload.customer_project or form_data.get("customer_project") or form_data.get("customer"),
+        "product_no": payload.product_no or form_data.get("product_no") or form_data.get("product"),
+        "part_no": payload.part_no or form_data.get("part_no") or form_data.get("component_no") or form_data.get("partNumber"),
+        "component_no": payload.part_no or form_data.get("component_no") or form_data.get("partNumber"),
+        "target_close_date": payload.target_close_date or form_data.get("target_close_date"),
+        "leader_confirmed": False,
+        "content": form_data.get("changeSummary") or form_data.get("change_proposal") or form_data.get("description") or payload.title or "",
+        "summary": form_data.get("changeSummary") or form_data.get("change_proposal") or payload.title or "",
+    }
+    session.add(
+        PdEcrModule(
+            case_id=case.id,
+            module_id="change-description",
+            title="Change Request description",
+            content_json=module_data,
+            content_md=str(module_data.get("content") or ""),
+            source_cases=[case.case_no],
+            source_files=[],
+            needs_human_input=False,
+            status="submitted",
+            version=1,
+            updated_by_id=current_user.id,
+        )
+    )
+
+    # 2. Resolve approver
+    approver_email = payload.approver_email
+    approver_name = payload.approver_name
+    approver_id: uuid.UUID | None = None
+
+    if not approver_email:
+        members = form_data.get("members") if isinstance(form_data.get("members"), list) else []
+        owner = next((m for m in members if isinstance(m, dict) and m.get("role") == "owner"), None)
+        if owner and isinstance(owner, dict):
+            approver_email = owner.get("email", "")
+            approver_name = owner.get("displayName", "")
+        if not approver_email:
+            # Fallback: find department leader in initiator's department
+            dept = current_user.department
+            if dept:
+                leader = session.exec(
+                    select(User).where(
+                        User.department == dept,
+                        User.pd_ecr_role == "department_leader",
+                        User.is_active,  # noqa: E712
+                    ).limit(1)
+                ).first()
+                if leader:
+                    approver_email = leader.email
+                    approver_name = leader.display_name or leader.full_name
+                    approver_id = leader.id
+
+    if approver_email and not approver_id:
+        approver = session.exec(
+            select(User).where(
+                User.email == approver_email,
+                User.is_active,  # noqa: E712
+            ).limit(1)
+        ).first()
+        if approver:
+            approver_id = approver.id
+            approver_name = approver_name or approver.display_name or approver.full_name
+
+    # 3. Create approval task
+    approval_task = PdEcrApprovalTask(
+        case_id=case.id,
+        approver_id=approver_id,
+        approver_email=approver_email,
+        approver_name=approver_name,
+        status="pending",
+    )
+    session.add(approval_task)
+    session.commit()
+    session.refresh(case)
+
+    return {
+        "case": serialize_case(case),
+        "approval_task": {
+            "id": str(approval_task.id),
+            "status": approval_task.status,
+            "approver_email": approval_task.approver_email,
+            "approver_name": approval_task.approver_name,
+        },
+    }
+
+
+@router.post("/cases/{case_id}/manager-approve")
+def manager_approve_case(
+    case_id: str,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Manager approves a submitted case."""
+    from app.models import PdEcrApprovalTask, PdEcrCase, PdEcrModule
+
+    case = session.exec(
+        select(PdEcrCase).where(PdEcrCase.id == uuid.UUID(case_id))
+    ).first()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    if case.status != "submitted":
+        raise HTTPException(status_code=409, detail=f"Case is {case.status}, not submitted")
+
+    approval = session.exec(
+        select(PdEcrApprovalTask).where(
+            PdEcrApprovalTask.case_id == uuid.UUID(case_id),
+            PdEcrApprovalTask.status == "pending",
+        )
+    ).first()
+    if not approval:
+        raise HTTPException(status_code=404, detail="No pending approval task for this case")
+
+    if approval.approver_id and approval.approver_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Only the assigned approver can approve")
+    if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
+        raise HTTPException(status_code=403, detail="Only the assigned approver can approve")
+
+    now = datetime.utcnow()
+    approval.status = "approved"
+    approval.approved_at = now
+    approval.updated_at = now
+    session.add(approval)
+
+    module = session.exec(
+        select(PdEcrModule).where(
+            PdEcrModule.case_id == uuid.UUID(case_id),
+            PdEcrModule.module_id == "change-description",
+        )
+    ).first()
+    if module:
+        content = dict(module.content_json or {})
+        content["leaderConfirmed"] = True
+        content["leader_confirmed"] = True
+        content["leader_confirmed_by"] = current_user.display_name or current_user.full_name or current_user.email
+        content["leader_confirmed_at"] = now.isoformat()
+        module.content_json = content
+        module.updated_by_id = current_user.id
+        module.updated_at = now
+        session.add(module)
+
+    case.status = "generated"
+    case.updated_at = now
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    return {
+        "case": serialize_case(case),
+        "message": "Case approved. AI generation can now proceed.",
+    }
+
+
+@router.post("/cases/{case_id}/manager-reject")
+def manager_reject_case(
+    case_id: str,
+    payload: PdEcrRejectPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Manager rejects a submitted case."""
+    from app.models import PdEcrApprovalTask, PdEcrCase
+
+    case = session.exec(
+        select(PdEcrCase).where(PdEcrCase.id == uuid.UUID(case_id))
+    ).first()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    approval = session.exec(
+        select(PdEcrApprovalTask).where(
+            PdEcrApprovalTask.case_id == uuid.UUID(case_id),
+            PdEcrApprovalTask.status == "pending",
+        )
+    ).first()
+    if not approval:
+        raise HTTPException(status_code=404, detail="No pending approval task for this case")
+
+    if approval.approver_id and approval.approver_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Only the assigned approver can reject")
+    if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
+        raise HTTPException(status_code=403, detail="Only the assigned approver can reject")
+
+    now = datetime.utcnow()
+    approval.status = "rejected"
+    approval.rejection_reason = payload.rejection_reason
+    approval.updated_at = now
+    session.add(approval)
+
+    case.status = "draft"
+    case.updated_at = now
+    session.add(case)
+    session.commit()
+    session.refresh(case)
+
+    return {
+        "case": serialize_case(case),
+        "message": "Case rejected. Initiator can revise and resubmit.",
+    }
+
+
 @router.patch("/cases/{case_id}")
 def update_pd_ecr_case(
     case_id: str,
@@ -1781,12 +2043,45 @@ def review_pd_ecr_leader_task(
 @router.get("/cases/{case_id}/modules")
 def list_pd_ecr_case_modules_v1(case_id: str, session: SessionDep):
     case = get_case_or_404(session=session, case_id=case_id)
+    modules = [
+        serialize_module(module)
+        for module in list_modules(session=session, case_id=case.id)
+    ]
+    if not any(module.get("module_id") == "change-description" for module in modules):
+        fallback_content = {
+            "title": case.title,
+            "changeTitle": case.title,
+            "initiator": case.initiator,
+            "customer_project": case.customer_project,
+            "product_no": case.product_no,
+            "part_no": case.part_no,
+            "component_no": case.part_no,
+            "target_close_date": case.target_close_date.isoformat() if case.target_close_date else None,
+            "leader_confirmed": False,
+            "content": case.title or "",
+            "summary": case.title or "",
+        }
+        modules.insert(
+            0,
+            {
+                "id": f"{case.id}:change-description",
+                "case_id": str(case.id),
+                "module_id": "change-description",
+                "title": "Change Request description",
+                "content_json": fallback_content,
+                "content_md": fallback_content["content"],
+                "source_cases": [case.case_no],
+                "source_files": [],
+                "needs_human_input": False,
+                "status": case.status,
+                "version": 0,
+                "permissions": {},
+                "data": fallback_content,
+            },
+        )
     return {
         "case": _serialize_case_with_source_pdf(session, case),
-        "modules": [
-            serialize_module(module)
-            for module in list_modules(session=session, case_id=case.id)
-        ],
+        "modules": modules,
     }
 
 
@@ -6279,3 +6574,56 @@ async def pd_ecr_case_collaboration(
             session_id=session_id,
         )
         await pd_ecr_connection_manager.broadcast_presence(case_id=parsed_case_id)
+
+
+# ── Member search ──────────────────────────────────────────────────
+
+
+class PdEcrMember(BaseModel):
+    id: str
+    display_name: str | None = None
+    email: str
+    department: str | None = None
+    pd_ecr_role: str | None = None
+
+
+class PdEcrMemberList(BaseModel):
+    members: list[PdEcrMember]
+
+
+@router.get("/members/search", response_model=PdEcrMemberList)
+def search_members(
+    department: str,
+    q: str | None = None,
+    session: SessionDep = None,
+    current_user: CurrentUser = None,
+):
+    """Search users by department, with optional keyword filter on name/email."""
+    statement = select(User).where(User.is_active)  # noqa: E712
+
+    statement = statement.where(User.department == department)
+
+    if q:
+        keyword = f"%{q}%"
+        statement = statement.where(
+            or_(
+                col(User.display_name).ilike(keyword),
+                col(User.email).ilike(keyword),
+            )
+        )
+
+    statement = statement.limit(50)
+    users = session.exec(statement).all()
+
+    return PdEcrMemberList(
+        members=[
+            PdEcrMember(
+                id=str(user.id),
+                display_name=user.display_name or user.full_name or user.email,
+                email=user.email,
+                department=user.department,
+                pd_ecr_role=user.pd_ecr_role,
+            )
+            for user in users
+        ]
+    )

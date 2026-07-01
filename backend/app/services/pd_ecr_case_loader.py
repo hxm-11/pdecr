@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -296,6 +297,12 @@ def load_historical_cases(*, limit: int | None = None, sources: set[str] | None 
 def find_historical_case(identifier: str) -> HistoricalCase | None:
     needle = str(identifier or "").strip().lower()
     if not needle:
+        return None
+    try:
+        uuid.UUID(needle)
+    except ValueError:
+        pass
+    else:
         return None
     needle_code = _case_code(needle).lower()
 

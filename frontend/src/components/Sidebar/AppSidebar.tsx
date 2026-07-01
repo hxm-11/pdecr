@@ -1,36 +1,57 @@
-import { ClipboardCheck, FileText, Inbox, LayoutDashboard } from "lucide-react"
+import {
+  ClipboardCheck,
+  FileText,
+  History,
+  Inbox,
+  LayoutDashboard,
+} from "lucide-react";
 
-import { SidebarAppearance } from "@/components/Common/Appearance"
-import { Logo } from "@/components/Common/Logo"
+import { SidebarAppearance } from "@/components/Common/Appearance";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-} from "@/components/ui/sidebar"
-import { type Item, Main } from "./Main"
+} from "@/components/ui/sidebar";
+import logo from "/assets/images/Bosch.svg";
+import { type Item, Main } from "./Main";
 
 const items: Item[] = [
   { icon: LayoutDashboard, title: "Dashboard", path: "/pd-ecr/dashboard" },
   { icon: FileText, title: "PD-ECR", path: "/pd-ecr" },
+  { icon: History, title: "History Case", path: "/pd-ecr/history-case" },
   { icon: ClipboardCheck, title: "My Tasks", path: "/pd-ecr/tasks" },
   { icon: Inbox, title: "草稿箱", path: "/pd-ecr/drafts" },
-]
+];
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="px-4 py-8 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:items-center">
-        <Logo variant="responsive" />
+    <Sidebar collapsible="none" className="border-r border-slate-200 bg-white">
+      <SidebarHeader className="border-b border-slate-100 px-3 py-3">
+        <div className="mb-3 h-1 rounded-full bg-red-600" />
+        <div className="flex items-center gap-2.5">
+          <img src={logo} alt="BOSCH" className="h-8 w-8 object-contain" />
+          <div className="min-w-0">
+            <p className="truncate text-base font-bold tracking-tight text-slate-900">
+              BOSCH
+            </p>
+            <p className="truncate text-xs font-medium text-slate-500">
+              PD-ECR Workspace
+            </p>
+          </div>
+        </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-2 py-3">
+        <p className="px-2.5 pb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          Navigation
+        </p>
         <Main items={items} />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-slate-100 px-2 py-3">
         <SidebarAppearance />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
 
-export default AppSidebar
+export default AppSidebar;

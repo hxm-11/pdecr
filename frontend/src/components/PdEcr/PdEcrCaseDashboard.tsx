@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   ChevronDown,
@@ -13,11 +13,11 @@ import {
   Search,
   Sparkles,
   Trash2,
-} from "lucide-react"
-import { useMemo, useState } from "react"
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   deletePdEcrCase,
   deletePdEcrSourceDocument,
@@ -27,28 +27,34 @@ import {
   type PdEcrCaseRecord,
   type PdEcrDbModule,
   type PdEcrKnowledgeBaseStatus,
-} from "@/lib/pdEcrApi"
+} from "@/lib/pdEcrApi";
 import {
   fallbackHistoryModules,
   normalizeModules,
   normalizePdEcrCaseRow,
   saveActiveResult,
   type PdEcrPdEcrCaseRow,
-} from "./pdEcrState"
-import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
+} from "./pdEcrState";
+import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow";
+import { PdEcrCaseStatusFlow } from "./PdEcrCaseStatusFlow";
+import {
+  getPdEcrCaseWorkbenchState,
+  type PdEcrCaseWorkbenchState,
+} from "./PdEcrWorkflowRules";
 
 type DashboardCase = {
-  id: string
-  row: PdEcrPdEcrCaseRow
-  caseNo: string
-  title: string
-  status: string
-  source: string
-  customerProject: string
-  dcNo: string
-  changeType: string
-  createdDate: string
-}
+  id: string;
+  row: PdEcrPdEcrCaseRow;
+  caseNo: string;
+  title: string;
+  status: string;
+  source: string;
+  customerProject: string;
+  dcNo: string;
+  changeType: string;
+  createdDate: string;
+  workbench: PdEcrCaseWorkbenchState;
+};
 
 const statusLabels: Record<string, { label: string; className: string }> = {
   historical: {
@@ -87,70 +93,75 @@ const statusLabels: Record<string, { label: string; className: string }> = {
     label: "Cancelled",
     className: "border-red-200 bg-red-50 text-red-400",
   },
-}
+};
 
 function pickString(record: PdEcrCaseRecord, keys: string[]) {
   for (const key of keys) {
-    const value = record[key]
+    const value = record[key];
     if (Array.isArray(value)) {
-      const text = value.filter(Boolean).join(" / ")
-      if (text) return text
+      const text = value.filter(Boolean).join(" / ");
+      if (text) return text;
     }
-    if (typeof value === "string" && value.trim()) return value.trim()
-    if (typeof value === "number") return String(value)
+    if (typeof value === "string" && value.trim()) return value.trim();
+    if (typeof value === "number") return String(value);
   }
-  return ""
+  return "";
 }
 
 function errorMessage(error: unknown) {
-  if (!error || typeof error !== "object") return "Request failed"
+  if (!error || typeof error !== "object") return "Request failed";
   const record = error as {
-    message?: string
-    response?: { status?: number; data?: unknown }
-  }
+    message?: string;
+    response?: { status?: number; data?: unknown };
+  };
   const detail =
     record.response?.data && typeof record.response.data === "object"
       ? (record.response.data as { detail?: unknown }).detail
-      : undefined
+      : undefined;
   return [
     record.response?.status ? `HTTP ${record.response.status}` : "",
     typeof detail === "string" ? detail : record.message || "Request failed",
   ]
     .filter(Boolean)
-    .join(": ")
+    .join(": ");
 }
 
 function deleteTargetId(item: DashboardCase) {
-  return item.row.backendCaseId || ""
+  return item.row.backendCaseId || "";
 }
 
 function sourceDeleteTargetId(item: DashboardCase) {
-  return item.row.sourceDocumentId || ""
+  return item.row.sourceDocumentId || "";
 }
 
 function isHistoricalCase(record: PdEcrCaseRecord) {
-  const source = pickString(record, ["source_type", "_source", "from"]).toLowerCase()
+  const source = pickString(record, [
+    "source_type",
+    "_source",
+    "from",
+  ]).toLowerCase();
   return (
     record.is_historical === true ||
     source.includes("historical") ||
     source.includes("knowledge") ||
     source.includes("pdf") ||
     source.includes("normalized")
-  )
+  );
 }
 
 function normalizeStatus(record: PdEcrCaseRecord) {
-  if (isHistoricalCase(record)) return "historical"
-  return pickString(record, ["status"]) || "draft"
+  if (isHistoricalCase(record)) return "historical";
+  return pickString(record, ["status"]) || "draft";
 }
 
 function mapCaseModules(modules: PdEcrDbModule[]) {
   return modules.map((module) => {
-    const contentJson = module.content_json || {}
-    const content = contentJson.content || module.content_md || module.title || ""
+    const contentJson = module.content_json || {};
+    const content =
+      contentJson.content || module.content_md || module.title || "";
     const warnings = Array.isArray(contentJson.warnings)
       ? contentJson.warnings
-      : []
+      : [];
 
     return {
       id: module.module_id,
@@ -176,34 +187,42 @@ function mapCaseModules(modules: PdEcrDbModule[]) {
       source_files: module.source_files || [],
       needs_human_input: module.needs_human_input || false,
       warnings,
-    }
-  })
+    };
+  });
 }
 
 function normalizeCase(record: PdEcrCaseRecord, index: number): DashboardCase {
   const metadata =
     record.metadata && typeof record.metadata === "object"
       ? (record.metadata as PdEcrCaseRecord)
-      : {}
-  const merged = { ...metadata, ...record }
-  const row = normalizePdEcrCaseRow(record, index)
+      : {};
+  const merged = { ...metadata, ...record };
+  const row = normalizePdEcrCaseRow(record, index);
   const id =
     row.backendCaseId ||
     row.id ||
     pickString(merged, ["id", "case_id", "case_no", "source_file"]) ||
-    `PD-ECR-${index + 1}`
-  const caseNo = row.id || pickString(merged, ["case_no", "case_id", "id"]) || id
+    `PD-ECR-${index + 1}`;
+  const caseNo =
+    row.id || pickString(merged, ["case_no", "case_id", "id"]) || id;
   const title =
     pickString(merged, ["title", "reason_for_change", "change_reason"]) ||
     row.reasonForChange ||
-    caseNo
+    caseNo;
+
+  const status = normalizeStatus(merged);
+  const targetCloseDate = pickString(merged, [
+    "target_close_date",
+    "due_date",
+    "planned_close_date",
+  ]);
 
   return {
     id,
     row,
     caseNo,
     title,
-    status: normalizeStatus(merged),
+    status,
     source: pickString(merged, ["source_type", "_source", "from"]) || "PD-ECR",
     customerProject:
       pickString(merged, ["customer_project", "customer", "project"]) || "-",
@@ -212,19 +231,27 @@ function normalizeCase(record: PdEcrCaseRecord, index: number): DashboardCase {
     createdDate:
       pickString(merged, ["created_at", "create_date", "date", "updated_at"]) ||
       "-",
-  }
+    workbench: getPdEcrCaseWorkbenchState({
+      row,
+      status,
+      source: isHistoricalCase(merged)
+        ? "history"
+        : pickString(merged, ["source_type", "_source", "from"]),
+      targetCloseDate,
+    }),
+  };
 }
 
 function formatDate(value: string) {
-  if (!value || value === "-") return "-"
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return value.slice(0, 10)
-  return date.toLocaleDateString()
+  if (!value || value === "-") return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value.slice(0, 10);
+  return date.toLocaleDateString();
 }
 
 function matchesSearch(item: DashboardCase, query: string) {
-  const q = query.trim().toLowerCase()
-  if (!q) return true
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
   return [
     item.caseNo,
     item.title,
@@ -235,7 +262,7 @@ function matchesSearch(item: DashboardCase, query: string) {
   ]
     .join(" ")
     .toLowerCase()
-    .includes(q)
+    .includes(q);
 }
 
 function MetricTile({
@@ -243,24 +270,24 @@ function MetricTile({
   value,
   hint,
 }: {
-  label: string
-  value: number | string
-  hint: string
+  label: string;
+  value: number | string;
+  hint: string;
 }) {
   return (
-    <div className="rounded-lg border border-stone-200 bg-white px-4 py-3">
+    <div className="rounded-xl border border-stone-200 bg-white px-4 py-3 card-hover">
       <p className="text-2xl font-semibold text-stone-900">{value}</p>
       <p className="mt-1 text-sm font-semibold text-stone-700">{label}</p>
       <p className="mt-0.5 text-xs text-stone-500">{hint}</p>
     </div>
-  )
+  );
 }
 
 function formatStatusDate(value?: string | null) {
-  if (!value) return "-"
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return value.slice(0, 19)
-  return date.toLocaleString()
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value.slice(0, 19);
+  return date.toLocaleString();
 }
 
 function parserLabel(key: string) {
@@ -270,8 +297,8 @@ function parserLabel(key: string) {
     pdf_to_markdown: "PDF parser",
     mineru: "MinerU OCR",
     libreoffice: "LibreOffice",
-  }
-  return labels[key] || key
+  };
+  return labels[key] || key;
 }
 
 function KnowledgeHealthPanel({
@@ -281,22 +308,22 @@ function KnowledgeHealthPanel({
   expanded,
   onToggle,
 }: {
-  status?: PdEcrKnowledgeBaseStatus
-  isLoading: boolean
-  isError: boolean
-  expanded: boolean
-  onToggle: () => void
+  status?: PdEcrKnowledgeBaseStatus;
+  isLoading: boolean;
+  isError: boolean;
+  expanded: boolean;
+  onToggle: () => void;
 }) {
   const vectorReady = Boolean(
     status?.vector_store?.index_exists && status?.vector_store?.meta_exists,
-  )
-  const rebuildOk = status?.last_rebuild?.success
-  const totalDocuments = status?.last_rebuild?.total_documents ?? "-"
-  const pending = status?.staged_documents?.pending ?? 0
-  const capabilities = Object.entries(status?.parser_capabilities ?? {})
+  );
+  const rebuildOk = status?.last_rebuild?.success;
+  const totalDocuments = status?.last_rebuild?.total_documents ?? "-";
+  const pending = status?.staged_documents?.pending ?? 0;
+  const capabilities = Object.entries(status?.parser_capabilities ?? {});
 
   return (
-    <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+    <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
         <div>
           <p className="text-sm font-semibold text-stone-900">
@@ -349,7 +376,9 @@ function KnowledgeHealthPanel({
             />
             <MetricTile
               label="Vector chunks"
-              value={isLoading ? "..." : status?.vector_store?.chunk_files ?? 0}
+              value={
+                isLoading ? "..." : (status?.vector_store?.chunk_files ?? 0)
+              }
               hint={vectorReady ? "FAISS + metadata ready" : "Index missing"}
             />
             <MetricTile
@@ -387,23 +416,23 @@ function KnowledgeHealthPanel({
         </>
       ) : null}
     </section>
-  )
+  );
 }
 
 export function PdEcrCaseDashboard() {
-  const navigate = useNavigate()
-  const [searchText, setSearchText] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [openingCaseId, setOpeningCaseId] = useState<string | null>(null)
-  const [deletingCaseId, setDeletingCaseId] = useState<string | null>(null)
-  const [dashboardMessage, setDashboardMessage] = useState("")
-  const [healthExpanded, setHealthExpanded] = useState(false)
+  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [openingCaseId, setOpeningCaseId] = useState<string | null>(null);
+  const [deletingCaseId, setDeletingCaseId] = useState<string | null>(null);
+  const [dashboardMessage, setDashboardMessage] = useState("");
+  const [healthExpanded, setHealthExpanded] = useState(false);
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["pd-ecr-cases"],
     queryFn: listPdEcrCases,
     refetchOnWindowFocus: true,
-  })
+  });
   const {
     data: knowledgeStatus,
     isLoading: isKnowledgeLoading,
@@ -412,27 +441,28 @@ export function PdEcrCaseDashboard() {
     queryKey: ["pd-ecr-knowledge-base-status"],
     queryFn: getPdEcrKnowledgeBaseStatus,
     refetchOnWindowFocus: true,
-  })
+  });
 
   const allCases = useMemo(
     () => (data?.cases ?? []).map(normalizeCase),
     [data],
-  )
+  );
 
   const visibleCases = useMemo(
     () =>
       allCases.filter((item) => {
-        if (!matchesSearch(item, searchText)) return false
-        if (statusFilter === "all") return true
-        return item.status === statusFilter
+        if (!matchesSearch(item, searchText)) return false;
+        if (statusFilter === "all") return true;
+        return item.status === statusFilter;
       }),
     [allCases, searchText, statusFilter],
-  )
+  );
 
   const stats = useMemo(
     () => ({
       total: allCases.length,
-      historical: allCases.filter((item) => item.status === "historical").length,
+      historical: allCases.filter((item) => item.status === "historical")
+        .length,
       draft: allCases.filter((item) => item.status === "draft").length,
       inReview: allCases.filter((item) =>
         ["submitted", "in_review", "changes_requested"].includes(item.status),
@@ -440,12 +470,18 @@ export function PdEcrCaseDashboard() {
       closed: allCases.filter((item) =>
         ["approved", "implementation", "closed"].includes(item.status),
       ).length,
-      active: allCases.filter((item) =>
-        !["historical", "closed", "cancelled"].includes(item.status),
+      active: allCases.filter(
+        (item) => !["historical", "closed", "cancelled"].includes(item.status),
+      ).length,
+      overdue: allCases.filter((item) => item.workbench.overdueDays > 0).length,
+      highRisk: allCases.filter((item) => item.workbench.risk === "High")
+        .length,
+      needsInput: allCases.filter((item) =>
+        ["blocked", "warning"].includes(item.workbench.gate.tone),
       ).length,
     }),
     [allCases],
-  )
+  );
 
   const filterOptions = [
     ["all", "All"],
@@ -455,19 +491,19 @@ export function PdEcrCaseDashboard() {
     ["in_review", "In Review"],
     ["approved", "Approved"],
     ["closed", "Closed"],
-  ]
+  ];
 
   const openCase = async (item: DashboardCase) => {
-    const caseId = item.row.backendCaseId || item.id || item.caseNo
-    setOpeningCaseId(item.id)
-    setDashboardMessage(`Opening ${item.caseNo}...`)
+    const caseId = item.row.backendCaseId || item.id || item.caseNo;
+    setOpeningCaseId(item.id);
+    setDashboardMessage(`Opening ${item.caseNo}...`);
 
     try {
-      const detail = await getPdEcrCase(caseId)
+      const detail = await getPdEcrCase(caseId);
       const modules = normalizeModules(
         mapCaseModules(detail.modules),
         fallbackHistoryModules,
-      )
+      );
 
       saveActiveResult({
         source: item.status === "historical" ? "history" : "generated",
@@ -476,59 +512,63 @@ export function PdEcrCaseDashboard() {
         caseRows: allCases.map((caseItem) => caseItem.row),
         currentCase: item.row,
         modules,
-      })
-      navigate({ to: "/pd-ecr/content" })
+      });
+      navigate({ to: "/pd-ecr/content" });
     } catch {
       setDashboardMessage(
         `Could not open ${item.caseNo}. Use All PD-ECR List if this is a PDF-only source row.`,
-      )
+      );
     } finally {
-      setOpeningCaseId(null)
+      setOpeningCaseId(null);
     }
-  }
+  };
 
   const deleteCase = async (item: DashboardCase) => {
-    const caseId = deleteTargetId(item)
-    const sourceDocumentId = sourceDeleteTargetId(item)
+    const caseId = deleteTargetId(item);
+    const sourceDocumentId = sourceDeleteTargetId(item);
     if (!caseId && !sourceDocumentId) {
       setDashboardMessage(
         `${item.caseNo} does not have a database case ID. It may be a source/PDF knowledge row, so it cannot be deleted from the case dashboard.`,
-      )
-      return
+      );
+      return;
     }
     const confirmed = window.confirm(
       `Delete PD-ECR case ${item.caseNo}?\n\nApproved, implementation, and closed cases are protected by the backend.`,
-    )
-    if (!confirmed) return
+    );
+    if (!confirmed) return;
 
-    setDeletingCaseId(item.id)
-    setDashboardMessage(`Deleting ${item.caseNo}...`)
+    setDeletingCaseId(item.id);
+    setDashboardMessage(`Deleting ${item.caseNo}...`);
     try {
       const result = caseId
         ? await deletePdEcrCase(caseId)
-        : await deletePdEcrSourceDocument(sourceDocumentId)
-      await refetch()
-      setDashboardMessage(`Deleted ${"case_no" in result ? result.case_no : result.source_file || item.caseNo}.`)
+        : await deletePdEcrSourceDocument(sourceDocumentId);
+      await refetch();
+      setDashboardMessage(
+        `Deleted ${"case_no" in result ? result.case_no : result.source_file || item.caseNo}.`,
+      );
     } catch (error) {
-      setDashboardMessage(`Could not delete ${item.caseNo}: ${errorMessage(error)}`)
+      setDashboardMessage(
+        `Could not delete ${item.caseNo}: ${errorMessage(error)}`,
+      );
     } finally {
-      setDeletingCaseId(null)
+      setDeletingCaseId(null);
     }
-  }
+  };
 
   return (
-    <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
+    <div className="page-shell">
       <div className="w-full min-w-0 space-y-4">
-        <header className="rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+        <header className="enterprise-panel px-5 py-4">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-amber-600">
+              <p className="enterprise-section-title text-blue-700">
                 PD-ECR control center
               </p>
-              <h1 className="text-3xl font-semibold tracking-normal text-stone-900">
+              <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
                 PD-ECR Dashboard
               </h1>
-              <p className="mt-1 text-sm text-stone-500">
+              <p className="mt-1 text-sm text-slate-500">
                 {stats.total} total cases · historical knowledge, active drafts,
                 and review status in one place.
               </p>
@@ -536,14 +576,16 @@ export function PdEcrCaseDashboard() {
             <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
-                className="bg-white"
-                onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}
+                className="bg-white hover:border-blue-300 hover:bg-blue-50"
+                onClick={() =>
+                  navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
+                }
               >
                 <ListFilter className="size-4" />
                 All PD-ECR List
               </Button>
               <Button
-                className="bg-amber-600 text-white hover:bg-amber-700"
+                className="bg-blue-600 text-white hover:bg-blue-700 transition-all active:scale-[0.98]"
                 onClick={() => navigate({ to: "/pd-ecr" })}
               >
                 <Plus className="size-4" />
@@ -553,12 +595,43 @@ export function PdEcrCaseDashboard() {
           </div>
         </header>
 
-        <section className="grid gap-3 md:grid-cols-5">
-          <MetricTile label="Total" value={stats.total} hint="All loaded cases" />
-          <MetricTile label="Active" value={stats.active} hint="Drafts and workflow" />
-          <MetricTile label="Historical" value={stats.historical} hint="Knowledge base" />
+        <section className="grid gap-3 md:grid-cols-5 xl:grid-cols-8">
+          <MetricTile
+            label="Total"
+            value={stats.total}
+            hint="All loaded cases"
+          />
+          <MetricTile
+            label="Active"
+            value={stats.active}
+            hint="Drafts and workflow"
+          />
+          <MetricTile
+            label="Historical"
+            value={stats.historical}
+            hint="Knowledge base"
+          />
           <MetricTile label="Draft" value={stats.draft} hint="Editable work" />
-          <MetricTile label="In Review" value={stats.inReview} hint="Open workflow" />
+          <MetricTile
+            label="In Review"
+            value={stats.inReview}
+            hint="Open workflow"
+          />
+          <MetricTile
+            label="Needs input"
+            value={stats.needsInput}
+            hint="Gate blocked"
+          />
+          <MetricTile
+            label="Overdue"
+            value={stats.overdue}
+            hint="Past target date"
+          />
+          <MetricTile
+            label="High risk"
+            value={stats.highRisk}
+            hint="Escalation view"
+          />
         </section>
 
         <KnowledgeHealthPanel
@@ -570,7 +643,7 @@ export function PdEcrCaseDashboard() {
         />
 
         <section className="grid gap-3 lg:grid-cols-[1fr_24rem]">
-          <div className="rounded-lg border border-stone-200 bg-white px-4 py-3 shadow-sm">
+          <div className="enterprise-panel px-4 py-3">
             <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-center">
               <label className="relative block">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-stone-400" />
@@ -578,7 +651,7 @@ export function PdEcrCaseDashboard() {
                   value={searchText}
                   onChange={(event) => setSearchText(event.target.value)}
                   placeholder="Search case no, DC no, customer, source, or change type"
-                  className="h-10 border-stone-300 bg-white pl-9 shadow-none"
+                  className="h-10 border-slate-300 bg-white pl-9 shadow-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -589,8 +662,8 @@ export function PdEcrCaseDashboard() {
                     onClick={() => setStatusFilter(value)}
                     className={
                       statusFilter === value
-                        ? "rounded-full border border-amber-400 bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"
-                        : "rounded-full border border-stone-200 bg-white px-3 py-1 text-xs font-semibold text-stone-600 hover:bg-stone-50"
+                        ? "rounded-md border border-blue-300 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700"
+                        : "rounded-md border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
                     }
                   >
                     {label}
@@ -600,10 +673,10 @@ export function PdEcrCaseDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 rounded-lg border border-stone-200 bg-white p-3 shadow-sm">
+          <div className="enterprise-panel grid grid-cols-3 gap-2 p-3">
             <Button
               variant="outline"
-              className="h-10 bg-white px-2"
+              className="h-10 bg-white px-2 hover:border-blue-300 hover:bg-blue-50"
               onClick={() => navigate({ to: "/pd-ecr" })}
             >
               <Sparkles className="size-4" />
@@ -611,7 +684,7 @@ export function PdEcrCaseDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="h-10 bg-white px-2"
+              className="h-10 bg-white px-2 hover:border-blue-300 hover:bg-blue-50"
               onClick={() => navigate({ to: "/pd-ecr/drafts" })}
             >
               <Inbox className="size-4" />
@@ -619,8 +692,10 @@ export function PdEcrCaseDashboard() {
             </Button>
             <Button
               variant="outline"
-              className="h-10 bg-white px-2"
-              onClick={() => navigate({ to: "/pd-ecr/cases", search: { view: "all" } })}
+              className="h-10 bg-white px-2 hover:border-blue-300 hover:bg-blue-50"
+              onClick={() =>
+                navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
+              }
             >
               <Database className="size-4" />
               List
@@ -634,7 +709,7 @@ export function PdEcrCaseDashboard() {
           </div>
         ) : null}
 
-        <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <section className="enterprise-panel overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
             <div>
               <p className="text-sm font-semibold text-stone-900">
@@ -655,7 +730,11 @@ export function PdEcrCaseDashboard() {
           ) : isError ? (
             <div className="flex flex-col items-center justify-center gap-3 py-20 text-stone-500">
               <p>Failed to load PD-ECR cases. Check the backend API address.</p>
-              <Button variant="outline" onClick={() => navigate({ to: "/pd-ecr" })}>
+              <Button
+                variant="outline"
+                className="hover:bg-amber-50 hover:border-amber-300"
+                onClick={() => navigate({ to: "/pd-ecr" })}
+              >
                 Open PD-ECR Platform
               </Button>
             </div>
@@ -664,10 +743,10 @@ export function PdEcrCaseDashboard() {
               <FileText className="size-10" />
               <p>No matching PD-ECR cases.</p>
               <Button
-                className="bg-amber-600 text-white hover:bg-amber-700"
+                className="bg-amber-600 text-white hover:bg-amber-700 transition-all active:scale-[0.98]"
                 onClick={() => {
-                  setSearchText("")
-                  setStatusFilter("all")
+                  setSearchText("");
+                  setStatusFilter("all");
                 }}
               >
                 Show all
@@ -675,27 +754,42 @@ export function PdEcrCaseDashboard() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-180 border-collapse text-left text-sm">
-                <thead className="bg-stone-800 text-white">
+              <table className="w-full min-w-[118rem] border-collapse text-left text-sm">
+                <thead className="bg-slate-800 text-white">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Case No.</th>
                     <th className="px-4 py-3 font-semibold">Title</th>
                     <th className="px-4 py-3 font-semibold">Status</th>
-                    <th className="hidden px-4 py-3 font-semibold md:table-cell">Customer</th>
-                    <th className="hidden px-4 py-3 font-semibold lg:table-cell">Change Type</th>
-                    <th className="hidden px-4 py-3 font-semibold lg:table-cell">Date</th>
-                    <th className="px-4 py-3 text-right font-semibold">Action</th>
+                    <th className="px-4 py-3 font-semibold">Status flow</th>
+                    <th className="px-4 py-3 font-semibold">Owner</th>
+                    <th className="px-4 py-3 font-semibold">Current task</th>
+                    <th className="px-4 py-3 font-semibold">Gate</th>
+                    <th className="px-4 py-3 font-semibold">Risk</th>
+                    <th className="px-4 py-3 font-semibold">Due</th>
+                    <th className="hidden px-4 py-3 font-semibold md:table-cell">
+                      Customer
+                    </th>
+                    <th className="hidden px-4 py-3 font-semibold lg:table-cell">
+                      Change Type
+                    </th>
+                    <th className="hidden px-4 py-3 font-semibold lg:table-cell">
+                      Date
+                    </th>
+                    <th className="px-4 py-3 text-right font-semibold">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {visibleCases.slice(0, 12).map((item, index) => {
-                    const status = statusLabels[item.status] || statusLabels.draft
+                    const status =
+                      statusLabels[item.status] || statusLabels.draft;
                     return (
                       <tr
                         key={`${item.id}-${index}`}
                         className="border-t border-stone-200 odd:bg-white even:bg-stone-50/60"
                       >
-                        <td className="whitespace-nowrap px-4 py-3 font-semibold text-amber-700">
+                        <td className="whitespace-nowrap px-4 py-3 font-semibold text-blue-700">
                           {item.caseNo}
                         </td>
                         <td className="max-w-72 truncate px-4 py-3 text-stone-700">
@@ -707,6 +801,65 @@ export function PdEcrCaseDashboard() {
                           >
                             {status.label}
                           </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <PdEcrCaseStatusFlow
+                            status={item.status}
+                            source={
+                              item.status === "historical"
+                                ? "history"
+                                : item.source
+                            }
+                            compact
+                          />
+                        </td>
+                        <td
+                          className="max-w-40 truncate px-4 py-3 text-stone-700"
+                          title={item.workbench.owner}
+                        >
+                          {item.workbench.owner}
+                        </td>
+                        <td
+                          className="max-w-56 truncate px-4 py-3 text-stone-700"
+                          title={item.workbench.currentTask}
+                        >
+                          {item.workbench.currentTask}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={`inline-flex max-w-48 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                              item.workbench.gate.tone === "ready"
+                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                : item.workbench.gate.tone === "blocked"
+                                  ? "border-rose-200 bg-rose-50 text-rose-700"
+                                  : item.workbench.gate.tone === "done"
+                                    ? "border-stone-200 bg-stone-50 text-stone-500"
+                                    : item.workbench.gate.tone === "readonly"
+                                      ? "border-sky-200 bg-sky-50 text-sky-700"
+                                      : "border-amber-200 bg-amber-50 text-amber-700"
+                            }`}
+                            title={item.workbench.gate.detail}
+                          >
+                            {item.workbench.gate.label}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                              item.workbench.risk === "High"
+                                ? "border-rose-200 bg-rose-50 text-rose-700"
+                                : item.workbench.risk === "Medium"
+                                  ? "border-amber-200 bg-amber-50 text-amber-700"
+                                  : item.workbench.risk === "Low"
+                                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                    : "border-stone-200 bg-stone-50 text-stone-500"
+                            }`}
+                          >
+                            {item.workbench.risk}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-stone-600">
+                          {item.workbench.dueLabel}
                         </td>
                         <td className="hidden px-4 py-3 text-stone-600 md:table-cell">
                           {item.customerProject}
@@ -726,9 +879,12 @@ export function PdEcrCaseDashboard() {
                               type="button"
                               size="sm"
                               variant="outline"
-                              className="h-8 bg-white"
+                              className="h-8 bg-white hover:bg-amber-50 hover:border-amber-300"
                               onClick={() => openCase(item)}
-                              disabled={openingCaseId === item.id || deletingCaseId === item.id}
+                              disabled={
+                                openingCaseId === item.id ||
+                                deletingCaseId === item.id
+                              }
                             >
                               {openingCaseId === item.id ? "Opening" : "Open"}
                               <ArrowRight className="size-3" />
@@ -737,9 +893,12 @@ export function PdEcrCaseDashboard() {
                               type="button"
                               size="sm"
                               variant="outline"
-                              className="h-8 border-red-200 bg-white px-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              className="h-8 border-red-200 bg-white px-2 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-amber-300"
                               onClick={() => deleteCase(item)}
-                              disabled={deletingCaseId === item.id || openingCaseId === item.id}
+                              disabled={
+                                deletingCaseId === item.id ||
+                                openingCaseId === item.id
+                              }
                               title="Delete case"
                               aria-label={`Delete ${item.caseNo}`}
                             >
@@ -749,7 +908,7 @@ export function PdEcrCaseDashboard() {
                           </div>
                         </td>
                       </tr>
-                    )
+                    );
                   })}
                 </tbody>
               </table>
@@ -758,5 +917,5 @@ export function PdEcrCaseDashboard() {
         </section>
       </div>
     </div>
-  )
+  );
 }

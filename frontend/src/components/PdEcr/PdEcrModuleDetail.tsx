@@ -121,16 +121,6 @@ function ToolFooter({ module }: { module?: PdEcrDisplayModule }) {
 
   return (
     <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-stone-200 pt-4">
-      <Button
-        type="button"
-        variant="outline"
-        className="bg-white"
-        disabled
-        title="Module attachment upload is outside the current MVP. Use Step 2 feasibility attachments for now."
-      >
-        <Upload className="size-4" />
-        Upload files
-      </Button>
       <Button type="button" variant="outline" className="bg-white" onClick={exportCsv}>
         Export module CSV
       </Button>
@@ -783,7 +773,7 @@ const changeFieldSpecs: {
   {
     key: "product",
     label: "产品",
-    dataKeys: ["product_no", "product"],
+    dataKeys: ["product", "product_no"],
     tableLabels: ["product no", "产品号"],
   },
   {
@@ -795,13 +785,13 @@ const changeFieldSpecs: {
   {
     key: "partNumber",
     label: "零部件号.",
-    dataKeys: ["component_no", "part_number"],
+    dataKeys: ["partNumber", "part_no", "component_no", "part_number"],
     tableLabels: ["component no", "部件号", "零部件号"],
   },
   {
     key: "title",
     label: "变更名称",
-    dataKeys: ["title", "change_name"],
+    dataKeys: ["changeTitle", "title", "change_name"],
     tableLabels: ["change name", "变更名称"],
   },
 ]
@@ -865,7 +855,7 @@ function buildChangeDraft(module: PdEcrDisplayModule): ChangeDescriptionDraft {
   const changeSummary =
     firstModuleValue(
       module,
-      ["change_proposal", "summary"],
+      ["changeSummary", "change_proposal", "summary"],
       ["step 2", "change proposal", "变更描述"],
     ) || module.summary
 
@@ -888,6 +878,19 @@ function buildChangeDraft(module: PdEcrDisplayModule): ChangeDescriptionDraft {
     ),
     departments,
   }
+}
+
+function hasSubmittedChangeDescriptionData(module: PdEcrDisplayModule) {
+  const data = module.data || {}
+  return Boolean(
+    data.changeTitle ||
+      data.changeSummary ||
+      data.change_proposal ||
+      data.initiatorConfirmed !== undefined ||
+      data.initiator_confirmed !== undefined ||
+      data.leaderConfirmed !== undefined ||
+      data.leader_confirmed !== undefined,
+  )
 }
 
 function getActiveRecordId(): string {
@@ -1023,6 +1026,8 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
   const storageKey = useMemo(() => changeDraftStorageKey(module), [module])
   const [draft, setDraft] = useState<ChangeDescriptionDraft>(() => {
     const initialDraft = buildChangeDraft(module)
+    if (hasSubmittedChangeDescriptionData(module)) return initialDraft
+
     const raw = localStorage.getItem(storageKey)
     if (!raw) return initialDraft
 
@@ -1317,9 +1322,17 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
               </Button>
             </div>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div
+            className="grid gap-4 md:grid-cols-2"
+            data-pdecr-anchor="manager-approval"
+            data-pdecr-field="manager_approval"
+          >
             {changeFieldSpecs.map((field) => (
-              <label key={field.key} className="space-y-1">
+              <label
+                key={field.key}
+                className="space-y-1 rounded-md"
+                data-pdecr-field={field.key}
+              >
                 <span className="text-sm font-semibold text-stone-700">
                   {field.label}
                 </span>
@@ -1904,7 +1917,11 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
               const deptCount = deptIndices.length
               const isDeptExpanded = expandedImpactDepts.has(dept)
               return (
-                <div key={dept}>
+                <div
+                  key={dept}
+                  data-pdecr-anchor={`impact-department-${taskAnchorSuffix(dept)}`}
+                  data-pdecr-field={`department_confirmation.${dept}`}
+                >
                   {/* Department header bar */}
                   <button
                     type="button"
@@ -3040,7 +3057,12 @@ export function ImplementationView({
                           {deptRows.map((row, idx) => {
                             const globalIndex = checklistRows.findIndex((r) => r.id === row.id)
                             return (
-                              <tr key={row.id} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
+                              <tr
+                                key={row.id}
+                                className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors"
+                                data-pdecr-anchor={`implementation-task-${taskAnchorSuffix(row.id)}`}
+                                data-pdecr-field={`checklistRows.${row.id}`}
+                              >
                                 <td className="px-2 py-2 text-center text-xs text-stone-400">
                                   {idx + 1}
                                 </td>
@@ -3225,13 +3247,60 @@ function loadModule(moduleId: string): {
   }
 }
 
-export function PdEcrModuleDetail({ moduleId }: { moduleId: string }) {
+function escapeSelector(value: string) {
+  return window.CSS?.escape ? window.CSS.escape(value) : value.replace(/"/g, '\\"')
+}
+
+function taskAnchorSuffix(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "target"
+}
+
+export function PdEcrModuleDetail({
+  moduleId,
+  targetField,
+  targetAnchor,
+  taskId,
+}: {
+  moduleId: string
+  targetField?: string
+  targetAnchor?: string
+  taskId?: string
+}) {
   const navigate = useNavigate()
   const { module, reportUrl, source } = useMemo(
     () => loadModule(moduleId),
     [moduleId],
   )
   const resolvedReportUrl = resolvePdEcrAssetUrl(reportUrl)
+
+  useEffect(() => {
+    if (!targetAnchor && !targetField) return
+
+    const timer = window.setTimeout(() => {
+      const selectors = [
+        targetAnchor ? `[data-pdecr-anchor="${escapeSelector(targetAnchor)}"]` : "",
+        targetAnchor ? `#${escapeSelector(targetAnchor)}` : "",
+        targetField ? `[data-pdecr-field="${escapeSelector(targetField)}"]` : "",
+      ].filter(Boolean)
+      const target = selectors
+        .map((selector) => document.querySelector(selector))
+        .find(Boolean) || document.querySelector("[data-pdecr-module-root]")
+
+      if (target instanceof HTMLElement) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" })
+        target.classList.add("ring-2", "ring-amber-400", "ring-offset-2")
+        window.setTimeout(() => {
+          target.classList.remove("ring-2", "ring-amber-400", "ring-offset-2")
+        }, 2600)
+      }
+    }, 250)
+
+    return () => window.clearTimeout(timer)
+  }, [moduleId, targetAnchor, targetField])
 
   if (!module) {
     return (
@@ -3288,7 +3357,10 @@ export function PdEcrModuleDetail({ moduleId }: { moduleId: string }) {
           ) : null}
         </div>
 
-        <article className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <article
+          className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm"
+          data-pdecr-module-root
+        >
           <div className="border-b border-stone-200 bg-white px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="flex size-8 items-center justify-center rounded bg-amber-50 text-amber-600">
@@ -3309,6 +3381,15 @@ export function PdEcrModuleDetail({ moduleId }: { moduleId: string }) {
           </div>
 
           <div className="p-4 md:p-8">
+            {(targetField || targetAnchor || taskId) && (
+              <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                <p className="font-semibold">已从 My Tasks 定位到此模块</p>
+                <p className="mt-1 text-xs">
+                  {targetField ? `目标字段：${targetField}` : "请处理此模块中的任务项。"}
+                  {taskId ? ` · Task ${taskId.slice(0, 8)}` : ""}
+                </p>
+              </div>
+            )}
             <SourceTracePanel module={module} />
             {renderModuleBody(module)}
           </div>

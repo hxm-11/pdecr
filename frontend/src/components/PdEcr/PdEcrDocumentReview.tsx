@@ -236,34 +236,34 @@ export function PdEcrDocumentReview() {
   return (
     <div className="min-h-[calc(100vh-7rem)] bg-stone-50 text-stone-900">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-stone-200 bg-white px-5 py-3 shadow-sm">
+      <header className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-stone-200/60 glass-header px-5 py-3 shadow-sm">
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={() => navigate({ to: "/pd-ecr" })}>
+          <Button variant="outline" className="hover:bg-amber-50 hover:border-amber-300" onClick={() => navigate({ to: "/pd-ecr" })}>
             <ArrowLeft className="size-4" /> 返回
           </Button>
           <div>
             <h1 className="text-lg font-semibold">{data.original_filename}</h1>
             <p className="text-xs text-stone-500">
-              AI 解析完成 · 请核对并修改后确认入库
+              历史 PD-ECR 文件解析完成 · 核对后确认入数据库并构建知识库
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {saveMsg && (
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm">
               {saveMsg}
             </span>
           )}
           <Button
             variant="outline"
-            className="bg-white"
+            className="bg-white hover:bg-amber-50 hover:border-amber-300"
             onClick={() => saveMutation.mutate()}
             disabled={saveMutation.isPending}
           >
             <Save className="size-4" /> 保存草稿
           </Button>
           <Button
-            className="bg-amber-600 hover:bg-amber-700"
+            className="bg-amber-600 hover:bg-amber-700 transition-all active:scale-[0.98]"
             onClick={() => confirmMutation.mutate()}
             disabled={confirmMutation.isPending}
           >
@@ -278,9 +278,9 @@ export function PdEcrDocumentReview() {
         {/* LEFT: PDF preview + parsed text */}
         <div className="space-y-4">
           {previewUrl ? (
-            <section className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+            <section className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
               <div className="border-b border-stone-200 bg-stone-100 px-4 py-2 text-sm font-semibold">
-                文件预览
+                历史文件预览
               </div>
               <iframe
                 src={previewUrl}
@@ -289,8 +289,8 @@ export function PdEcrDocumentReview() {
               />
             </section>
           ) : (
-            <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
-              <h2 className="text-sm font-semibold">解析文本</h2>
+            <section className="rounded-xl border border-stone-200/60 bg-white p-5 shadow-sm card-hover">
+              <h2 className="text-sm font-semibold">历史文件解析文本</h2>
               <div className="prose prose-stone prose-sm mt-3 max-h-[70vh] max-w-none overflow-y-auto">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {data.parsed_text}
@@ -302,7 +302,7 @@ export function PdEcrDocumentReview() {
 
         {/* RIGHT: Metadata form + Sections + Tables */}
         <div className="space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
-          <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+          <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
             <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
               <FileText className="size-4 text-amber-700" />
               解析质量报告
@@ -345,14 +345,14 @@ export function PdEcrDocumentReview() {
                   {qualityWarnings.map((warning) => (
                     <span
                       key={warning}
-                      className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700"
+                      className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 shadow-sm"
                     >
                       {warning}
                     </span>
                   ))}
                 </div>
               ) : (
-                <span className="mt-2 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                <span className="mt-2 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 shadow-sm">
                   结构化解析可用于审核和入库
                 </span>
               )}
@@ -360,9 +360,9 @@ export function PdEcrDocumentReview() {
           </section>
 
           {/* ── Metadata form — matches platform NewChangeForm ── */}
-          <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+          <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
             <div className="border-b border-stone-200 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-900">
-              AI 提取的变更信息（可修改）
+              AI 提取的历史 PD-ECR 元数据（可修改）
             </div>
             <div className="p-4 space-y-3">
               {/* 产品 & 客户 */}
@@ -370,12 +370,12 @@ export function PdEcrDocumentReview() {
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">产品</span>
                   <input value={form.product} onChange={(e) => updateForm("product", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">客户</span>
                   <input value={form.customer} onChange={(e) => updateForm("customer", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
               </div>
 
@@ -401,7 +401,7 @@ export function PdEcrDocumentReview() {
                   })}
                 </div>
                 {selectedSources.length > 0 && (
-                  <div className="space-y-1.5 rounded-lg border border-stone-200 bg-stone-50 p-2.5">
+                  <div className="space-y-1.5 rounded-xl border border-stone-200/60 bg-stone-50/80 p-2.5">
                     {selectedSources.map((val) => {
                       const label = CHANGE_SOURCE_OPTIONS.find((o) => o.value === val)?.label || val
                       return (
@@ -410,7 +410,7 @@ export function PdEcrDocumentReview() {
                           <input type="text" placeholder="备注..."
                             value={sourceNotes[val] || ""}
                             onChange={(e) => setSourceNotes((prev) => ({ ...prev, [val]: e.target.value }))}
-                            className="h-8 flex-1 rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                            className="h-8 flex-1 rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                         </div>
                       )
                     })}
@@ -423,12 +423,12 @@ export function PdEcrDocumentReview() {
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">变更背景原因</span>
                   <input value={form.reason} onChange={(e) => updateForm("reason", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">变更发起部门</span>
                   <input value={form.department} onChange={(e) => updateForm("department", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
               </div>
 
@@ -437,17 +437,17 @@ export function PdEcrDocumentReview() {
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">变更发起人</span>
                   <input value={form.initiator} onChange={(e) => updateForm("initiator", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">变更发起日期</span>
                   <input type="date" value={form.date} onChange={(e) => updateForm("date", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
                 <label className="space-y-1">
                   <span className="text-xs font-semibold text-stone-500">零部件号</span>
                   <input value={form.partNumber} onChange={(e) => updateForm("partNumber", e.target.value)}
-                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500" />
+                    className="h-9 w-full rounded-md border border-stone-300 bg-white px-2.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                 </label>
               </div>
 
@@ -455,11 +455,11 @@ export function PdEcrDocumentReview() {
               <label className="space-y-1">
                 <span className="text-xs font-semibold text-stone-500">变更描述</span>
                 <textarea value={form.description} onChange={(e) => updateForm("description", e.target.value)}
-                  className="min-h-20 w-full resize-y rounded-md border border-stone-300 bg-white px-2.5 py-2 text-sm leading-relaxed outline-none focus:border-amber-500" />
+                  className="min-h-20 w-full resize-y rounded-md border border-stone-300 bg-white px-2.5 py-2 text-sm leading-relaxed outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
               </label>
 
               {/* 影响的开发域 */}
-              <fieldset className="rounded-lg border border-stone-200 bg-stone-50 p-3">
+              <fieldset className="rounded-xl border border-stone-200/60 bg-stone-50/80 p-3">
                 <legend className="px-1.5 text-xs font-semibold text-stone-500">影响的开发域</legend>
                 <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
                   {DEV_DOMAINS.map((d) => (
@@ -482,7 +482,7 @@ export function PdEcrDocumentReview() {
 
           {/* ── Parsed Excel controls ── */}
           {parsedControls.length > 0 && (
-            <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+            <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
               <div className="flex items-center gap-2 border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
                 <CheckSquare className="size-4 text-amber-700" />
                 控件状态 · {parsedControls.length} 个
@@ -518,7 +518,7 @@ export function PdEcrDocumentReview() {
 
           {/* ── Sections ── */}
           {sections.length > 0 && (
-            <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+            <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
               <div className="border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
                 章节内容（可修改）· {sections.length} 个章节
               </div>
@@ -531,13 +531,13 @@ export function PdEcrDocumentReview() {
                       </span>
                       <input value={sec.heading}
                         onChange={(e) => setSections((prev) => prev.map((s, j) => j === i ? { ...s, heading: e.target.value } : s))}
-                        className="flex-1 rounded border border-stone-200 bg-stone-50 px-2 py-0.5 text-sm font-semibold outline-none focus:border-amber-400"
+                        className="flex-1 rounded border border-stone-200 bg-stone-50 px-2 py-0.5 text-sm font-semibold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
                         placeholder="Section heading" />
                       <span className="text-[10px] text-stone-400">p.{sec.page_no}</span>
                     </div>
                     <textarea value={sec.content}
                       onChange={(e) => setSections((prev) => prev.map((s, j) => j === i ? { ...s, content: e.target.value } : s))}
-                      className="mt-1 min-h-20 w-full resize-y rounded-md border border-stone-200 bg-white px-3 py-2 text-sm leading-relaxed outline-none focus:border-amber-400" />
+                      className="mt-1 min-h-20 w-full resize-y rounded-md border border-stone-200 bg-white px-3 py-2 text-sm leading-relaxed outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80" />
                   </div>
                 ))}
               </div>
@@ -546,7 +546,7 @@ export function PdEcrDocumentReview() {
 
           {/* ── Tables ── */}
           {tables.length > 0 && (
-            <section className="rounded-lg border border-stone-200 bg-white shadow-sm">
+            <section className="rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
               <div className="border-b border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-semibold">
                 表格（可修改）· {tables.length} 个表格
               </div>
@@ -560,7 +560,7 @@ export function PdEcrDocumentReview() {
                     </div>
                     <input value={table.caption}
                       onChange={(e) => setTables((prev) => prev.map((t, j) => j === ti ? { ...t, caption: e.target.value } : t))}
-                      className="mb-2 w-full rounded border border-stone-200 bg-stone-50 px-2 py-0.5 text-sm outline-none focus:border-amber-400"
+                      className="mb-2 w-full rounded border border-stone-200 bg-stone-50 px-2 py-0.5 text-sm outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200/80"
                       placeholder="Table caption" />
                     <div className="overflow-x-auto rounded border border-stone-200">
                       <table className="w-full text-left text-xs">

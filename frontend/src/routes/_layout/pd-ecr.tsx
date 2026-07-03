@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_layout/pd-ecr")({
   head: () => ({
     meta: [
       {
-        title: "PD-ECR Platform",
+        title: "New PD-ECR",
       },
     ],
   }),

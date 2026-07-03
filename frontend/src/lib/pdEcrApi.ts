@@ -900,7 +900,15 @@ export async function submitPdEcrForApproval(
 
 export async function approvePdEcrCase(
   caseId: string,
-): Promise<{ case: PdEcrCase; message: string }> {
+): Promise<{
+  case: PdEcrCase;
+  message: string;
+  notification?: {
+    status: string;
+    recipient_email?: string;
+    error_message?: string | null;
+  };
+}> {
   const res = await pdEcrApi.post(
     `/api/v1/pd-ecr/cases/${caseId}/manager-approve`,
     {},

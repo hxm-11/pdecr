@@ -5,7 +5,6 @@ import {
   ClipboardList,
   Database,
   FolderKanban,
-  Sparkles,
   Upload,
 } from "lucide-react";
 import { type ReactNode, useEffect, useId, useRef, useState } from "react";
@@ -43,6 +42,7 @@ type ChangeAttachment = {
 };
 
 type NewChangeForm = {
+  nr: string;
   title: string;
   product: string;
   productNo: string;
@@ -64,6 +64,7 @@ type NewChangeForm = {
 };
 
 const defaultNewChange: NewChangeForm = {
+  nr: "",
   title: "",
   product: "",
   productNo: "",
@@ -157,7 +158,7 @@ function buildGenerationInput(form: NewChangeForm): PdEcrInput {
   const title = form.title.trim();
   return {
     title,
-    dc_no: `PD-ECR-${Date.now()}`,
+    dc_no: form.nr || `PD-ECR-${Date.now()}`,
     date: form.date || new Date().toISOString().slice(0, 10),
     customer_project: form.customer || "PD-ECR Platform",
     product_no: form.productNo || form.product,
@@ -170,6 +171,7 @@ function buildGenerationInput(form: NewChangeForm): PdEcrInput {
     change_description: form.description,
     target_close_date: form.targetCloseDate,
     remarks: [
+      `Nr: ${form.nr}`,
       `Title: ${title}`,
       `Product: ${form.product}`,
       `Product No.: ${form.productNo}`,
@@ -249,6 +251,7 @@ function changeFormFromCaseDetail(detail: PdEcrCaseDetailResponse): NewChangeFor
   const caseRecord = detail.case;
 
   return {
+    nr: recordText(data, ["nr", "Nr", "dc_no", "case_no"], caseRecord.dc_no || caseRecord.case_no || ""),
     title: recordText(data, ["changeTitle", "title", "change_title"], caseRecord.title || ""),
     product: recordText(data, ["product", "product_name"], caseRecord.product_no || ""),
     productNo: recordText(data, ["product_no", "productNo"], caseRecord.product_no || ""),
@@ -276,28 +279,32 @@ function WorkPanel({
   icon,
   children,
   className,
+  hideHeader = false,
 }: {
-  eyebrow: string;
-  title: string;
-  icon: ReactNode;
+  eyebrow?: string;
+  title?: string;
+  icon?: ReactNode;
   children: ReactNode;
   className?: string;
+  hideHeader?: boolean;
 }) {
   return (
     <section
       className={`enterprise-panel flex flex-col overflow-hidden ${className ?? ""}`}
     >
-      <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-slate-50/70 px-4 py-3">
-        <div className="flex size-9 items-center justify-center rounded-md bg-blue-50 text-blue-700 ring-1 ring-blue-100">
-          {icon}
-        </div>
-        <div>
-          <p className="enterprise-section-title">{eyebrow}</p>
-          <h2 className="text-lg font-semibold tracking-normal text-slate-900">
-            {title}
-          </h2>
-        </div>
-      </header>
+      {!hideHeader && (
+        <header className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-slate-50/70 px-4 py-3">
+          <div className="flex size-9 items-center justify-center rounded-md bg-blue-50 text-blue-700 ring-1 ring-blue-100">
+            {icon}
+          </div>
+          <div>
+            <p className="enterprise-section-title">{eyebrow || "PD-ECR"}</p>
+            <h2 className="text-lg font-semibold tracking-normal text-slate-900">
+              {title || "Workspace"}
+            </h2>
+          </div>
+        </header>
+      )}
       <div className="min-h-0 flex-1 p-4">{children}</div>
     </section>
   );
@@ -307,17 +314,40 @@ function FormSectionHeader({
   eyebrow,
   title,
   description,
+  rightSlot,
   className,
 }: {
   eyebrow: string;
-  title: string;
+  title?: string;
   description?: string;
+  rightSlot?: ReactNode;
   className?: string;
 }) {
+  // 把 "Section 01: Basic information" 拆成编号 "01" 和标签 "Basic information"
+  const sectionMatch = eyebrow.match(/^Section\s+(\d+)\s*:\s*(.+)$/i);
+  const sectionNumber = sectionMatch?.[1];
+  const sectionLabel = sectionMatch?.[2] ?? eyebrow;
+
   return (
     <div className={`border-b border-slate-200 pb-3 ${className ?? ""}`}>
-      <p className="enterprise-section-title">{eyebrow}</p>
-      <h3 className="mt-1 text-base font-semibold text-slate-900">{title}</h3>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2.5">
+          {sectionNumber ? (
+            <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-blue-50 font-mono text-[11px] font-bold tabular-nums text-blue-700 ring-1 ring-blue-100">
+              {sectionNumber}
+            </span>
+          ) : null}
+          <div className="min-w-0">
+            <p className="enterprise-section-title">{sectionLabel}</p>
+            {title ? (
+              <h3 className="mt-1 text-base font-semibold text-slate-900">
+                {title}
+              </h3>
+            ) : null}
+          </div>
+        </div>
+        {rightSlot ? <div className="shrink-0">{rightSlot}</div> : null}
+      </div>
       {description ? (
         <p className="mt-1 text-sm leading-6 text-slate-500">{description}</p>
       ) : null}
@@ -349,7 +379,7 @@ function FormField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="h-10 rounded-md border-slate-300 bg-white text-sm text-slate-900 shadow-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        className="enterprise-input"
       />
     </label>
   );
@@ -378,7 +408,7 @@ function SelectField({
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        className="enterprise-input"
       >
         <option value="">{placeholder}</option>
         {options.map((option) => (
@@ -394,9 +424,11 @@ function SelectField({
 function DepartmentCheckboxGroup({
   selected,
   onChange,
+  className,
 }: {
   selected: string[];
   onChange: (value: string[]) => void;
+  className?: string;
 }) {
   const toggleDepartment = (department: string, checked: boolean) => {
     onChange(
@@ -407,7 +439,11 @@ function DepartmentCheckboxGroup({
   };
 
   return (
-    <fieldset className="mt-4 rounded-md border border-slate-200 bg-slate-50/70 px-3 py-3">
+    <fieldset
+      className={`enterprise-field-surface-muted ${
+        className ?? ""
+      }`}
+    >
       <legend className="px-1 text-sm font-semibold text-slate-600">
         影响部门
       </legend>
@@ -430,46 +466,26 @@ function DepartmentCheckboxGroup({
   );
 }
 
-function ConfirmationBox({
-  title,
-  description,
+function CompactConfirmationCheck({
+  label,
   checked,
   onChange,
-  tone,
   disabled,
   disabledReason,
 }: {
-  title: string;
-  description: string;
+  label: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
-  tone: "amber" | "emerald";
   disabled?: boolean;
   disabledReason?: string;
 }) {
-  const styles =
-    tone === "emerald"
-      ? {
-          active:
-            "border-emerald-300 bg-emerald-50 shadow-[inset_4px_0_0_#059669]",
-          inactive:
-            "border-slate-200 bg-slate-50/60 hover:border-emerald-200 hover:bg-white",
-          accent: "accent-emerald-600",
-          text: "text-emerald-800",
-        }
-      : {
-          active: "border-blue-300 bg-blue-50 shadow-[inset_4px_0_0_#2563eb]",
-          inactive:
-            "border-slate-200 bg-slate-50/60 hover:border-blue-200 hover:bg-white",
-          accent: "accent-blue-600",
-          text: "text-blue-800",
-        };
-
   return (
     <label
-      className={`flex items-start gap-3 rounded-md border p-4 transition ${
-        disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
-      } ${checked ? styles.active : styles.inactive}`}
+      className={`inline-flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-xs font-semibold transition ${
+        checked
+          ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+          : "border-slate-200 bg-white text-slate-600 hover:border-blue-200 hover:bg-blue-50"
+      } ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
       title={disabled ? disabledReason : undefined}
     >
       <input
@@ -480,21 +496,9 @@ function ConfirmationBox({
           if (disabled) return;
           onChange(event.target.checked);
         }}
-        className={`mt-1 ${styles.accent}`}
+        className="size-3.5 accent-emerald-600"
       />
-      <span className="min-w-0">
-        <span className={`block text-base font-semibold ${styles.text}`}>
-          {title}
-        </span>
-        <span className="mt-1 block text-sm leading-6 text-slate-600">
-          {description}
-        </span>
-        {disabled && disabledReason ? (
-          <span className="mt-2 block text-xs font-medium text-slate-500">
-            {disabledReason}
-          </span>
-        ) : null}
-      </span>
+      <span>{label}</span>
     </label>
   );
 }
@@ -526,13 +530,10 @@ function NewChangeAttachmentPanel({
   onNoteChange: (value: string) => void;
 }) {
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-4">
+    <div className="enterprise-field-surface">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h4 className="text-base font-semibold text-slate-800">{title}</h4>
-          <p className="mt-1 text-sm text-slate-500">
-            上传图片、PDF、Excel 或其他支持材料
-          </p>
         </div>
         <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
           <Upload className="size-4" />
@@ -588,7 +589,7 @@ function NewChangeAttachmentPanel({
         </div>
       ) : (
         <p className="mt-3 rounded-md border border-dashed border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-500">
-          暂无附件
+          No files
         </p>
       )}
 
@@ -597,8 +598,8 @@ function NewChangeAttachmentPanel({
         <textarea
           value={note}
           onChange={(event) => onNoteChange(event.target.value)}
-          placeholder="补充说明该附件与变更前后状态的关系、重点差异或需要审批人关注的点。"
-          className="min-h-20 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          placeholder="Note"
+          className="enterprise-textarea min-h-20"
         />
       </label>
     </div>
@@ -671,7 +672,7 @@ function SourceMultiSelect({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className={`flex w-full items-center justify-between rounded-lg border bg-white px-3 py-2 text-left text-sm shadow-none transition ${
+        className={`flex w-full items-center justify-between rounded-md border bg-white px-3 py-2 text-left text-sm shadow-sm transition-colors hover:border-slate-400 ${
           open ? "border-blue-500 ring-2 ring-blue-100" : "border-slate-300"
         }`}
       >
@@ -691,7 +692,7 @@ function SourceMultiSelect({
         <span className="ml-2 shrink-0 self-start text-slate-400">▼</span>
       </button>
       {open && (
-        <div className="absolute z-20 mt-1 w-full rounded-md border border-slate-200 bg-white py-1 shadow-lg">
+        <div className="absolute z-20 mt-1 w-full rounded-lg border border-slate-200 bg-white py-1 shadow-xl">
           {CHANGE_SOURCE_OPTIONS.map((opt) => (
             <label
               key={opt.value}
@@ -708,6 +709,35 @@ function SourceMultiSelect({
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+function StatusTile({
+  label,
+  value,
+  detail,
+  tone = "slate",
+}: {
+  label: string;
+  value: string;
+  detail?: string;
+  tone?: "slate" | "blue" | "emerald" | "amber";
+}) {
+  const toneClass = {
+    slate: "border-slate-200 bg-slate-50 text-slate-900",
+    blue: "border-blue-100 bg-blue-50 text-blue-950",
+    emerald: "border-emerald-100 bg-emerald-50 text-emerald-950",
+    amber: "border-amber-100 bg-amber-50 text-amber-950",
+  }[tone];
+
+  return (
+    <div className={`rounded-lg border px-3 py-2.5 shadow-sm ${toneClass}`}>
+      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-slate-500">
+        {label}
+      </p>
+      <p className="mt-1 truncate text-sm font-semibold">{value || "-"}</p>
+      {detail ? <p className="mt-0.5 truncate text-xs text-slate-500">{detail}</p> : null}
     </div>
   );
 }
@@ -733,10 +763,26 @@ export function PdEcrPlatform() {
   const loadedReviewCaseRef = useRef("");
   const canContinue = newChange.initiatorConfirmed && newChange.leaderConfirmed;
   const isReviewClosed = Boolean(reviewCaseId && reviewCaseStatus && reviewCaseStatus !== "submitted");
+  const isManagerApprovalReview = Boolean(reviewCaseId && reviewCaseStatus === "submitted");
   const initiatorName = newChange.initiator.trim();
   const userLabel = actorDisplayName(currentUser);
   const canConfirmInitiator = currentUserMatchesInitiator(currentUser, initiatorName);
-  const canConfirmLeader = canConfirmInitiatorLeader(currentUser, initiatorName);
+  const canConfirmLeader =
+    isManagerApprovalReview || canConfirmInitiatorLeader(currentUser, initiatorName);
+  const attachmentCount = beforeAttachments.length + afterAttachments.length;
+  const approvalComplete = newChange.initiatorConfirmed && newChange.leaderConfirmed;
+  const workspaceStatus = reviewCaseId
+    ? reviewCaseStatus || "Review"
+    : approvalComplete
+      ? "Ready for next step"
+      : newChange.initiatorConfirmed
+        ? "Leader pending"
+        : "Drafting";
+  const statusTone = approvalComplete
+    ? "emerald"
+    : newChange.initiatorConfirmed
+      ? "amber"
+      : "blue";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -835,6 +881,8 @@ export function PdEcrPlatform() {
         part_no: newChange.partNumber || undefined,
         target_close_date: newChange.targetCloseDate || undefined,
         form_data: {
+          nr: newChange.nr,
+          dc_no: newChange.nr,
           title,
           changeTitle: title,
           source: newChange.source,
@@ -892,10 +940,21 @@ export function PdEcrPlatform() {
       if (!reviewCaseId) throw new Error("未找到审批 case");
       return approvePdEcrCase(reviewCaseId);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       updateNewChange("leaderConfirmed", true);
       setReviewCaseStatus("generated");
-      setReviewMessage("已完成领导审批。你可以回到 My Tasks 查看状态。");
+      const notification = response.notification;
+      const mailMessage =
+        notification?.status === "sent"
+          ? `系统已邮件通知 ${notification.recipient_email || "对应负责人"}。`
+          : notification?.status === "failed"
+            ? `审批已通过，但邮件发送失败：${notification.error_message || "请检查 SMTP 配置或收件人邮箱"}。`
+            : "";
+      setReviewMessage(
+        ["已完成领导审批。", mailMessage, "你可以回到 My Tasks 查看状态。"]
+          .filter(Boolean)
+          .join(""),
+      );
       setDraftStatus("领导审批已通过。");
     },
     onError: (error) => {
@@ -937,6 +996,8 @@ export function PdEcrPlatform() {
 
     // Write form data to localStorage (existing draft save)
     const draftData = {
+      nr: newChange.nr,
+      dc_no: newChange.nr,
       title,
       changeTitle: title,
       source: newChange.source,
@@ -969,6 +1030,8 @@ export function PdEcrPlatform() {
     const seedData: Record<string, unknown> = {
       source: newChange.source,
       change_source: newChange.source,
+      nr: newChange.nr,
+      dc_no: newChange.nr,
       title,
       change_title: title,
       reason: newChange.reason,
@@ -1046,7 +1109,7 @@ export function PdEcrPlatform() {
           "New PD-ECR Change Request",
         status: "draft",
         source_type: "ai_generated",
-        dc_no: `PD-ECR-${Date.now()}`,
+        dc_no: newChange.nr || `PD-ECR-${Date.now()}`,
         initiator: newChange.initiator || newChange.source || "AI Generated",
         customer_project: newChange.customer || "PD-ECR Platform",
         product_no: newChange.productNo || newChange.product || undefined,
@@ -1098,24 +1161,37 @@ export function PdEcrPlatform() {
 
   return (
     <div className="page-shell flex h-full min-h-0 flex-1 flex-col">
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3">
-        <header className="enterprise-panel shrink-0 px-4 py-3">
-          <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-                  New PD-ECR Change
+      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-4">
+        <header className="enterprise-panel shrink-0 overflow-hidden">
+          <div className="border-b border-slate-200 bg-white px-4 py-3">
+            <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex h-7 items-center rounded-md border border-slate-200 bg-slate-50 px-2.5 text-xs font-bold uppercase tracking-[0.08em] text-slate-500">
+                    PD-ECR
+                  </span>
+                  <span
+                    className={`inline-flex h-7 items-center rounded-md border px-2.5 text-xs font-semibold ${
+                      statusTone === "emerald"
+                        ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                        : statusTone === "amber"
+                          ? "border-amber-200 bg-amber-50 text-amber-700"
+                          : "border-blue-200 bg-blue-50 text-blue-700"
+                    }`}
+                  >
+                    {workspaceStatus}
+                  </span>
+                  {reviewCaseId ? (
+                    <span className="inline-flex h-7 items-center rounded-md border border-slate-200 bg-white px-2.5 text-xs font-semibold text-slate-600">
+                      Review case
+                    </span>
+                  ) : null}
+                </div>
+                <h1 className="mt-2 truncate text-2xl font-semibold tracking-tight text-slate-950">
+                  {newChange.title.trim() || "New PD-ECR Change"}
                 </h1>
-                <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                  Step 1 · Initiation
-                </span>
               </div>
-              <p className="mt-1 text-sm text-slate-500">
-                Capture request data, evidence and initial approval before
-                impact planning.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -1145,7 +1221,35 @@ export function PdEcrPlatform() {
                 <FolderKanban className="size-4" />
                 Dashboard
               </Button>
+              <PdEcrProcessFlowButton />
+              </div>
             </div>
+          </div>
+          <div className="grid gap-2 bg-slate-50/70 px-4 py-2 sm:grid-cols-2 xl:grid-cols-4">
+            <StatusTile
+              label="Product"
+              value={newChange.product || "Unassigned"}
+              detail={newChange.productNo}
+              tone="slate"
+            />
+            <StatusTile
+              label="Customer"
+              value={newChange.customer || "Unassigned"}
+              detail={newChange.partNumber}
+              tone="slate"
+            />
+            <StatusTile
+              label="Evidence"
+              value={`${attachmentCount} files`}
+              detail={`${beforeAttachments.length} before / ${afterAttachments.length} after`}
+              tone={attachmentCount ? "blue" : "slate"}
+            />
+            <StatusTile
+              label="Gate"
+              value={approvalComplete ? "Confirmed" : "Pending"}
+              detail={newChange.initiatorConfirmed ? "Leader" : "Initiator"}
+              tone={approvalComplete ? "emerald" : "amber"}
+            />
           </div>
         </header>
 
@@ -1153,16 +1257,31 @@ export function PdEcrPlatform() {
           <div className="flex min-w-0 flex-col">
             <WorkPanel
               eyebrow="New creation"
-              title="新建变更申请"
-              icon={<Sparkles className="size-5" />}
-              className="flex-1"
+              className="min-w-0 flex-1"
+              hideHeader
             >
               <FormSectionHeader
-                eyebrow="Section 01"
-                title="Basic information"
-                description="用于识别 case、产品范围和发起人责任人。"
+                eyebrow="Section 01: Basic information"
+                title="Change object"
+                rightSlot={
+                  <label className="flex items-center gap-2.5">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      Nr
+                    </span>
+                    <Input
+                      aria-label="Nr"
+                      value={newChange.nr}
+                      onChange={(event) =>
+                        updateNewChange("nr", event.target.value)
+                      }
+                      className="h-8 w-36 rounded-md border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-800 shadow-sm transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                    />
+                  </label>
+                }
               />
-              <div className="grid gap-3 sm:grid-cols-3">
+              
+              <div className="enterprise-field-surface-muted mt-4">
+                <div className="grid gap-3 sm:grid-cols-3">
                 <FormField
                   label="产品"
                   value={newChange.product}
@@ -1178,17 +1297,20 @@ export function PdEcrPlatform() {
                   value={newChange.initiator}
                   onChange={(value) => updateNewChange("initiator", value)}
                 />
+                </div>
               </div>
 
-              <FormField
-                label="变更名称"
-                value={newChange.title}
-                onChange={(value) => updateNewChange("title", value)}
-                placeholder="例如：JIM 493 C-sample release / 螺栓供应商切换"
-                className="mt-5"
-              />
+              <div className="enterprise-field-surface mt-3">
+                <FormField
+                  label="变更名称"
+                  value={newChange.title}
+                  onChange={(value) => updateNewChange("title", value)}
+                  placeholder="例如：JIM 493 C-sample release / 螺栓供应商切换"
+                />
+              </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <div className="enterprise-field-surface-muted mt-3">
+                <div className="grid gap-3 sm:grid-cols-3">
                 <FormField
                   label="产品号"
                   value={newChange.productNo}
@@ -1205,13 +1327,13 @@ export function PdEcrPlatform() {
                   onChange={(value) => updateNewChange("sampleType", value)}
                   options={SAMPLE_TYPE_OPTIONS}
                 />
+                </div>
               </div>
 
               {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
               <FormSectionHeader
-                eyebrow="Section 02"
-                title="Change details"
-                description="描述变更来源、原因、影响部门和 before / after 证据。"
+                eyebrow="Section 02: Change details"
+                title="Impact entry"
                 className="mt-8"
               />
               <div className="mt-5 space-y-2">
@@ -1228,7 +1350,7 @@ export function PdEcrPlatform() {
                   if (!selectedValues.length) return null;
                   const notes = parseSourceNotes(newChange.sourceNote);
                   return (
-                    <div className="mt-2 space-y-2 rounded-md border border-slate-200 bg-slate-50/70 p-3">
+                    <div className="enterprise-field-surface-muted mt-2 space-y-2">
                       {selectedValues.map((val) => {
                         const label =
                           CHANGE_SOURCE_OPTIONS.find((o) => o.value === val)
@@ -1252,7 +1374,7 @@ export function PdEcrPlatform() {
                                   serializeSourceNotes(next),
                                 );
                               }}
-                              className="h-10 flex-1 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                              className="enterprise-input flex-1"
                             />
                           </div>
                         );
@@ -1262,13 +1384,22 @@ export function PdEcrPlatform() {
                 })()}
               </div>
 
-              <div className="mt-7 grid gap-3 lg:grid-cols-2">
-                <FormField
-                  label="变更背景原因"
-                  value={newChange.reason}
-                  onChange={(value) => updateNewChange("reason", value)}
-                />
-                <label className="space-y-2">
+              <section className="enterprise-field-surface mt-7">
+                <label className="block space-y-2">
+                  <span className="enterprise-field-label">变更背景原因</span>
+                  <textarea
+                    value={newChange.reason}
+                    onChange={(event) =>
+                      updateNewChange("reason", event.target.value)
+                    }
+                    placeholder="请说明为什么需要变更，可包含客户要求、质量问题、供应风险、成本/工艺优化等背景。"
+                    className="enterprise-textarea min-h-28"
+                  />
+                </label>
+              </section>
+
+              <div className="mt-3 grid gap-3 lg:grid-cols-[16rem_minmax(0,1fr)]">
+                <label className="enterprise-field-surface-muted space-y-2">
                   <span className="enterprise-field-label">
                     Target Close date
                   </span>
@@ -1278,17 +1409,17 @@ export function PdEcrPlatform() {
                     onChange={(e) =>
                       updateNewChange("targetCloseDate", e.target.value)
                     }
-                    className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    className="enterprise-input"
                   />
                 </label>
+                <DepartmentCheckboxGroup
+                  selected={newChange.departments}
+                  onChange={(value) => updateNewChange("departments", value)}
+                  className="min-h-full"
+                />
               </div>
 
-              <DepartmentCheckboxGroup
-                selected={newChange.departments}
-                onChange={(value) => updateNewChange("departments", value)}
-              />
-
-              <section className="mt-7 space-y-3">
+              <section className="enterprise-field-surface mt-7">
                 <label className="block space-y-2">
                   <span className="enterprise-field-label">变更描述</span>
                   <textarea
@@ -1297,12 +1428,12 @@ export function PdEcrPlatform() {
                       updateNewChange("description", event.target.value)
                     }
                     placeholder="请描述当前状态、拟变更内容、变更原因、影响范围和期望结果。"
-                    className="min-h-32 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 text-slate-900 shadow-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    className="enterprise-textarea min-h-24"
                   />
                 </label>
               </section>
 
-              <section className="mt-4 rounded-md border border-slate-200 bg-slate-50/70 p-3">
+              <section className="enterprise-field-surface mt-4">
                 <button
                   type="button"
                   onClick={() => setIsAttachmentExpanded((value) => !value)}
@@ -1350,42 +1481,48 @@ export function PdEcrPlatform() {
               </section>
 
               <FormSectionHeader
-                eyebrow="Section 03"
-                title="Initiator approval gate"
-                description="两个确认完成后，case 才能进入影响分析、验证计划和执行计划。"
+                eyebrow="Section 03: Initiator approval gate"
+                title="Release gate"
                 className="mt-8"
+                rightSlot={
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <CompactConfirmationCheck
+                      label="发起人确认"
+                      checked={newChange.initiatorConfirmed}
+                      disabled={!canConfirmInitiator}
+                      disabledReason={
+                        initiatorName
+                          ? `只能由发起人本人确认。当前登录用户：${userLabel || "未登录"}`
+                          : "请先填写变更发起人。"
+                      }
+                      onChange={(checked) =>
+                        updateNewChange("initiatorConfirmed", checked)
+                      }
+                    />
+                    <CompactConfirmationCheck
+                      label="领导确认"
+                      checked={newChange.leaderConfirmed}
+                      disabled={!canConfirmLeader}
+                      disabledReason={
+                        isManagerApprovalReview
+                          ? undefined
+                          : initiatorName
+                          ? "只能由发起人所在部门的 department_leader 确认，且不能由发起人本人确认。"
+                          : "请先填写变更发起人。"
+                      }
+                      onChange={(checked) =>
+                        updateNewChange("leaderConfirmed", checked)
+                      }
+                    />
+                  </div>
+                }
               />
-              <section className="mt-4 grid gap-3 lg:grid-cols-2">
-                <ConfirmationBox
-                  title="发起人确认"
-                  description="发起人已确认变更描述、影响部门、Before/After 附件和基础信息真实完整。"
-                  checked={newChange.initiatorConfirmed}
-                  tone="amber"
-                  disabled={!canConfirmInitiator}
-                  disabledReason={
-                    initiatorName
-                      ? `只能由发起人本人确认。当前登录用户：${userLabel || "未登录"}`
-                      : "请先填写变更发起人。"
-                  }
-                  onChange={(checked) =>
-                    updateNewChange("initiatorConfirmed", checked)
-                  }
-                />
-                <ConfirmationBox
-                  title="发起人的领导确认"
-                  description="发起人的直属领导已确认该变更可以进入后续 PD-ECR 流程。"
-                  checked={newChange.leaderConfirmed}
-                  tone="emerald"
-                  disabled={!canConfirmLeader}
-                  disabledReason={
-                    initiatorName
-                      ? "只能由发起人所在部门的 department_leader 确认，且不能由发起人本人确认。"
-                      : "请先填写变更发起人。"
-                  }
-                  onChange={(checked) =>
-                    updateNewChange("leaderConfirmed", checked)
-                  }
-                />
+              <section className="mt-3 flex justify-end">
+                <span className="text-xs font-medium text-slate-500">
+                  {newChange.initiatorConfirmed && newChange.leaderConfirmed
+                    ? "确认完成"
+                    : "等待确认"}
+                </span>
               </section>
 
               {reviewCaseId ? (
@@ -1394,9 +1531,6 @@ export function PdEcrPlatform() {
                     <div>
                       <p className="text-sm font-semibold text-emerald-900">
                         领导审批当前新建变更表单
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">
-                        当前打开的是发起人提交的原始新建变更界面，请核对表单内容和 Before/After 附件说明后审批。
                       </p>
                       <p className="mt-1 text-xs text-slate-500">
                         Case: {reviewCaseId}{reviewTaskId ? ` · Task: ${reviewTaskId}` : ""}{reviewCaseStatus ? ` · Status: ${reviewCaseStatus}` : ""}
@@ -1428,7 +1562,7 @@ export function PdEcrPlatform() {
                           disabled={
                             approveReviewMutation.isPending ||
                             rejectReviewMutation.isPending ||
-                            !newChange.leaderConfirmed
+                            (!isManagerApprovalReview && !newChange.leaderConfirmed)
                           }
                           onClick={() => approveReviewMutation.mutate()}
                         >
@@ -1443,10 +1577,7 @@ export function PdEcrPlatform() {
                   <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                       <p className="text-sm font-semibold text-blue-900">
-                        提交给发起人领导确认
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">
-                        发起人确认后，点击这里生成领导审批待办。领导登录后到 My Tasks 的 Manager Approvals 中确认。
+                        Submit to leader
                       </p>
                       {leaderSubmitMessage ? (
                         <p className="mt-2 text-sm font-medium text-blue-800">
@@ -1505,27 +1636,6 @@ export function PdEcrPlatform() {
             </WorkPanel>
           </div>
         </main>
-
-        <footer className="shrink-0 flex flex-wrap items-center gap-3 pb-1">
-          <Button
-            variant="outline"
-            className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
-            onClick={() => navigate({ to: "/pd-ecr/dashboard" })}
-          >
-            <FolderKanban className="size-4" />
-            Case Dashboard
-          </Button>
-          <Button
-            variant="outline"
-            className="h-9 rounded-md bg-white text-sm hover:border-blue-300 hover:bg-blue-50"
-            onClick={() =>
-              navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
-            }
-          >
-            All Pd-ECR list
-          </Button>
-          <PdEcrProcessFlowButton />
-        </footer>
       </div>
     </div>
   );

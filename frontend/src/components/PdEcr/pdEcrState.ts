@@ -60,6 +60,7 @@ export type PdEcrPdEcrCaseRow = {
   sourceFile?: string
   pdfFile?: string
   pdfUrl?: string
+  missingFields?: string[]
   dcNo?: string
   mcrNo?: string
   productNo?: string
@@ -921,11 +922,13 @@ export function normalizePdEcrCaseRow(
       safePick(record, [
         "partNumber",
         "part_number",
+        "part_no",
         "component_no",
       ]) ||
       safePick(metadata, [
         "partNumber",
         "part_number",
+        "part_no",
         "component_no",
       ]) ||
       "-",
@@ -945,6 +948,12 @@ export function normalizePdEcrCaseRow(
     pdfUrl:
       safePick(record, ["pdfUrl", "pdf_url"]) ||
       safePick(metadata, ["pdfUrl", "pdf_url"]),
+    missingFields: uniqueStrings([
+      record.missing_fields,
+      record.missingFields,
+      metadata.missing_fields,
+      metadata.missingFields,
+    ]),
     dcNo:
       safePick(record, ["dcNo", "dc_no"]) ||
       safePick(metadata, ["dcNo", "dc_no"]),

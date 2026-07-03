@@ -1,4 +1,9 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useLocation,
+} from "@tanstack/react-router";
 import { Bell, CircleHelp, Search } from "lucide-react";
 
 import AppSidebar from "@/components/Sidebar/AppSidebar";
@@ -22,22 +27,33 @@ export const Route = createFileRoute("/_layout")({
   component: Layout,
 });
 
+function topbarPageLabel(pathname: string) {
+  if (pathname === "/pd-ecr" || pathname === "/pd-ecr/new") return "New Change";
+  if (pathname.startsWith("/pd-ecr/tasks")) return "My Tasks";
+  if (pathname.startsWith("/pd-ecr/cases")) return "Cases";
+  if (pathname.startsWith("/pd-ecr/dashboard")) return "Dashboard";
+  if (pathname.startsWith("/pd-ecr/history-case")) return "History";
+  if (pathname.startsWith("/pd-ecr/drafts")) return "Drafts";
+  if (pathname.startsWith("/pd-ecr/content")) return "Change Content";
+  if (pathname.startsWith("/pd-ecr/documents")) return "Document";
+  if (pathname.startsWith("/settings")) return "Settings";
+  if (pathname.startsWith("/admin")) return "Admin";
+  return "Workspace";
+}
+
 function Layout() {
+  const { pathname } = useLocation();
+  const pageLabel = topbarPageLabel(pathname);
+
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-svh overflow-hidden">
       <AppSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 text-sm text-slate-600">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="h-6 w-px bg-red-600" />
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">
-                BOSCH PD-ECR Management
-              </p>
-              <p className="truncate text-xs text-slate-500">
-                Engineering change workflow cockpit
-              </p>
-            </div>
+      <SidebarInset className="h-svh min-w-0 overflow-hidden">
+        <header className="z-10 flex h-14 shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 text-sm text-slate-600">
+          <div className="flex min-w-0 items-center gap-2 text-sm">
+            <span className="truncate font-semibold text-slate-900">PD-ECR</span>
+            <span className="text-slate-300">/</span>
+            <span className="truncate text-slate-500">{pageLabel}</span>
           </div>
           <div className="flex min-w-0 items-center gap-2">
             <label className="relative hidden min-w-72 lg:block">
@@ -62,12 +78,9 @@ function Layout() {
             >
               <Bell className="size-4" />
             </button>
-            <span className="hidden rounded-md bg-blue-600 px-2.5 py-1.5 text-xs font-semibold text-white sm:inline-flex">
-              PLM
-            </span>
           </div>
         </header>
-        <main className="flex min-h-0 flex-1 bg-slate-50 p-3 md:p-4">
+        <main className="flex min-h-0 flex-1 overflow-y-auto bg-slate-50 p-3 md:p-4">
           <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col">
             <Outlet />
           </div>

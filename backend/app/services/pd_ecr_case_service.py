@@ -854,6 +854,13 @@ def serialize_case(case: PdEcrCase) -> dict[str, Any]:
         "created_at": case.created_at.isoformat() if case.created_at else None,
         "updated_at": case.updated_at.isoformat() if case.updated_at else None,
         "closed_at": case.closed_at.isoformat() if case.closed_at else None,
+        "flowable_process_instance_id": case.flowable_process_instance_id,
+        "flowable_process_definition_key": case.flowable_process_definition_key,
+        "flowable_business_key": case.flowable_business_key,
+        "flowable_status": case.flowable_status,
+        "flowable_last_synced_at": case.flowable_last_synced_at.isoformat()
+        if case.flowable_last_synced_at
+        else None,
         "source_file": case.case_no,
         "customer": case.customer_project,
         "project": case.customer_project,

@@ -85,12 +85,12 @@ V1_MODULE_IDS: tuple[PdEcrModuleId, ...] = (
 )
 
 MODULE_TITLES: dict[PdEcrModuleId, str] = {
-    PdEcrModuleId.BASIC_INFORMATION: "Change Request description",
-    PdEcrModuleId.CHANGE_DESCRIPTION: "Affection analysis",
-    PdEcrModuleId.REASON_FOR_CHANGE: "Validation & Trial Run Results",
-    PdEcrModuleId.IMPACT_ANALYSIS: "Validation &Trial run plan result",
-    PdEcrModuleId.IMPLEMENTATION_PLAN: "Implementation task plan",
-    PdEcrModuleId.APPROVAL_SIGNOFF_INFORMATION: "Implementation result",
+    PdEcrModuleId.BASIC_INFORMATION: "Basic Information",
+    PdEcrModuleId.CHANGE_DESCRIPTION: "Change Description",
+    PdEcrModuleId.REASON_FOR_CHANGE: "Reason for Change",
+    PdEcrModuleId.IMPACT_ANALYSIS: "Impact Analysis",
+    PdEcrModuleId.IMPLEMENTATION_PLAN: "Implementation Plan",
+    PdEcrModuleId.APPROVAL_SIGNOFF_INFORMATION: "Approval / Sign-off Information",
 }
 
 
@@ -111,19 +111,41 @@ def normalize_new_pd_ecr_input(data: dict[str, Any]) -> dict[str, Any]:
 
     if "part_no" not in normalized and "component_no" in normalized:
         normalized["part_no"] = normalized.get("component_no")
+    if "part_no" not in normalized and "part_number" in normalized:
+        normalized["part_no"] = normalized.get("part_number")
     normalized.pop("component_no", None)
+    normalized.pop("part_number", None)
+
+    if "product_no" not in normalized and "product" in normalized:
+        normalized["product_no"] = normalized.get("product")
+    normalized.pop("product", None)
+
+    if "customer_project" not in normalized:
+        normalized["customer_project"] = (
+            normalized.get("project")
+            or normalized.get("customer")
+            or normalized.get("customer_project")
+            or ""
+        )
+    normalized.pop("project", None)
+    normalized.pop("customer", None)
 
     if "change_reason" not in normalized and "reason" in normalized:
         normalized["change_reason"] = normalized.get("reason")
+    if "change_reason" not in normalized and "reason_for_change" in normalized:
+        normalized["change_reason"] = normalized.get("reason_for_change")
     normalized.pop("reason", None)
+    normalized.pop("reason_for_change", None)
 
     if "change_description" not in normalized:
         normalized["change_description"] = (
-            normalized.get("change_description")
+            normalized.get("description")
+            or normalized.get("change_description")
             or normalized.get("change_proposal")
             or normalized.get("current_design")
             or ""
         )
+    normalized.pop("description", None)
 
     allowed_keys = {
         "dc_no",
@@ -226,12 +248,12 @@ class HistoricalCase(PdEcrBaseModel):
 
 
 class NewPdEcrRequest(PdEcrBaseModel):
-    dc_no: str = ""
-    mcr_no: str = ""
-    customer_project: str = ""
-    product_no: str = ""
-    part_no: str = ""
-    change_type: str = ""
+    dc_no: str
+    mcr_no: str
+    customer_project: str
+    product_no: str
+    part_no: str
+    change_type: str
     change_description: str
     change_reason: str
     change_source: str = ""
@@ -244,6 +266,12 @@ class NewPdEcrRequest(PdEcrBaseModel):
     top_k: int = Field(default=5, ge=1, le=20)
 
     @field_validator(
+        "dc_no",
+        "mcr_no",
+        "customer_project",
+        "product_no",
+        "part_no",
+        "change_type",
         "change_description",
         "change_reason",
     )

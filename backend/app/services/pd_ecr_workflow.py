@@ -292,6 +292,8 @@ def _serialize_approval_task(task: Any) -> dict[str, Any]:
         "approver_id": str(task.approver_id) if task.approver_id else None,
         "approver_email": task.approver_email,
         "approver_name": task.approver_name,
+        "flowable_task_id": task.flowable_task_id,
+        "flowable_task_definition_key": task.flowable_task_definition_key,
         "rejection_reason": task.rejection_reason,
         "approved_at": task.approved_at.isoformat() if task.approved_at else None,
         "created_at": task.created_at.isoformat() if task.created_at else None,
@@ -359,7 +361,8 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
     # — Approval tasks —
     from app.models import PdEcrApprovalTask
     approval_statement = select(PdEcrApprovalTask).where(
-        PdEcrApprovalTask.approver_id == current_user.id,
+        (PdEcrApprovalTask.approver_id == current_user.id)
+        | (PdEcrApprovalTask.approver_email == current_user.email),
     ).order_by(PdEcrApprovalTask.created_at.desc())
     approval_tasks_raw = session.exec(approval_statement).all()
     approval_case_ids = list({t.case_id for t in approval_tasks_raw})
@@ -1039,6 +1042,9 @@ def create_approval_task(
     approver_id: uuid.UUID | None = None,
     approver_email: str | None = None,
     approver_name: str | None = None,
+    flowable_task_id: str | None = None,
+    flowable_task_definition_key: str | None = None,
+    commit: bool = True,
 ) -> Any:
     """Create a manager approval task for a submitted case."""
     from app.models import PdEcrApprovalTask
@@ -1047,11 +1053,14 @@ def create_approval_task(
         approver_id=approver_id,
         approver_email=approver_email,
         approver_name=approver_name,
+        flowable_task_id=flowable_task_id,
+        flowable_task_definition_key=flowable_task_definition_key,
         status="pending",
     )
     session.add(task)
-    session.commit()
-    session.refresh(task)
+    if commit:
+        session.commit()
+        session.refresh(task)
     return task
 
 
@@ -1061,9 +1070,11 @@ def approve_case(
     case: Any,
     approval_task: Any,
     current_user: Any,
+    module: Any | None = None,
+    commit: bool = True,
+    flowable_status: str | None = None,
 ) -> Any:
     """Approve a case — transition to generated and trigger AI."""
-    from app.models import PdEcrCase, PdEcrApprovalTask
     from app.models import get_datetime_utc
 
     now = get_datetime_utc()
@@ -1074,13 +1085,28 @@ def approve_case(
     approval_task.updated_at = now
     session.add(approval_task)
 
+    if module is not None:
+        content = dict(getattr(module, "content_json", {}) or {})
+        content["leaderConfirmed"] = True
+        content["leader_confirmed"] = True
+        content["leader_confirmed_by"] = _actor_name(current_user)
+        content["leader_confirmed_at"] = now.isoformat()
+        module.content_json = content
+        module.updated_by_id = current_user.id
+        module.updated_at = now
+        session.add(module)
+
     # Update case status
     case.status = "generated"
+    case.flowable_status = flowable_status or case.flowable_status
+    if case.flowable_process_instance_id or flowable_status:
+        case.flowable_last_synced_at = now
     case.updated_at = now
     session.add(case)
 
-    session.commit()
-    session.refresh(case)
+    if commit:
+        session.commit()
+        session.refresh(case)
     return case
 
 
@@ -1090,9 +1116,11 @@ def reject_case(
     case: Any,
     approval_task: Any,
     rejection_reason: str | None = None,
+    commit: bool = True,
+    flowable_status: str | None = None,
 ) -> Any:
     """Reject a case — send back to draft."""
-    from app.models import PdEcrCase, PdEcrApprovalTask
+    from app.models import get_datetime_utc
 
     now = get_datetime_utc()
 
@@ -1102,9 +1130,13 @@ def reject_case(
     session.add(approval_task)
 
     case.status = "draft"
+    case.flowable_status = flowable_status or case.flowable_status
+    if case.flowable_process_instance_id or flowable_status:
+        case.flowable_last_synced_at = now
     case.updated_at = now
     session.add(case)
 
-    session.commit()
-    session.refresh(case)
+    if commit:
+        session.commit()
+        session.refresh(case)
     return case

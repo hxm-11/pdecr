@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+  xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:flowable="http://flowable.org/bpmn"
+  targetNamespace="https://pd-ecr.local/flowable">
+
+  <process id="pd_ecr_manager_approval" name="PD-ECR Manager Approval" isExecutable="true">
+    <startEvent id="startEvent" name="Submitted" />
+
+    <sequenceFlow id="flow_start_to_manager" sourceRef="startEvent" targetRef="managerApprovalTask" />
+
+    <userTask
+      id="managerApprovalTask"
+      name="Manager approval"
+      flowable:assignee="${approverEmail}">
+      <documentation>
+        Approve or reject the submitted PD-ECR request before AI generation continues.
+      </documentation>
+    </userTask>
+
+    <sequenceFlow id="flow_manager_to_gateway" sourceRef="managerApprovalTask" targetRef="approvalGateway" />
+
+    <exclusiveGateway id="approvalGateway" name="Approval decision" />
+
+    <sequenceFlow id="flow_approved" sourceRef="approvalGateway" targetRef="approvedEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == true}]]></conditionExpression>
+    </sequenceFlow>
+
+    <sequenceFlow id="flow_rejected" sourceRef="approvalGateway" targetRef="rejectedEnd">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == false}]]></conditionExpression>
+    </sequenceFlow>
+
+    <endEvent id="approvedEnd" name="Approved" />
+    <endEvent id="rejectedEnd" name="Rejected" />
+  </process>
+</definitions>

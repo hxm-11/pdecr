@@ -55,21 +55,31 @@ from app.services.pd_ecr_case_service import (
     update_module,
 )
 from app.services.pd_ecr_notification_service import (
+    record_workflow_notification,
     run_due_reminders,
     send_module_assignment_email,
 )
 from app.services.pd_ecr_workflow import (
+    approve_case,
     assign_execution_tasks,
     complete_execution_task,
     confirm_department_task,
     confirm_execution_assignment,
+    create_approval_task,
     get_workflow_state,
     list_my_workflow_tasks,
     publish_case_to_departments,
+    reject_case,
     request_department_changes,
     request_execution_task_changes,
     review_leader_task,
     submit_for_department_confirmation,
+)
+from app.services.pd_ecr_flowable_service import (
+    FlowableIntegrationError,
+    complete_manager_approval_task,
+    start_manager_approval_process,
+    sync_approval_task_from_flowable,
 )
 from app.services.pd_ecr_ai_case_service import (
     apply_generated_module,
@@ -89,6 +99,7 @@ from app.services.pd_ecr_four_module_generation import (
 )
 from app.services.pd_ecr_generation import generate_grounded_draft, get_cached_draft
 from app.services.pd_ecr_import_service import import_historical_sources, ingest_uploaded_file
+from app.services.pd_ecr_quality import missing_metadata_fields
 from app.services.pd_ecr_realtime_service import pd_ecr_connection_manager
 from app.services.pd_ecr_retrieval import retrieve_similar_cases
 from app.services.pd_ecr_schema import GeneratedDraft, NewPdEcrRequest
@@ -103,6 +114,100 @@ DEBUG_PD_ECR = os.getenv("PD_ECR_DEBUG") == "1"
 def debug_print(*args):
     if DEBUG_PD_ECR:
         logger.debug(" ".join(str(arg) for arg in args))
+
+
+def _compact_text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, list):
+        return "; ".join(_compact_text(item) for item in value if _compact_text(item))
+    if isinstance(value, dict):
+        return json.dumps(value, ensure_ascii=False)
+    text = str(value).strip()
+    return "" if text in {"-", "N/A", "NA", "None", "null", "[]", "{}"} else text
+
+
+def _first_text(*values: Any) -> str:
+    for value in values:
+        text = _compact_text(value)
+        if text:
+            return text
+    return ""
+
+
+def _pd_ecr_v1_metadata(record: dict[str, Any]) -> dict[str, Any]:
+    metadata = record.get("metadata") if isinstance(record.get("metadata"), dict) else {}
+    case_id = _first_text(
+        metadata.get("case_id"),
+        record.get("case_id"),
+        record.get("case_no"),
+        record.get("pd_ecr_no"),
+        record.get("dc_no"),
+        record.get("id"),
+    )
+    source_file = _first_text(
+        metadata.get("source_file"),
+        record.get("source_file"),
+        record.get("sourceFile"),
+        record.get("pdf_file"),
+        record.get("document_name"),
+    )
+    if not case_id and source_file:
+        case_id = Path(source_file).stem
+
+    return {
+        "case_id": case_id,
+        "dc_no": _first_text(metadata.get("dc_no"), record.get("dc_no")),
+        "mcr_no": _first_text(metadata.get("mcr_no"), record.get("mcr_no")),
+        "change_type": _first_text(metadata.get("change_type"), record.get("change_type")),
+        "product_no": _first_text(
+            metadata.get("product_no"),
+            record.get("product_no"),
+            record.get("product"),
+            record.get("product_class"),
+        ),
+        "part_no": _first_text(
+            metadata.get("part_no"),
+            record.get("part_no"),
+            record.get("part_number"),
+            record.get("component_no"),
+        ),
+        "customer_project": _first_text(
+            metadata.get("customer_project"),
+            record.get("customer_project"),
+            record.get("project"),
+            record.get("customer"),
+        ),
+        "source_file": source_file,
+        "date": _first_text(metadata.get("date"), record.get("date"), record.get("create_date")),
+        "initiator": _first_text(metadata.get("initiator"), record.get("initiator")),
+    }
+
+
+def _with_v1_case_contract(record: dict[str, Any]) -> dict[str, Any]:
+    payload = dict(record)
+    metadata = _pd_ecr_v1_metadata(payload)
+    existing_missing = payload.get("missing_fields")
+    missing = list(existing_missing) if isinstance(existing_missing, list) else []
+    missing.extend(missing_metadata_fields(metadata))
+    payload["case_id"] = metadata["case_id"]
+    existing_metadata = payload.get("metadata") if isinstance(payload.get("metadata"), dict) else {}
+    payload["metadata"] = {**existing_metadata, **metadata}
+    payload["source_file"] = metadata["source_file"]
+    payload["missing_fields"] = list(dict.fromkeys(missing))
+
+    payload.setdefault("id", metadata["case_id"])
+    payload.setdefault("case_no", metadata["case_id"])
+    payload.setdefault("dc_no", metadata["dc_no"])
+    payload.setdefault("mcr_no", metadata["mcr_no"])
+    payload.setdefault("change_type", metadata["change_type"])
+    payload.setdefault("product_no", metadata["product_no"])
+    payload.setdefault("part_no", metadata["part_no"])
+    payload.setdefault("part_number", metadata["part_no"])
+    payload.setdefault("customer_project", metadata["customer_project"])
+    payload.setdefault("customer", metadata["customer_project"])
+    payload.setdefault("project", metadata["customer_project"])
+    return payload
 
 DATA_PATH = (
     Path(__file__).resolve().parents[2] / "data" / "pd_ecr_cases" / "pd_ecr_cases.json"
@@ -946,7 +1051,10 @@ def list_pd_ecr_cases(
         ]
 
     return {
-        "cases": all_cases[skip : skip + limit],
+        "cases": [
+            _with_v1_case_contract(case)
+            for case in all_cases[skip : skip + limit]
+        ],
         "total": len(all_cases),
     }
 
@@ -1606,7 +1714,7 @@ def submit_for_approval(
     current_user: CurrentUser,
 ):
     """Submit a PD-ECR case for manager approval before AI generation."""
-    from app.models import PdEcrApprovalTask, PdEcrCase, PdEcrModule, User
+    from app.models import PdEcrCase, PdEcrModule, User
 
     # 1. Create the case in "submitted" status
     case_no = f"PD-ECR-{uuid.uuid4().hex[:8].upper()}"
@@ -1696,16 +1804,52 @@ def submit_for_approval(
             approver_name = approver_name or approver.display_name or approver.full_name
 
     # 3. Create approval task
-    approval_task = PdEcrApprovalTask(
-        case_id=case.id,
+    flowable_task: dict[str, Any] | None = None
+    try:
+        flowable_result = start_manager_approval_process(
+            case=case,
+            approver_id=approver_id,
+            approver_email=approver_email,
+            approver_name=approver_name,
+            form_data=form_data,
+        )
+        flowable_task = (
+            flowable_result.get("task")
+            if isinstance(flowable_result, dict)
+            else None
+        )
+    except FlowableIntegrationError as exc:
+        session.rollback()
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to start Flowable approval process: {exc}",
+        ) from exc
+
+    approval_task = create_approval_task(
+        session=session,
+        case=case,
         approver_id=approver_id,
         approver_email=approver_email,
         approver_name=approver_name,
-        status="pending",
+        flowable_task_id=(
+            str(flowable_task.get("id") or "")
+            if isinstance(flowable_task, dict)
+            else None
+        ),
+        flowable_task_definition_key=(
+            str(flowable_task.get("taskDefinitionKey") or "")
+            if isinstance(flowable_task, dict)
+            else None
+        ),
+        commit=False,
     )
-    session.add(approval_task)
+    sync_approval_task_from_flowable(
+        approval_task=approval_task,
+        flowable_task=flowable_task,
+    )
     session.commit()
     session.refresh(case)
+    session.refresh(approval_task)
 
     return {
         "case": serialize_case(case),
@@ -1714,6 +1858,8 @@ def submit_for_approval(
             "status": approval_task.status,
             "approver_email": approval_task.approver_email,
             "approver_name": approval_task.approver_name,
+            "flowable_task_id": approval_task.flowable_task_id,
+            "flowable_task_definition_key": approval_task.flowable_task_definition_key,
         },
     }
 
@@ -1749,38 +1895,67 @@ def manager_approve_case(
     if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
         raise HTTPException(status_code=403, detail="Only the assigned approver can approve")
 
-    now = datetime.utcnow()
-    approval.status = "approved"
-    approval.approved_at = now
-    approval.updated_at = now
-    session.add(approval)
-
     module = session.exec(
         select(PdEcrModule).where(
             PdEcrModule.case_id == uuid.UUID(case_id),
             PdEcrModule.module_id == "change-description",
         )
     ).first()
-    if module:
-        content = dict(module.content_json or {})
-        content["leaderConfirmed"] = True
-        content["leader_confirmed"] = True
-        content["leader_confirmed_by"] = current_user.display_name or current_user.full_name or current_user.email
-        content["leader_confirmed_at"] = now.isoformat()
-        module.content_json = content
-        module.updated_by_id = current_user.id
-        module.updated_at = now
-        session.add(module)
+    try:
+        complete_manager_approval_task(
+            case=case,
+            approval_task=approval,
+            current_user=current_user,
+            approved=True,
+        )
+    except FlowableIntegrationError as exc:
+        session.rollback()
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to complete Flowable approval task: {exc}",
+        ) from exc
 
-    case.status = "generated"
-    case.updated_at = now
-    session.add(case)
+    approve_case(
+        session=session,
+        case=case,
+        approval_task=approval,
+        current_user=current_user,
+        module=module,
+        flowable_status=case.flowable_status,
+    )
+
+    recipient_email = None
+    owner = session.get(User, case.owner_id) if case.owner_id else None
+    creator = (
+        session.get(User, case.created_by_id)
+        if case.created_by_id and case.created_by_id != case.owner_id
+        else owner
+    )
+    if owner and owner.email:
+        recipient_email = owner.email
+    elif creator and creator.email:
+        recipient_email = creator.email
+    elif case.initiator and "@" in case.initiator:
+        recipient_email = case.initiator
+
+    notification = record_workflow_notification(
+        session=session,
+        case=case,
+        recipient_email=recipient_email,
+        notification_type="manager_approval_approved",
+        department=current_user.department or "manager_approval",
+        comment=(
+            f"Approved by "
+            f"{current_user.display_name or current_user.full_name or current_user.email}"
+        ),
+    )
     session.commit()
-    session.refresh(case)
+    session.refresh(notification)
 
     return {
         "case": serialize_case(case),
         "message": "Case approved. AI generation can now proceed.",
+        "notification": notification.model_dump(mode="json"),
     }
 
 
@@ -1814,17 +1989,28 @@ def manager_reject_case(
     if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
         raise HTTPException(status_code=403, detail="Only the assigned approver can reject")
 
-    now = datetime.utcnow()
-    approval.status = "rejected"
-    approval.rejection_reason = payload.rejection_reason
-    approval.updated_at = now
-    session.add(approval)
+    try:
+        complete_manager_approval_task(
+            case=case,
+            approval_task=approval,
+            current_user=current_user,
+            approved=False,
+            rejection_reason=payload.rejection_reason,
+        )
+    except FlowableIntegrationError as exc:
+        session.rollback()
+        raise HTTPException(
+            status_code=502,
+            detail=f"Failed to complete Flowable rejection task: {exc}",
+        ) from exc
 
-    case.status = "draft"
-    case.updated_at = now
-    session.add(case)
-    session.commit()
-    session.refresh(case)
+    reject_case(
+        session=session,
+        case=case,
+        approval_task=approval,
+        rejection_reason=payload.rejection_reason,
+        flowable_status=case.flowable_status,
+    )
 
     return {
         "case": serialize_case(case),
@@ -6403,12 +6589,13 @@ def get_pd_ecr_case_modules(case_no: str):
 
     pdf_case = find_pdecr_pdf_case_record(case_no)
     if pdf_case:
+        case_payload = _with_v1_case_contract(pdf_case)
         return {
             "message": "历史 PDF 案例模块生成成功",
             "source": "history",
-            "case": pdf_case,
-            "metadata": {},
-            "missing_fields": [],
+            "case": case_payload,
+            "metadata": case_payload["metadata"],
+            "missing_fields": case_payload["missing_fields"],
             "modules": modules_from_pdf_case_record(pdf_case),
         }
 
@@ -6444,7 +6631,7 @@ def get_pd_ecr_case_modules(case_no: str):
     source_text = source_path.read_text(encoding="utf-8", errors="ignore")
 
     # 2. 提取结构化信息（metadata）
-    case_record = build_knowledge_case_record(source_path, 0)
+    case_record = _with_v1_case_contract(build_knowledge_case_record(source_path, 0))
 
     # 3. 解析 parsed JSON 获取模块内容（如果有）
     parsed = load_parsed_case_json(source_path)
@@ -6496,6 +6683,8 @@ def get_pd_ecr_case_modules(case_no: str):
         "message": "历史案例模块生成成功",
         "source": "history",
         "case": case_record,
+        "metadata": case_record["metadata"],
+        "missing_fields": case_record["missing_fields"],
         "modules": modules,
     }
 
@@ -6510,16 +6699,25 @@ def get_pd_ecr_case_detail(case_id: str, session: SessionDep):
 
     pdf_case = find_pdecr_pdf_case_record(case_id)
     if pdf_case:
+        case_payload = _with_v1_case_contract(pdf_case)
         return {
-            "case": pdf_case,
+            "case_id": case_payload["case_id"],
+            "metadata": case_payload["metadata"],
+            "source_file": case_payload["source_file"],
+            "missing_fields": case_payload["missing_fields"],
+            "case": case_payload,
             "modules": modules_from_pdf_case_record(pdf_case),
             "source": "history",
-            "missing_fields": [],
         }
 
     case = get_case_or_404(session=session, case_id=case_id)
+    case_payload = _with_v1_case_contract(_serialize_case_with_source_pdf(session, case))
     return {
-        "case": _serialize_case_with_source_pdf(session, case),
+        "case_id": case_payload["case_id"],
+        "metadata": case_payload["metadata"],
+        "source_file": case_payload["source_file"],
+        "missing_fields": case_payload["missing_fields"],
+        "case": case_payload,
         "modules": [
             serialize_module(module)
             for module in list_modules(session=session, case_id=case.id)

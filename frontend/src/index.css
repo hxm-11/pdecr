@@ -174,17 +174,56 @@
 }
 
 .glass-header {
-  @apply border-slate-200 bg-white;
+  @apply border-slate-200 bg-white shadow-sm;
 }
 
 .enterprise-panel {
-  @apply rounded-lg border border-slate-200 bg-white shadow-sm;
+  @apply rounded-lg border border-slate-200/80 bg-white shadow-[0_12px_28px_rgba(15,23,42,0.06)];
 }
 
+.enterprise-field-surface {
+  @apply rounded-lg border border-slate-200/90 bg-white p-4 shadow-sm transition-colors;
+}
+
+.enterprise-field-surface:hover {
+  @apply border-slate-300;
+}
+
+.enterprise-field-surface-muted {
+  @apply rounded-lg border border-slate-200/90 bg-slate-50/70 p-4 shadow-sm transition-colors;
+}
+
+.enterprise-field-surface-muted:hover {
+  @apply border-slate-300 bg-slate-50;
+}
+
+.enterprise-input {
+  @apply h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm outline-none transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100;
+}
+
+.enterprise-textarea {
+  @apply w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 text-slate-950 shadow-sm outline-none transition-colors placeholder:text-slate-400 hover:border-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100;
+}
+
+/* Section 小标题（如 "Section 01: Basic information" 中的文字部分）
+   字重加粗但字号更小、颜色更淡，退到"元数据"层级，
+   不与真正的字段内容抢视觉焦点 —— 这是系统感与表单感的关键区别之一。 */
 .enterprise-section-title {
-  @apply text-[11px] font-semibold uppercase tracking-wide text-slate-500;
+  @apply text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400;
 }
 
+/* 字段标签（如"产品"、"客户/平台"）
+   固定字段名需要比备注/说明更醒目，帮助用户快速扫表单结构。 */
 .enterprise-field-label {
-  @apply text-sm font-semibold text-slate-700;
+  @apply text-[13px] font-semibold text-slate-800;
+}
+
+/* Section 编号徽标（"01" "02" "03" 这种小方块）
+   颜色使用 color-mix 从 --primary token 派生，
+   不写死具体色值，主题色调整时会自动跟随。 */
+.enterprise-section-badge {
+  @apply flex size-6 shrink-0 items-center justify-center rounded-md font-mono text-[11px] font-bold tabular-nums;
+  background-color: color-mix(in oklch, var(--primary) 10%, white);
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--primary) 20%, white);
 }

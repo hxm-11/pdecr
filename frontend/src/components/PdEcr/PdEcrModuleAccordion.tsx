@@ -26,11 +26,11 @@ const MODULE_LABELS: Record<string, { title: string; subtitle: string }> = {
   "impact-analysis": { title: "1.2 影响分析", subtitle: "Impact Analysis" },
   "validation-plan": {
     title: "1.3 QAC & 验证计划",
-    subtitle: "QAC & Validation Plan",
+    subtitle: "QAC & Validation Plan and Results",
   },
   "implementation-plan": {
-    title: "1.4 执行计划",
-    subtitle: "Implementation & Plan",
+    title: "1.4 执行计划和结果",
+    subtitle: "Implementation & Plan and Results",
   },
 };
 
@@ -50,8 +50,8 @@ const RESULT_MODULE_LABELS: Record<
 
 function HistoricalReferencePanel() {
   return (
-    <div className="sticky top-4 rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800">
-      <div className="flex items-center gap-2 font-semibold text-sky-900">
+    <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm text-blue-800">
+      <div className="flex items-center gap-2 font-semibold text-blue-900">
         <FileText className="size-4" />
         Historical reference
       </div>
@@ -123,7 +123,7 @@ function completionState(
   return {
     label,
     detail,
-    className: "border-stone-200 bg-stone-50 text-stone-500 shadow-sm",
+    className: "border-slate-200 bg-slate-50 text-slate-600 shadow-sm",
     icon: <CircleDashed className="size-3.5" />,
   };
 }
@@ -193,9 +193,12 @@ function impactAnalysisStatus(module: PdEcrDisplayModule) {
       : completionState("Empty", "No impact analysis yet");
   }
 
-  const unselected = impacts.filter((row) => !row.no && !row.yes).length;
+  const ynValue = (row: Record<string, unknown>) =>
+    String(row.yn || "").toUpperCase() ||
+    (row.yes ? "Y" : row.no ? "N" : "");
+  const unselected = impacts.filter((row) => !ynValue(row)).length;
   const yesWithoutMeasure = impacts.filter(
-    (row) => row.yes && !textValue(row.desc),
+    (row) => ynValue(row) === "Y" && !textValue(row.desc),
   ).length;
   if (unselected || yesWithoutMeasure) {
     const parts = [];
@@ -217,7 +220,11 @@ function validationPlanStatus(module: PdEcrDisplayModule) {
   const rows = Array.isArray(draft?.rows)
     ? (draft.rows as Array<Record<string, unknown>>)
     : [];
-  const selected = rows.filter((row) => Boolean(row.checked));
+  const selected = rows.filter(
+    (row) =>
+      String(row.yn || "").toUpperCase() === "Y" ||
+      (!row.yn && Boolean(row.checked)),
+  );
 
   const impactDraft = safeParseJson(
     localStorage.getItem("pd-ecr-impact-analysis-impact-analysis"),
@@ -226,7 +233,12 @@ function validationPlanStatus(module: PdEcrDisplayModule) {
     ? (impactDraft.impacts as Array<Record<string, unknown>>)
     : [];
   const customMeasureIndexes = impactRows
-    .map((row, index) => (row.yes && textValue(row.desc) ? index : -1))
+    .map((row, index) => {
+      const yn = String(row.yn || "").toUpperCase();
+      return (yn === "Y" || (!yn && row.yes)) && textValue(row.desc)
+        ? index
+        : -1;
+    })
     .filter((index) => index >= 0);
   const customRows =
     draft?.customRows && typeof draft.customRows === "object"
@@ -361,34 +373,34 @@ function AccordionItem({
   void statusRevision;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
+    <div className="enterprise-panel overflow-hidden">
       {/* ── Header ── */}
       <button
         type="button"
         onClick={onToggle}
-        className={`flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-stone-50 ${
-          isExpanded ? "border-b border-stone-200 bg-stone-50/50" : ""
+        className={`flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-slate-50 ${
+          isExpanded ? "border-b border-slate-200 bg-slate-50/70" : ""
         }`}
       >
         <div
-          className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+          className={`flex size-10 shrink-0 items-center justify-center rounded-md border ${
             hasContent
-              ? "bg-amber-50 text-amber-700"
-              : "bg-stone-100 text-stone-400"
+              ? "border-blue-100 bg-blue-50 text-blue-700"
+              : "border-slate-200 bg-slate-50 text-slate-400"
           }`}
         >
           <FileText className="size-5" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+          <p className="enterprise-section-title">
             {label.subtitle}
           </p>
-          <h3 className="text-lg font-semibold tracking-normal text-stone-900">
+          <h3 className="mt-1 text-base font-semibold tracking-normal text-slate-900">
             {label.title}
           </h3>
           {!isExpanded && (
-            <p className="mt-1 line-clamp-2 text-sm leading-6 text-stone-500">
+            <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-500">
               {module.summary || "暂无内容 — 点击展开"}
             </p>
           )}
@@ -403,7 +415,7 @@ function AccordionItem({
           </span>
           {state.detail ? (
             <span
-              className="max-w-52 truncate text-[11px] font-medium text-stone-500"
+              className="max-w-52 truncate text-[11px] font-medium text-slate-500"
               title={state.detail}
             >
               {state.detail}
@@ -418,7 +430,7 @@ function AccordionItem({
         </div>
 
         <ChevronDown
-          className={`size-5 shrink-0 text-stone-400 transition-transform duration-200 ${
+          className={`size-5 shrink-0 text-slate-400 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
         />
@@ -426,10 +438,12 @@ function AccordionItem({
 
       {/* ── Body ── */}
       {isExpanded && (
-        <div className="p-4 md:p-6">
-          <p className="mb-5 max-w-5xl text-base leading-7 text-stone-600">
-            {module.summary}
-          </p>
+        <div className="bg-slate-50/50 p-4 md:p-5">
+          {module.summary ? (
+            <p className="mb-4 max-w-5xl rounded-md border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600">
+              {module.summary}
+            </p>
+          ) : null}
 
           {renderModuleBody(module, true, mode)}
 
@@ -483,68 +497,68 @@ function GroupedPlanningItem({
   void statusRevision;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
+    <div className="enterprise-panel overflow-hidden">
       <button
         type="button"
         onClick={onToggle}
-        className={`flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-stone-50 ${
-          isExpanded ? "border-b border-stone-200 bg-stone-50/50" : ""
+        className={`flex w-full items-center gap-4 px-5 py-4 text-left transition hover:bg-slate-50 ${
+          isExpanded ? "border-b border-slate-200 bg-slate-50/70" : ""
         }`}
       >
         <div
-          className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+          className={`flex size-10 shrink-0 items-center justify-center rounded-md border ${
             hasContent
-              ? "bg-sky-50 text-sky-700"
-              : "bg-stone-100 text-stone-400"
+              ? "border-blue-100 bg-blue-50 text-blue-700"
+              : "border-slate-200 bg-slate-50 text-slate-400"
           }`}
         >
           <FileText className="size-5" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
-            Impact Analysis + QAC & Validation Plan
+          <p className="enterprise-section-title">
+            Impact Analysis + QAC & Validation Plan and Results
           </p>
-          <h3 className="text-lg font-semibold tracking-normal text-stone-900">
-            1.2 影响分析 / 1.3 QAC & 验证计划
+          <h3 className="mt-1 text-base font-semibold tracking-normal text-slate-900">
+            1.2 影响分析 / 1.3 QAC & 验证计划和结果
           </h3>
           {!isExpanded && (
-            <p className="mt-1 line-clamp-2 text-sm leading-6 text-stone-500">
-              合并查看影响项、QAC 要求与验证计划。
+            <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-500">
+              {/* 合并查看影响项、QAC 要求与验证计划。 */}
             </p>
           )}
         </div>
 
         <div className="hidden shrink-0 flex-col items-end gap-1 md:flex">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-800 shadow-sm">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-800 shadow-sm">
             <CheckCircle2 className="size-3.5" />
             {completeCount}/{states.length || 2} ready
           </span>
-          <span className="max-w-52 truncate text-[11px] font-medium text-stone-500">
+          <span className="max-w-52 truncate text-[11px] font-medium text-slate-500">
             1.2 and 1.3 grouped
           </span>
         </div>
 
         <ChevronDown
-          className={`size-5 shrink-0 text-stone-400 transition-transform duration-200 ${
+          className={`size-5 shrink-0 text-slate-400 transition-transform duration-200 ${
             isExpanded ? "rotate-180" : ""
           }`}
         />
       </button>
 
       {isExpanded && (
-        <div className="space-y-5 p-4 md:p-6">
+        <div className="space-y-4 bg-slate-50/50 p-4 md:p-5">
           {states.map(({ module, state, label }) => (
             <section
               key={module.id}
-              className="rounded-lg border border-stone-200 bg-stone-50/40 p-4"
+              className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
             >
-              <div className="mb-4 flex flex-col justify-between gap-2 border-b border-stone-200 pb-3 md:flex-row md:items-center">
+              <div className="mb-4 flex flex-col justify-between gap-2 border-b border-slate-200 pb-3 md:flex-row md:items-center">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-stone-500">
+                  <p className="enterprise-section-title">
                     {label.subtitle}
                   </p>
-                  <h4 className="text-base font-semibold text-stone-900">
+                  <h4 className="mt-1 text-base font-semibold text-slate-900">
                     {label.title}
                   </h4>
                 </div>
@@ -556,7 +570,7 @@ function GroupedPlanningItem({
                 </span>
               </div>
               {module.summary ? (
-                <p className="mb-4 text-sm leading-6 text-stone-600">
+                <p className="mb-4 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-600">
                   {module.summary}
                 </p>
               ) : null}
@@ -583,7 +597,7 @@ export function PdEcrResultModuleAccordion({
 
   if (!resultModules.length) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-white p-8 text-center text-stone-500">
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center text-slate-500">
         No result modules available.
       </div>
     );
@@ -619,6 +633,7 @@ type ValResultRow = {
   id?: string;
   label: string;
   checked: boolean;
+  yn?: string;
   finishDate: string;
   respPerson: string;
   comments: string;
@@ -717,7 +732,7 @@ function saveResultSigners(signers: ResultSignerRow[]) {
   localStorage.setItem("pd-ecr-result-signers", JSON.stringify({ signers }));
 }
 
-// ── Result signer panel (right side, sticky) ──
+// ── Result signer panel ──
 function ResultSignerPanel() {
   const [signers, setSigners] = useState<ResultSignerRow[]>(() =>
     loadResultSigners(),
@@ -754,22 +769,19 @@ function ResultSignerPanel() {
   };
 
   return (
-    <div
-      className="sticky top-4 space-y-4"
-      style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}
-    >
-      <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
-        <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
+    <div className="space-y-4">
+      <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900">
           Result Sign-off / 结果签核
         </div>
-        <div className="divide-y divide-stone-100">
+        <div className="divide-y divide-slate-100">
           {RESULT_SIGNER_ROLES.map((role, i) => (
             <div key={role} className="px-4 py-2.5">
-              <p className="text-xs font-semibold text-stone-700">{role}</p>
+              <p className="text-xs font-semibold text-slate-700">{role}</p>
               <input
                 value={signers[i].person}
                 onChange={(e) => updateSigner(i, e.target.value)}
-                className="mt-1 h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                className="mt-1 h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 placeholder="签字人..."
               />
               {signers[i].date ? (
@@ -777,7 +789,7 @@ function ResultSignerPanel() {
                   ✓ {signers[i].date}
                 </p>
               ) : (
-                <p className="mt-1 text-[10px] text-stone-300">待签字</p>
+                <p className="mt-1 text-[10px] text-slate-400">待签字</p>
               )}
             </div>
           ))}
@@ -800,11 +812,11 @@ function CollapsibleResultSection({
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-stone-200/60 bg-white shadow-sm card-hover">
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center justify-between bg-stone-800/90 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition-colors"
+        className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
       >
         <span>{title}</span>
         <ChevronDown
@@ -838,7 +850,7 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
       <CollapsibleResultSection
         title={
           <span>
-            <span className="mr-2 text-amber-400">Result</span>QAC &amp;
+            <span className="mr-2 text-blue-600">Result</span>QAC &amp;
             Validation result
           </span>
         }
@@ -846,8 +858,8 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-stone-200 bg-stone-50/80 text-xs font-semibold uppercase text-stone-500">
-                <th className="w-8 px-3 py-2.5">☑</th>
+              <tr className="border-b-2 border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
+                <th className="w-12 px-3 py-2.5 text-center">Y/N</th>
                 <th className="px-3 py-2.5">Validation / 验证项目</th>
                 <th className="w-32 px-3 py-2.5">Plan finish date</th>
                 <th className="w-28 px-3 py-2.5">Resp. person</th>
@@ -867,25 +879,32 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                   return (
                     <tr
                       key={row.id || i}
-                      className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/40"
+                      className="border-b border-slate-100 even:bg-slate-50/50 hover:bg-blue-50/40"
                     >
                       <td className="px-3 py-2.5 text-center">
+                        {(() => {
+                          const yn =
+                            String(row.yn || "").toUpperCase() ||
+                            (row.checked ? "Y" : "—");
+                          return (
                         <span
-                          className={`inline-flex size-4 items-center justify-center rounded text-xs font-bold ${row.checked ? "bg-emerald-100 text-emerald-700" : "bg-stone-100 text-stone-400"}`}
+                          className={`inline-flex size-5 items-center justify-center rounded text-xs font-bold ${yn === "Y" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-400"}`}
                         >
-                          {row.checked ? "✓" : "—"}
+                          {yn}
                         </span>
+                          );
+                        })()}
                       </td>
-                      <td className="px-3 py-2.5 text-sm font-medium text-stone-800">
+                      <td className="px-3 py-2.5 text-sm font-medium text-slate-800">
                         {row.label}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600">
+                      <td className="px-3 py-2.5 text-xs text-slate-600">
                         {row.finishDate || "-"}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600">
+                      <td className="px-3 py-2.5 text-xs text-slate-600">
                         {row.respPerson || "-"}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600">
+                      <td className="px-3 py-2.5 text-xs text-slate-600">
                         {row.comments || "-"}
                       </td>
                       <td className="px-3 py-2.5 text-center">
@@ -897,23 +916,23 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                                 : detail.status === "NOK"
                                   ? "bg-red-100 text-red-700"
                                   : detail.status === "N/A"
-                                    ? "bg-amber-100 text-amber-700"
-                                    : "bg-stone-100 text-stone-400"
+                                    ? "bg-blue-100 text-blue-700"
+                                    : "bg-slate-100 text-slate-400"
                             }`}
                           >
                             {detail.status || "—"}
                           </span>
                         ) : (
-                          <span className="text-xs text-stone-300">—</span>
+                          <span className="text-xs text-slate-300">—</span>
                         )}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600 whitespace-pre-wrap">
+                      <td className="px-3 py-2.5 text-xs text-slate-600 whitespace-pre-wrap">
                         {detail?.result || "-"}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600">
+                      <td className="px-3 py-2.5 text-xs text-slate-600">
                         {detail?.signer || "-"}
                       </td>
-                      <td className="px-3 py-2.5 text-xs text-stone-600">
+                      <td className="px-3 py-2.5 text-xs text-slate-600">
                         {detail?.date || "-"}
                       </td>
                     </tr>
@@ -923,7 +942,7 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                 <tr>
                   <td
                     colSpan={9}
-                    className="px-3 py-8 text-center text-sm text-stone-400"
+                    className="px-3 py-8 text-center text-sm text-slate-400"
                   >
                     暂无验证计划数据
                   </td>
@@ -938,27 +957,27 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
       <CollapsibleResultSection
         title={
           <span>
-            <span className="mr-2 text-amber-400">Result</span>Implementation
+            <span className="mr-2 text-blue-600">Result</span>Implementation
             &amp; Plan result
           </span>
         }
       >
         {implData.developmentConfirmation && (
-          <div className="border-b border-stone-200 bg-amber-50/50 px-4 py-3">
-            <p className="text-xs font-semibold text-stone-500">
+          <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-xs font-semibold text-slate-500">
               Development confirmation
             </p>
-            <p className="mt-1 text-sm text-stone-800 whitespace-pre-wrap">
+            <p className="mt-1 text-sm text-slate-800 whitespace-pre-wrap">
               {implData.developmentConfirmation}
             </p>
           </div>
         )}
         {implData.implementationDate && (
-          <div className="border-b border-stone-200 bg-amber-50/50 px-4 py-3">
-            <p className="text-xs font-semibold text-stone-500">
+          <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-xs font-semibold text-slate-500">
               Implementation date
             </p>
-            <p className="mt-1 text-sm text-stone-800">
+            <p className="mt-1 text-sm text-slate-800">
               {implData.implementationDate}
             </p>
           </div>
@@ -966,7 +985,7 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-stone-200 bg-stone-50/80 text-xs font-semibold uppercase text-stone-500">
+              <tr className="border-b-2 border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                 <th className="w-24 px-3 py-2.5">Department</th>
                 <th className="w-10 px-3 py-2.5 text-center">Y/N</th>
                 <th className="px-3 py-2.5">Description</th>
@@ -981,9 +1000,9 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                 implData.checklistRows.map((row, i) => (
                   <tr
                     key={row.id || i}
-                    className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/40"
+                    className="border-b border-slate-100 even:bg-slate-50/50 hover:bg-blue-50/40"
                   >
-                    <td className="px-3 py-2.5 text-xs font-medium text-stone-700">
+                    <td className="px-3 py-2.5 text-xs font-medium text-slate-700">
                       {row.department}
                     </td>
                     <td className="px-3 py-2.5 text-center">
@@ -991,19 +1010,19 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                         className={`inline-flex size-5 items-center justify-center rounded text-xs font-bold ${
                           row.yn === "Y"
                             ? "bg-emerald-100 text-emerald-700"
-                            : "bg-stone-100 text-stone-400"
+                            : "bg-slate-100 text-slate-400"
                         }`}
                       >
                         {row.yn || "—"}
                       </span>
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-stone-600">
+                    <td className="px-3 py-2.5 text-xs text-slate-600">
                       {row.description || "-"}
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-stone-600">
+                    <td className="px-3 py-2.5 text-xs text-slate-600">
                       {row.responsible || "-"}
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-stone-600">
+                    <td className="px-3 py-2.5 text-xs text-slate-600">
                       {row.dueDate || "-"}
                     </td>
                     <td className="px-3 py-2.5 text-center">
@@ -1013,19 +1032,19 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                             row.result === "Closed"
                               ? "bg-emerald-100 text-emerald-700"
                               : row.result === "Ongoing"
-                                ? "bg-sky-100 text-sky-700"
+                                ? "bg-blue-100 text-blue-700"
                                 : row.result === "Open"
-                                  ? "bg-amber-100 text-amber-700"
-                                  : "bg-stone-100 text-stone-500"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : "bg-slate-100 text-slate-500"
                           }`}
                         >
                           {row.result}
                         </span>
                       ) : (
-                        <span className="text-xs text-stone-300">—</span>
+                        <span className="text-xs text-slate-300">—</span>
                       )}
                     </td>
-                    <td className="px-3 py-2.5 text-xs text-stone-600 whitespace-pre-wrap">
+                    <td className="px-3 py-2.5 text-xs text-slate-600 whitespace-pre-wrap">
                       {row.resultNote || "-"}
                     </td>
                   </tr>
@@ -1034,7 +1053,7 @@ export function ResultView({ modules }: { modules: PdEcrDisplayModule[] }) {
                 <tr>
                   <td
                     colSpan={7}
-                    className="px-3 py-8 text-center text-sm text-stone-400"
+                    className="px-3 py-8 text-center text-sm text-slate-400"
                   >
                     暂无实施计划数据
                   </td>
@@ -1088,7 +1107,7 @@ export function PdEcrModuleAccordion({
 
   if (!hasPlanModules) {
     return (
-      <div className="rounded-lg border border-stone-200 bg-white p-8 text-center text-stone-500">
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center text-slate-500">
         No modules available. Please generate PD-ECR content first.
       </div>
     );
@@ -1099,14 +1118,14 @@ export function PdEcrModuleAccordion({
     return (
       <div className="relative">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-stone-900">
+          <h2 className="text-xl font-semibold text-slate-900">
             Sign-off / 签核确认
           </h2>
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="bg-white hover:bg-amber-50 hover:border-amber-300"
+            className="bg-white hover:border-blue-300 hover:bg-blue-50"
             onClick={() => setViewMode("accordion")}
           >
             ← 返回编辑
@@ -1160,8 +1179,8 @@ export function PdEcrModuleAccordion({
           <div className="hidden xl:block">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <UserCheck className="size-4 text-amber-600" />
-                <p className="text-sm font-semibold text-stone-700">
+                <UserCheck className="size-4 text-blue-600" />
+                <p className="text-sm font-semibold text-slate-700">
                   {workflowEnabled
                     ? "状态流 / Workflow"
                     : "Historical reference"}
@@ -1170,7 +1189,7 @@ export function PdEcrModuleAccordion({
               <button
                 type="button"
                 onClick={() => setShowApproval(false)}
-                className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-stone-600 transition"
+                className="rounded p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
                 title="收起审批面板"
               >
                 <ChevronRight className="size-4" />
@@ -1191,8 +1210,8 @@ export function PdEcrModuleAccordion({
       {showApproval && Boolean(caseId) && (
         <div className="mt-5 xl:hidden">
           <div className="mb-3 flex items-center gap-2">
-            <UserCheck className="size-4 text-amber-600" />
-            <p className="text-sm font-semibold text-stone-700">
+            <UserCheck className="size-4 text-blue-600" />
+            <p className="text-sm font-semibold text-slate-700">
               {workflowEnabled ? "状态流 / Workflow" : "Historical reference"}
             </p>
           </div>
@@ -1212,7 +1231,7 @@ export function PdEcrModuleAccordion({
         <button
           type="button"
           onClick={() => setShowApproval(true)}
-          className="hidden xl:flex fixed right-4 top-24 z-40 items-center gap-1.5 rounded-l-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 shadow-md hover:bg-amber-100 transition"
+          className="mt-4 hidden w-fit items-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-700 shadow-sm transition hover:bg-blue-100 xl:flex"
           title="展开审批面板"
         >
           <ChevronLeft className="size-3.5" />

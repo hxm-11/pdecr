@@ -1,8 +1,0 @@
-Task 1A: complete (no git commits available; review clean after fixes; tests 7 passed)
-Task 1B: complete (no git commits available; migration review clean; py_compile passed)
-Task 2: complete (no git commits available; review clean; tests 3 passed plus 7 regression)
-Task 3: complete (no git commits available; review clean; tests 2 passed plus 7 regression)
-Task 4: complete (no git commits available; review accepted with minor route-test note; tests 7 passed plus 4 regression)
-Task 5: complete (no git commits available; review accepted with minor follow-ups; tests 8 passed plus 4 regression)
-Task 6: complete (no git commits available; review clean; frontend build passed with warnings)
-Task 7: complete (no git commits available; review clean; frontend build passed with warnings)

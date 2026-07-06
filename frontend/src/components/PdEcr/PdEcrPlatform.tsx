@@ -1160,9 +1160,9 @@ export function PdEcrPlatform() {
   };
 
   return (
-    <div className="page-shell flex h-full min-h-0 flex-1 flex-col">
-      <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-4">
-        <header className="enterprise-panel shrink-0 overflow-hidden">
+    <div className="page-shell w-full">
+      <div className="mx-auto flex w-full max-w-7xl min-w-0 flex-col gap-4">
+        <header className="enterprise-panel overflow-hidden">
           <div className="border-b border-slate-200 bg-white px-4 py-3">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
               <div className="min-w-0">
@@ -1253,16 +1253,16 @@ export function PdEcrPlatform() {
           </div>
         </header>
 
-        <main className="min-h-0 flex-1 overflow-y-auto">
+        <main className="min-w-0">
           <div className="flex min-w-0 flex-col">
             <WorkPanel
               eyebrow="New creation"
-              className="min-w-0 flex-1"
+              className="min-w-0"
               hideHeader
             >
               <FormSectionHeader
                 eyebrow="Section 01: Basic information"
-                title="Change object"
+                title="变更对象"
                 rightSlot={
                   <label className="flex items-center gap-2.5">
                     <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -1333,15 +1333,17 @@ export function PdEcrPlatform() {
               {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
               <FormSectionHeader
                 eyebrow="Section 02: Change details"
-                title="Impact entry"
+                title="变更内容"
                 className="mt-8"
               />
-              <div className="mt-5 space-y-2">
-                <span className="enterprise-field-label">变更来源</span>
-                <SourceMultiSelect
-                  selected={newChange.source}
-                  onChange={(value) => updateNewChange("source", value)}
-                />
+              <section className="enterprise-field-surface mt-5">
+                <label className="block space-y-2">
+                  <span className="enterprise-field-label">变更来源</span>
+                  <SourceMultiSelect
+                    selected={newChange.source}
+                    onChange={(value) => updateNewChange("source", value)}
+                  />
+                </label>
                 {(() => {
                   const selectedValues = newChange.source
                     .split(",")
@@ -1382,7 +1384,7 @@ export function PdEcrPlatform() {
                     </div>
                   );
                 })()}
-              </div>
+              </section>
 
               <section className="enterprise-field-surface mt-7">
                 <label className="block space-y-2">
@@ -1482,7 +1484,7 @@ export function PdEcrPlatform() {
 
               <FormSectionHeader
                 eyebrow="Section 03: Initiator approval gate"
-                title="Release gate"
+                title="确认节点"
                 className="mt-8"
                 rightSlot={
                   <div className="flex flex-wrap justify-end gap-2">
@@ -1604,7 +1606,7 @@ export function PdEcrPlatform() {
               )}
 
               {/* 操作按钮 */}
-              <div className="sticky bottom-0 -mx-4 mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur">
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-200 bg-slate-50/80 px-4 py-3">
                 {draftStatus ? (
                   <p
                     className={`text-sm font-medium ${

@@ -2,14 +2,9 @@ import { useNavigate } from "@tanstack/react-router"
 import {
   ArrowLeft,
   ArrowUpDown,
-  Database,
   ExternalLink,
-  FileText,
   Filter,
   Home,
-  ListFilter,
-  Printer,
-  Share2,
   Trash2,
   Upload,
   X,
@@ -221,63 +216,6 @@ function deleteTargetId(row: PdEcrCaseRow) {
 
 function sourceDeleteTargetId(row: PdEcrCaseRow) {
   return row.sourceDocumentId || ""
-}
-
-function ActionRail({
-  onShowAll,
-  onNew,
-  onEdit,
-  onShare,
-  onPrint,
-  hasSelection,
-}: {
-  onShowAll: () => void
-  onNew: () => void
-  onEdit: () => void
-  onShare: () => void
-  onPrint: () => void
-  hasSelection: boolean
-}) {
-  const actions = [
-    { label: "Show all", icon: ListFilter, onClick: onShowAll },
-    { label: "New PD-ECR", icon: FileText, onClick: onNew },
-    {
-      label: "Edit PD-ECR",
-      icon: Database,
-      onClick: onEdit,
-      requiresSelection: true,
-    },
-    {
-      label: "Share PD-ECR",
-      icon: Share2,
-      onClick: onShare,
-      requiresSelection: true,
-    },
-    {
-      label: "Print one page",
-      icon: Printer,
-      onClick: onPrint,
-      requiresSelection: true,
-    },
-  ]
-
-  return (
-    <aside className="flex gap-2 lg:w-36 lg:flex-col">
-      {actions.map(({ label, icon: Icon, onClick, requiresSelection }) => (
-        <Button
-          key={label}
-          variant="outline"
-          className="h-10 justify-start bg-white text-sm lg:w-full hover:border-blue-300 hover:bg-blue-50"
-          type="button"
-          onClick={onClick}
-          disabled={requiresSelection && !hasSelection}
-        >
-          <Icon className="size-4" />
-          {label}
-        </Button>
-      ))}
-    </aside>
-  )
 }
 
 function FilterPanel({
@@ -513,16 +451,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
     setStatus(`Showing ${nextRows.length} matching case(s).`)
   }
 
-  const showAll = async () => {
-    navigate({ to: "/pd-ecr/cases", search: { view: "all" } })
-    setField("all")
-    setPendingQuery("")
-    setAppliedQuery("")
-    setSelectedIds([])
-    setSortState(null)
-    await loadAllRealCases()
-  }
-
   const importHistoricalCases = async () => {
     setIsImporting(true)
     setStatus("Importing historical PD-ECR OCR/Markdown/JSON sources...")
@@ -621,28 +549,6 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
       await navigator.clipboard?.writeText(text)
       setStatus(`Copied ${ids.length} case(s) to clipboard.`)
     }
-  }
-
-  const printSelected = () => {
-    const html = exportPdEcrOnePage({
-      cases: targetRows as PdEcrCaseSummary[],
-      result: buildVisibleResult(targetRows),
-      returnHtml: true,
-    })
-
-    const printWindow = window.open("", "_blank")
-    if (!printWindow) {
-      setStatus(
-        "Popup blocked. Allow popups to print the selected PD-ECR cases.",
-      )
-      return
-    }
-
-    printWindow.document.write(html)
-    printWindow.document.close()
-    printWindow.focus()
-    printWindow.print()
-    setStatus(`Print preview opened for ${targetRows.length} case(s).`)
   }
 
   const deleteSelected = async () => {
@@ -832,16 +738,7 @@ export function PdEcrCaseList({ view = "all" }: { view?: PdEcrCaseListView }) {
           ) : null}
         </section>
 
-        <main className="grid gap-4 lg:grid-cols-[9rem_1fr_11rem]">
-          <ActionRail
-            onShowAll={showAll}
-            onNew={() => navigate({ to: "/pd-ecr" })}
-            onEdit={editSelected}
-            onShare={shareSelected}
-            onPrint={printSelected}
-            hasSelection={selectedIds.length > 0}
-          />
-
+        <main className="grid gap-4 lg:grid-cols-[1fr_11rem]">
           <section className="overflow-hidden rounded-xl border border-slate-200/60 bg-white shadow-sm card-hover">
             {deleteNotice ? (
               <div

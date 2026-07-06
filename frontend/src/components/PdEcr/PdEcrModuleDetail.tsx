@@ -35,7 +35,13 @@ import {
   type PdEcrDisplayModule,
   type PdEcrModuleId,
 } from "./pdEcrState"
-import { PdEcrFeasibilityConfirmation } from "./PdEcrFeasibilityConfirmation"
+import {
+  PdEcrFeasibilityConfirmation,
+  isFeasibilityComplete,
+  loadFeasibilityState,
+  saveFeasibilityState,
+  type FeasibilityState,
+} from "./PdEcrFeasibilityConfirmation"
 
 function textValue(module: PdEcrDisplayModule, keys: string[], fallback = "-") {
   for (const key of keys) {
@@ -921,6 +927,207 @@ async function saveBackendModuleDraft(
   })
 }
 
+function useFeasibilityResultGate() {
+  const [state, setState] = useState<FeasibilityState>(() => loadFeasibilityState())
+
+  useEffect(() => {
+    const refresh = () => setState(loadFeasibilityState())
+    window.addEventListener("pd-ecr-feasibility-updated", refresh)
+    window.addEventListener("storage", refresh)
+    return () => {
+      window.removeEventListener("pd-ecr-feasibility-updated", refresh)
+      window.removeEventListener("storage", refresh)
+    }
+  }, [])
+
+  return {
+    feasibilityState: state,
+    resultUnlocked: isFeasibilityComplete(state),
+  }
+}
+
+function FeasibilityChangeReviewPanel() {
+  const [state, setState] = useState<FeasibilityState>(() => loadFeasibilityState())
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const reviewComplete = isFeasibilityComplete(state)
+
+  useEffect(() => {
+    if (localStorage.getItem("pd-ecr-feasibility-confirmation")) return
+    let cancelled = false
+    getPdEcrModuleDraft(getActiveRecordId(), "feasibility-confirmation")
+      .then((response) => {
+        if (cancelled || !response.data) return
+        const next = {
+          infoText: String(response.data.infoText || ""),
+          initiatorConfirmed: Boolean(response.data.initiatorConfirmed),
+          initiatorConfirmDate: String(response.data.initiatorConfirmDate || ""),
+          attachments: Array.isArray(response.data.attachments)
+            ? response.data.attachments as FeasibilityState["attachments"]
+            : [],
+        }
+        setState(next)
+        saveFeasibilityState(next)
+      })
+      .catch(() => undefined)
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!autoSaveTimer.current) {
+      autoSaveTimer.current = setTimeout(() => {}, 0)
+      return
+    }
+    clearTimeout(autoSaveTimer.current)
+    autoSaveTimer.current = setTimeout(() => {
+      saveFeasibilityState(state)
+      void saveBackendModuleDraft(
+        getActiveRecordId(),
+        "feasibility-confirmation",
+        "Feasibility Change Review",
+        state as unknown as Record<string, unknown>,
+      )
+    }, 700)
+    return () => clearTimeout(autoSaveTimer.current)
+  }, [state])
+
+  const addFiles = (files: FileList | null) => {
+    const incoming = Array.from(files || []).map((file) => ({
+      name: file.name,
+      type: file.type || "application/octet-stream",
+      size: file.size,
+    }))
+    if (!incoming.length) return
+    setState((prev) => ({
+      ...prev,
+      attachments: [...prev.attachments, ...incoming],
+    }))
+  }
+
+  const removeFile = (index: number) => {
+    setState((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, idx) => idx !== index),
+    }))
+  }
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-2.5">
+        <div>
+          <p className="text-sm font-semibold text-slate-900">
+            Feasibility Change Review / 可行性变更评审
+          </p>
+          <p className="mt-0.5 text-xs text-slate-500">
+            发起人确认后，1.3 和 1.4 的 Result 字段才可填写。
+          </p>
+        </div>
+        <span
+          className={`rounded-md border px-2.5 py-1 text-xs font-semibold ${
+            reviewComplete
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-slate-200 bg-slate-100 text-slate-500"
+          }`}
+        >
+          {reviewComplete ? "Result unlocked" : "Result locked"}
+        </span>
+      </div>
+
+      <div className="grid gap-4 p-4 lg:grid-cols-2">
+        <section className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-semibold text-slate-800">Upload files / 上传文件</p>
+          <label className="mt-3 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border-2 border-dashed border-slate-300 bg-white px-4 py-5 text-center transition hover:border-blue-300 hover:bg-blue-50">
+            <input
+              type="file"
+              multiple
+              accept=".xlsx,.xls,.xlsm,.pdf,.docx,.doc,.png,.jpg,.jpeg"
+              className="sr-only"
+              onChange={(event) => {
+                addFiles(event.target.files)
+                event.target.value = ""
+              }}
+            />
+            <Upload className="size-5 text-slate-400" />
+            <span className="mt-2 text-xs font-medium text-slate-600">
+              Click to upload review evidence
+            </span>
+          </label>
+          {state.attachments.length ? (
+            <div className="mt-3 space-y-2">
+              {state.attachments.map((file, index) => (
+                <div
+                  key={`${file.name}-${file.size}-${index}`}
+                  className="flex items-center justify-between gap-2 rounded-md border border-slate-200 bg-white px-3 py-2"
+                >
+                  <div className="flex min-w-0 items-center gap-2">
+                    <FileText className="size-4 shrink-0 text-slate-400" />
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-medium text-slate-700">{file.name}</p>
+                      <p className="text-[10px] text-slate-400">{fileSizeLabel(file.size)}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removeFile(index)}
+                    className="text-xs font-semibold text-slate-400 transition hover:text-red-500"
+                  >
+                    x
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </section>
+
+        <section className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-semibold text-slate-800">Comments / 评审意见</p>
+          <textarea
+            value={state.infoText}
+            onChange={(event) => setState((prev) => ({ ...prev, infoText: event.target.value }))}
+            className="mt-3 min-h-28 w-full resize-y rounded-md border border-slate-300 bg-white px-3 py-2 text-sm leading-6 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            placeholder="Record feasibility review comments, risks, and conclusion."
+          />
+        </section>
+      </div>
+
+      <div className="border-t border-slate-200 bg-slate-50 px-4 py-3">
+        <label className="flex items-start gap-3">
+          <input
+            type="checkbox"
+            checked={state.initiatorConfirmed}
+            onChange={(event) => {
+              const checked = event.target.checked
+              const now = new Date()
+              setState((prev) => ({
+                ...prev,
+                initiatorConfirmed: checked,
+                initiatorConfirmDate: checked
+                  ? `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`
+                  : "",
+              }))
+            }}
+            className="mt-0.5 size-4 accent-blue-600"
+          />
+          <span>
+            <span className="block text-sm font-semibold text-slate-800">
+              Initiator confirms feasibility review / 发起人确认
+            </span>
+            <span className="block text-xs text-slate-500">
+              需要 comments、至少一个文件和发起人确认，Result 字段才会解锁。
+            </span>
+            {state.initiatorConfirmDate ? (
+              <span className="mt-1 block text-[11px] font-medium text-emerald-600">
+                Confirmed at {state.initiatorConfirmDate}
+              </span>
+            ) : null}
+          </span>
+        </label>
+      </div>
+    </div>
+  )
+}
+
 function attachmentStorageKey(module: PdEcrDisplayModule, side: "before" | "after" | "flow") {
   const recordId = getActiveRecordId()
 
@@ -1551,7 +1758,23 @@ const IMPACT_ANALYSIS_MODULE_ID = "impact-analysis"
 const IMPACT_ANALYSIS_STORAGE_KEY = `pd-ecr-impact-analysis-${IMPACT_ANALYSIS_MODULE_ID}`
 const IMPACT_ANALYSIS_UPDATED_EVENT = "pd-ecr-impacts-updated"
 
+type YesNoValue = "" | "Y" | "N"
+
+function yesNoFromLegacy(row: { yn?: unknown; yes?: unknown; no?: unknown } | null | undefined): YesNoValue {
+  const yn = String(row?.yn || "").toUpperCase()
+  if (yn === "Y" || yn === "N") return yn
+  if (row?.yes) return "Y"
+  if (row?.no) return "N"
+  return ""
+}
+
+function todayDateValue() {
+  const now = new Date()
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
+}
+
 type ImpactAnalysisDraftRow = {
+  yn?: string
   yes?: boolean
   desc?: string
   confirmedBy?: string
@@ -1596,7 +1819,7 @@ function readImpactCustomMeasures(): ImpactCustomMeasure[] {
         confirmedBy: impact.confirmedBy,
         confirmedAt: impact.confirmedAt,
         area: impactItems[idx],
-        yes: Boolean(impact.yes),
+        yes: String(impact.yn || "").toUpperCase() === "Y" || Boolean(impact.yes),
       }))
       .filter((impact: ImpactCustomMeasure & { yes: boolean }) => impact.yes && impact.desc)
   } catch {
@@ -1666,8 +1889,8 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const recordId = useMemo(() => getActiveRecordId(), [])
   const backendModuleId = backendDraftModuleId(module)
   const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
-  type ImpactRow = { no: boolean; yes: boolean; confirmedBy: string; confirmedAt: string; desc: string }
-  type DocRow = { no: boolean; yes: boolean; respPerson: string; dueDate: string }
+  type ImpactRow = { yn: YesNoValue; no?: boolean; yes?: boolean; confirmedBy: string; confirmedAt: string; desc: string }
+  type DocRow = { yn: YesNoValue; no?: boolean; yes?: boolean; respPerson: string; dueDate: string }
   type ApprovalRow = { person: string; date: string }
   type StockDeliveryRow = {
     label: string
@@ -1677,8 +1900,29 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
     remark: string
   }
 
-  const defaultImpact = (): ImpactRow => ({ no: true, yes: false, confirmedBy: "", confirmedAt: "", desc: "" })
-  const defaultDoc = (): DocRow => ({ no: true, yes: false, respPerson: "", dueDate: "" })
+  const normalizeImpactRow = (row: Partial<ImpactRow> | null | undefined): ImpactRow => {
+    const yn = yesNoFromLegacy(row)
+    return {
+      yn,
+      no: yn === "N",
+      yes: yn === "Y",
+      confirmedBy: String(row?.confirmedBy || ""),
+      confirmedAt: String(row?.confirmedAt || ""),
+      desc: String(row?.desc || ""),
+    }
+  }
+  const normalizeDocRow = (row: Partial<DocRow> | null | undefined): DocRow => {
+    const yn = yesNoFromLegacy(row)
+    return {
+      yn,
+      no: yn === "N",
+      yes: yn === "Y",
+      respPerson: String(row?.respPerson || ""),
+      dueDate: String(row?.dueDate || ""),
+    }
+  }
+  const defaultImpact = (): ImpactRow => ({ yn: "N", no: true, yes: false, confirmedBy: "", confirmedAt: "", desc: "" })
+  const defaultDoc = (): DocRow => ({ yn: "N", no: true, yes: false, respPerson: "", dueDate: "" })
   const defaultApproval = (): ApprovalRow => ({ person: "", date: "" })
   const readStoredDraft = () => {
     try {
@@ -1697,15 +1941,19 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const [impacts, setImpacts] = useState<ImpactRow[]>(() => {
     const saved = readStoredDraft().impacts
     if (Array.isArray(saved) && saved.length) {
+      const normalized = (saved as Partial<ImpactRow>[]).map(normalizeImpactRow)
       return [
-        ...saved,
-        ...Array.from({ length: Math.max(impactItems.length - saved.length, 0) }, () => defaultImpact()),
+        ...normalized,
+        ...Array.from({ length: Math.max(impactItems.length - normalized.length, 0) }, () => defaultImpact()),
       ]
     }
     return impactItems.map(() => defaultImpact())
   })
   const [documents, setDocuments] = useState<DocRow[]>(() => {
-    try { const p = JSON.parse(localStorage.getItem(storageKey) || ""); if (p?.documents?.length) return p.documents } catch {}
+    try {
+      const p = JSON.parse(localStorage.getItem(storageKey) || "")
+      if (p?.documents?.length) return (p.documents as Partial<DocRow>[]).map(normalizeDocRow)
+    } catch {}
     return docItems.map(() => defaultDoc())
   })
   const [mixedDeliveries, setMixedDeliveries] = useState<string>(() => {
@@ -1745,8 +1993,8 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
       .then((response) => {
         const data = response.data
         if (cancelled || !data) return
-        if (Array.isArray(data.impacts)) setImpacts(data.impacts as ImpactRow[])
-        if (Array.isArray(data.documents)) setDocuments(data.documents as DocRow[])
+        if (Array.isArray(data.impacts)) setImpacts((data.impacts as Partial<ImpactRow>[]).map(normalizeImpactRow))
+        if (Array.isArray(data.documents)) setDocuments((data.documents as Partial<DocRow>[]).map(normalizeDocRow))
         if (typeof data.mixedDeliveries === "string") setMixedDeliveries(data.mixedDeliveries)
         if (typeof data.mixedDeliveryRemark === "string") setMixedDeliveryRemark(data.mixedDeliveryRemark)
         if (typeof data.firstDeliveryAnswer === "string") setFirstDeliveryAnswer(data.firstDeliveryAnswer)
@@ -1834,8 +2082,8 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
       return next
     }))
   }
-  const toggleImpact = (i: number, field: "no" | "yes") =>
-    setImpacts((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  const updateImpactYesNo = (i: number, yn: YesNoValue) =>
+    setImpacts((p) => p.map((r, j) => j === i ? { ...r, yn, no: yn === "N", yes: yn === "Y" } : r))
   const addImpactItem = (dept: ImpactDept) => {
     const id = `custom-impact-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
     setCustomImpactItems((prev) => [...prev, { id, en: "", zh: "", dept, custom: true }])
@@ -1854,8 +2102,8 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
       return { ...item, [field]: value }
     }))
   }
-  const toggleDoc = (i: number, field: "no" | "yes") =>
-    setDocuments((p) => p.map((r, j) => j === i ? { ...r, [field]: !r[field], [field === "no" ? "yes" : "no"]: false } : r))
+  const updateDocYesNo = (i: number, yn: YesNoValue) =>
+    setDocuments((p) => p.map((r, j) => j === i ? { ...r, yn, no: yn === "N", yes: yn === "Y" } : r))
   const updateDoc = (i: number, f: keyof DocRow, v: string) =>
     setDocuments((p) => p.map((r, j) => j === i ? { ...r, [f]: v } : r))
   const updateApproval = (i: number, f: keyof ApprovalRow, v: string) =>
@@ -1884,11 +2132,11 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
 
   return (
     <div className={hideApproval ? "" : "grid gap-5 xl:grid-cols-[4fr_1fr]"}>
-      {/* ═══ LEFT: scrollable Impact Analysis Content ═══ */}
-      <div className={`min-w-0 space-y-5 ${hideApproval ? "" : "pr-1"}`} style={hideApproval ? {} : { maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+      {/* ═══ LEFT: Impact Analysis Content ═══ */}
+      <div className={`min-w-0 space-y-5 ${hideApproval ? "" : "pr-1"}`}>
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-            <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-400 animate-pulse" : saveStatus === "Auto-saved" ? "bg-green-500" : "bg-amber-500"}`} />{saveStatus}
+          <span className="inline-flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+            <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-blue-400 animate-pulse" : saveStatus === "Auto-saved" ? "bg-emerald-500" : "bg-blue-500"}`} />{saveStatus}
           </span>
           <Button type="button" variant="outline" size="sm" className="bg-white"
             onClick={() => navigate({ to: "/pd-ecr/content" })}>
@@ -1897,19 +2145,19 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
         </div>
 
         {/* Step 3.1 Impact analysis */}
-        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <button
             type="button"
             onClick={() => toggleStep("step-3.1")}
-            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+            className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
           >
-            <span><span className="mr-2 text-amber-400">1.2.1</span>Impact Analysis / 影响分析</span>
+            <span><span className="mr-2 text-blue-600">1.2.1</span>Impact Analysis / 影响分析</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.1") && (
           <>
           {/* Impact table grouped by department — collapsible like 1.4 */}
-          <div className="divide-y divide-stone-200">
+          <div className="divide-y divide-slate-200">
             {IMPACT_DEPTS.map((dept) => {
               const deptIndices = impactItems
                 .map((item, idx) => (item.dept === dept ? idx : -1))
@@ -1926,11 +2174,11 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                   <button
                     type="button"
                     onClick={() => toggleImpactDept(dept)}
-                    className="flex w-full items-center gap-2 bg-stone-100 px-4 py-2 text-left hover:bg-stone-200 transition cursor-pointer"
+                    className="flex w-full cursor-pointer items-center gap-2 bg-slate-50 px-4 py-2 text-left transition hover:bg-blue-50"
                   >
-                    <ChevronDown className={`size-3.5 text-stone-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
-                    <span className="text-sm font-semibold text-stone-800">{dept}</span>
-                    <span className="text-xs text-stone-400">({deptCount} items)</span>
+                    <ChevronDown className={`size-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
+                    <span className="text-sm font-semibold text-slate-800">{dept}</span>
+                    <span className="text-xs text-slate-400">({deptCount} items)</span>
                   </button>
                   {/* Department mini-table */}
                   {isDeptExpanded && (
@@ -1938,18 +2186,16 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                       <table className="w-full min-w-[56rem] table-fixed text-left text-sm">
                         <colgroup>
                           <col className="w-10" />
-                          <col className="w-[34%]" />
-                          <col className="w-14" />
+                          <col className="w-[38%]" />
                           <col className="w-14" />
                           <col className="w-[28%]" />
                           <col className="w-[18%]" />
                         </colgroup>
                         <thead>
-                          <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                          <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                             <th className="w-8 px-2 py-2 text-center">#</th>
                             <th className="px-4 py-2">Influence area / 影响范围</th>
-                            <th className="px-2 py-2 text-center">No</th>
-                            <th className="px-2 py-2 text-center">Yes</th>
+                            <th className="px-2 py-2 text-center">Y/N</th>
                             <th className="px-4 py-2">Measures / 措施</th>
                             <th className="px-4 py-2">Confirmed by / 确认人</th>
                           </tr>
@@ -1960,27 +2206,27 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                             const item = impactItems[i]
                             const isCostRow = item.dept === "Initiator" && !item.custom
                             return (
-                              <tr key={item.id || item.en || `impact-${i}`} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                                <td className="px-2 py-3 text-center text-xs text-stone-400 align-middle">{i + 1}</td>
+                              <tr key={item.id || item.en || `impact-${i}`} className="border-b border-slate-100 even:bg-slate-50/50 transition-colors hover:bg-blue-50/40">
+                                <td className="px-2 py-3 text-center text-xs text-slate-400 align-middle">{i + 1}</td>
                                 <td className="px-4 py-3 align-middle">
                                   {item.custom ? (
                                     <div className="space-y-1">
                                       <input
                                         value={item.en}
                                         onChange={(e) => updateCustomImpactItem(i, "en", e.target.value)}
-                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs font-medium text-stone-800 outline-none focus:border-amber-400"
+                                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs font-medium text-slate-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                         placeholder="Influence area"
                                       />
                                       <input
                                         value={item.zh}
                                         onChange={(e) => updateCustomImpactItem(i, "zh", e.target.value)}
-                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs text-stone-600 outline-none focus:border-amber-400"
+                                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs text-slate-600 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                         placeholder="影响范围"
                                       />
                                       <select
                                         value={item.dept}
                                         onChange={(e) => updateCustomImpactItem(i, "dept", e.target.value)}
-                                        className="h-8 rounded border border-stone-200 bg-white px-2 text-xs text-stone-600 outline-none focus:border-amber-400"
+                                        className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs text-slate-600 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                       >
                                         {IMPACT_DEPTS.map((option) => (
                                           <option key={option} value={option}>{option}</option>
@@ -1989,16 +2235,22 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                                     </div>
                                   ) : (
                                     <>
-                                      <p className="text-sm font-medium text-stone-800">{item.en}</p>
-                                      <p className="text-xs text-stone-400">{item.zh}</p>
+                                      <p className="text-sm font-medium text-slate-800">{item.en}</p>
+                                      <p className="text-xs text-slate-500">{item.zh}</p>
                                     </>
                                   )}
                                 </td>
                                 <td className="px-2 py-3 text-center align-middle">
-                                  <input type="checkbox" checked={row.no} onChange={() => toggleImpact(i, "no")} className="accent-stone-500 size-4" />
-                                </td>
-                                <td className="px-2 py-3 text-center align-middle">
-                                  <input type="checkbox" checked={row.yes} onChange={() => toggleImpact(i, "yes")} className="accent-amber-600 size-4" />
+                                  <select
+                                    value={row.yn}
+                                    onChange={(e) => updateImpactYesNo(i, e.target.value as YesNoValue)}
+                                    className="h-8 w-14 rounded-md border border-slate-300 bg-white px-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    aria-label={`Impact ${i + 1} Y/N`}
+                                  >
+                                    <option value="">-</option>
+                                    <option value="Y">Y</option>
+                                    <option value="N">N</option>
+                                  </select>
                                 </td>
                                 <td className="px-4 py-3 align-middle">
                                   {isCostRow ? (
@@ -2007,24 +2259,24 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                                         {["Increase", "Decrease", "No change"].map((opt) => (
                                           <label key={opt} className="flex items-center gap-1.5 text-xs whitespace-nowrap">
                                             <input type="radio" name={`cost-${module.id}`} value={opt} checked={costNote === opt}
-                                              onChange={(e) => setCostNote(e.target.value)} className="accent-amber-600" />{opt}
+                                              onChange={(e) => setCostNote(e.target.value)} className="accent-blue-600" />{opt}
                                           </label>
                                         ))}
                                       </div>
                                       <input value={costNote && !["Increase","Decrease","No change"].includes(costNote) ? costNote : ""}
                                         onChange={(e) => setCostNote(e.target.value)}
-                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Cost remark / 成本备注" />
+                                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Cost remark / 成本备注" />
                                     </div>
                                   ) : (
                                       <input value={row.desc} onChange={(e) => updateImpact(i, "desc", e.target.value)}
-                                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                         placeholder="Validation measures / 验证措施" />
                                   )}
                                 </td>
                                 <td className="px-4 py-3 align-middle">
                                   <input value={row.confirmedBy} onChange={(e) => updateImpact(i, "confirmedBy", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Name" />
-                                  {row.confirmedAt && <p className="mt-0.5 text-[10px] text-stone-400">{new Date(row.confirmedAt).toLocaleString()}</p>}
+                                    className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Name" />
+                                  {row.confirmedAt && <p className="mt-0.5 text-[10px] text-slate-400">{new Date(row.confirmedAt).toLocaleString()}</p>}
                                 </td>
                               </tr>
                             )
@@ -2032,7 +2284,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                         </tbody>
                       </table>
                       <button type="button" onClick={() => addImpactItem(dept)}
-                        className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+                        className="flex w-full items-center justify-center gap-1 border-t border-slate-200 py-1.5 text-xs text-slate-500 transition hover:bg-blue-50 hover:text-blue-700">
                         + 添加 {dept} 影响项
                       </button>
                     </div>
@@ -2041,18 +2293,18 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
               )
             })}
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-stone-200 bg-stone-50/50 px-3 py-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-slate-200 bg-slate-50 px-3 py-2">
             <select
               value={newImpactDept}
               onChange={(e) => setNewImpactDept(e.target.value as ImpactDept)}
-              className="h-8 rounded border border-stone-200 bg-white px-2 text-xs text-stone-700 outline-none focus:border-amber-400"
+              className="h-8 rounded-md border border-slate-300 bg-white px-2 text-xs text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             >
               {IMPACT_DEPTS.map((dept) => (
                 <option key={dept} value={dept}>{dept}</option>
               ))}
             </select>
             <button type="button" onClick={() => addImpactItem(newImpactDept)}
-              className="inline-flex h-8 items-center justify-center rounded border border-stone-200 bg-white px-3 text-xs text-stone-500 hover:bg-stone-100 hover:text-stone-700 transition">
+              className="inline-flex h-8 items-center justify-center rounded-md border border-slate-200 bg-white px-3 text-xs text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700">
               + 添加影响项
             </button>
           </div>
@@ -2061,20 +2313,20 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
         </div>
 
         {/* Mixed Deliveries */}
-        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <button
             type="button"
             onClick={() => toggleStep("step-3.1.9")}
-            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+            className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
           >
-            <span><span className="mr-2 text-amber-400">1.2.2</span>Stock / Delivery Treatment / 库存发货处理</span>
+            <span><span className="mr-2 text-blue-600">1.2.2</span>Stock / Delivery Treatment / 库存发货处理</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.1.9") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.1.9") && (
           <div className="p-4">
-            <div className="overflow-x-auto rounded-md border border-stone-200">
+            <div className="overflow-x-auto rounded-md border border-slate-200">
               <table className="min-w-250 w-full text-left text-sm">
-                <thead className="bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                <thead className="bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                   <tr>
                     <th className="w-72 px-3 py-2.5">Item / 项目</th>
                     {stockDeliveryOptions.map((option) => (
@@ -2086,60 +2338,60 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-t border-stone-200">
-                    <td className="px-3 py-2.5 font-medium text-stone-800">
+                  <tr className="border-t border-slate-200">
+                    <td className="px-3 py-2.5 font-medium text-slate-800">
                       <p>Mixed Deliveries Permissible?</p>
-                      <p className="text-xs font-normal text-stone-400">改前改后是否可以混合供货？</p>
+                      <p className="text-xs font-normal text-slate-500">改前改后是否可以混合供货？</p>
                     </td>
                     <td className="px-2 py-2.5 text-center">
                       <label className="inline-flex items-center gap-1.5">
                         <input type="radio" name={`mixed-${module.id}`} value="YES" checked={mixedDeliveries === "YES"}
-                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-amber-600" />
+                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-blue-600" />
                         YES
                       </label>
                     </td>
                     <td className="px-2 py-2.5 text-center">
                       <label className="inline-flex items-center gap-1.5">
                         <input type="radio" name={`mixed-${module.id}`} value="NO" checked={mixedDeliveries === "NO"}
-                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-amber-600" />
+                          onChange={(e) => setMixedDeliveries(e.target.value)} className="accent-blue-600" />
                         NO
                       </label>
                     </td>
                     <td colSpan={stockDeliveryOptions.length - 2} className="px-2 py-2.5" />
                     <td className="px-3 py-2.5">
                       <input value={mixedDeliveryRemark} onChange={(e) => setMixedDeliveryRemark(e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
                     </td>
                   </tr>
-                  <tr className="border-t border-stone-200 bg-stone-50/50">
-                    <td className="px-3 py-2.5 font-medium text-stone-800">
+                  <tr className="border-t border-slate-200 bg-slate-50/50">
+                    <td className="px-3 py-2.5 font-medium text-slate-800">
                       <p>How to deal with 1st delivery after change?</p>
-                      <p className="text-xs font-normal text-stone-400">改后第一批货物的交货要求?</p>
+                      <p className="text-xs font-normal text-slate-500">改后第一批货物的交货要求?</p>
                     </td>
                     <td colSpan={stockDeliveryOptions.length + 1} className="px-3 py-2.5">
                       <input value={firstDeliveryAnswer} onChange={(e) => setFirstDeliveryAnswer(e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         placeholder="Answer / 回答" />
                     </td>
                   </tr>
                   {stockDeliveryRows.map((row, i) => (
-                    <tr key={row.label} className="border-t border-stone-200 even:bg-stone-50/50">
-                      <td className="px-3 py-2.5 font-medium text-stone-800">
+                    <tr key={row.label} className="border-t border-slate-200 even:bg-slate-50/50">
+                      <td className="px-3 py-2.5 font-medium text-slate-800">
                         <p>{row.label}</p>
-                        <p className="text-xs font-normal text-stone-400">{row.zh}</p>
+                        <p className="text-xs font-normal text-slate-500">{row.zh}</p>
                       </td>
                       {stockDeliveryOptions.map((option) => (
                         <td key={option} className="px-2 py-2.5 text-center">
                           {row.options.includes(option) ? (
                             <input type="checkbox" checked={row.checked.includes(option)}
                               onChange={() => toggleStockDelivery(i, option)}
-                              className="accent-amber-600 size-4" aria-label={`${row.label} ${option}`} />
+                              className="size-4 accent-blue-600" aria-label={`${row.label} ${option}`} />
                           ) : null}
                         </td>
                       ))}
                       <td className="px-3 py-2.5">
                         <input value={row.remark} onChange={(e) => updateStockDeliveryRemark(i, e.target.value)}
-                          className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                          className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                           placeholder="Remark / 备注" />
                       </td>
                     </tr>
@@ -2152,13 +2404,13 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
         </div>
 
         {/* Step 3.3 Affected documents */}
-        <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <button
             type="button"
             onClick={() => toggleStep("step-3.3")}
-            className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+            className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
           >
-            <span><span className="mr-2 text-amber-400">1.2.3</span>Affected Documents Check / 受影响文件检查</span>
+            <span><span className="mr-2 text-blue-600">1.2.3</span>Affected Documents Check / 受影响文件检查</span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-3.3") ? "rotate-180" : ""}`} />
           </button>
           {expandedSteps.has("step-3.3") && (
@@ -2166,33 +2418,38 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
+                <tr className="border-b-2 border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                   <th className="w-8 px-2 py-2.5 text-center">#</th>
                   <th className="px-4 py-2.5">Document / 文件</th>
-                  <th className="w-14 px-2 py-2.5 text-center">No</th>
-                  <th className="w-14 px-2 py-2.5 text-center">Yes</th>
+                  <th className="w-14 px-2 py-2.5 text-center">Y/N</th>
                   <th className="px-4 py-2.5" style={{ minWidth: "10rem" }}>Resp. person</th>
                   <th className="px-4 py-2.5" style={{ minWidth: "9rem" }}>Due date</th>
                 </tr>
               </thead>
               <tbody>
                 {documents.map((row, i) => (
-                  <tr key={i} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                    <td className="px-2 py-3 text-center text-xs text-stone-400 align-middle">{i + 1}</td>
-                    <td className="px-4 py-3 text-sm font-medium text-stone-800 align-middle">{docItems[i]}</td>
+                  <tr key={i} className="border-b border-slate-100 even:bg-slate-50/50 transition-colors hover:bg-blue-50/40">
+                    <td className="px-2 py-3 text-center text-xs text-slate-400 align-middle">{i + 1}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-slate-800 align-middle">{docItems[i]}</td>
                     <td className="px-2 py-3 text-center align-middle">
-                      <input type="checkbox" checked={row.no} onChange={() => toggleDoc(i, "no")} className="accent-stone-500 size-4" />
-                    </td>
-                    <td className="px-2 py-3 text-center align-middle">
-                      <input type="checkbox" checked={row.yes} onChange={() => toggleDoc(i, "yes")} className="accent-amber-600 size-4" />
+                      <select
+                        value={row.yn}
+                        onChange={(e) => updateDocYesNo(i, e.target.value as YesNoValue)}
+                        className="h-8 w-14 rounded-md border border-slate-300 bg-white px-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                        aria-label={`${docItems[i]} Y/N`}
+                      >
+                        <option value="">-</option>
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                      </select>
                     </td>
                     <td className="px-4 py-3 align-middle">
                       <input value={row.respPerson} onChange={(e) => updateDoc(i, "respPerson", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
+                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Resp." />
                     </td>
                     <td className="px-4 py-3 align-middle">
                       <input type="date" value={row.dueDate} onChange={(e) => updateDoc(i, "dueDate", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                        className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
                     </td>
                   </tr>
                 ))}
@@ -2200,7 +2457,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
             </table>
           </div>
           <button type="button" onClick={() => setDocuments((p) => [...p, defaultDoc()])}
-            className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+            className="flex w-full items-center justify-center gap-1 border-t border-slate-200 py-1.5 text-xs text-slate-500 transition hover:bg-blue-50 hover:text-blue-700">
             + 添加文件项
           </button>
           </>
@@ -2209,28 +2466,28 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
 
       </div>
 
-      {/* ═══ RIGHT: Leader Approval Panel (1/5, sticky) — hidden when outer panel is active ═══ */}
+      {/* ═══ RIGHT: Leader Approval Panel — hidden when outer panel is active ═══ */}
       {!hideApproval && (
-      <div className="hidden xl:block">
-        <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+      <div className="hidden min-w-0 xl:block">
+        <div className="space-y-4">
           {/* Auto-synced approval panel */}
-          <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
-            <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
+          <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
+            <div className="border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900">
               Change-Feasibility Review / 可行性评审
             </div>
-            <div className="divide-y divide-stone-100">
+            <div className="divide-y divide-slate-100">
               {approvalDepts.map((dept, i) => (
                 <div key={dept} className="px-4 py-2.5">
-                  <p className="text-xs font-semibold text-stone-700">{dept}</p>
+                  <p className="text-xs font-semibold text-slate-700">{dept}</p>
                   <input value={approvals[i].person} onChange={(e) => updateApproval(i, "person", e.target.value)}
-                    className="mt-1 h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                    className="mt-1 h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                     placeholder="签批人..." />
                   {approvals[i].date ? (
                     <p className="mt-1 text-[10px] font-medium text-emerald-600">
                       ✓ {approvals[i].date}
                     </p>
                   ) : (
-                    <p className="mt-1 text-[10px] text-stone-300">待确认</p>
+                    <p className="mt-1 text-[10px] text-slate-400">待确认</p>
                   )}
                 </div>
               ))}
@@ -2238,16 +2495,16 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
           </div>
 
           {/* Impact confirmations feed into approval */}
-          <div className="rounded-lg border border-stone-200 bg-stone-50 p-4">
-            <p className="text-xs font-semibold text-stone-500">已确认的影响项</p>
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <p className="text-xs font-semibold text-slate-600">已确认的影响项</p>
             <div className="mt-2 max-h-48 space-y-1.5 overflow-y-auto">
               {impacts.filter((r) => r.confirmedBy).length === 0 && (
-                <p className="text-xs text-stone-400">左侧填写确认人后自动显示</p>
+                <p className="text-xs text-slate-400">左侧填写确认人后自动显示</p>
               )}
               {impacts.map((row, idx) => ({ row, idx })).filter(({ row }) => row.confirmedBy).map(({ row, idx }) => (
-                <div key={idx} className="rounded border border-amber-100 bg-white px-2 py-1 text-xs">
-                  <span className="font-medium text-stone-700">{(impactItems[idx]?.en || impactItems[idx]?.zh || "Custom impact").slice(0, 40)}...</span>
-                  <div className="mt-0.5 flex items-center justify-between text-stone-500">
+                <div key={idx} className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs">
+                  <span className="font-medium text-slate-700">{(impactItems[idx]?.en || impactItems[idx]?.zh || "Custom impact").slice(0, 40)}...</span>
+                  <div className="mt-0.5 flex items-center justify-between text-slate-500">
                     <span>{row.confirmedBy}</span>
                     <span className="text-[10px]">{row.confirmedAt ? new Date(row.confirmedAt).toLocaleString() : ""}</span>
                   </div>
@@ -2286,16 +2543,35 @@ export function ValidationPlanView({
   const recordId = useMemo(() => getActiveRecordId(), [])
   const backendModuleId = backendDraftModuleId(module, resultOnly ? "result" : "plan")
   const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
-  type ValRow = { id: string; label: string; checked: boolean; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string }
+  type ValRow = { id: string; label: string; checked: boolean; yn: YesNoValue; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string; status: string; result: string }
   type CustomValRow = Pick<ValRow, "checked" | "finishDate" | "actualDate" | "respPerson" | "comments">
   const defaultCustomValRow = (): CustomValRow => ({ checked: true, finishDate: "", actualDate: "", respPerson: "", comments: "" })
+  const normalizeValRow = (row: Partial<ValRow> | null | undefined): ValRow => {
+    const yn = yesNoFromLegacy(row) || (row?.checked ? "Y" : "")
+    return {
+      id: String(row?.id || `init-${row?.label || Date.now()}`),
+      label: String(row?.label || ""),
+      checked: yn === "Y",
+      yn,
+      criteria: String(row?.criteria || ""),
+      finishDate: String(row?.finishDate || ""),
+      actualDate: String(row?.actualDate || ""),
+      respPerson: String(row?.respPerson || ""),
+      comments: String(row?.comments || ""),
+      status: String(row?.status || ""),
+      result: String(row?.result || ""),
+    }
+  }
 
   const [rows, setRows] = useState<ValRow[]>(() => {
     const raw = localStorage.getItem(storageKey)
     if (raw) {
-      try { const parsed = JSON.parse(raw); if (parsed.rows) return parsed.rows } catch {}
+      try {
+        const parsed = JSON.parse(raw)
+        if (parsed.rows) return (parsed.rows as Partial<ValRow>[]).map(normalizeValRow)
+      } catch {}
     }
-    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, criteria: "AI suggested criteria", finishDate: "", actualDate: "", respPerson: "", comments: "" }))
+    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, yn: "", criteria: "AI suggested criteria", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "" }))
   })
   const [customRows, setCustomRows] = useState<Record<string, CustomValRow>>(() => {
     const raw = localStorage.getItem(storageKey)
@@ -2311,6 +2587,7 @@ export function ValidationPlanView({
   const [expanded, setExpanded] = useState(true)
   const [customExpanded, setCustomExpanded] = useState(true)
   const [refreshKey, setRefreshKey] = useState(0)
+  const { resultUnlocked } = useFeasibilityResultGate()
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
@@ -2320,7 +2597,7 @@ export function ValidationPlanView({
       .then((response) => {
         const data = response.data
         if (cancelled || !data) return
-        if (Array.isArray(data.rows)) setRows(data.rows as ValRow[])
+        if (Array.isArray(data.rows)) setRows((data.rows as Partial<ValRow>[]).map(normalizeValRow))
         if (data.customRows && typeof data.customRows === "object") {
           setCustomRows(data.customRows as Record<string, CustomValRow>)
         }
@@ -2381,9 +2658,17 @@ export function ValidationPlanView({
     }
   }, [])
 
-  const toggleCheck = (index: number) => setRows((prev) => prev.map((r, i) => i === index ? { ...r, checked: !r.checked } : r))
-  const updateField = (index: number, field: keyof Omit<ValRow, "label" | "checked">, value: string) => {
+  const updateValidationYesNo = (index: number, yn: YesNoValue) =>
+    setRows((prev) => prev.map((r, i) => i === index ? { ...r, yn, checked: yn === "Y" } : r))
+  const updateField = (index: number, field: keyof Omit<ValRow, "label" | "checked" | "yn">, value: string) => {
     setRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+  }
+  const updateValidationStatus = (index: number, status: string) => {
+    setRows((prev) => prev.map((row, i) => i === index ? {
+      ...row,
+      status,
+      actualDate: status === "Closed" ? todayDateValue() : "",
+    } : row))
   }
   const customMeasureKey = (measure: ImpactCustomMeasure) => `impact-${measure.idx}`
   const customMeasureRow = (measure: ImpactCustomMeasure) => customRows[customMeasureKey(measure)] || defaultCustomValRow()
@@ -2412,89 +2697,150 @@ export function ValidationPlanView({
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
-          <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-amber-400 animate-pulse" : saveStatus === "Saved" ? "bg-green-500" : "bg-amber-500"}`} />{saveStatus || "Draft"}
+        <span className="inline-flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+          <span className={`size-1.5 rounded-full ${saveStatus === "Saving..." ? "bg-blue-400 animate-pulse" : saveStatus === "Saved" ? "bg-emerald-500" : "bg-blue-500"}`} />{saveStatus || "Draft"}
         </span>
         <Button type="button" variant="outline" size="sm" className="bg-white" onClick={savePlan}>Save changes</Button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <button
           type="button"
           onClick={() => setExpanded((p) => !p)}
-          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
         >
           {resultOnly ? (
-            <span><span className="mr-2 text-amber-400">3.1</span>QAC &amp; Validation results</span>
+            <span><span className="mr-2 text-blue-600">3.1</span>QAC &amp; Validation results</span>
           ) : (
-            <span><span className="mr-2 text-amber-400">1.3.1</span>QAC &amp; Validation plan</span>
+            <span><span className="mr-2 text-blue-600">1.3.1</span>QAC &amp; Validation plan</span>
           )}
           <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} />
         </button>
         {expanded && (
         <>
+        {!resultUnlocked ? (
+          <div className="border-b border-slate-200 bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-500">
+            Result fields are locked until Feasibility Change Review is confirmed by the initiator.
+          </div>
+        ) : null}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b-2 border-stone-200 bg-stone-50 text-xs font-semibold uppercase text-stone-500">
-                <th className="w-8 px-3 py-2.5">☑</th>
-                <th className="px-3 py-2.5">Validation / 验证项目</th>
-                <th className="w-28 px-3 py-2.5">Resp. person</th>
-                <th className="w-32 px-3 py-2.5">Plan finish date</th>
-                {resultOnly && <th className="w-32 px-3 py-2.5">Actual date</th>}
-                <th className="px-3 py-2.5">Comments / 备注</th>
+              <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
+                <th className="w-8 px-2 py-2 text-center">#</th>
+                <th className="px-3 py-2">Description</th>
+                <th className="w-36 px-3 py-2">Responsible</th>
+                <th className="w-14 px-2 py-2 text-center">Y/N</th>
+                <th className="w-32 px-3 py-2">Due date</th>
+                <th className="w-28 px-3 py-2">STATUS</th>
+                <th className="w-36 px-3 py-2">Actual finish date</th>
+                <th className="w-72 px-3 py-2">Result</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, i) => (
-                <tr key={row.id} className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors">
-                  <td className="px-3 py-2.5 text-center">
-                    <input type="checkbox" checked={row.checked} onChange={() => toggleCheck(i)} className="accent-amber-600 size-4" />
+              {rows.map((row, i) => {
+                const resultDisabled = !resultOnly || !resultUnlocked || row.yn === "N"
+
+                return (
+                <tr key={row.id} className="border-b border-slate-100 even:bg-slate-50/50 hover:bg-blue-50/40 transition-colors">
+                  <td className="px-2 py-2 text-center text-xs text-slate-400">
+                    {i + 1}
                   </td>
-                  <td className="px-3 py-2.5 text-sm font-medium text-stone-800">{row.label}</td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-3 py-2 text-xs leading-5 text-slate-700">{row.label}</td>
+                  <td className="px-3 py-2">
                     <input value={row.respPerson} onChange={(e) => updateField(i, "respPerson", e.target.value)}
-                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="Resp." />
+                      className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Resp." />
                   </td>
-                  <td className="px-3 py-2.5">
+                  <td className="px-2 py-2 text-center">
+                    <select
+                      value={row.yn}
+                      onChange={(e) => updateValidationYesNo(i, e.target.value as YesNoValue)}
+                      className="h-8 w-14 rounded-md border border-slate-300 bg-white px-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      aria-label={`${row.label} Y/N`}
+                    >
+                      <option value="">-</option>
+                      <option value="Y">Y</option>
+                      <option value="N">N</option>
+                    </select>
+                  </td>
+                  <td className="px-3 py-2">
                     <input type="date" value={row.finishDate} onChange={(e) => updateField(i, "finishDate", e.target.value)}
-                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
+                      className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" />
                   </td>
-                  {resultOnly && (
-                    <td className="px-3 py-2.5">
-                      <input type="date" value={row.actualDate} onChange={(e) => updateField(i, "actualDate", e.target.value)}
-                        className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" />
-                    </td>
-                  )}
-                  <td className="px-3 py-2.5">
-                    <input value={row.comments} onChange={(e) => updateField(i, "comments", e.target.value)}
-                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400" placeholder="备注" />
+                  <td className="px-3 py-2">
+                    <select
+                      value={row.status}
+                      disabled={resultDisabled}
+                      onChange={(e) => updateValidationStatus(i, e.target.value)}
+                      className={`h-8 w-full rounded-md border px-1 text-xs font-semibold outline-none transition ${
+                        resultDisabled
+                          ? "cursor-not-allowed border-slate-100 bg-slate-100 text-slate-300"
+                          : row.status === "Closed"
+                            ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                            : row.status === "Ongoing"
+                              ? "border-amber-300 bg-amber-50 text-amber-700"
+                              : row.status === "Open"
+                                ? "border-blue-300 bg-blue-50 text-blue-700"
+                                : "border-slate-200 bg-white"
+                      }`}
+                    >
+                      <option value="">-</option>
+                      <option value="Closed">Closed</option>
+                      <option value="Ongoing">Ongoing</option>
+                      <option value="Open">Open</option>
+                    </select>
+                  </td>
+                  <td className="px-3 py-2">
+                    <input
+                      type="date"
+                      value={row.actualDate}
+                      readOnly
+                      disabled
+                      className="h-8 w-full rounded-md border border-slate-200 bg-slate-100 px-2 text-xs text-slate-500"
+                    />
+                  </td>
+                  <td className="px-3 py-2">
+                    <textarea
+                      value={row.result}
+                      disabled={resultDisabled}
+                      onChange={(e) => updateField(i, "result", e.target.value)}
+                      className={`min-h-16 w-full resize-y rounded-md border px-2 py-1.5 text-xs leading-5 outline-none transition ${
+                        resultDisabled
+                          ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
+                          : "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      }`}
+                      placeholder={resultDisabled ? "Locked" : "Result..."}
+                    />
                   </td>
                 </tr>
-              ))}
+                )
+              })}
             </tbody>
           </table>
         </div>
 
-        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, criteria: "", finishDate: "", actualDate: "", respPerson: "", comments: "" }])}
-          className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition">
+        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, yn: "", criteria: "", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "" }])}
+          className="flex w-full items-center justify-center gap-1 border-t border-slate-200 py-1.5 text-xs text-slate-500 hover:bg-blue-50 hover:text-blue-700 transition">
           + 添加验证项
         </button>
         </>
         )}
 
         {/* 1.3.2 自定义措施：自动从 1.2.1 影响分析中 Yes + Measures 填入 */}
-        <div className="overflow-hidden rounded-lg border border-amber-300 bg-white shadow-sm">
+        <div className="overflow-hidden rounded-lg border-t border-slate-200 bg-white">
           <button
             type="button"
             onClick={() => setCustomExpanded((p) => !p)}
-            className="flex w-full items-center justify-between bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 transition"
+            className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
           >
-            <span>
-              <span className="mr-2 text-white">
+            <span className="flex items-center">
+              <span className="mr-2 text-blue-600">
                 {resultOnly ? "3.1.2" : "1.3.2"}
               </span>
               自定义措施
+              <span className="ml-2 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                自动同步
+              </span>
             </span>
             <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${customExpanded ? "rotate-180" : ""}`} />
           </button>
@@ -2503,7 +2849,7 @@ export function ValidationPlanView({
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-amber-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                    <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                       <th className="w-8 px-3 py-2.5">☑</th>
                       <th className="px-3 py-2.5">VALIDATION / 验证项目</th>
                       <th className="w-28 px-3 py-2.5">Resp. person</th>
@@ -2516,20 +2862,20 @@ export function ValidationPlanView({
                     {customMeasures.map((cm) => {
                       const row = customMeasureRow(cm)
                       return (
-                      <tr key={`custom-measure-${cm.idx}`} className="border-b border-amber-100 even:bg-amber-50/30 hover:bg-amber-50/60 transition-colors">
+                      <tr key={`custom-measure-${cm.idx}`} className="border-b border-slate-100 even:bg-slate-50/50 hover:bg-blue-50/40 transition-colors">
                         <td className="px-3 py-2.5 text-center">
                           <input
                             type="checkbox"
                             checked={row.checked}
                             onChange={(e) => updateCustomMeasureField(cm, "checked", e.target.checked)}
-                            className="accent-amber-600 size-4"
+                            className="accent-blue-600 size-4"
                           />
                         </td>
                         <td className="px-3 py-2.5 align-middle">
-                          <p className="text-sm font-medium text-stone-800">
+                          <p className="text-sm font-medium text-slate-800">
                             {cm.desc}
                           </p>
-                          <p className="mt-0.5 text-xs text-stone-400">
+                          <p className="mt-0.5 text-xs text-slate-400">
                             {cm.area?.en || cm.area?.zh || "影响范围未指定"}
                           </p>
                         </td>
@@ -2537,7 +2883,7 @@ export function ValidationPlanView({
                           <input
                             value={row.respPerson}
                             onChange={(e) => updateCustomMeasureField(cm, "respPerson", e.target.value)}
-                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="Resp."
                           />
                         </td>
@@ -2546,7 +2892,7 @@ export function ValidationPlanView({
                             type="date"
                             value={row.finishDate}
                             onChange={(e) => updateCustomMeasureField(cm, "finishDate", e.target.value)}
-                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                           />
                         </td>
                         {resultOnly && (
@@ -2555,7 +2901,7 @@ export function ValidationPlanView({
                               type="date"
                               value={row.actualDate}
                               onChange={(e) => updateCustomMeasureField(cm, "actualDate", e.target.value)}
-                              className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                              className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             />
                           </td>
                         )}
@@ -2563,7 +2909,7 @@ export function ValidationPlanView({
                           <input
                             value={row.comments}
                             onChange={(e) => updateCustomMeasureField(cm, "comments", e.target.value)}
-                            className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                            className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                             placeholder="备注"
                           />
                         </td>
@@ -2574,7 +2920,7 @@ export function ValidationPlanView({
                 </table>
               </div>
             ) : (
-              <div className="border-t border-amber-200 bg-amber-50/30 px-4 py-4 text-sm text-stone-500">
+              <div className="border-t border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-500">
                 1.2.1 中选择 Yes 并填写 Measures 后，这里会自动显示对应措施。
               </div>
             )
@@ -2913,6 +3259,7 @@ export function ImplementationView({
     return ""
   })
   const [saveStatus, setSaveStatus] = useState("Draft")
+  const { resultUnlocked } = useFeasibilityResultGate()
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => {
@@ -2952,7 +3299,14 @@ export function ImplementationView({
 
   // ── Mutations ──
   const updateChecklist = (index: number, field: keyof ImplRow, value: string) => {
-    setChecklistRows((prev) => prev.map((r, i) => i === index ? { ...r, [field]: value } : r))
+    setChecklistRows((prev) => prev.map((r, i) => {
+      if (i !== index) return r
+      const next = { ...r, [field]: value }
+      if (field === "result") {
+        next.actualDate = value === "Closed" ? todayDateValue() : ""
+      }
+      return next
+    }))
   }
   const addChecklistItem = (dept: string) => {
     setChecklistRows((prev) => {
@@ -2994,25 +3348,30 @@ export function ImplementationView({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">{saveStatus}</span>
+        <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">{saveStatus}</span>
       </div>
 
       {/* ── Step 6.1: Implementation plan/results ── */}
-      <div className="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
         <button
           type="button"
           onClick={() => toggleStep("step-6.1")}
-          className="flex w-full items-center justify-between bg-stone-800 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700 transition"
+          className="flex w-full items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
         >
           {resultOnly ? (
-            <span><span className="mr-2 text-amber-400"> 3.2 </span>Implementation results</span>
+            <span><span className="mr-2 text-blue-600">3.2</span>Implementation results</span>
           ) : (
-            <span><span className="mr-2 text-amber-400">1.4.1</span>Implementation check list / 导入清单</span>
+            <span><span className="mr-2 text-blue-600">1.4.1</span>Implementation check list / 导入清单</span>
           )}
           <ChevronDown className={`size-4 shrink-0 transition-transform duration-200 ${expandedSteps.has("step-6.1") ? "rotate-180" : ""}`} />
         </button>
         {expandedSteps.has("step-6.1") && (
-          <div className="divide-y divide-stone-200">
+          <div className="divide-y divide-slate-200">
+            {!resultUnlocked ? (
+              <div className="bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-500">
+                Result fields are locked until Feasibility Change Review is confirmed by the initiator.
+              </div>
+            ) : null}
             {departments.map((dept) => {
               const deptRows = checklistRows.filter((r) => r.department === dept)
               const deptKey = `dept-${dept}`
@@ -3031,49 +3390,50 @@ export function ImplementationView({
                   <button
                     type="button"
                     onClick={toggleDept}
-                    className="flex w-full items-center gap-2 bg-stone-100 px-4 py-2 text-left hover:bg-stone-200 transition cursor-pointer"
+                    className="flex w-full cursor-pointer items-center gap-2 bg-slate-50 px-4 py-2 text-left transition hover:bg-blue-50"
                   >
-                    <ChevronDown className={`size-3.5 text-stone-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
-                    <span className="text-sm font-semibold text-stone-800">{dept}</span>
-                    <span className="text-xs text-stone-400">({deptRows.length} items)</span>
+                    <ChevronDown className={`size-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${isDeptExpanded ? "rotate-180" : ""}`} />
+                    <span className="text-sm font-semibold text-slate-800">{dept}</span>
+                    <span className="text-xs text-slate-400">({deptRows.length} items)</span>
                   </button>
                   {/* ── Department mini-table (with its own headers) ── */}
                   {isDeptExpanded && (
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-sm">
                         <thead>
-                          <tr className="border-b border-stone-200 bg-amber-50/50 text-xs font-semibold uppercase text-stone-500">
+                          <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase text-slate-500">
                             <th className="w-8 px-2 py-2 text-center">#</th>
                             <th className="px-3 py-2">Description</th>
                             <th className="w-36 px-3 py-2">Responsible</th>
                             <th className="w-14 px-2 py-2 text-center">Y/N</th>
                             <th className="w-32 px-3 py-2">Due date</th>
-                            {resultOnly && <th className="w-32 px-3 py-2">Actual date</th>}
                             <th className="w-28 px-3 py-2">STATUS</th>
-                            <th className="w-40 px-3 py-2">Result</th>
+                            <th className="w-36 px-3 py-2">Actual finish date</th>
+                            <th className="w-72 px-3 py-2">Result</th>
                           </tr>
                         </thead>
                         <tbody>
                           {deptRows.map((row, idx) => {
                             const globalIndex = checklistRows.findIndex((r) => r.id === row.id)
+                            const resultDisabled = !resultUnlocked || row.yn === "N"
                             return (
                               <tr
                                 key={row.id}
-                                className="border-b border-stone-100 even:bg-stone-50/50 hover:bg-amber-50/30 transition-colors"
+                                className="border-b border-slate-100 even:bg-slate-50/50 hover:bg-blue-50/40 transition-colors"
                                 data-pdecr-anchor={`implementation-task-${taskAnchorSuffix(row.id)}`}
                                 data-pdecr-field={`checklistRows.${row.id}`}
                               >
-                                <td className="px-2 py-2 text-center text-xs text-stone-400">
+                                <td className="px-2 py-2 text-center text-xs text-slate-400">
                                   {idx + 1}
                                 </td>
-                                <td className="px-3 py-2 text-xs leading-5 text-stone-700">
+                                <td className="px-3 py-2 text-xs leading-5 text-slate-700">
                                   {row.description || "-"}
                                 </td>
                                 <td className="px-3 py-2">
                                   <input
                                     value={row.responsible}
                                     onChange={(e) => updateChecklist(globalIndex, "responsible", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                     placeholder="Resp."
                                   />
                                 </td>
@@ -3081,7 +3441,7 @@ export function ImplementationView({
                                   <select
                                     value={row.yn}
                                     onChange={(e) => updateChecklist(globalIndex, "yn", e.target.value)}
-                                    className="h-8 w-14 rounded border border-stone-200 bg-white px-1 text-xs outline-none focus:border-amber-400"
+                                    className="h-8 w-14 rounded-md border border-slate-300 bg-white px-1 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                   >
                                     <option value="">-</option>
                                     <option value="Y">Y</option>
@@ -3093,34 +3453,24 @@ export function ImplementationView({
                                     type="date"
                                     value={row.dueDate}
                                     onChange={(e) => updateChecklist(globalIndex, "dueDate", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
+                                    className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                   />
                                 </td>
-                                {resultOnly && (
-                                  <td className="px-3 py-2">
-                                    <input
-                                      type="date"
-                                      value={row.actualDate}
-                                      onChange={(e) => updateChecklist(globalIndex, "actualDate", e.target.value)}
-                                      className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                                    />
-                                  </td>
-                                )}
                                 <td className="px-3 py-2">
                                   <select
                                     value={row.result || ""}
                                     onChange={(e) => updateChecklist(globalIndex, "result", e.target.value)}
-                                    disabled={row.yn === "N"}
-                                    className={`h-8 w-full rounded border px-1 text-xs font-semibold outline-none transition ${
-                                      row.yn === "N"
-                                        ? "border-stone-100 bg-stone-100 text-stone-300 cursor-not-allowed"
+                                    disabled={resultDisabled}
+                                    className={`h-8 w-full rounded-md border px-1 text-xs font-semibold outline-none transition ${
+                                      resultDisabled
+                                        ? "border-slate-100 bg-slate-100 text-slate-300 cursor-not-allowed"
                                         : row.result === "Closed"
                                           ? "border-emerald-300 bg-emerald-50 text-emerald-700"
                                           : row.result === "Ongoing"
                                             ? "border-amber-300 bg-amber-50 text-amber-700"
                                             : row.result === "Open"
                                               ? "border-blue-300 bg-blue-50 text-blue-700"
-                                              : "border-stone-200 bg-white"
+                                              : "border-slate-200 bg-white"
                                     }`}
                                   >
                                     <option value="">-</option>
@@ -3131,10 +3481,24 @@ export function ImplementationView({
                                 </td>
                                 <td className="px-3 py-2">
                                   <input
+                                    type="date"
+                                    value={row.actualDate}
+                                    readOnly
+                                    disabled
+                                    className="h-8 w-full rounded-md border border-slate-200 bg-slate-100 px-2 text-xs text-slate-500"
+                                  />
+                                </td>
+                                <td className="px-3 py-2">
+                                  <textarea
                                     value={row.resultNote || ""}
                                     onChange={(e) => updateChecklist(globalIndex, "resultNote", e.target.value)}
-                                    className="h-8 w-full rounded border border-stone-200 bg-white px-2 text-xs outline-none focus:border-amber-400"
-                                    placeholder="Result..."
+                                    disabled={resultDisabled}
+                                    className={`min-h-16 w-full resize-y rounded-md border px-2 py-1.5 text-xs leading-5 outline-none transition ${
+                                      resultDisabled
+                                        ? "cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400"
+                                        : "border-slate-300 bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    }`}
+                                    placeholder={resultDisabled ? "Locked" : "Result..."}
                                   />
                                 </td>
                               </tr>
@@ -3145,7 +3509,7 @@ export function ImplementationView({
                       <button
                         type="button"
                         onClick={() => addChecklistItem(dept)}
-                        className="flex w-full items-center justify-center gap-1 border-t border-stone-200 py-1.5 text-xs text-stone-400 hover:bg-stone-50 hover:text-stone-600 transition"
+                        className="flex w-full items-center justify-center gap-1 border-t border-slate-200 py-1.5 text-xs text-slate-500 hover:bg-blue-50 hover:text-blue-700 transition"
                       >
                         + 添加项
                       </button>
@@ -3158,9 +3522,12 @@ export function ImplementationView({
         )}
       </div>
 
+      {!resultOnly ? <FeasibilityChangeReviewPanel /> : null}
+
     </div>
   )
 }
+
 
 export function FallbackView({ module }: { module: PdEcrDisplayModule }) {
   return (

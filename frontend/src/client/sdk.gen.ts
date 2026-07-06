@@ -3,7 +3,29 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+import type { ServeFrontendData, ServeFrontendResponse, ItemsReadItemsData, ItemsReadItemsResponse, ItemsCreateItemData, ItemsCreateItemResponse, ItemsReadItemData, ItemsReadItemResponse, ItemsUpdateItemData, ItemsUpdateItemResponse, ItemsDeleteItemData, ItemsDeleteItemResponse, LoginLoginAccessTokenData, LoginLoginAccessTokenResponse, LoginTestTokenResponse, LoginRecoverPasswordData, LoginRecoverPasswordResponse, LoginResetPasswordData, LoginResetPasswordResponse, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentResponse, PdEcrListPdEcrCasesData, PdEcrListPdEcrCasesResponse, PdEcrCreatePdEcrCaseData, PdEcrCreatePdEcrCaseResponse, PdEcrGetPdecrJieJimPdfData, PdEcrGetPdecrJieJimPdfResponse, PdEcrGetHistoricalSourceDocumentPreviewData, PdEcrGetHistoricalSourceDocumentPreviewResponse, PdEcrDeleteHistoricalSourceDocumentData, PdEcrDeleteHistoricalSourceDocumentResponse, PdEcrGetPdEcrModuleDraftData, PdEcrGetPdEcrModuleDraftResponse, PdEcrSavePdEcrModuleDraftData, PdEcrSavePdEcrModuleDraftResponse, PdEcrDeletePdEcrModuleDraftData, PdEcrDeletePdEcrModuleDraftResponse, PdEcrListPdEcrModuleDraftsData, PdEcrListPdEcrModuleDraftsResponse, PdEcrCreatePdEcrCaseFromAiData, PdEcrCreatePdEcrCaseFromAiResponse, PdEcrSubmitForApprovalData, PdEcrSubmitForApprovalResponse, PdEcrManagerApproveCaseData, PdEcrManagerApproveCaseResponse, PdEcrManagerRejectCaseData, PdEcrManagerRejectCaseResponse, PdEcrUpdatePdEcrCaseData, PdEcrUpdatePdEcrCaseResponse, PdEcrDeletePdEcrCaseData, PdEcrDeletePdEcrCaseResponse, PdEcrGetPdEcrCaseDetailData, PdEcrGetPdEcrCaseDetailResponse, PdEcrTransitionPdEcrCaseData, PdEcrTransitionPdEcrCaseResponse, PdEcrSubmitPdEcrWorkflowData, PdEcrSubmitPdEcrWorkflowResponse, PdEcrPublishPdEcrDepartmentsData, PdEcrPublishPdEcrDepartmentsResponse, PdEcrAssignPdEcrExecutionData, PdEcrAssignPdEcrExecutionResponse, PdEcrGetPdEcrWorkflowData, PdEcrGetPdEcrWorkflowResponse, PdEcrGetMyPdEcrWorkflowTasksResponse, PdEcrConfirmPdEcrExecutionAssignmentData, PdEcrConfirmPdEcrExecutionAssignmentResponse, PdEcrCompletePdEcrExecutionTaskData, PdEcrCompletePdEcrExecutionTaskResponse, PdEcrRequestPdEcrExecutionChangesData, PdEcrRequestPdEcrExecutionChangesResponse, PdEcrConfirmPdEcrDepartmentTaskData, PdEcrConfirmPdEcrDepartmentTaskResponse, PdEcrRequestPdEcrDepartmentChangesData, PdEcrRequestPdEcrDepartmentChangesResponse, PdEcrReviewPdEcrLeaderTaskData, PdEcrReviewPdEcrLeaderTaskResponse, PdEcrListPdEcrCaseModulesV1Data, PdEcrListPdEcrCaseModulesV1Response, PdEcrUpdatePdEcrCaseModuleData, PdEcrUpdatePdEcrCaseModuleResponse, PdEcrAssignPdEcrCaseModuleData, PdEcrAssignPdEcrCaseModuleResponse, PdEcrSendPdEcrModuleReminderData, PdEcrSendPdEcrModuleReminderResponse, PdEcrRunPdEcrDueRemindersResponse, PdEcrRegeneratePdEcrCaseModuleData, PdEcrRegeneratePdEcrCaseModuleResponse, PdEcrApplyGeneratedPdEcrCaseModuleData, PdEcrApplyGeneratedPdEcrCaseModuleResponse, PdEcrListPdEcrCaseVersionsData, PdEcrListPdEcrCaseVersionsResponse, PdEcrListPdEcrCaseActivityData, PdEcrListPdEcrCaseActivityResponse, PdEcrCreatePdEcrCaseTaskData, PdEcrCreatePdEcrCaseTaskResponse, PdEcrCreatePdEcrCaseCommentData, PdEcrCreatePdEcrCaseCommentResponse, PdEcrUploadPdEcrCaseFileData, PdEcrUploadPdEcrCaseFileResponse, PdEcrGetKnowledgeBaseStatusResponse, PdEcrUploadAndStageDocumentData, PdEcrUploadAndStageDocumentResponse, PdEcrGetStagedDocumentData, PdEcrGetStagedDocumentResponse, PdEcrUpdateStagedDocumentData, PdEcrUpdateStagedDocumentResponse, PdEcrConfirmStagedDocumentData, PdEcrConfirmStagedDocumentResponse, PdEcrGetStagedDocumentPreviewData, PdEcrGetStagedDocumentPreviewResponse, PdEcrImportPdEcrHistoricalCasesData, PdEcrImportPdEcrHistoricalCasesResponse, PdEcrCreatePdEcrV1RequestData, PdEcrCreatePdEcrV1RequestResponse, PdEcrRetrievePdEcrSimilarCasesData, PdEcrRetrievePdEcrSimilarCasesResponse, PdEcrGenerateReportData, PdEcrGenerateReportResponse, PdEcrGeneratePdEcrDraftData, PdEcrGeneratePdEcrDraftResponse, PdEcrGeneratePdEcrFromChangeDescriptionData, PdEcrGeneratePdEcrFromChangeDescriptionResponse, PdEcrGetPdEcrDraftModulesData, PdEcrGetPdEcrDraftModulesResponse, PdEcrExportPdEcrCaseData, PdEcrExportPdEcrCaseResponse, PdEcrDownloadPdEcrV1ReportData, PdEcrDownloadPdEcrV1ReportResponse, PdEcrTestRagData, PdEcrTestRagResponse, PdEcrHistorySearchData, PdEcrHistorySearchResponse, PdEcrTestStructuredSignatureData, PdEcrTestStructuredSignatureResponse, PdEcrGetPdEcrCaseModulesData, PdEcrGetPdEcrCaseModulesResponse, PdEcrSearchMembersData, PdEcrSearchMembersResponse, PrivateCreateUserData, PrivateCreateUserResponse, UsersReadUsersData, UsersReadUsersResponse, UsersCreateUserData, UsersCreateUserResponse, UsersReadUserMeResponse, UsersDeleteUserMeResponse, UsersUpdateUserMeData, UsersUpdateUserMeResponse, UsersUpdatePasswordMeData, UsersUpdatePasswordMeResponse, UsersRegisterUserData, UsersRegisterUserResponse, UsersReadUserByIdData, UsersReadUserByIdResponse, UsersUpdateUserData, UsersUpdateUserResponse, UsersDeleteUserData, UsersDeleteUserResponse, UtilsTestEmailData, UtilsTestEmailResponse, UtilsHealthCheckResponse } from './types.gen';
+
+export class DefaultService {
+    /**
+     * Serve Frontend
+     * @param data The data for the request.
+     * @param data.fullPath
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static serveFrontend(data: ServeFrontendData): CancelablePromise<ServeFrontendResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/{full_path}',
+            path: {
+                full_path: data.fullPath
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
 
 export class ItemsService {
     /**
@@ -205,6 +227,1271 @@ export class LoginService {
             url: '/api/v1/password-recovery-html-content/{email}',
             path: {
                 email: data.email
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+}
+
+export class PdEcrService {
+    /**
+     * List Pd Ecr Cases
+     * @param data The data for the request.
+     * @param data.status
+     * @param data.query
+     * @param data.skip
+     * @param data.limit
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPdEcrCases(data: PdEcrListPdEcrCasesData = {}): CancelablePromise<PdEcrListPdEcrCasesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases',
+            query: {
+                status: data.status,
+                query: data.query,
+                skip: data.skip,
+                limit: data.limit
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Pd Ecr Case
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static createPdEcrCase(data: PdEcrCreatePdEcrCaseData): CancelablePromise<PdEcrCreatePdEcrCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pdecr Jie Jim Pdf
+     * @param data The data for the request.
+     * @param data.filename
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdecrJieJimPdf(data: PdEcrGetPdecrJieJimPdfData): CancelablePromise<PdEcrGetPdecrJieJimPdfResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/pdf/{filename}',
+            path: {
+                filename: data.filename
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Historical Source Document Preview
+     * @param data The data for the request.
+     * @param data.sourceDocId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getHistoricalSourceDocumentPreview(data: PdEcrGetHistoricalSourceDocumentPreviewData): CancelablePromise<PdEcrGetHistoricalSourceDocumentPreviewResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/source-documents/{source_doc_id}/preview',
+            path: {
+                source_doc_id: data.sourceDocId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Historical Source Document
+     * @param data The data for the request.
+     * @param data.sourceDocId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static deleteHistoricalSourceDocument(data: PdEcrDeleteHistoricalSourceDocumentData): CancelablePromise<PdEcrDeleteHistoricalSourceDocumentResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/pd-ecr/source-documents/{source_doc_id}',
+            path: {
+                source_doc_id: data.sourceDocId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pd Ecr Module Draft
+     * @param data The data for the request.
+     * @param data.recordId
+     * @param data.moduleId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdEcrModuleDraft(data: PdEcrGetPdEcrModuleDraftData): CancelablePromise<PdEcrGetPdEcrModuleDraftResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/module-drafts',
+            query: {
+                record_id: data.recordId,
+                module_id: data.moduleId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Save Pd Ecr Module Draft
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static savePdEcrModuleDraft(data: PdEcrSavePdEcrModuleDraftData): CancelablePromise<PdEcrSavePdEcrModuleDraftResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/module-drafts',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Pd Ecr Module Draft
+     * @param data The data for the request.
+     * @param data.recordId
+     * @param data.moduleId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static deletePdEcrModuleDraft(data: PdEcrDeletePdEcrModuleDraftData): CancelablePromise<PdEcrDeletePdEcrModuleDraftResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/pd-ecr/module-drafts',
+            query: {
+                record_id: data.recordId,
+                module_id: data.moduleId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * List Pd Ecr Module Drafts
+     * @param data The data for the request.
+     * @param data.recordId
+     * @param data.limit
+     * @param data.offset
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPdEcrModuleDrafts(data: PdEcrListPdEcrModuleDraftsData = {}): CancelablePromise<PdEcrListPdEcrModuleDraftsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/module-drafts/list',
+            query: {
+                record_id: data.recordId,
+                limit: data.limit,
+                offset: data.offset
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Pd Ecr Case From Ai
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static createPdEcrCaseFromAi(data: PdEcrCreatePdEcrCaseFromAiData): CancelablePromise<PdEcrCreatePdEcrCaseFromAiResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/generate-from-ai',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Submit For Approval
+     * Submit a PD-ECR case for manager approval before AI generation.
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static submitForApproval(data: PdEcrSubmitForApprovalData): CancelablePromise<PdEcrSubmitForApprovalResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/submit-for-approval',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Manager Approve Case
+     * Manager approves a submitted case.
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static managerApproveCase(data: PdEcrManagerApproveCaseData): CancelablePromise<PdEcrManagerApproveCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/manager-approve',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Manager Reject Case
+     * Manager rejects a submitted case.
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static managerRejectCase(data: PdEcrManagerRejectCaseData): CancelablePromise<PdEcrManagerRejectCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/manager-reject',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Pd Ecr Case
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static updatePdEcrCase(data: PdEcrUpdatePdEcrCaseData): CancelablePromise<PdEcrUpdatePdEcrCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/pd-ecr/cases/{case_id}',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Delete Pd Ecr Case
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static deletePdEcrCase(data: PdEcrDeletePdEcrCaseData): CancelablePromise<PdEcrDeletePdEcrCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/pd-ecr/cases/{case_id}',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pd Ecr Case Detail
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdEcrCaseDetail(data: PdEcrGetPdEcrCaseDetailData): CancelablePromise<PdEcrGetPdEcrCaseDetailResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/{case_id}',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Transition Pd Ecr Case
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static transitionPdEcrCase(data: PdEcrTransitionPdEcrCaseData): CancelablePromise<PdEcrTransitionPdEcrCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/transition',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Submit Pd Ecr Workflow
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static submitPdEcrWorkflow(data: PdEcrSubmitPdEcrWorkflowData): CancelablePromise<PdEcrSubmitPdEcrWorkflowResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/workflow/submit',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Publish Pd Ecr Departments
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static publishPdEcrDepartments(data: PdEcrPublishPdEcrDepartmentsData): CancelablePromise<PdEcrPublishPdEcrDepartmentsResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/workflow/publish-departments',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Assign Pd Ecr Execution
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static assignPdEcrExecution(data: PdEcrAssignPdEcrExecutionData): CancelablePromise<PdEcrAssignPdEcrExecutionResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/workflow/assign-execution',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pd Ecr Workflow
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdEcrWorkflow(data: PdEcrGetPdEcrWorkflowData): CancelablePromise<PdEcrGetPdEcrWorkflowResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/{case_id}/workflow',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get My Pd Ecr Workflow Tasks
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getMyPdEcrWorkflowTasks(): CancelablePromise<PdEcrGetMyPdEcrWorkflowTasksResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/workflow/my-tasks'
+        });
+    }
+    
+    /**
+     * Confirm Pd Ecr Execution Assignment
+     * @param data The data for the request.
+     * @param data.taskId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static confirmPdEcrExecutionAssignment(data: PdEcrConfirmPdEcrExecutionAssignmentData): CancelablePromise<PdEcrConfirmPdEcrExecutionAssignmentResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/execution-tasks/{task_id}/confirm-assignment',
+            path: {
+                task_id: data.taskId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Complete Pd Ecr Execution Task
+     * @param data The data for the request.
+     * @param data.taskId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static completePdEcrExecutionTask(data: PdEcrCompletePdEcrExecutionTaskData): CancelablePromise<PdEcrCompletePdEcrExecutionTaskResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/execution-tasks/{task_id}/complete',
+            path: {
+                task_id: data.taskId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Request Pd Ecr Execution Changes
+     * @param data The data for the request.
+     * @param data.taskId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static requestPdEcrExecutionChanges(data: PdEcrRequestPdEcrExecutionChangesData): CancelablePromise<PdEcrRequestPdEcrExecutionChangesResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/execution-tasks/{task_id}/request-changes',
+            path: {
+                task_id: data.taskId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Confirm Pd Ecr Department Task
+     * @param data The data for the request.
+     * @param data.taskId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static confirmPdEcrDepartmentTask(data: PdEcrConfirmPdEcrDepartmentTaskData): CancelablePromise<PdEcrConfirmPdEcrDepartmentTaskResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/department-tasks/{task_id}/confirm',
+            path: {
+                task_id: data.taskId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Request Pd Ecr Department Changes
+     * @param data The data for the request.
+     * @param data.taskId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static requestPdEcrDepartmentChanges(data: PdEcrRequestPdEcrDepartmentChangesData): CancelablePromise<PdEcrRequestPdEcrDepartmentChangesResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/department-tasks/{task_id}/request-changes',
+            path: {
+                task_id: data.taskId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Review Pd Ecr Leader Task
+     * @param data The data for the request.
+     * @param data.taskId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static reviewPdEcrLeaderTask(data: PdEcrReviewPdEcrLeaderTaskData): CancelablePromise<PdEcrReviewPdEcrLeaderTaskResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/workflow/leader-tasks/{task_id}/review',
+            path: {
+                task_id: data.taskId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * List Pd Ecr Case Modules V1
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPdEcrCaseModulesV1(data: PdEcrListPdEcrCaseModulesV1Data): CancelablePromise<PdEcrListPdEcrCaseModulesV1Response> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Pd Ecr Case Module
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.moduleId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static updatePdEcrCaseModule(data: PdEcrUpdatePdEcrCaseModuleData): CancelablePromise<PdEcrUpdatePdEcrCaseModuleResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules/{module_id}',
+            path: {
+                case_id: data.caseId,
+                module_id: data.moduleId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Assign Pd Ecr Case Module
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.moduleId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static assignPdEcrCaseModule(data: PdEcrAssignPdEcrCaseModuleData): CancelablePromise<PdEcrAssignPdEcrCaseModuleResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules/{module_id}/assignment',
+            path: {
+                case_id: data.caseId,
+                module_id: data.moduleId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Send Pd Ecr Module Reminder
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.moduleId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static sendPdEcrModuleReminder(data: PdEcrSendPdEcrModuleReminderData): CancelablePromise<PdEcrSendPdEcrModuleReminderResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules/{module_id}/send-reminder',
+            path: {
+                case_id: data.caseId,
+                module_id: data.moduleId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Run Pd Ecr Due Reminders
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static runPdEcrDueReminders(): CancelablePromise<PdEcrRunPdEcrDueRemindersResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/notifications/run-due-reminders'
+        });
+    }
+    
+    /**
+     * Regenerate Pd Ecr Case Module
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.moduleId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static regeneratePdEcrCaseModule(data: PdEcrRegeneratePdEcrCaseModuleData): CancelablePromise<PdEcrRegeneratePdEcrCaseModuleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules/{module_id}/regenerate',
+            path: {
+                case_id: data.caseId,
+                module_id: data.moduleId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Apply Generated Pd Ecr Case Module
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.moduleId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static applyGeneratedPdEcrCaseModule(data: PdEcrApplyGeneratedPdEcrCaseModuleData): CancelablePromise<PdEcrApplyGeneratedPdEcrCaseModuleResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/modules/{module_id}/apply-generated',
+            path: {
+                case_id: data.caseId,
+                module_id: data.moduleId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * List Pd Ecr Case Versions
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPdEcrCaseVersions(data: PdEcrListPdEcrCaseVersionsData): CancelablePromise<PdEcrListPdEcrCaseVersionsResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/{case_id}/versions',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * List Pd Ecr Case Activity
+     * @param data The data for the request.
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static listPdEcrCaseActivity(data: PdEcrListPdEcrCaseActivityData): CancelablePromise<PdEcrListPdEcrCaseActivityResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/{case_id}/activity',
+            path: {
+                case_id: data.caseId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Pd Ecr Case Task
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static createPdEcrCaseTask(data: PdEcrCreatePdEcrCaseTaskData): CancelablePromise<PdEcrCreatePdEcrCaseTaskResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/tasks',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Pd Ecr Case Comment
+     * @param data The data for the request.
+     * @param data.caseId
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static createPdEcrCaseComment(data: PdEcrCreatePdEcrCaseCommentData): CancelablePromise<PdEcrCreatePdEcrCaseCommentResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/{case_id}/comments',
+            path: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Upload Pd Ecr Case File
+     * Upload a single Excel or PDF file to create a PD-ECR case.
+     *
+     * Returns parsed metadata, case info, and content preview.
+     * The file is automatically added to the FAISS knowledge index in the background.
+     * @param data The data for the request.
+     * @param data.formData
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static uploadPdEcrCaseFile(data: PdEcrUploadPdEcrCaseFileData): CancelablePromise<PdEcrUploadPdEcrCaseFileResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/cases/upload-file',
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Knowledge Base Status
+     * Return the RAG knowledge base indexing status.
+     *
+     * Users can call this to verify their uploaded files have been indexed.
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getKnowledgeBaseStatus(): CancelablePromise<PdEcrGetKnowledgeBaseStatusResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/knowledge-base/status'
+        });
+    }
+    
+    /**
+     * Upload And Stage Document
+     * Upload a file, parse it, and create a staged document for review.
+     *
+     * The parsed result is NOT written to the case database yet.
+     * User must review and call POST /documents/{id}/confirm to commit.
+     * @param data The data for the request.
+     * @param data.formData
+     * @returns PdEcrStagedDocumentResponse Successful Response
+     * @throws ApiError
+     */
+    public static uploadAndStageDocument(data: PdEcrUploadAndStageDocumentData): CancelablePromise<PdEcrUploadAndStageDocumentResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/documents/upload',
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Staged Document
+     * Retrieve a staged document for review.
+     * @param data The data for the request.
+     * @param data.docId
+     * @returns PdEcrStagedDocumentResponse Successful Response
+     * @throws ApiError
+     */
+    public static getStagedDocument(data: PdEcrGetStagedDocumentData): CancelablePromise<PdEcrGetStagedDocumentResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/documents/{doc_id}',
+            path: {
+                doc_id: data.docId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Update Staged Document
+     * Save user edits to a staged document's metadata, sections, or tables.
+     * @param data The data for the request.
+     * @param data.docId
+     * @param data.requestBody
+     * @returns PdEcrStagedDocumentResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateStagedDocument(data: PdEcrUpdateStagedDocumentData): CancelablePromise<PdEcrUpdateStagedDocumentResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/api/v1/pd-ecr/documents/{doc_id}',
+            path: {
+                doc_id: data.docId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Confirm Staged Document
+     * Confirm a staged document: create PdEcrCase + modules + vector chunks + FAISS rebuild.
+     * @param data The data for the request.
+     * @param data.docId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static confirmStagedDocument(data: PdEcrConfirmStagedDocumentData): CancelablePromise<PdEcrConfirmStagedDocumentResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/documents/{doc_id}/confirm',
+            path: {
+                doc_id: data.docId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Staged Document Preview
+     * Serve the preview PDF for a staged document.
+     * @param data The data for the request.
+     * @param data.docId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getStagedDocumentPreview(data: PdEcrGetStagedDocumentPreviewData): CancelablePromise<PdEcrGetStagedDocumentPreviewResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/documents/{doc_id}/preview',
+            path: {
+                doc_id: data.docId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Import Pd Ecr Historical Cases
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static importPdEcrHistoricalCases(data: PdEcrImportPdEcrHistoricalCasesData): CancelablePromise<PdEcrImportPdEcrHistoricalCasesResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/import/historical',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Create Pd Ecr V1 Request
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static createPdEcrV1Request(data: PdEcrCreatePdEcrV1RequestData): CancelablePromise<PdEcrCreatePdEcrV1RequestResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/requests',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Retrieve Pd Ecr Similar Cases
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static retrievePdEcrSimilarCases(data: PdEcrRetrievePdEcrSimilarCasesData): CancelablePromise<PdEcrRetrievePdEcrSimilarCasesResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/retrieve',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Generate Report
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static generateReport(data: PdEcrGenerateReportData): CancelablePromise<PdEcrGenerateReportResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/generate-report',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Generate Pd Ecr Draft
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static generatePdEcrDraft(data: PdEcrGeneratePdEcrDraftData): CancelablePromise<PdEcrGeneratePdEcrDraftResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/generate-draft',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Generate Pd Ecr From Change Description
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static generatePdEcrFromChangeDescription(data: PdEcrGeneratePdEcrFromChangeDescriptionData): CancelablePromise<PdEcrGeneratePdEcrFromChangeDescriptionResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/generate-from-change-description',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pd Ecr Draft Modules
+     * @param data The data for the request.
+     * @param data.draftId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdEcrDraftModules(data: PdEcrGetPdEcrDraftModulesData): CancelablePromise<PdEcrGetPdEcrDraftModulesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/drafts/{draft_id}/modules',
+            path: {
+                draft_id: data.draftId
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Export Pd Ecr Case
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @param data.caseId
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static exportPdEcrCase(data: PdEcrExportPdEcrCaseData): CancelablePromise<PdEcrExportPdEcrCaseResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/export',
+            query: {
+                case_id: data.caseId
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Download Pd Ecr V1 Report
+     * @param data The data for the request.
+     * @param data.filename
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static downloadPdEcrV1Report(data: PdEcrDownloadPdEcrV1ReportData): CancelablePromise<PdEcrDownloadPdEcrV1ReportResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/reports/{filename}',
+            path: {
+                filename: data.filename
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Test Rag
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static testRag(data: PdEcrTestRagData): CancelablePromise<PdEcrTestRagResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/test-rag',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Test Rag
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static historySearch(data: PdEcrHistorySearchData): CancelablePromise<PdEcrHistorySearchResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/history/search',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Test Structured Signature
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static testStructuredSignature(data: PdEcrTestStructuredSignatureData): CancelablePromise<PdEcrTestStructuredSignatureResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/pd-ecr/test-structured-signature',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Get Pd Ecr Case Modules
+     * @param data The data for the request.
+     * @param data.caseNo
+     * @returns unknown Successful Response
+     * @throws ApiError
+     */
+    public static getPdEcrCaseModules(data: PdEcrGetPdEcrCaseModulesData): CancelablePromise<PdEcrGetPdEcrCaseModulesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/cases/modules',
+            query: {
+                case_no: data.caseNo
+            },
+            errors: {
+                422: 'Validation Error'
+            }
+        });
+    }
+    
+    /**
+     * Search Members
+     * Search users by department, with optional keyword filter on name/email.
+     * @param data The data for the request.
+     * @param data.department
+     * @param data.q
+     * @returns PdEcrMemberList Successful Response
+     * @throws ApiError
+     */
+    public static searchMembers(data: PdEcrSearchMembersData): CancelablePromise<PdEcrSearchMembersResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/v1/pd-ecr/members/search',
+            query: {
+                department: data.department,
+                q: data.q
             },
             errors: {
                 422: 'Validation Error'

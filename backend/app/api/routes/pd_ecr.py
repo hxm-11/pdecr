@@ -6337,8 +6337,8 @@ def download_pd_ecr_v1_report(filename: str):
     return FileResponse(report_path)
 
 
-@router.post("/history/search")
-@router.post("/test-rag")
+@router.post("/history/search", operation_id="pd-ecr-history-search")
+@router.post("/test-rag", operation_id="pd-ecr-test-rag")
 def test_rag(data: PdEcrInput):
     user_input = data.model_dump()
     results = search_pdecr_pdf_case_records(user_input, top_k=20)

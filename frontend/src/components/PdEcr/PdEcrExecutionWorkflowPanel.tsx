@@ -309,7 +309,7 @@ export function PdEcrExecutionWorkflowPanel({
   }, [assignmentEmails, hasPublishedDepartments, selected, workflow?.case.status, yRows])
 
   return (
-    <div className="sticky top-4 space-y-4" style={{ maxHeight: "calc(100vh - 8rem)", overflowY: "auto" }}>
+    <div className="space-y-4">
       <div className="rounded-lg border border-amber-300 bg-white shadow-sm">
         <div className="rounded-t-lg bg-amber-600 px-4 py-2.5 text-sm font-semibold text-white">
           PD-ECR Workflow

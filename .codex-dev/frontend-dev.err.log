@@ -1,3 +1,0 @@
-npm warn Unknown global config "always-auth". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
-(node:16964) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)

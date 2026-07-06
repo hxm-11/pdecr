@@ -9,6 +9,14 @@ export type Body_login_login_access_token = {
     client_secret?: (string | null);
 };
 
+export type Body_pd_ecr_upload_and_stage_document = {
+    file: string;
+};
+
+export type Body_pd_ecr_upload_pd_ecr_case_file = {
+    file: string;
+};
+
 export type HTTPValidationError = {
     detail?: Array<ValidationError>;
 };
@@ -45,6 +53,297 @@ export type NewPassword = {
     new_password: string;
 };
 
+export type PdEcrApplyGeneratedModulePayload = {
+    generated: {
+        [key: string]: unknown;
+    };
+    expected_version: number;
+};
+
+export type PdEcrAssignExecutionPayload = {
+    assignments: Array<PdEcrExecutionAssignmentPayload>;
+};
+
+export type PdEcrCaseCreate = {
+    case_no: string;
+    title?: string;
+    status?: string;
+    source_type?: string;
+    is_historical?: boolean;
+    dc_no?: (string | null);
+    mcr_no?: (string | null);
+    customer_project?: (string | null);
+    product_no?: (string | null);
+    part_no?: (string | null);
+    change_type?: (string | null);
+    sample_type?: (string | null);
+    initiator?: (string | null);
+    target_close_date?: (string | null);
+    modules?: (Array<{
+    [key: string]: unknown;
+}> | null);
+};
+
+export type PdEcrCaseUpdate = {
+    title?: (string | null);
+    status?: (string | null);
+    owner_id?: (string | null);
+    dc_no?: (string | null);
+    mcr_no?: (string | null);
+    customer_project?: (string | null);
+    product_no?: (string | null);
+    part_no?: (string | null);
+    change_type?: (string | null);
+    sample_type?: (string | null);
+    initiator?: (string | null);
+    target_close_date?: (string | null);
+};
+
+export type PdEcrCommentCreate = {
+    target_type?: string;
+    target_id?: (string | null);
+    body: string;
+};
+
+export type PdEcrDepartmentTaskConfirmPayload = {
+    impact_result: string;
+    impact_remark?: (string | null);
+    action_required?: (string | null);
+};
+
+export type PdEcrExecutionAssignmentPayload = {
+    checklist_row_id: string;
+    department: string;
+    description?: string;
+    assignee_id?: (string | null);
+    assignee_email: string;
+    assignee_name?: (string | null);
+    due_date?: (string | null);
+};
+
+export type PdEcrExecutionCompletePayload = {
+    execution_result: string;
+    execution_note?: (string | null);
+    evidence_note?: (string | null);
+};
+
+export type PdEcrExportPayload = {
+    format?: string;
+    draft_id?: (string | null);
+    draft?: ({
+    [key: string]: unknown;
+} | null);
+};
+
+export type PdEcrGenerateCasePayload = {
+    input: {
+        [key: string]: unknown;
+    };
+    similar_cases?: (Array<{
+    [key: string]: unknown;
+}> | null);
+};
+
+export type PdEcrGenerateDraftPayload = {
+    case_id?: (string | null);
+    input: {
+        [key: string]: unknown;
+    };
+    similar_cases?: (Array<{
+    [key: string]: unknown;
+}> | null);
+};
+
+export type PdEcrGenerateFromChangeDescriptionPayload = {
+    change_description: {
+        [key: string]: unknown;
+    };
+    top_k?: number;
+};
+
+export type PdEcrImportPayload = {
+    limit?: (number | null);
+};
+
+export type PdEcrInput = {
+    dc_no?: string;
+    date?: string;
+    customer_project?: string;
+    mcr_no?: string;
+    product_no?: string;
+    part_no?: string;
+    component_no?: string;
+    change_type?: string;
+    initiator?: string;
+    reason?: string;
+    current_design?: string;
+    change_proposal?: string;
+    remarks?: string;
+};
+
+export type PdEcrLeaderReviewPayload = {
+    decision: string;
+    review_comment?: (string | null);
+    signature_name?: (string | null);
+};
+
+export type PdEcrMember = {
+    id: string;
+    display_name?: (string | null);
+    email: string;
+    department?: (string | null);
+    pd_ecr_role?: (string | null);
+};
+
+export type PdEcrMemberList = {
+    members: Array<PdEcrMember>;
+};
+
+export type PdEcrModuleAssignmentPayload = {
+    assignee_id?: (string | null);
+    assignee_email?: (string | null);
+    assignee_name?: (string | null);
+    department?: (string | null);
+    due_date?: (string | null);
+    reminder_policy?: ({
+    [key: string]: unknown;
+} | null);
+    send_assignment_email?: boolean;
+};
+
+export type PdEcrModuleDraftPayload = {
+    record_id: string;
+    module_id: string;
+    data: {
+        [key: string]: unknown;
+    };
+    title?: string;
+};
+
+export type PdEcrModuleUpdate = {
+    title?: (string | null);
+    content_json?: ({
+    [key: string]: unknown;
+} | null);
+    content_md?: (string | null);
+    source_cases?: (Array<(string)> | null);
+    source_files?: (Array<(string)> | null);
+    needs_human_input?: (boolean | null);
+    status?: (string | null);
+    assignee_id?: (string | null);
+    assignee_email?: (string | null);
+    assignee_name?: (string | null);
+    department?: (string | null);
+    due_date?: (string | null);
+    reminder_policy?: ({
+    [key: string]: unknown;
+} | null);
+    expected_version?: (number | null);
+};
+
+export type PdEcrPublishDepartmentsPayload = {
+    selected_departments: Array<(string)>;
+};
+
+export type PdEcrRegenerateModulePayload = {
+    instruction?: (string | null);
+};
+
+/**
+ * P0: Manager rejects a submitted case.
+ */
+export type PdEcrRejectPayload = {
+    rejection_reason?: (string | null);
+};
+
+export type PdEcrRetrievePayload = {
+    input?: ({
+    [key: string]: unknown;
+} | null);
+    top_k?: number;
+    filters?: ({
+    [key: string]: unknown;
+} | null);
+};
+
+export type PdEcrStagedDocumentResponse = {
+    id: string;
+    status: string;
+    original_filename: string;
+    file_type: string;
+    preview_pdf_url?: (string | null);
+    parsed_text?: string;
+    metadata?: {
+        [key: string]: unknown;
+    };
+    sections?: Array<{
+        [key: string]: unknown;
+    }>;
+    tables?: Array<{
+        [key: string]: unknown;
+    }>;
+    created_at?: (string | null);
+    updated_at?: (string | null);
+};
+
+/**
+ * Fields the user can edit during review.
+ */
+export type PdEcrStagedDocumentUpdate = {
+    metadata_json?: ({
+    [key: string]: unknown;
+} | null);
+    sections_json?: (Array<{
+    [key: string]: unknown;
+}> | null);
+    tables_json?: (Array<{
+    [key: string]: unknown;
+}> | null);
+};
+
+/**
+ * P0: Submit a case for manager approval.
+ */
+export type PdEcrSubmitForApprovalPayload = {
+    title?: string;
+    initiator?: (string | null);
+    customer_project?: (string | null);
+    product_no?: (string | null);
+    part_no?: (string | null);
+    target_close_date?: (string | null);
+    form_data?: ({
+    [key: string]: unknown;
+} | null);
+    approver_email?: (string | null);
+    approver_name?: (string | null);
+};
+
+export type PdEcrTaskCreate = {
+    module_id?: (string | null);
+    title: string;
+    description?: (string | null);
+    status?: string;
+    due_date?: (string | null);
+    assignee_id?: (string | null);
+};
+
+export type PdEcrTransitionPayload = {
+    status: string;
+};
+
+export type PdEcrWorkflowCommentPayload = {
+    comment: string;
+};
+
+export type PdEcrWorkflowSubmitPayload = {
+    selected_departments: Array<(string)>;
+    assignees?: ({
+    [key: string]: {
+        [key: string]: unknown;
+    };
+} | null);
+};
+
 export type PrivateUserCreate = {
     email: string;
     password: string;
@@ -67,6 +366,11 @@ export type UserCreate = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    auth_provider?: string;
+    external_subject?: (string | null);
+    department?: (string | null);
+    display_name?: (string | null);
+    pd_ecr_role?: (string | null);
     password: string;
 };
 
@@ -75,6 +379,11 @@ export type UserPublic = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    auth_provider?: string;
+    external_subject?: (string | null);
+    department?: (string | null);
+    display_name?: (string | null);
+    pd_ecr_role?: (string | null);
     id: string;
     created_at?: (string | null);
 };
@@ -95,6 +404,11 @@ export type UserUpdate = {
     is_active?: boolean;
     is_superuser?: boolean;
     full_name?: (string | null);
+    auth_provider?: string;
+    external_subject?: (string | null);
+    department?: (string | null);
+    display_name?: (string | null);
+    pd_ecr_role?: (string | null);
     password?: (string | null);
 };
 
@@ -112,6 +426,12 @@ export type ValidationError = {
         [key: string]: unknown;
     };
 };
+
+export type ServeFrontendData = {
+    fullPath: string;
+};
+
+export type ServeFrontendResponse = (unknown);
 
 export type ItemsReadItemsData = {
     limit?: number;
@@ -170,6 +490,388 @@ export type LoginRecoverPasswordHtmlContentData = {
 };
 
 export type LoginRecoverPasswordHtmlContentResponse = (string);
+
+export type PdEcrListPdEcrCasesData = {
+    limit?: number;
+    query?: (string | null);
+    skip?: number;
+    status?: (string | null);
+};
+
+export type PdEcrListPdEcrCasesResponse = (unknown);
+
+export type PdEcrCreatePdEcrCaseData = {
+    requestBody: PdEcrCaseCreate;
+};
+
+export type PdEcrCreatePdEcrCaseResponse = (unknown);
+
+export type PdEcrGetPdecrJieJimPdfData = {
+    filename: string;
+};
+
+export type PdEcrGetPdecrJieJimPdfResponse = (unknown);
+
+export type PdEcrGetHistoricalSourceDocumentPreviewData = {
+    sourceDocId: string;
+};
+
+export type PdEcrGetHistoricalSourceDocumentPreviewResponse = (unknown);
+
+export type PdEcrDeleteHistoricalSourceDocumentData = {
+    sourceDocId: string;
+};
+
+export type PdEcrDeleteHistoricalSourceDocumentResponse = (unknown);
+
+export type PdEcrGetPdEcrModuleDraftData = {
+    moduleId: string;
+    recordId: string;
+};
+
+export type PdEcrGetPdEcrModuleDraftResponse = (unknown);
+
+export type PdEcrSavePdEcrModuleDraftData = {
+    requestBody: PdEcrModuleDraftPayload;
+};
+
+export type PdEcrSavePdEcrModuleDraftResponse = (unknown);
+
+export type PdEcrDeletePdEcrModuleDraftData = {
+    moduleId: string;
+    recordId: string;
+};
+
+export type PdEcrDeletePdEcrModuleDraftResponse = (unknown);
+
+export type PdEcrListPdEcrModuleDraftsData = {
+    limit?: number;
+    offset?: number;
+    recordId?: (string | null);
+};
+
+export type PdEcrListPdEcrModuleDraftsResponse = (unknown);
+
+export type PdEcrCreatePdEcrCaseFromAiData = {
+    requestBody: PdEcrGenerateCasePayload;
+};
+
+export type PdEcrCreatePdEcrCaseFromAiResponse = (unknown);
+
+export type PdEcrSubmitForApprovalData = {
+    requestBody: PdEcrSubmitForApprovalPayload;
+};
+
+export type PdEcrSubmitForApprovalResponse = (unknown);
+
+export type PdEcrManagerApproveCaseData = {
+    caseId: string;
+};
+
+export type PdEcrManagerApproveCaseResponse = (unknown);
+
+export type PdEcrManagerRejectCaseData = {
+    caseId: string;
+    requestBody: PdEcrRejectPayload;
+};
+
+export type PdEcrManagerRejectCaseResponse = (unknown);
+
+export type PdEcrUpdatePdEcrCaseData = {
+    caseId: string;
+    requestBody: PdEcrCaseUpdate;
+};
+
+export type PdEcrUpdatePdEcrCaseResponse = (unknown);
+
+export type PdEcrDeletePdEcrCaseData = {
+    caseId: string;
+};
+
+export type PdEcrDeletePdEcrCaseResponse = (unknown);
+
+export type PdEcrGetPdEcrCaseDetailData = {
+    caseId: string;
+};
+
+export type PdEcrGetPdEcrCaseDetailResponse = (unknown);
+
+export type PdEcrTransitionPdEcrCaseData = {
+    caseId: string;
+    requestBody: PdEcrTransitionPayload;
+};
+
+export type PdEcrTransitionPdEcrCaseResponse = (unknown);
+
+export type PdEcrSubmitPdEcrWorkflowData = {
+    caseId: string;
+    requestBody: PdEcrWorkflowSubmitPayload;
+};
+
+export type PdEcrSubmitPdEcrWorkflowResponse = (unknown);
+
+export type PdEcrPublishPdEcrDepartmentsData = {
+    caseId: string;
+    requestBody: PdEcrPublishDepartmentsPayload;
+};
+
+export type PdEcrPublishPdEcrDepartmentsResponse = (unknown);
+
+export type PdEcrAssignPdEcrExecutionData = {
+    caseId: string;
+    requestBody: PdEcrAssignExecutionPayload;
+};
+
+export type PdEcrAssignPdEcrExecutionResponse = (unknown);
+
+export type PdEcrGetPdEcrWorkflowData = {
+    caseId: string;
+};
+
+export type PdEcrGetPdEcrWorkflowResponse = (unknown);
+
+export type PdEcrGetMyPdEcrWorkflowTasksResponse = (unknown);
+
+export type PdEcrConfirmPdEcrExecutionAssignmentData = {
+    taskId: string;
+};
+
+export type PdEcrConfirmPdEcrExecutionAssignmentResponse = (unknown);
+
+export type PdEcrCompletePdEcrExecutionTaskData = {
+    requestBody: PdEcrExecutionCompletePayload;
+    taskId: string;
+};
+
+export type PdEcrCompletePdEcrExecutionTaskResponse = (unknown);
+
+export type PdEcrRequestPdEcrExecutionChangesData = {
+    requestBody: PdEcrWorkflowCommentPayload;
+    taskId: string;
+};
+
+export type PdEcrRequestPdEcrExecutionChangesResponse = (unknown);
+
+export type PdEcrConfirmPdEcrDepartmentTaskData = {
+    requestBody: PdEcrDepartmentTaskConfirmPayload;
+    taskId: string;
+};
+
+export type PdEcrConfirmPdEcrDepartmentTaskResponse = (unknown);
+
+export type PdEcrRequestPdEcrDepartmentChangesData = {
+    requestBody: PdEcrWorkflowCommentPayload;
+    taskId: string;
+};
+
+export type PdEcrRequestPdEcrDepartmentChangesResponse = (unknown);
+
+export type PdEcrReviewPdEcrLeaderTaskData = {
+    requestBody: PdEcrLeaderReviewPayload;
+    taskId: string;
+};
+
+export type PdEcrReviewPdEcrLeaderTaskResponse = (unknown);
+
+export type PdEcrListPdEcrCaseModulesV1Data = {
+    caseId: string;
+};
+
+export type PdEcrListPdEcrCaseModulesV1Response = (unknown);
+
+export type PdEcrUpdatePdEcrCaseModuleData = {
+    caseId: string;
+    moduleId: string;
+    requestBody: PdEcrModuleUpdate;
+};
+
+export type PdEcrUpdatePdEcrCaseModuleResponse = (unknown);
+
+export type PdEcrAssignPdEcrCaseModuleData = {
+    caseId: string;
+    moduleId: string;
+    requestBody: PdEcrModuleAssignmentPayload;
+};
+
+export type PdEcrAssignPdEcrCaseModuleResponse = (unknown);
+
+export type PdEcrSendPdEcrModuleReminderData = {
+    caseId: string;
+    moduleId: string;
+};
+
+export type PdEcrSendPdEcrModuleReminderResponse = (unknown);
+
+export type PdEcrRunPdEcrDueRemindersResponse = (unknown);
+
+export type PdEcrRegeneratePdEcrCaseModuleData = {
+    caseId: string;
+    moduleId: string;
+    requestBody: PdEcrRegenerateModulePayload;
+};
+
+export type PdEcrRegeneratePdEcrCaseModuleResponse = (unknown);
+
+export type PdEcrApplyGeneratedPdEcrCaseModuleData = {
+    caseId: string;
+    moduleId: string;
+    requestBody: PdEcrApplyGeneratedModulePayload;
+};
+
+export type PdEcrApplyGeneratedPdEcrCaseModuleResponse = (unknown);
+
+export type PdEcrListPdEcrCaseVersionsData = {
+    caseId: string;
+};
+
+export type PdEcrListPdEcrCaseVersionsResponse = (unknown);
+
+export type PdEcrListPdEcrCaseActivityData = {
+    caseId: string;
+};
+
+export type PdEcrListPdEcrCaseActivityResponse = (unknown);
+
+export type PdEcrCreatePdEcrCaseTaskData = {
+    caseId: string;
+    requestBody: PdEcrTaskCreate;
+};
+
+export type PdEcrCreatePdEcrCaseTaskResponse = (unknown);
+
+export type PdEcrCreatePdEcrCaseCommentData = {
+    caseId: string;
+    requestBody: PdEcrCommentCreate;
+};
+
+export type PdEcrCreatePdEcrCaseCommentResponse = (unknown);
+
+export type PdEcrUploadPdEcrCaseFileData = {
+    formData: Body_pd_ecr_upload_pd_ecr_case_file;
+};
+
+export type PdEcrUploadPdEcrCaseFileResponse = (unknown);
+
+export type PdEcrGetKnowledgeBaseStatusResponse = (unknown);
+
+export type PdEcrUploadAndStageDocumentData = {
+    formData: Body_pd_ecr_upload_and_stage_document;
+};
+
+export type PdEcrUploadAndStageDocumentResponse = (PdEcrStagedDocumentResponse);
+
+export type PdEcrGetStagedDocumentData = {
+    docId: string;
+};
+
+export type PdEcrGetStagedDocumentResponse = (PdEcrStagedDocumentResponse);
+
+export type PdEcrUpdateStagedDocumentData = {
+    docId: string;
+    requestBody: PdEcrStagedDocumentUpdate;
+};
+
+export type PdEcrUpdateStagedDocumentResponse = (PdEcrStagedDocumentResponse);
+
+export type PdEcrConfirmStagedDocumentData = {
+    docId: string;
+};
+
+export type PdEcrConfirmStagedDocumentResponse = (unknown);
+
+export type PdEcrGetStagedDocumentPreviewData = {
+    docId: string;
+};
+
+export type PdEcrGetStagedDocumentPreviewResponse = (unknown);
+
+export type PdEcrImportPdEcrHistoricalCasesData = {
+    requestBody: PdEcrImportPayload;
+};
+
+export type PdEcrImportPdEcrHistoricalCasesResponse = (unknown);
+
+export type PdEcrCreatePdEcrV1RequestData = {
+    requestBody: {
+        [key: string]: unknown;
+    };
+};
+
+export type PdEcrCreatePdEcrV1RequestResponse = (unknown);
+
+export type PdEcrRetrievePdEcrSimilarCasesData = {
+    requestBody: PdEcrRetrievePayload;
+};
+
+export type PdEcrRetrievePdEcrSimilarCasesResponse = (unknown);
+
+export type PdEcrGenerateReportData = {
+    requestBody: PdEcrInput;
+};
+
+export type PdEcrGenerateReportResponse = (unknown);
+
+export type PdEcrGeneratePdEcrDraftData = {
+    requestBody: PdEcrGenerateDraftPayload;
+};
+
+export type PdEcrGeneratePdEcrDraftResponse = (unknown);
+
+export type PdEcrGeneratePdEcrFromChangeDescriptionData = {
+    requestBody: PdEcrGenerateFromChangeDescriptionPayload;
+};
+
+export type PdEcrGeneratePdEcrFromChangeDescriptionResponse = (unknown);
+
+export type PdEcrGetPdEcrDraftModulesData = {
+    draftId: string;
+};
+
+export type PdEcrGetPdEcrDraftModulesResponse = (unknown);
+
+export type PdEcrExportPdEcrCaseData = {
+    caseId?: (string | null);
+    requestBody: PdEcrExportPayload;
+};
+
+export type PdEcrExportPdEcrCaseResponse = (unknown);
+
+export type PdEcrDownloadPdEcrV1ReportData = {
+    filename: string;
+};
+
+export type PdEcrDownloadPdEcrV1ReportResponse = (unknown);
+
+export type PdEcrTestRagData = {
+    requestBody: PdEcrInput;
+};
+
+export type PdEcrTestRagResponse = (unknown);
+
+export type PdEcrHistorySearchData = {
+    requestBody: PdEcrInput;
+};
+
+export type PdEcrHistorySearchResponse = (unknown);
+
+export type PdEcrTestStructuredSignatureData = {
+    requestBody: PdEcrInput;
+};
+
+export type PdEcrTestStructuredSignatureResponse = (unknown);
+
+export type PdEcrGetPdEcrCaseModulesData = {
+    caseNo: string;
+};
+
+export type PdEcrGetPdEcrCaseModulesResponse = (unknown);
+
+export type PdEcrSearchMembersData = {
+    department: string;
+    q?: (string | null);
+};
+
+export type PdEcrSearchMembersResponse = (PdEcrMemberList);
 
 export type PrivateCreateUserData = {
     requestBody: PrivateUserCreate;

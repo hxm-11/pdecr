@@ -57,6 +57,32 @@ export const Body_login_login_access_tokenSchema = {
     title: 'Body_login-login_access_token'
 } as const;
 
+export const Body_pd_ecr_upload_and_stage_documentSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            contentMediaType: 'application/octet-stream',
+            title: 'File'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_pd-ecr-upload_and_stage_document'
+} as const;
+
+export const Body_pd_ecr_upload_pd_ecr_case_fileSchema = {
+    properties: {
+        file: {
+            type: 'string',
+            contentMediaType: 'application/octet-stream',
+            title: 'File'
+        }
+    },
+    type: 'object',
+    required: ['file'],
+    title: 'Body_pd-ecr-upload_pd_ecr_case_file'
+} as const;
+
 export const HTTPValidationErrorSchema = {
     properties: {
         detail: {
@@ -226,6 +252,1530 @@ export const NewPasswordSchema = {
     title: 'NewPassword'
 } as const;
 
+export const PdEcrApplyGeneratedModulePayloadSchema = {
+    properties: {
+        generated: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Generated'
+        },
+        expected_version: {
+            type: 'integer',
+            title: 'Expected Version'
+        }
+    },
+    type: 'object',
+    required: ['generated', 'expected_version'],
+    title: 'PdEcrApplyGeneratedModulePayload'
+} as const;
+
+export const PdEcrAssignExecutionPayloadSchema = {
+    properties: {
+        assignments: {
+            items: {
+                '$ref': '#/components/schemas/PdEcrExecutionAssignmentPayload'
+            },
+            type: 'array',
+            title: 'Assignments'
+        }
+    },
+    type: 'object',
+    required: ['assignments'],
+    title: 'PdEcrAssignExecutionPayload'
+} as const;
+
+export const PdEcrCaseCreateSchema = {
+    properties: {
+        case_no: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Case No'
+        },
+        title: {
+            type: 'string',
+            maxLength: 500,
+            title: 'Title',
+            default: ''
+        },
+        status: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Status',
+            default: 'draft'
+        },
+        source_type: {
+            type: 'string',
+            maxLength: 64,
+            title: 'Source Type',
+            default: 'manual'
+        },
+        is_historical: {
+            type: 'boolean',
+            title: 'Is Historical',
+            default: false
+        },
+        dc_no: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Dc No'
+        },
+        mcr_no: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Mcr No'
+        },
+        customer_project: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Customer Project'
+        },
+        product_no: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product No'
+        },
+        part_no: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Part No'
+        },
+        change_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Change Type'
+        },
+        sample_type: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sample Type'
+        },
+        initiator: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Initiator'
+        },
+        target_close_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Close Date'
+        },
+        modules: {
+            anyOf: [
+                {
+                    items: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Modules'
+        }
+    },
+    type: 'object',
+    required: ['case_no'],
+    title: 'PdEcrCaseCreate'
+} as const;
+
+export const PdEcrCaseUpdateSchema = {
+    properties: {
+        title: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Title'
+        },
+        status: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Status'
+        },
+        owner_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Owner Id'
+        },
+        dc_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Dc No'
+        },
+        mcr_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Mcr No'
+        },
+        customer_project: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Customer Project'
+        },
+        product_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product No'
+        },
+        part_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Part No'
+        },
+        change_type: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Change Type'
+        },
+        sample_type: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sample Type'
+        },
+        initiator: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Initiator'
+        },
+        target_close_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Close Date'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrCaseUpdate'
+} as const;
+
+export const PdEcrCommentCreateSchema = {
+    properties: {
+        target_type: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Target Type',
+            default: 'case'
+        },
+        target_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Id'
+        },
+        body: {
+            type: 'string',
+            title: 'Body'
+        }
+    },
+    type: 'object',
+    required: ['body'],
+    title: 'PdEcrCommentCreate'
+} as const;
+
+export const PdEcrDepartmentTaskConfirmPayloadSchema = {
+    properties: {
+        impact_result: {
+            type: 'string',
+            title: 'Impact Result'
+        },
+        impact_remark: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Impact Remark'
+        },
+        action_required: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Action Required'
+        }
+    },
+    type: 'object',
+    required: ['impact_result'],
+    title: 'PdEcrDepartmentTaskConfirmPayload'
+} as const;
+
+export const PdEcrExecutionAssignmentPayloadSchema = {
+    properties: {
+        checklist_row_id: {
+            type: 'string',
+            title: 'Checklist Row Id'
+        },
+        department: {
+            type: 'string',
+            title: 'Department'
+        },
+        description: {
+            type: 'string',
+            title: 'Description',
+            default: ''
+        },
+        assignee_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Id'
+        },
+        assignee_email: {
+            type: 'string',
+            title: 'Assignee Email'
+        },
+        assignee_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Name'
+        },
+        due_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Due Date'
+        }
+    },
+    type: 'object',
+    required: ['checklist_row_id', 'department', 'assignee_email'],
+    title: 'PdEcrExecutionAssignmentPayload'
+} as const;
+
+export const PdEcrExecutionCompletePayloadSchema = {
+    properties: {
+        execution_result: {
+            type: 'string',
+            title: 'Execution Result'
+        },
+        execution_note: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Execution Note'
+        },
+        evidence_note: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Evidence Note'
+        }
+    },
+    type: 'object',
+    required: ['execution_result'],
+    title: 'PdEcrExecutionCompletePayload'
+} as const;
+
+export const PdEcrExportPayloadSchema = {
+    properties: {
+        format: {
+            type: 'string',
+            title: 'Format',
+            default: 'html'
+        },
+        draft_id: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Draft Id'
+        },
+        draft: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Draft'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrExportPayload'
+} as const;
+
+export const PdEcrGenerateCasePayloadSchema = {
+    properties: {
+        input: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Input'
+        },
+        similar_cases: {
+            anyOf: [
+                {
+                    items: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Similar Cases'
+        }
+    },
+    type: 'object',
+    required: ['input'],
+    title: 'PdEcrGenerateCasePayload'
+} as const;
+
+export const PdEcrGenerateDraftPayloadSchema = {
+    properties: {
+        case_id: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Case Id'
+        },
+        input: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Input'
+        },
+        similar_cases: {
+            anyOf: [
+                {
+                    items: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Similar Cases'
+        }
+    },
+    type: 'object',
+    required: ['input'],
+    title: 'PdEcrGenerateDraftPayload'
+} as const;
+
+export const PdEcrGenerateFromChangeDescriptionPayloadSchema = {
+    properties: {
+        change_description: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Change Description'
+        },
+        top_k: {
+            type: 'integer',
+            title: 'Top K',
+            default: 5
+        }
+    },
+    type: 'object',
+    required: ['change_description'],
+    title: 'PdEcrGenerateFromChangeDescriptionPayload'
+} as const;
+
+export const PdEcrImportPayloadSchema = {
+    properties: {
+        limit: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Limit'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrImportPayload'
+} as const;
+
+export const PdEcrInputSchema = {
+    properties: {
+        dc_no: {
+            type: 'string',
+            title: 'Dc No',
+            default: ''
+        },
+        date: {
+            type: 'string',
+            title: 'Date',
+            default: ''
+        },
+        customer_project: {
+            type: 'string',
+            title: 'Customer Project',
+            default: ''
+        },
+        mcr_no: {
+            type: 'string',
+            title: 'Mcr No',
+            default: ''
+        },
+        product_no: {
+            type: 'string',
+            title: 'Product No',
+            default: ''
+        },
+        part_no: {
+            type: 'string',
+            title: 'Part No',
+            default: ''
+        },
+        component_no: {
+            type: 'string',
+            title: 'Component No',
+            default: ''
+        },
+        change_type: {
+            type: 'string',
+            title: 'Change Type',
+            default: ''
+        },
+        initiator: {
+            type: 'string',
+            title: 'Initiator',
+            default: ''
+        },
+        reason: {
+            type: 'string',
+            title: 'Reason',
+            default: ''
+        },
+        current_design: {
+            type: 'string',
+            title: 'Current Design',
+            default: ''
+        },
+        change_proposal: {
+            type: 'string',
+            title: 'Change Proposal',
+            default: ''
+        },
+        remarks: {
+            type: 'string',
+            title: 'Remarks',
+            default: ''
+        }
+    },
+    type: 'object',
+    title: 'PdEcrInput'
+} as const;
+
+export const PdEcrLeaderReviewPayloadSchema = {
+    properties: {
+        decision: {
+            type: 'string',
+            title: 'Decision'
+        },
+        review_comment: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Review Comment'
+        },
+        signature_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Signature Name'
+        }
+    },
+    type: 'object',
+    required: ['decision'],
+    title: 'PdEcrLeaderReviewPayload'
+} as const;
+
+export const PdEcrMemberSchema = {
+    properties: {
+        id: {
+            type: 'string',
+            title: 'Id'
+        },
+        display_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Display Name'
+        },
+        email: {
+            type: 'string',
+            title: 'Email'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        pd_ecr_role: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Pd Ecr Role'
+        }
+    },
+    type: 'object',
+    required: ['id', 'email'],
+    title: 'PdEcrMember'
+} as const;
+
+export const PdEcrMemberListSchema = {
+    properties: {
+        members: {
+            items: {
+                '$ref': '#/components/schemas/PdEcrMember'
+            },
+            type: 'array',
+            title: 'Members'
+        }
+    },
+    type: 'object',
+    required: ['members'],
+    title: 'PdEcrMemberList'
+} as const;
+
+export const PdEcrModuleAssignmentPayloadSchema = {
+    properties: {
+        assignee_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Id'
+        },
+        assignee_email: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Email'
+        },
+        assignee_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Name'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        due_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Due Date'
+        },
+        reminder_policy: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reminder Policy'
+        },
+        send_assignment_email: {
+            type: 'boolean',
+            title: 'Send Assignment Email',
+            default: true
+        }
+    },
+    type: 'object',
+    title: 'PdEcrModuleAssignmentPayload'
+} as const;
+
+export const PdEcrModuleDraftPayloadSchema = {
+    properties: {
+        record_id: {
+            type: 'string',
+            title: 'Record Id'
+        },
+        module_id: {
+            type: 'string',
+            title: 'Module Id'
+        },
+        data: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Data'
+        },
+        title: {
+            type: 'string',
+            title: 'Title',
+            default: ''
+        }
+    },
+    type: 'object',
+    required: ['record_id', 'module_id', 'data'],
+    title: 'PdEcrModuleDraftPayload'
+} as const;
+
+export const PdEcrModuleUpdateSchema = {
+    properties: {
+        title: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Title'
+        },
+        content_json: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content Json'
+        },
+        content_md: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Content Md'
+        },
+        source_cases: {
+            anyOf: [
+                {
+                    items: {
+                        type: 'string'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source Cases'
+        },
+        source_files: {
+            anyOf: [
+                {
+                    items: {
+                        type: 'string'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Source Files'
+        },
+        needs_human_input: {
+            anyOf: [
+                {
+                    type: 'boolean'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Needs Human Input'
+        },
+        status: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Status'
+        },
+        assignee_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Id'
+        },
+        assignee_email: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Email'
+        },
+        assignee_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Name'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        due_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Due Date'
+        },
+        reminder_policy: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Reminder Policy'
+        },
+        expected_version: {
+            anyOf: [
+                {
+                    type: 'integer'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Expected Version'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrModuleUpdate'
+} as const;
+
+export const PdEcrPublishDepartmentsPayloadSchema = {
+    properties: {
+        selected_departments: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Selected Departments'
+        }
+    },
+    type: 'object',
+    required: ['selected_departments'],
+    title: 'PdEcrPublishDepartmentsPayload'
+} as const;
+
+export const PdEcrRegenerateModulePayloadSchema = {
+    properties: {
+        instruction: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Instruction'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrRegenerateModulePayload'
+} as const;
+
+export const PdEcrRejectPayloadSchema = {
+    properties: {
+        rejection_reason: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Rejection Reason'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrRejectPayload',
+    description: 'P0: Manager rejects a submitted case.'
+} as const;
+
+export const PdEcrRetrievePayloadSchema = {
+    properties: {
+        input: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Input'
+        },
+        top_k: {
+            type: 'integer',
+            title: 'Top K',
+            default: 5
+        },
+        filters: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Filters'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrRetrievePayload'
+} as const;
+
+export const PdEcrStagedDocumentResponseSchema = {
+    properties: {
+        id: {
+            type: 'string',
+            title: 'Id'
+        },
+        status: {
+            type: 'string',
+            title: 'Status'
+        },
+        original_filename: {
+            type: 'string',
+            title: 'Original Filename'
+        },
+        file_type: {
+            type: 'string',
+            title: 'File Type'
+        },
+        preview_pdf_url: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Preview Pdf Url'
+        },
+        parsed_text: {
+            type: 'string',
+            title: 'Parsed Text',
+            default: ''
+        },
+        metadata: {
+            additionalProperties: true,
+            type: 'object',
+            title: 'Metadata',
+            default: {}
+        },
+        sections: {
+            items: {
+                additionalProperties: true,
+                type: 'object'
+            },
+            type: 'array',
+            title: 'Sections',
+            default: []
+        },
+        tables: {
+            items: {
+                additionalProperties: true,
+                type: 'object'
+            },
+            type: 'array',
+            title: 'Tables',
+            default: []
+        },
+        created_at: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Created At'
+        },
+        updated_at: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Updated At'
+        }
+    },
+    type: 'object',
+    required: ['id', 'status', 'original_filename', 'file_type'],
+    title: 'PdEcrStagedDocumentResponse'
+} as const;
+
+export const PdEcrStagedDocumentUpdateSchema = {
+    properties: {
+        metadata_json: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Metadata Json'
+        },
+        sections_json: {
+            anyOf: [
+                {
+                    items: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Sections Json'
+        },
+        tables_json: {
+            anyOf: [
+                {
+                    items: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'array'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Tables Json'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrStagedDocumentUpdate',
+    description: 'Fields the user can edit during review.'
+} as const;
+
+export const PdEcrSubmitForApprovalPayloadSchema = {
+    properties: {
+        title: {
+            type: 'string',
+            title: 'Title',
+            default: ''
+        },
+        initiator: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Initiator'
+        },
+        customer_project: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Customer Project'
+        },
+        product_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Product No'
+        },
+        part_no: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Part No'
+        },
+        target_close_date: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Target Close Date'
+        },
+        form_data: {
+            anyOf: [
+                {
+                    additionalProperties: true,
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Form Data'
+        },
+        approver_email: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Approver Email'
+        },
+        approver_name: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Approver Name'
+        }
+    },
+    type: 'object',
+    title: 'PdEcrSubmitForApprovalPayload',
+    description: 'P0: Submit a case for manager approval.'
+} as const;
+
+export const PdEcrTaskCreateSchema = {
+    properties: {
+        module_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 128
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Module Id'
+        },
+        title: {
+            type: 'string',
+            maxLength: 255,
+            minLength: 1,
+            title: 'Title'
+        },
+        description: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Description'
+        },
+        status: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Status',
+            default: 'todo'
+        },
+        due_date: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'date-time'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Due Date'
+        },
+        assignee_id: {
+            anyOf: [
+                {
+                    type: 'string',
+                    format: 'uuid'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignee Id'
+        }
+    },
+    type: 'object',
+    required: ['title'],
+    title: 'PdEcrTaskCreate'
+} as const;
+
+export const PdEcrTransitionPayloadSchema = {
+    properties: {
+        status: {
+            type: 'string',
+            title: 'Status'
+        }
+    },
+    type: 'object',
+    required: ['status'],
+    title: 'PdEcrTransitionPayload'
+} as const;
+
+export const PdEcrWorkflowCommentPayloadSchema = {
+    properties: {
+        comment: {
+            type: 'string',
+            title: 'Comment'
+        }
+    },
+    type: 'object',
+    required: ['comment'],
+    title: 'PdEcrWorkflowCommentPayload'
+} as const;
+
+export const PdEcrWorkflowSubmitPayloadSchema = {
+    properties: {
+        selected_departments: {
+            items: {
+                type: 'string'
+            },
+            type: 'array',
+            title: 'Selected Departments'
+        },
+        assignees: {
+            anyOf: [
+                {
+                    additionalProperties: {
+                        additionalProperties: true,
+                        type: 'object'
+                    },
+                    type: 'object'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Assignees'
+        }
+    },
+    type: 'object',
+    required: ['selected_departments'],
+    title: 'PdEcrWorkflowSubmitPayload'
+} as const;
+
 export const PrivateUserCreateSchema = {
     properties: {
         email: {
@@ -318,6 +1868,60 @@ export const UserCreateSchema = {
             ],
             title: 'Full Name'
         },
+        auth_provider: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Auth Provider',
+            default: 'local'
+        },
+        external_subject: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'External Subject'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        display_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Display Name'
+        },
+        pd_ecr_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 64
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Pd Ecr Role'
+        },
         password: {
             type: 'string',
             maxLength: 128,
@@ -359,6 +1963,60 @@ export const UserPublicSchema = {
                 }
             ],
             title: 'Full Name'
+        },
+        auth_provider: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Auth Provider',
+            default: 'local'
+        },
+        external_subject: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'External Subject'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        display_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Display Name'
+        },
+        pd_ecr_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 64
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Pd Ecr Role'
         },
         id: {
             type: 'string',
@@ -451,6 +2109,60 @@ export const UserUpdateSchema = {
                 }
             ],
             title: 'Full Name'
+        },
+        auth_provider: {
+            type: 'string',
+            maxLength: 32,
+            title: 'Auth Provider',
+            default: 'local'
+        },
+        external_subject: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'External Subject'
+        },
+        department: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Department'
+        },
+        display_name: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 255
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Display Name'
+        },
+        pd_ecr_role: {
+            anyOf: [
+                {
+                    type: 'string',
+                    maxLength: 64
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Pd Ecr Role'
         },
         password: {
             anyOf: [

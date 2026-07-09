@@ -14,15 +14,19 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import {
+  createPdEcrSignoff,
   exportPdEcrCase,
   exportPdEcrDraft,
+  listPdEcrSignoffs,
   resolvePdEcrAssetUrl,
   transitionPdEcrCase,
 } from "@/lib/pdEcrApi";
+import { isBackendCaseId } from "@/lib/usePdEcrAttachments";
 import {
   getModuleCompletionState,
   PdEcrModuleAccordion,
 } from "./PdEcrModuleAccordion";
+import { FeasibilityChangeReviewPanel } from "./PdEcrModuleDetail";
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow";
 import { buildPdEcrOnePageHtml, downloadText } from "./pdEcrExport";
 import { loadActiveResult, type PdEcrStoredResult } from "./pdEcrState";
@@ -195,6 +199,26 @@ function getEngineerConfirmationProgress(result: PdEcrStoredResult) {
   return { completed, total: modules.length || AI_REVIEW_MODULE_IDS.length };
 }
 
+// 1.3 / 1.4 result modules — filled by their owners after engineer confirmation,
+// before the leader/signers are notified.
+const RESULT_MODULE_IDS = [
+  "validation-result",
+  "implementation-result",
+] as const;
+
+function getResultFillingProgress(result: PdEcrStoredResult) {
+  const modules = RESULT_MODULE_IDS.map((id) =>
+    result.modules.find((module) => module.id === id),
+  ).filter(Boolean) as PdEcrStoredResult["modules"];
+  // Only count result modules that actually exist in this case, so cases
+  // without result modules pass straight through instead of getting stuck.
+  const total = modules.length;
+  const completed = modules.filter(
+    (module) => getModuleCompletionState(module).label === "Complete",
+  ).length;
+  return { completed, total };
+}
+
 function getSignoffProgress(recordId: string) {
   const signed = loadLeaderSignoffs(recordId);
   const signedCount = LEADER_SIGNOFF_ROLES.filter((role) => signed[role.key])
@@ -217,12 +241,16 @@ function getWorkflowStage(result: PdEcrStoredResult, recordId: string) {
   const gate = getPreGenerationGate(result);
   const aiModules = getAiGenerationProgress(result);
   const engineerModules = getEngineerConfirmationProgress(result);
+  const resultModules = getResultFillingProgress(result);
 
   if (!gate.initiatorConfirmed) return "initiator";
   if (!gate.leaderConfirmed) return "leader";
   if (aiModules.completed < aiModules.total) return "ai-generation";
   if (engineerModules.completed < engineerModules.total) {
     return "engineer-confirmation";
+  }
+  if (resultModules.total > 0 && resultModules.completed < resultModules.total) {
+    return "result-filling";
   }
   if (!signedCount) return "notification";
   if (!allSigned) return "final-signoff";
@@ -243,6 +271,7 @@ function WorkflowOverview({
   const gate = getPreGenerationGate(result);
   const aiModules = getAiGenerationProgress(result);
   const engineerModules = getEngineerConfirmationProgress(result);
+  const resultModules = getResultFillingProgress(result);
   const { signedCount, total: signTotal } = getSignoffProgress(recordId);
 
   const steps = [
@@ -267,9 +296,17 @@ function WorkflowOverview({
       desc: `${engineerModules.completed}/${engineerModules.total} 模块已确认`,
     },
     {
+      key: "result-filling",
+      label: "填写 1.3/1.4 结果",
+      desc:
+        resultModules.total > 0
+          ? `${resultModules.completed}/${resultModules.total} 结果已填写`
+          : "通知 1.3/1.4 负责人填写 Result",
+    },
+    {
       key: "notification",
       label: "邮件通知",
-      desc: "通知 leader 和相关签字人",
+      desc: "结果填写后通知 leader 和签字人",
     },
     {
       key: "final-signoff",
@@ -313,7 +350,7 @@ function WorkflowOverview({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-7">
+      <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-8">
         {steps.map((step, index) => {
           const current = stage !== "readonly" && index === activeIndex;
           const done = stage !== "readonly" && index < activeIndex;
@@ -512,6 +549,27 @@ function LeaderSignOffButtons({
   const [signed, setSigned] = useState<LeaderSignoffState>(() =>
     loadLeaderSignoffs(recordId),
   );
+
+  // Hydrate leader signoffs from the backend audit trail when a real case
+  // exists, so they survive refresh / device change (localStorage is fallback).
+  useEffect(() => {
+    if (!isBackendCaseId(caseId) || !caseId) return;
+    let cancelled = false;
+    void listPdEcrSignoffs(caseId).then((records) => {
+      if (cancelled) return;
+      const fromBackend: LeaderSignoffState = {};
+      for (const rec of records) {
+        const role = rec.role || (rec.metadata?.role as string | undefined);
+        if (role) fromBackend[role] = rec.created_at || new Date().toISOString();
+      }
+      if (Object.keys(fromBackend).length > 0) {
+        setSigned((current) => ({ ...current, ...fromBackend }));
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [caseId]);
   const [isStartingExecution, setIsStartingExecution] = useState(false);
   const [executionStarted, setExecutionStarted] = useState(
     () => localStorage.getItem(leaderExecutionStorageKey(recordId)) !== null,
@@ -545,6 +603,7 @@ function LeaderSignOffButtons({
 
     setSigned((current) => {
       const next = { ...current };
+      const isAdding = !next[roleKey];
 
       if (next[roleKey]) {
         delete next[roleKey];
@@ -556,6 +615,22 @@ function LeaderSignOffButtons({
         leaderSignoffStorageKey(recordId),
         JSON.stringify(next),
       );
+
+      // Persist the signoff action to the backend audit trail (best-effort;
+      // localStorage above keeps the UI responsive and offline-safe).
+      if (isAdding && isBackendCaseId(caseId) && caseId) {
+        void createPdEcrSignoff({
+          caseId,
+          step: "leader_signoff",
+          role: roleKey,
+          action: "signed",
+          signerName:
+            currentUser?.display_name ||
+            currentUser?.full_name ||
+            currentUser?.email ||
+            undefined,
+        });
+      }
 
       window.dispatchEvent(new Event("pd-ecr-leader-signoff-updated"));
 
@@ -994,6 +1069,8 @@ export function PdEcrContentBlocks() {
             workflowEnabled={result.source !== "history"}
           />
         </section>
+
+        {result.source !== "history" ? <FeasibilityChangeReviewPanel /> : null}
 
         {result.source !== "history" ? (
           <LeaderSignOffButtons

@@ -1,0 +1,56 @@
+{
+  "case_id": "CASE_d293932d2dd3",
+  "source": {
+    "source_file": "T0003-PD-ECR_PTS_Enhancement.xls",
+    "file_type": "xls",
+    "parser": "excel",
+    "raw_markdown_path": null,
+    "raw_json_path": null,
+    "checksum": "e5e77f320485033d6322dfdb04335eed10ba80b93a11ea97bbac6cd6e460969f"
+  },
+  "metadata": {
+    "dc_no": null,
+    "date": "2024-09-23",
+    "mcr_no": null,
+    "customer_project": [
+      "PTS"
+    ],
+    "affected_product_no": [
+      "F019.A60.000-01"
+    ],
+    "component_no": [
+      "F019.A66.014-01",
+      "F019A66004-01"
+    ],
+    "initiator": "HU Feng",
+    "department": null,
+    "product_family": null,
+    "change_type": "Design optimization / 设计优化"
+  },
+  "modules": {
+    "change_reason": "1.Lifetime of sensor: operation time change from 1.50 mio. to 2.39 mio. cycles\n2.Sensor characteristic curve: for more precisely measurement of travel distance\n3.Size of sliding block part: for tolerance control\n4.Connector: change to latest product type\n5.Add O ring for protection;   6.Rod change for tolerance control and more easy assembling",
+    "current_design": null,
+    "change_proposal": "1. Design change details\n1.1\tSpring\n1.2\tSensor characteristic\n1.3\tSize of sliding block part\n1.4\tConnector\n1.5\tO ring\n1.6\tRod\n2.PTS part number change from B1(F019.A66.014-01) to B2(F019.A66.014-02)\n3.Rod part number change from B1(F019A66004-01) to B2(F019A66004-02)",
+    "impact_analysis": "1.Sensor characteristic curve change: a) need new calibration for SW;  b) need update test specification for test and EOL\n2.Size of sliding block part:design change of rod\n3.Endurance test needed for sensor and BPM component\nInterface of BPM need update\nEOL testing specification to be updated\nAlready discussed with suppliers for tooling modification\nTooling adjustment from supplier 23,000 CNY; O ring added --> cost increase 0.5 CNY/pcs; DV cost from 157,000 CNY to 224,600 CNY\nMixed Deliveries Permissible? 改前改后是否可以混合供货？          YES                NO\nHow to deal with 1st delviery after change? 改后第一批货物的发货要求？  Answer回答：according to part number\nRaw materials:\t\tNot affect       Use in other products       Scrap         Rework         Use up\nParts/Subassemblies:\t\tNot affect       Use in other products       Scrap         Rework         Use up\nFinished goods(inhouse):       Not affect        Scrap         Rework         Use up\nFinished goods(RDC外库):       Not affect        Scrap         Rework         Use up\nFinished goods(customer):     Not affect        Recall         Rework",
+    "validation_plan": "Validations 验证\nCapability Studies_ CMK\nCapability Studies_ MSA\nMAE release\nCleanness test\nQZ test\n200h PDL\nEndurance test\t\t\t2024.11.30\t\t\tFeng Xiao/Hu Feng\n\nAffected documents Check/ 影响文档检查\n1 Interface FMEA-relevant / IFMEA:\t\t\t\t\t\tResp.person:\t\t\t\tDue date:  _______\n2.Product FMEA-relevant / DFMEA:\t\t\t\t\t\tResp.person:\t\t\t\tDue date:  _______\n3. Special Charecteristics relevant/PSC:\t\t\t\t\t\tResp.person:   Yao Kai\t\t\t\tDue date:  _2024.10.30___________\n4. IMDS relevant:\t\t\t\t\t\tResp.person:\t\t\t\tDue date:  _______\n5 Offer drawing relevant:\t\t\t\t\t\tResp.person:     Yao Kai, Hu Feng\t\t\t\tDue date:  _2024.10.30___________\n6. TCD relevant:\t\t\t\t\t\tResp.person:    Hu Feng\t\t\t\tDue date:  _2024.10.30___________\n7. Norm, WB, HF... relevant:\t\t\t\t\t\tResp.person:\t\t\t\tDue date:  _______\n8.BPM test specifation\t\t\t\t\t\tResp.person:        Chen  Bao\t\t\t\tDue date:  _2024.12.01___________",
+    "implementation_plan": "Step 5 Documents release / 文档发布\n1.  Documents release (drawing, offer drawing, Bom, Spec., ) / 文档发布 (图纸, 客户图纸， …)\nDevelopment confirmation/ 研发确认: __________\n\nStep 6.1 Implementation check list / 导入清单\nDevelopment\nY\tChange BOMs & Drawings & Documents in POE system\tYao Kai\t30th Oct.\nN\tInform documents update   (check work-on can met requirements)\nN\tUpdate Offer drawing\nN\tNorm, WB, HF...\nN\tMoC，IMDS.\n\nManufacturing\nN\tRelated (Production/Testing) equipement be ready on site\nN\tRelated (Production/Testing) program be ready\nN\tRelated (Production/Testing) tooling / cutting / fixture etc. be ready\nN\tOld tooling / cutting / fixture disposal\nN\tOld materials disposal\nN\tPlanner update the planning sheet\nN\tUpdate FMEA\nN\tUpdate CP/FC (Control Plan/Flow Chart)\nN\tUpdate WI/PDS (Include attachments.)\nN\tFirst batch Mark, Special Mark (Inside Package)\nN\tFirst batch Mark, Special Mark (Outside Package)\nN\tTraining\n\nCOS\nY\tConfirm the storage of old parts and coordinate the introduction date for new part (RM)\tChen Daming,Li Bin\t30th Oct.\nY\tConfirm the delivery date of old parts and first delivery of new parts (FG)\tChen Daming,Li Bin\t30th Oct.\nN\tCheck sample orders which affected:material order of  CKD\nN\tConfirm production scheduling according to the alignment, any changes share the information to MOEx,MFE\nN\tConfirm the old stock/ do prioritize delivery and inventory handling\nN\tInform the first delivery to PMO\n\nPPX (PPX->PMQ/PQA)\nY\tCheck sample orders which affected: material order of purchasing parts\tHu Guirong,Zhang Haonan,Wang Changchuan\t4th Nov.\nY\tInform internal related departments(COS,MFE,MOEx)with following requirements.:Yellow sticker, delivery quantities and date, PN No. and name,change description…\tHu Guirong,Zhang Haonan,Wang Changchuan\t4th Nov.\nN\tUpdate incoming inspection plan\n\nQMM4\nN\tUpdate testing programe on testing equipment\nN\tUpdate inspection plan for CKD parts\n\nEPA2\nN\tDistribute the Offer drawing, TCD to customer\n\nLOP\nN\tCheck 10 digit material order\n\nPMO\nN\tCheck sample orders which affected: Customer order\nN\tInform Customer the first delivery information\n\nStep 6.2 Implementation date / 执行日期\nPlanned implementation date:\n变更计划执行日期_____2024.11.04____________________________________",
+    "risk_analysis": null,
+    "approval_summary": "Step 4 Technical feasibility & Validation plan approval  / 技术可行性&验证计划批准\nDevelopment/ 研发\t\tPurchasing/采购\t\tMFE/工艺\t\tQuality/质量\t\tECO/客户项目\t\tCOS/样品\n\nStep 6.3 Implementation approval / 导入清单\nDevelopment/ 研发\t\tPurchasing/采购\t\tMFE/工艺\tCOS/样品\tQuality/质量\t\tECO/客户项目\t\tMOEx/生产\tOther/其他",
+    "remarks": null
+  },
+  "impact_departments": [],
+  "tasks": [],
+  "attachments": [],
+  "quality_control": {
+    "extraction_status": "partial",
+    "missing_fields": [
+      "metadata.dc_no",
+      "modules.current_design",
+      "modules.risk_analysis",
+      "modules.remarks"
+    ],
+    "confidence": 0.7,
+    "needs_human_review": true,
+    "errors": []
+  }
+}

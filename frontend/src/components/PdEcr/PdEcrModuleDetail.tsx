@@ -8,6 +8,7 @@ import {
   Home,
   Link2,
   Sparkles,
+  Trash2,
   Upload,
 } from "lucide-react"
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react"
@@ -21,6 +22,7 @@ import {
   resolvePdEcrAssetUrl,
   savePdEcrModuleDraft,
 } from "@/lib/pdEcrApi"
+import { useBackendAttachments } from "@/lib/usePdEcrAttachments"
 import { PdEcrProcessFlowButton } from "./PdEcrProcessFlow"
 import { buildPdEcrOnePageHtml } from "./pdEcrExport"
 import {
@@ -946,7 +948,7 @@ function useFeasibilityResultGate() {
   }
 }
 
-function FeasibilityChangeReviewPanel() {
+export function FeasibilityChangeReviewPanel() {
   const [state, setState] = useState<FeasibilityState>(() => loadFeasibilityState())
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const reviewComplete = isFeasibilityComplete(state)
@@ -1230,6 +1232,23 @@ function mergeFourModuleResult(
 
 function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
   const recordId = useMemo(() => getActiveRecordId(), [])
+  // Backend-persisted attachments when the working record is a real case;
+  // falls back to localStorage state below for unsaved client drafts.
+  const beforeBackend = useBackendAttachments({
+    caseId: recordId,
+    section: "before_change",
+    moduleId: module.id,
+  })
+  const afterBackend = useBackendAttachments({
+    caseId: recordId,
+    section: "after_change",
+    moduleId: module.id,
+  })
+  const flowBackend = useBackendAttachments({
+    caseId: recordId,
+    section: "other",
+    moduleId: module.id,
+  })
   const storageKey = useMemo(() => changeDraftStorageKey(module), [module])
   const [draft, setDraft] = useState<ChangeDescriptionDraft>(() => {
     const initialDraft = buildChangeDraft(module)
@@ -1426,6 +1445,11 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
     side: "before" | "after",
     files: FileList | null,
   ) => {
+    const backend = side === "before" ? beforeBackend : afterBackend
+    if (backend.enabled) {
+      void backend.upload(files)
+      return
+    }
     const incoming = Array.from(files ?? []).map((file) => ({
       name: file.name,
       type: file.type || "application/octet-stream",
@@ -1607,8 +1631,14 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
             before and after comparison.
           </p>
           <div className="mt-6 grid min-w-0 gap-3 lg:grid-cols-2">
-            {attachmentList("before", beforeAttachments)}
-            {attachmentList("after", afterAttachments)}
+            {attachmentList(
+              "before",
+              beforeBackend.enabled ? beforeBackend.items : beforeAttachments,
+            )}
+            {attachmentList(
+              "after",
+              afterBackend.enabled ? afterBackend.items : afterAttachments,
+            )}
           </div>
           <p className="mt-8 text-2xl font-semibold">Flow:</p>
           <p className="mt-2 text-sm leading-6 text-stone-600">
@@ -1627,6 +1657,10 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
                 className="sr-only"
                 onChange={(event) => {
                   const files = event.target.files
+                  if (flowBackend.enabled) {
+                    void flowBackend.upload(files)
+                    return
+                  }
                   const incoming = Array.from(files ?? []).map((file) => ({
                     name: file.name,
                     type: file.type || "application/octet-stream",
@@ -1645,8 +1679,12 @@ function ChangeDescriptionView({ module }: { module: PdEcrDisplayModule }) {
               />
             </label>
             <div className="mt-3 space-y-2">
-              {flowAttachments.length ? (
-                flowAttachments.map((file, index) => (
+              {(flowBackend.enabled ? flowBackend.items : flowAttachments)
+                .length ? (
+                (flowBackend.enabled
+                  ? flowBackend.items
+                  : flowAttachments
+                ).map((file, index) => (
                   <div
                     key={`${file.name}-${index}`}
                     className="rounded border border-stone-200 bg-stone-50 p-2 text-xs text-stone-700"
@@ -1760,6 +1798,15 @@ const IMPACT_ANALYSIS_UPDATED_EVENT = "pd-ecr-impacts-updated"
 
 type YesNoValue = "" | "Y" | "N"
 
+type ImpactAiSuggestion = {
+  yn?: YesNoValue
+  impacted?: boolean
+  measure?: string
+  rationale?: string
+  source?: string
+  sources?: string[]
+}
+
 function yesNoFromLegacy(row: { yn?: unknown; yes?: unknown; no?: unknown } | null | undefined): YesNoValue {
   const yn = String(row?.yn || "").toUpperCase()
   if (yn === "Y" || yn === "N") return yn
@@ -1773,12 +1820,169 @@ function todayDateValue() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`
 }
 
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value))
+}
+
+function compactText(value: unknown) {
+  return String(value || "").trim()
+}
+
+function normalizeAiYesNo(value: unknown): YesNoValue {
+  const text = String(value || "").trim().toUpperCase()
+  if (text === "Y" || text === "YES" || text === "TRUE") return "Y"
+  if (text === "N" || text === "NO" || text === "FALSE") return "N"
+  return ""
+}
+
+function normalizeImpactAiSuggestion(value: unknown): ImpactAiSuggestion | undefined {
+  if (!isPlainRecord(value)) return undefined
+  const sources = Array.isArray(value.sources)
+    ? value.sources.map((item) => compactText(item)).filter(Boolean)
+    : []
+  const normalizedYn = normalizeAiYesNo(value.yn)
+  const impactedYn: YesNoValue = typeof value.impacted === "boolean" ? (value.impacted ? "Y" : "N") : ""
+  const yn: YesNoValue = normalizedYn || impactedYn
+  const suggestion = {
+    yn,
+    impacted: typeof value.impacted === "boolean" ? value.impacted : yn === "Y",
+    measure: compactText(value.measure ?? value.desc ?? value.suggestion),
+    rationale: compactText(value.rationale ?? value.reason),
+    source: compactText(value.source ?? value.evidence),
+    sources,
+  }
+  return suggestion.yn || suggestion.measure || suggestion.rationale || suggestion.source || suggestion.sources.length
+    ? suggestion
+    : undefined
+}
+
+function arrayFromModuleData(module: PdEcrDisplayModule, key: string): unknown[] {
+  const value = module.data[key]
+  return Array.isArray(value) ? value : []
+}
+
+function hasGeneratedImpactContext(module: PdEcrDisplayModule) {
+  return Boolean(
+    arrayFromModuleData(module, "impacts").length ||
+      arrayFromModuleData(module, "aiImpactSuggestions").length ||
+      module.sourceCases?.length ||
+      module.sourceFiles?.length ||
+      /generated|AI|RAG|historical/i.test(`${module.summary} ${module.description || ""}`),
+  )
+}
+
+function impactAiSuggestionFor(
+  module: PdEcrDisplayModule,
+  item: ImpactItemDefinition,
+  index: number,
+  row: { yn?: YesNoValue | string; yes?: boolean; no?: boolean; desc?: string; aiSuggestion?: ImpactAiSuggestion | unknown },
+) {
+  const direct = normalizeImpactAiSuggestion(row.aiSuggestion)
+  if (direct) return direct
+
+  const generatedImpact = arrayFromModuleData(module, "impacts")[index]
+  if (isPlainRecord(generatedImpact)) {
+    const nested = normalizeImpactAiSuggestion(generatedImpact.aiSuggestion)
+    if (nested) return nested
+    const fallback = normalizeImpactAiSuggestion({
+      yn: generatedImpact.yn,
+      impacted: Boolean(generatedImpact.yes),
+      measure: generatedImpact.desc,
+      source: generatedImpact.source,
+      rationale: generatedImpact.rationale,
+    })
+    if (fallback) return fallback
+  }
+
+  const explicitSuggestions = arrayFromModuleData(module, "aiImpactSuggestions")
+  const explicit = explicitSuggestions.find((candidate) => {
+    if (!isPlainRecord(candidate)) return false
+    return candidate.index === index || candidate.label === item.en || candidate.label === item.zh
+  })
+  const explicitSuggestion = normalizeImpactAiSuggestion(explicit)
+  if (explicitSuggestion) return explicitSuggestion
+
+  const generatedFromRow = normalizeImpactAiSuggestion({
+    yn: row.yn,
+    impacted: typeof row.yes === "boolean" ? row.yes : undefined,
+    measure: row.desc,
+    rationale: row.desc ? `AI generated a draft measure for ${item.en || item.zh}.` : "",
+    sources: [...(module.sourceCases || []), ...(module.sourceFiles || [])],
+  })
+  if (generatedFromRow?.measure || row.aiSuggestion) return generatedFromRow
+
+  if (!item.custom && hasGeneratedImpactContext(module)) {
+    const yn = normalizeAiYesNo(row.yn) || "N"
+    const sourceRefs = [...(module.sourceCases || []), ...(module.sourceFiles || [])]
+    return {
+      yn,
+      impacted: yn === "Y",
+      measure: row.desc || "",
+      rationale: yn === "Y"
+        ? `AI judged this area may be impacted. Please confirm the measure for ${item.en || item.zh}.`
+        : `AI did not find a clear impact signal for ${item.en || item.zh}; responsible engineer should still confirm.`,
+      source: sourceRefs.length ? sourceRefs.join(", ") : "No close historical case found; please confirm manually.",
+    }
+  }
+
+  return undefined
+}
+
+function ImpactAiSuggestionCard({
+  suggestion,
+  onApply,
+  compact = false,
+}: {
+  suggestion: ImpactAiSuggestion
+  onApply?: () => void
+  compact?: boolean
+}) {
+  const hasEvidence = Boolean(suggestion.source || suggestion.sources?.length)
+
+  return (
+    <div className="rounded-md border border-blue-200 bg-blue-50/70 px-2.5 py-2 text-xs text-blue-900">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="inline-flex items-center gap-1 font-semibold text-blue-700">
+          <Sparkles className="size-3.5" />
+          AI 建议
+          {suggestion.yn ? (
+            <span className="rounded-full border border-blue-200 bg-white px-1.5 py-0.5 text-[10px]">
+              {suggestion.yn}
+            </span>
+          ) : null}
+        </span>
+        {onApply ? (
+          <button
+            type="button"
+            onClick={onApply}
+            className="rounded border border-blue-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100"
+          >
+            采用 AI 建议
+          </button>
+        ) : null}
+      </div>
+      {suggestion.measure && !compact ? (
+        <p className="mt-1 leading-5 text-blue-950">{suggestion.measure}</p>
+      ) : null}
+      {suggestion.rationale ? (
+        <p className="mt-1 leading-5 text-blue-800">依据：{suggestion.rationale}</p>
+      ) : null}
+      {hasEvidence ? (
+        <p className="mt-1 truncate text-[11px] text-blue-600">
+          来源：{suggestion.source || suggestion.sources?.join(", ")}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
 type ImpactAnalysisDraftRow = {
   yn?: string
   yes?: boolean
   desc?: string
   confirmedBy?: string
   confirmedAt?: string
+  aiSuggestion?: ImpactAiSuggestion
 }
 
 type ImpactCustomMeasure = {
@@ -1787,6 +1991,7 @@ type ImpactCustomMeasure = {
   confirmedBy?: string
   confirmedAt?: string
   area?: ImpactItemDefinition
+  aiSuggestion?: ImpactAiSuggestion
 }
 
 function normalizeCustomImpactItems(value: unknown): ImpactItemDefinition[] {
@@ -1819,6 +2024,7 @@ function readImpactCustomMeasures(): ImpactCustomMeasure[] {
         confirmedBy: impact.confirmedBy,
         confirmedAt: impact.confirmedAt,
         area: impactItems[idx],
+        aiSuggestion: normalizeImpactAiSuggestion(impact.aiSuggestion),
         yes: String(impact.yn || "").toUpperCase() === "Y" || Boolean(impact.yes),
       }))
       .filter((impact: ImpactCustomMeasure & { yes: boolean }) => impact.yes && impact.desc)
@@ -1889,7 +2095,7 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const recordId = useMemo(() => getActiveRecordId(), [])
   const backendModuleId = backendDraftModuleId(module)
   const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
-  type ImpactRow = { yn: YesNoValue; no?: boolean; yes?: boolean; confirmedBy: string; confirmedAt: string; desc: string }
+  type ImpactRow = { yn: YesNoValue; no?: boolean; yes?: boolean; confirmedBy: string; confirmedAt: string; desc: string; aiSuggestion?: ImpactAiSuggestion }
   type DocRow = { yn: YesNoValue; no?: boolean; yes?: boolean; respPerson: string; dueDate: string }
   type ApprovalRow = { person: string; date: string }
   type StockDeliveryRow = {
@@ -1909,7 +2115,27 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
       confirmedBy: String(row?.confirmedBy || ""),
       confirmedAt: String(row?.confirmedAt || ""),
       desc: String(row?.desc || ""),
+      aiSuggestion: normalizeImpactAiSuggestion(row?.aiSuggestion),
     }
+  }
+  const moduleImpactRows = () =>
+    arrayFromModuleData(module, "impacts").map((row) => normalizeImpactRow(row as Partial<ImpactRow>))
+  const mergeGeneratedImpactHints = (rows: ImpactRow[]): ImpactRow[] => {
+    const generatedRows = moduleImpactRows()
+    return rows.map((row, index) => {
+      const generated = generatedRows[index]
+      if (!generated) return row
+      const shouldUseGeneratedValue = !row.desc && !row.confirmedBy && !row.confirmedAt
+      const yn = shouldUseGeneratedValue ? (generated.yn || row.yn) : row.yn
+      return {
+        ...row,
+        yn,
+        no: yn ? yn === "N" : row.no,
+        yes: yn ? yn === "Y" : row.yes,
+        desc: row.desc || (shouldUseGeneratedValue ? generated.desc : ""),
+        aiSuggestion: row.aiSuggestion || generated.aiSuggestion,
+      }
+    })
   }
   const normalizeDocRow = (row: Partial<DocRow> | null | undefined): DocRow => {
     const yn = yesNoFromLegacy(row)
@@ -1941,10 +2167,17 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   const [impacts, setImpacts] = useState<ImpactRow[]>(() => {
     const saved = readStoredDraft().impacts
     if (Array.isArray(saved) && saved.length) {
-      const normalized = (saved as Partial<ImpactRow>[]).map(normalizeImpactRow)
+      const normalized = mergeGeneratedImpactHints((saved as Partial<ImpactRow>[]).map(normalizeImpactRow))
       return [
         ...normalized,
         ...Array.from({ length: Math.max(impactItems.length - normalized.length, 0) }, () => defaultImpact()),
+      ]
+    }
+    const generatedRows = moduleImpactRows()
+    if (generatedRows.length) {
+      return [
+        ...generatedRows,
+        ...Array.from({ length: Math.max(impactItems.length - generatedRows.length, 0) }, () => defaultImpact()),
       ]
     }
     return impactItems.map(() => defaultImpact())
@@ -2084,11 +2317,40 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
   }
   const updateImpactYesNo = (i: number, yn: YesNoValue) =>
     setImpacts((p) => p.map((r, j) => j === i ? { ...r, yn, no: yn === "N", yes: yn === "Y" } : r))
+  const reloadGeneratedImpactSuggestions = () => {
+    const generatedRows = moduleImpactRows()
+    if (!generatedRows.length) {
+      setSaveStatus("No AI suggestions in current generated module")
+      return
+    }
+    setImpacts((prev) => {
+      const base = prev.length
+        ? [
+            ...prev,
+            ...Array.from({ length: Math.max(impactItems.length - prev.length, 0) }, () => defaultImpact()),
+          ]
+        : [
+            ...generatedRows,
+            ...Array.from({ length: Math.max(impactItems.length - generatedRows.length, 0) }, () => defaultImpact()),
+          ]
+      return mergeGeneratedImpactHints(base)
+    })
+    setSaveStatus("Loaded AI suggestions")
+  }
   const addImpactItem = (dept: ImpactDept) => {
     const id = `custom-impact-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
     setCustomImpactItems((prev) => [...prev, { id, en: "", zh: "", dept, custom: true }])
     setImpacts((prev) => [...prev, defaultImpact()])
     setExpandedImpactDepts((prev) => new Set(prev).add(dept))
+  }
+  // Only custom-added rows can be removed; the built-in IMPACT_ITEMS are fixed.
+  // impacts[] is index-aligned with impactItems (built-ins + customs), so we
+  // drop the same index from both to keep them in sync.
+  const removeImpactItem = (i: number) => {
+    const customIndex = i - IMPACT_ITEMS.length
+    if (customIndex < 0) return
+    setCustomImpactItems((prev) => prev.filter((_, index) => index !== customIndex))
+    setImpacts((prev) => prev.filter((_, index) => index !== i))
   }
   const updateCustomImpactItem = (impactIndex: number, field: "en" | "zh" | "dept", value: string) => {
     const customIndex = impactIndex - IMPACT_ITEMS.length
@@ -2129,6 +2391,9 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
         : [...r.checked, option]
       return { ...r, checked }
     }))
+  const visibleImpactSuggestionCount = impactItems.filter((item, index) =>
+    impactAiSuggestionFor(module, item, index, impacts[index] || defaultImpact()),
+  ).length
 
   return (
     <div className={hideApproval ? "" : "grid gap-5 xl:grid-cols-[4fr_1fr]"}>
@@ -2156,6 +2421,32 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
           </button>
           {expandedSteps.has("step-3.1") && (
           <>
+          <div className={`flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3 text-xs ${
+            visibleImpactSuggestionCount > 0
+              ? "border-blue-100 bg-blue-50 text-blue-800"
+              : "border-amber-100 bg-amber-50 text-amber-800"
+          }`}>
+            <div className="flex min-w-0 items-start gap-2">
+              <Sparkles className="mt-0.5 size-4 shrink-0" />
+              <div className="min-w-0">
+                <p className="font-semibold">
+                  {visibleImpactSuggestionCount > 0
+                    ? `AI 建议已加载：${visibleImpactSuggestionCount} 条`
+                    : "当前 1.2 没有可用 AI 建议"}
+                </p>
+                <p className="mt-0.5 leading-5">
+                  AI 建议显示在每行的 <span className="font-semibold">Measures / 措施</span> 单元格里，是蓝色小卡片。若你有旧草稿，点击右侧按钮会把当前生成结果补到未人工确认的行。
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={reloadGeneratedImpactSuggestions}
+              className="shrink-0 rounded-md border border-blue-200 bg-white px-3 py-1.5 font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100"
+            >
+              载入 AI 建议
+            </button>
+          </div>
           {/* Impact table grouped by department — collapsible like 1.4 */}
           <div className="divide-y divide-slate-200">
             {IMPACT_DEPTS.map((dept) => {
@@ -2205,6 +2496,15 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                             const row = impacts[i] || defaultImpact()
                             const item = impactItems[i]
                             const isCostRow = item.dept === "Initiator" && !item.custom
+                            const aiSuggestion = impactAiSuggestionFor(module, item, i, row)
+                            const applyAiSuggestion = () => {
+                              if (!aiSuggestion) return
+                              if (aiSuggestion.yn) updateImpactYesNo(i, aiSuggestion.yn)
+                              if (aiSuggestion.measure) {
+                                if (isCostRow) setCostNote(aiSuggestion.measure)
+                                else updateImpact(i, "desc", aiSuggestion.measure)
+                              }
+                            }
                             return (
                               <tr key={item.id || item.en || `impact-${i}`} className="border-b border-slate-100 even:bg-slate-50/50 transition-colors hover:bg-blue-50/40">
                                 <td className="px-2 py-3 text-center text-xs text-slate-400 align-middle">{i + 1}</td>
@@ -2232,6 +2532,14 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                                           <option key={option} value={option}>{option}</option>
                                         ))}
                                       </select>
+                                      <button
+                                        type="button"
+                                        onClick={() => removeImpactItem(i)}
+                                        className="inline-flex items-center gap-1 text-[11px] font-medium text-rose-500 transition hover:text-rose-700"
+                                        aria-label={`删除影响项 ${i + 1}`}
+                                      >
+                                        <Trash2 className="size-3" /> 删除此项
+                                      </button>
                                     </div>
                                   ) : (
                                     <>
@@ -2255,6 +2563,9 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                                 <td className="px-4 py-3 align-middle">
                                   {isCostRow ? (
                                     <div className="space-y-2">
+                                      {aiSuggestion ? (
+                                        <ImpactAiSuggestionCard suggestion={aiSuggestion} onApply={applyAiSuggestion} />
+                                      ) : null}
                                       <div className="flex flex-wrap items-center gap-3">
                                         {["Increase", "Decrease", "No change"].map((opt) => (
                                           <label key={opt} className="flex items-center gap-1.5 text-xs whitespace-nowrap">
@@ -2268,9 +2579,14 @@ export function ImpactAnalysisView({ module, hideApproval }: { module: PdEcrDisp
                                         className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Cost remark / 成本备注" />
                                     </div>
                                   ) : (
+                                    <div className="space-y-2">
+                                      {aiSuggestion ? (
+                                        <ImpactAiSuggestionCard suggestion={aiSuggestion} onApply={applyAiSuggestion} />
+                                      ) : null}
                                       <input value={row.desc} onChange={(e) => updateImpact(i, "desc", e.target.value)}
                                         className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                                         placeholder="Validation measures / 验证措施" />
+                                    </div>
                                   )}
                                 </td>
                                 <td className="px-4 py-3 align-middle">
@@ -2543,7 +2859,7 @@ export function ValidationPlanView({
   const recordId = useMemo(() => getActiveRecordId(), [])
   const backendModuleId = backendDraftModuleId(module, resultOnly ? "result" : "plan")
   const hasLocalDraft = useRef(Boolean(localStorage.getItem(storageKey)))
-  type ValRow = { id: string; label: string; checked: boolean; yn: YesNoValue; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string; status: string; result: string }
+  type ValRow = { id: string; label: string; checked: boolean; yn: YesNoValue; criteria: string; finishDate: string; actualDate: string; respPerson: string; comments: string; status: string; result: string; aiGenerated?: boolean }
   type CustomValRow = Pick<ValRow, "checked" | "finishDate" | "actualDate" | "respPerson" | "comments">
   const defaultCustomValRow = (): CustomValRow => ({ checked: true, finishDate: "", actualDate: "", respPerson: "", comments: "" })
   const normalizeValRow = (row: Partial<ValRow> | null | undefined): ValRow => {
@@ -2560,6 +2876,7 @@ export function ValidationPlanView({
       comments: String(row?.comments || ""),
       status: String(row?.status || ""),
       result: String(row?.result || ""),
+      aiGenerated: Boolean(row?.aiGenerated),
     }
   }
 
@@ -2571,7 +2888,7 @@ export function ValidationPlanView({
         if (parsed.rows) return (parsed.rows as Partial<ValRow>[]).map(normalizeValRow)
       } catch {}
     }
-    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, yn: "", criteria: "AI suggested criteria", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "" }))
+    return rowLabels.map((label) => ({ id: `init-${label}`, label, checked: false, yn: "", criteria: "AI suggested criteria", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "", aiGenerated: false }))
   })
   const [customRows, setCustomRows] = useState<Record<string, CustomValRow>>(() => {
     const raw = localStorage.getItem(storageKey)
@@ -2746,7 +3063,15 @@ export function ValidationPlanView({
                   <td className="px-2 py-2 text-center text-xs text-slate-400">
                     {i + 1}
                   </td>
-                  <td className="px-3 py-2 text-xs leading-5 text-slate-700">{row.label}</td>
+                  <td className="px-3 py-2 text-xs leading-5 text-slate-700">
+                    <span>{row.label}</span>
+                    {row.aiGenerated ? (
+                      <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                        <Sparkles className="size-3" />
+                        AI generated
+                      </span>
+                    ) : null}
+                  </td>
                   <td className="px-3 py-2">
                     <input value={row.respPerson} onChange={(e) => updateField(i, "respPerson", e.target.value)}
                       className="h-8 w-full rounded-md border border-slate-300 bg-white px-2 text-xs outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100" placeholder="Resp." />
@@ -2819,7 +3144,7 @@ export function ValidationPlanView({
           </table>
         </div>
 
-        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, yn: "", criteria: "", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "" }])}
+        <button type="button" onClick={() => setRows((p) => [...p, { id: `new-${Date.now()}-${p.length}`, label: "", checked: false, yn: "", criteria: "", finishDate: "", actualDate: "", respPerson: "", comments: "", status: "", result: "", aiGenerated: false }])}
           className="flex w-full items-center justify-center gap-1 border-t border-slate-200 py-1.5 text-xs text-slate-500 hover:bg-blue-50 hover:text-blue-700 transition">
           + 添加验证项
         </button>
@@ -2878,6 +3203,12 @@ export function ValidationPlanView({
                           <p className="mt-0.5 text-xs text-slate-400">
                             {cm.area?.en || cm.area?.zh || "影响范围未指定"}
                           </p>
+                          {cm.aiSuggestion ? (
+                            <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                              <Sparkles className="size-3" />
+                              来自 1.2 AI 建议，已同步
+                            </span>
+                          ) : null}
                         </td>
                         <td className="px-3 py-2.5 align-middle">
                           <input
@@ -3182,7 +3513,7 @@ export function ImplementationView({
   resultOnly?: boolean
 }) {
   // ── Data definitions matching Excel template ──
-  type ImplRow = { id: string; department: string; yn: string; description: string; responsible: string; dueDate: string; actualDate: string; result?: string; resultNote?: string }
+  type ImplRow = { id: string; department: string; yn: string; description: string; responsible: string; dueDate: string; actualDate: string; result?: string; resultNote?: string; aiGenerated?: boolean; aiRationale?: string }
   let _implRowId = 0
   const nextImplRowId = () => `impl-${Date.now()}-${_implRowId++}-${Math.random().toString(36).slice(2, 6)}`
 
@@ -3310,7 +3641,7 @@ export function ImplementationView({
   }
   const addChecklistItem = (dept: string) => {
     setChecklistRows((prev) => {
-      const newRow: ImplRow = { id: nextImplRowId(), department: dept, yn: "", description: "", responsible: "", dueDate: "", actualDate: "", result: "", resultNote: "" }
+      const newRow: ImplRow = { id: nextImplRowId(), department: dept, yn: "", description: "", responsible: "", dueDate: "", actualDate: "", result: "", resultNote: "", aiGenerated: false }
       // Insert after the last item of this department
       const lastIndex = prev.map((r) => r.department).lastIndexOf(dept)
       if (lastIndex >= 0) {
@@ -3428,6 +3759,17 @@ export function ImplementationView({
                                 </td>
                                 <td className="px-3 py-2 text-xs leading-5 text-slate-700">
                                   {row.description || "-"}
+                                  {row.aiGenerated ? (
+                                    <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                                      <Sparkles className="size-3" />
+                                      AI generated
+                                    </span>
+                                  ) : null}
+                                  {row.aiRationale ? (
+                                    <p className="mt-1 text-[11px] leading-4 text-blue-600">
+                                      依据：{row.aiRationale}
+                                    </p>
+                                  ) : null}
                                 </td>
                                 <td className="px-3 py-2">
                                   <input
@@ -3521,8 +3863,6 @@ export function ImplementationView({
           </div>
         )}
       </div>
-
-      {!resultOnly ? <FeasibilityChangeReviewPanel /> : null}
 
     </div>
   )

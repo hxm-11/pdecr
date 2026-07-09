@@ -1,0 +1,50 @@
+{
+  "case_id": "PDECR_RBCE_PDECR2026003",
+  "source": {
+    "source_file": "T0006-PD-ECR_JP360螺栓F03Z20088M-00-20260511.xlsx",
+    "file_type": "xlsx",
+    "parser": "excel",
+    "raw_markdown_path": null,
+    "raw_json_path": null,
+    "checksum": "5378549b4d9a1449504ffb011113f78ec14509d3877b94d26f4bf177fc992a31"
+  },
+  "metadata": {
+    "dc_no": "RBCE-PDECR2026003",
+    "date": "2026-04-02",
+    "mcr_no": null,
+    "customer_project": [
+      "JP360"
+    ],
+    "affected_product_no": [
+      "F03ZS0000B-04"
+    ],
+    "component_no": [
+      "F03Z20088M-00"
+    ],
+    "initiator": "lu feihong",
+    "department": null,
+    "product_family": null,
+    "change_type": null
+  },
+  "modules": {
+    "change_reason": "螺栓增加二供供应商，新增二供螺栓料号及图纸，F03Z20088M-00，\n该二供料号图纸与一供图纸区别为,质量和供应商标识区域调整",
+    "current_design": "当前设计是标识打在螺栓法兰处",
+    "change_proposal": "新增螺栓供应商，新螺栓图纸调整二供供应商质量和供应商标识，其余尺寸未作更改\n更改后标识打在螺栓头部",
+    "impact_analysis": "螺栓疲劳试验未完成，带测试验证\n1.确认产线螺栓拧紧工艺，一供螺栓F03Z20046A-00与二供F03Z20088M-00拧紧工艺相同\n采购件变更\n2.52CNY/ Motor= 14pcs（0.18CNY/ pc）\n库存(发货)处理指示: 可以使用\n改单前改后是否可以混合供货：单电机不混，整托可混\n改后第一批货物的发货要求：维持跟先前一样",
+    "validation_plan": "try run 20260407 hu bin 一供与二供螺栓拧紧工艺共用，验证\nCapability Studies_ CMK 20260407 hu bin 一供与二供螺栓拧紧工艺共用，验证\nBOM check 20260331 lu feihong 双供，均适用\n螺栓盐雾试验 20260331 yang wei\n螺栓疲劳测试 20260530 yang wei",
+    "implementation_plan": "Step 5 Documents release / 文档发布\nDevelopment confirmation/ 研发确认: lufeihong\n\nDevelopment:\nY Change BOMs & Drawings & Documents in POE system lu feihong 20260530 ongoing\nY Inform documents update (check work-on can met requirements) lu feihong 20260530 ongoing\nN Update Offer drawing, TCD, D-FMEA\nN Norm, WB, HF...\nN MoC，IMDS.\n\nManufacturing:\nN Related (Production/Testing) equipement be ready on site\nN Related (Production/Testing) program be ready\nN Related (Production/Testing) tooling / cutting / fixture etc. be ready\nN Old tooling / cutting / fixture disposal\nN Old materials disposal\nN Planner update the planning sheet\nN Update FMEA\nN Update CP/FC (Control Plan/Flow Chart)\nN Update WI/PDS (Include attachments.)\nN First batch Mark, Special Mark (Inside Package)\nN First batch Mark, Special Mark (Outside Package)\nY Training xie qiangqiang 20260403 closed\n\nCOS:\nY Confirm the storage of old parts and coordinate the introduction date for new part (RM) fu huiqin DONE closed\nN Confirm the delivery date of old parts and first delivery of new parts (FG)\nN Check sample orders which affected:material order of CKD\nY Confirm production scheduling according to the alignment, any changes share the information to MOEx,MFE fu huiqin DONE closed\nN Confirm the old stock/ do prioritize delivery and inventory handling\nN Inform the first delivery to PMO\n\nPurchasing:\nY Check sample orders which affected: material order of purchasing parts yang wei DONE closed\nY Inform internal related departments(COS,MFE,MOEx)with following requirements.:Yellow sticker, delivery quantities and date, PN No. and name,change description… yang wei DONE closed\nY Update incoming inspection plan zhou zhaoxin DONE closed\n\nQuality:\nN Update testing programe on testing equipment\nN Update inspection plan for CKD parts\n\nCPjM:\nN Distribute the Offer drawing, TCD to customer\n\nLOP:\nN Check 10 digit material order\n\nPMO:\nN Check sample orders which affected: Customer order\nN Inform Customer the first delivery information\n\nPlanned implementation date: 20260530",
+    "risk_analysis": "螺栓疲劳试验未完成，带测试验证",
+    "approval_summary": "Step 4 Technical feasibility & Validation plan approval / 技术可行性&验证计划批准\nDevelopment/研发: xiang liangshan\nPurchasing/采购: tao jiong\nTEF/工艺: he yonggang\nQuality/质量: xia qian\nCPjM/客户项目: su jian\nCOS/样品: he yonggang\nMOE/生产: luo zhi\nLOG/物流: xu baochun\n\nStep 7 Implementation approval / 导入清单\nDevelopment/研发: xiang liangshan\nPurchasing/采购: tao jiong\nTEF/工艺: he yonggang\nCOS/样品: he yonggang\nQuality/质量: xia qian\nCPjM/客户项目: su jian\nMOEx/生产: luo zhi\nLOG/物流: xu baochun",
+    "remarks": "备注：\n新增螺栓供应商，新螺栓图纸调整二供供应商质量和供应商标识，其余尺寸未作更改\n\nAffected documents Check:\n8.WI check Resp.person: xie qiangqiang Due date: 20260331"
+  },
+  "impact_departments": [],
+  "tasks": [],
+  "attachments": [],
+  "quality_control": {
+    "extraction_status": "complete",
+    "missing_fields": [],
+    "confidence": 0.7,
+    "needs_human_review": false,
+    "errors": []
+  }
+}

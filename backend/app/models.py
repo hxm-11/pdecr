@@ -214,6 +214,11 @@ PD_ECR_STATUSES = {
     "draft",
     "generated",
     "submitted",
+    "rejected",
+    "applicant_confirming",
+    "leader_reviewing",
+    "task_executing",
+    "result_confirming",
     "department_confirmation",
     "department_alignment",
     "execution_assignment",
@@ -226,6 +231,7 @@ PD_ECR_STATUSES = {
     "implementation",
     "closed",
     "cancelled",
+    "expired",
 }
 
 PD_ECR_DEFAULT_MODULES: list[tuple[str, str]] = [
@@ -269,11 +275,6 @@ class PdEcrCase(PdEcrCaseBase, table=True):
     created_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
     updated_at: datetime = Field(default_factory=get_datetime_utc, sa_type=DateTime(timezone=True))  # type: ignore
     closed_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
-    flowable_process_instance_id: str | None = Field(default=None, index=True, max_length=128)
-    flowable_process_definition_key: str | None = Field(default=None, max_length=255)
-    flowable_business_key: str | None = Field(default=None, index=True, max_length=255)
-    flowable_status: str | None = Field(default=None, max_length=64)
-    flowable_last_synced_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
 
 
 class PdEcrModuleBase(SQLModel):
@@ -432,8 +433,6 @@ class PdEcrApprovalTaskBase(SQLModel):
     approver_id: uuid.UUID | None = Field(default=None, foreign_key="user.id", index=True)
     approver_email: str | None = Field(default=None, max_length=255)
     approver_name: str | None = Field(default=None, max_length=255)
-    flowable_task_id: str | None = Field(default=None, index=True, max_length=128)
-    flowable_task_definition_key: str | None = Field(default=None, max_length=255)
     rejection_reason: str | None = Field(default=None, sa_column=Column(Text))
     approved_at: datetime | None = Field(default=None, sa_type=DateTime(timezone=True))  # type: ignore
 
@@ -469,6 +468,11 @@ class PdEcrAttachmentBase(SQLModel):
     size_bytes: int | None = None
     target_type: str = Field(default="case", max_length=32)
     target_id: str | None = Field(default=None, max_length=255)
+    # Business classification: before_change | after_change | feasibility |
+    # execution | result | other
+    section: str = Field(default="other", index=True, max_length=32)
+    module_id: str | None = Field(default=None, index=True, max_length=255)
+    uploaded_by_name: str | None = Field(default=None, max_length=255)
 
 
 class PdEcrAttachment(PdEcrAttachmentBase, table=True):

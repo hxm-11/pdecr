@@ -8,6 +8,7 @@ from fastapi import HTTPException, status
 from sqlmodel import Session, select
 
 from app.models import (
+    PdEcrApprovalTask,
     PdEcrCase,
     PdEcrDepartmentVisibility,
     PdEcrExecutionTask,
@@ -110,6 +111,16 @@ def _execution_tasks(session: Session, case_id: uuid.UUID) -> list[PdEcrExecutio
             select(PdEcrExecutionTask)
             .where(PdEcrExecutionTask.case_id == case_id)
             .order_by(PdEcrExecutionTask.department, PdEcrExecutionTask.checklist_row_id)
+        ).all()
+    )
+
+
+def _approval_tasks(session: Session, case_id: uuid.UUID) -> list[PdEcrApprovalTask]:
+    return list(
+        session.exec(
+            select(PdEcrApprovalTask)
+            .where(PdEcrApprovalTask.case_id == case_id)
+            .order_by(PdEcrApprovalTask.created_at.desc())
         ).all()
     )
 
@@ -292,8 +303,6 @@ def _serialize_approval_task(task: Any) -> dict[str, Any]:
         "approver_id": str(task.approver_id) if task.approver_id else None,
         "approver_email": task.approver_email,
         "approver_name": task.approver_name,
-        "flowable_task_id": task.flowable_task_id,
-        "flowable_task_definition_key": task.flowable_task_definition_key,
         "rejection_reason": task.rejection_reason,
         "approved_at": task.approved_at.isoformat() if task.approved_at else None,
         "created_at": task.created_at.isoformat() if task.created_at else None,
@@ -320,6 +329,10 @@ def get_workflow_state(*, session: Session, case: PdEcrCase) -> dict[str, Any]:
         "leader_review_tasks": [
             _serialize_leader_task(task, case=case)
             for task in _leader_tasks(session, case.id)
+        ],
+        "approval_tasks": [
+            _serialize_approval_task(task)
+            for task in _approval_tasks(session, case.id)
         ],
     }
 
@@ -358,12 +371,14 @@ def list_my_workflow_tasks(*, session: Session, current_user: User) -> dict[str,
         ).all()
         cases_by_id = {case.id: case for case in cases}
 
-    # — Approval tasks —
-    from app.models import PdEcrApprovalTask
-    approval_statement = select(PdEcrApprovalTask).where(
-        (PdEcrApprovalTask.approver_id == current_user.id)
-        | (PdEcrApprovalTask.approver_email == current_user.email),
-    ).order_by(PdEcrApprovalTask.created_at.desc())
+    approval_statement = select(PdEcrApprovalTask).order_by(
+        PdEcrApprovalTask.created_at.desc()
+    )
+    if not current_user.is_superuser and getattr(current_user, "pd_ecr_role", None) != "pd_ecr_manager":
+        approval_statement = approval_statement.where(
+            (PdEcrApprovalTask.approver_id == current_user.id)
+            | (PdEcrApprovalTask.approver_email == current_user.email),
+        )
     approval_tasks_raw = session.exec(approval_statement).all()
     approval_case_ids = list({t.case_id for t in approval_tasks_raw})
     approval_cases: dict[uuid.UUID, dict[str, Any]] = {}
@@ -1042,8 +1057,6 @@ def create_approval_task(
     approver_id: uuid.UUID | None = None,
     approver_email: str | None = None,
     approver_name: str | None = None,
-    flowable_task_id: str | None = None,
-    flowable_task_definition_key: str | None = None,
     commit: bool = True,
 ) -> Any:
     """Create a manager approval task for a submitted case."""
@@ -1053,8 +1066,6 @@ def create_approval_task(
         approver_id=approver_id,
         approver_email=approver_email,
         approver_name=approver_name,
-        flowable_task_id=flowable_task_id,
-        flowable_task_definition_key=flowable_task_definition_key,
         status="pending",
     )
     session.add(task)
@@ -1072,7 +1083,6 @@ def approve_case(
     current_user: Any,
     module: Any | None = None,
     commit: bool = True,
-    flowable_status: str | None = None,
 ) -> Any:
     """Approve a case — transition to generated and trigger AI."""
     from app.models import get_datetime_utc
@@ -1098,9 +1108,6 @@ def approve_case(
 
     # Update case status
     case.status = "generated"
-    case.flowable_status = flowable_status or case.flowable_status
-    if case.flowable_process_instance_id or flowable_status:
-        case.flowable_last_synced_at = now
     case.updated_at = now
     session.add(case)
 
@@ -1117,7 +1124,6 @@ def reject_case(
     approval_task: Any,
     rejection_reason: str | None = None,
     commit: bool = True,
-    flowable_status: str | None = None,
 ) -> Any:
     """Reject a case — send back to draft."""
     from app.models import get_datetime_utc
@@ -1130,9 +1136,6 @@ def reject_case(
     session.add(approval_task)
 
     case.status = "draft"
-    case.flowable_status = flowable_status or case.flowable_status
-    if case.flowable_process_instance_id or flowable_status:
-        case.flowable_last_synced_at = now
     case.updated_at = now
     session.add(case)
 

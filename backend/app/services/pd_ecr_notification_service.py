@@ -73,6 +73,7 @@ def build_workflow_email_subject(
         "leader_review_request": "PD-ECR leader review requested",
         "leader_review_approved": "PD-ECR leader review approved",
         "leader_review_rejected": "PD-ECR leader review rejected",
+        "manager_approval_request": "PD-ECR manager approval requested",
         "manager_approval_approved": "PD-ECR manager approval completed",
         "changes_requested": "PD-ECR changes requested",
     }.get(notification_type, "PD-ECR workflow notification")

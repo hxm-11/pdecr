@@ -1,44 +1,47 @@
 import { CheckCircle2, Circle, Play, RotateCcw, XCircle } from "lucide-react"
 
+// Canonical PD-ECR lifecycle (source of truth: backend lifecycle_service).
 const flowSteps = [
   { id: "draft", short: "Draft", zh: "草稿" },
-  { id: "generated", short: "AI", zh: "生成" },
   { id: "submitted", short: "Submit", zh: "提交" },
-  { id: "department_confirmation", short: "Dept", zh: "部门" },
-  { id: "department_alignment", short: "Align", zh: "对齐" },
-  { id: "execution_assignment", short: "Assign", zh: "分派" },
-  { id: "assignee_confirmation", short: "Accept", zh: "确认" },
-  { id: "execution_in_progress", short: "Exec", zh: "执行" },
-  { id: "in_review", short: "Review", zh: "评审" },
-  { id: "leader_review", short: "Sign", zh: "签核" },
-  { id: "approved", short: "OK", zh: "批准" },
-  { id: "implementation", short: "Impl", zh: "导入" },
+  { id: "applicant_confirming", short: "Confirm", zh: "发起确认" },
+  { id: "leader_reviewing", short: "Review", zh: "领导审核" },
+  { id: "task_executing", short: "Exec", zh: "执行" },
+  { id: "result_confirming", short: "Result", zh: "结果确认" },
   { id: "closed", short: "Close", zh: "关闭" },
 ] as const
 
 const nextGate: Record<string, string> = {
-  draft: "Generate AI draft",
-  generated: "Submit review",
-  submitted: "Department confirmation",
-  department_confirmation: "Cross-team alignment",
-  department_alignment: "Assign execution tasks",
-  execution_assignment: "Assignee confirmation",
-  assignee_confirmation: "Execute validation",
-  execution_in_progress: "Review results",
-  in_review: "Leader sign-off",
-  leader_review: "Approve release",
-  approved: "Implement change",
-  implementation: "Close case",
+  draft: "Submit for approval",
+  submitted: "Applicant confirmation",
+  applicant_confirming: "Leader review",
+  leader_reviewing: "Execute tasks",
+  task_executing: "Confirm results",
+  result_confirming: "Close case",
   closed: "Archived",
   historical: "Reference only",
-  changes_requested: "Resolve comments",
+  rejected: "Resolve & resubmit",
   cancelled: "Stopped",
+  expired: "Overdue",
 }
 
+// Legacy/raw → canonical, mirroring backend LEGACY_STATUS_ALIASES so old case
+// records still resolve to a real step instead of an unknown (-1) index.
 const statusAlias: Record<string, string> = {
-  v1_mvp_draft: "generated",
-  review: "in_review",
+  v1_mvp_draft: "draft",
   pending: "submitted",
+  generated: "task_executing",
+  implementation: "task_executing",
+  execution_assignment: "task_executing",
+  assignee_confirmation: "task_executing",
+  execution_in_progress: "task_executing",
+  approved: "task_executing",
+  review: "leader_reviewing",
+  in_review: "leader_reviewing",
+  leader_review: "leader_reviewing",
+  department_confirmation: "applicant_confirming",
+  department_alignment: "applicant_confirming",
+  changes_requested: "rejected",
 }
 
 function normalizeStatus(status?: string, source?: string) {
@@ -54,8 +57,9 @@ function currentIndex(status: string) {
 
 function statusText(status: string) {
   if (status === "historical") return "Historical / 历史"
-  if (status === "changes_requested") return "Changes requested / 退回"
+  if (status === "rejected") return "Rejected / 退回"
   if (status === "cancelled") return "Cancelled / 取消"
+  if (status === "expired") return "Expired / 超期"
   const step = flowSteps.find((item) => item.id === status)
   return step ? `${step.short} / ${step.zh}` : status.replace(/_/g, " ")
 }
@@ -72,8 +76,8 @@ export function PdEcrCaseStatusFlow({
   const normalized = normalizeStatus(status, source)
   const activeIndex = currentIndex(normalized)
   const isHistorical = normalized === "historical"
-  const isReturned = normalized === "changes_requested"
-  const isCancelled = normalized === "cancelled"
+  const isReturned = normalized === "rejected"
+  const isCancelled = normalized === "cancelled" || normalized === "expired"
   const visibleSteps = compact
     ? flowSteps.filter((_, index) => index % 2 === 0 || index === activeIndex)
     : flowSteps

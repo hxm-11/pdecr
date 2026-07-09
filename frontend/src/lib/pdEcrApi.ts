@@ -120,10 +120,27 @@ export type PdEcrKnowledgeBaseStatus = {
   } | null;
 };
 
-export type PdEcrCaseStatus =
+/** Canonical backend lifecycle states (source of truth: lifecycle_service). */
+export type PdEcrLifecycleStatus =
   | "draft"
-  | "generated"
   | "submitted"
+  | "applicant_confirming"
+  | "leader_reviewing"
+  | "task_executing"
+  | "result_confirming"
+  | "closed"
+  | "rejected"
+  | "cancelled"
+  | "expired";
+
+/**
+ * Superset of canonical + legacy states. Prefer `PdEcrCase.lifecycle_status`
+ * (already normalized by the backend) for status-driven UI; the legacy members
+ * remain only so historical/raw values still type-check during migration.
+ */
+export type PdEcrCaseStatus =
+  | PdEcrLifecycleStatus
+  | "generated"
   | "department_confirmation"
   | "department_alignment"
   | "execution_assignment"
@@ -134,14 +151,19 @@ export type PdEcrCaseStatus =
   | "changes_requested"
   | "approved"
   | "implementation"
-  | "closed"
-  | "cancelled";
+  | "historical";
 
 export type PdEcrCase = {
   id: string;
   case_no: string;
   title?: string;
   status: PdEcrCaseStatus;
+  /** Backend-normalized lifecycle status — prefer this for status UI. */
+  lifecycle_status?: PdEcrCaseStatus;
+  lifecycle_label?: string;
+  raw_status?: string;
+  is_legacy_status?: boolean;
+  allowed_next_statuses?: PdEcrCaseStatus[];
   source_type?: string;
   is_historical?: boolean;
   dc_no?: string | null;
@@ -655,6 +677,171 @@ export async function uploadPdEcrFile(file: File): Promise<PdEcrUploadResult> {
     },
   );
   return res.data;
+}
+
+// ── Attachments (backend-persisted) ─────────────────────────────────────────
+
+export type PdEcrAttachmentSection =
+  | "before_change"
+  | "after_change"
+  | "feasibility"
+  | "execution"
+  | "result"
+  | "other";
+
+export type PdEcrAttachment = {
+  id: string;
+  case_id: string;
+  module_id: string | null;
+  section: PdEcrAttachmentSection;
+  filename: string;
+  content_type: string | null;
+  file_size: number | null;
+  uploaded_by: string | null;
+  uploaded_by_name: string | null;
+  created_at: string | null;
+};
+
+export async function uploadPdEcrAttachment(params: {
+  caseId: string;
+  file: File;
+  section?: PdEcrAttachmentSection;
+  moduleId?: string;
+}): Promise<PdEcrAttachment> {
+  const formData = new FormData();
+  formData.append("file", params.file);
+  formData.append("section", params.section || "other");
+  if (params.moduleId) formData.append("module_id", params.moduleId);
+
+  const res = await pdEcrApi.post<PdEcrAttachment>(
+    `/api/v1/pd-ecr/cases/${params.caseId}/attachments`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } },
+  );
+  return res.data;
+}
+
+export async function listPdEcrAttachments(params: {
+  caseId: string;
+  section?: PdEcrAttachmentSection;
+  moduleId?: string;
+}): Promise<PdEcrAttachment[]> {
+  const res = await pdEcrApi.get<{ attachments: PdEcrAttachment[] }>(
+    `/api/v1/pd-ecr/cases/${params.caseId}/attachments`,
+    { params: { section: params.section, module_id: params.moduleId } },
+  );
+  return res.data.attachments || [];
+}
+
+export async function deletePdEcrAttachment(
+  attachmentId: string,
+): Promise<void> {
+  await pdEcrApi.delete(`/api/v1/pd-ecr/attachments/${attachmentId}`);
+}
+
+export function pdEcrAttachmentDownloadUrl(attachmentId: string): string {
+  return resolvePdEcrAssetUrl(
+    `/api/v1/pd-ecr/attachments/${attachmentId}/download`,
+  );
+}
+
+// ── Signoffs (persisted to the audit trail) ─────────────────────────────────
+
+export type PdEcrSignoff = {
+  id: string;
+  step: string | null;
+  role: string | null;
+  action: string;
+  operator_id: string | null;
+  operator_name: string | null;
+  comment: string | null;
+  metadata?: Record<string, unknown>;
+  created_at: string | null;
+};
+
+export async function listPdEcrSignoffs(
+  caseId: string,
+): Promise<PdEcrSignoff[]> {
+  const res = await pdEcrApi.get<{ signoffs: PdEcrSignoff[] }>(
+    `/api/v1/pd-ecr/cases/${caseId}/signoffs`,
+  );
+  return res.data.signoffs || [];
+}
+
+export async function createPdEcrSignoff(params: {
+  caseId: string;
+  step?: string;
+  role?: string;
+  action?: string;
+  comment?: string;
+  signerName?: string;
+  moduleId?: string;
+  metadata?: Record<string, unknown>;
+}): Promise<PdEcrSignoff> {
+  const res = await pdEcrApi.post<PdEcrSignoff>(
+    `/api/v1/pd-ecr/cases/${params.caseId}/signoffs`,
+    {
+      step: params.step,
+      role: params.role,
+      action: params.action || "signed",
+      comment: params.comment,
+      signer_name: params.signerName,
+      module_id: params.moduleId,
+      metadata: params.metadata,
+    },
+  );
+  return res.data;
+}
+
+// ── New-form contract / required-field validation ───────────────────────────
+
+export const PD_ECR_REQUIRED_FIELDS = [
+  "product",
+  "customer_project",
+  "change_title",
+  "product_no",
+  "change_reason",
+  "change_description",
+  "affected_departments",
+] as const;
+
+export const PD_ECR_REQUIRED_FIELD_LABELS: Record<string, string> = {
+  product: "产品",
+  customer_project: "客户/项目",
+  change_title: "变更名称",
+  product_no: "产品编号",
+  change_reason: "变更原因",
+  change_description: "变更描述",
+  affected_departments: "影响部门",
+};
+
+export function pdEcrFieldLabel(field: string): string {
+  return PD_ECR_REQUIRED_FIELD_LABELS[field] || field;
+}
+
+export type PdEcrNewFormContract = {
+  required_fields: string[];
+  field_aliases: Record<string, string[]>;
+};
+
+export async function getPdEcrNewFormContract(): Promise<PdEcrNewFormContract> {
+  const res = await pdEcrApi.get<PdEcrNewFormContract>(
+    "/api/v1/pd-ecr/meta/new-form",
+  );
+  return res.data;
+}
+
+/** Pull the backend's structured `missing_fields` out of a 422 error body. */
+export function extractPdEcrMissingFields(error: unknown): string[] {
+  if (!error || typeof error !== "object") return [];
+  const detail = (
+    error as { response?: { data?: { detail?: unknown } } }
+  ).response?.data?.detail;
+  if (detail && typeof detail === "object") {
+    const missing = (detail as { missing_fields?: unknown }).missing_fields;
+    if (Array.isArray(missing)) return missing.map(String);
+  }
+  return [];
 }
 
 export async function retrievePdEcrSimilarCases(

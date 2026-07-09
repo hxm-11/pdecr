@@ -61,12 +61,12 @@ def load_faiss_index():
 
     if not FAISS_PATH.exists():
         raise RuntimeError(
-            f"FAISS 索引文件不存在：{FAISS_PATH}，请先运行 python app/rag/build_index.py"
+            f"FAISS 索引文件不存在：{FAISS_PATH}，请先运行 python -m app.rag.ingest.build_index"
         )
 
     if not META_PATH.exists():
         raise RuntimeError(
-            f"FAISS 元数据文件不存在：{META_PATH}，请先运行 python app/rag/build_index.py"
+            f"FAISS 元数据文件不存在：{META_PATH}，请先运行 python -m app.rag.ingest.build_index"
         )
 
     _index = faiss.read_index(str(FAISS_PATH))
@@ -238,20 +238,17 @@ def retrieve_pd_ecr_results(data: Dict[str, Any], top_k: int = 5) -> List[Dict[s
         return []
 
     try:
-        model = get_model()
+        from app.rag.retrieval.embeddings import get_embeddings
+
         index, meta = load_faiss_index()
         if np is None:
             raise RuntimeError("numpy is not installed")
+        embedder = get_embeddings()
     except Exception as exc:
         print(f"FAISS retrieval unavailable, using keyword fallback: {exc}")
         return _fallback_keyword_results(data, top_k=top_k)
 
-    query_embedding = model.encode(
-        [query],
-        normalize_embeddings=True,
-    )
-
-    query_embedding = np.asarray(query_embedding, dtype="float32")
+    query_embedding = np.asarray([embedder.embed_query(query)], dtype="float32")
 
     scores, indices = index.search(query_embedding, max(top_k * 2, top_k))
 
@@ -262,6 +259,7 @@ def retrieve_pd_ecr_results(data: Dict[str, Any], top_k: int = 5) -> List[Dict[s
             continue
 
         item = meta[idx]
+        item_metadata = item.get("metadata") if isinstance(item.get("metadata"), dict) else {}
 
         score = float(scores[0][rank])
         results.append({
@@ -269,11 +267,13 @@ def retrieve_pd_ecr_results(data: Dict[str, Any], top_k: int = 5) -> List[Dict[s
             "score": round(score, 4),
             "source": item.get("source", ""),
             "metadata": {
+                **item_metadata,
                 "source": item.get("source", ""),
                 "source_file": item.get("source", ""),
                 "document_name": item.get("source", ""),
                 "document_type": item.get("document_type", ""),
                 "case_id": item.get("case_id", ""),
+                "chunk_type": item.get("chunk_type", item_metadata.get("chunk_type", "")),
             },
             "chunk_id": item.get("chunk_id", ""),
             "text": item.get("text", ""),

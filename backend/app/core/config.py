@@ -63,14 +63,6 @@ class Settings(BaseSettings):
     # Upload directory for PD-ECR file imports
     UPLOAD_DIR: str = "uploads"
 
-    # Optional Flowable orchestration for PD-ECR approvals
-    FLOWABLE_ENABLED: bool = False
-    FLOWABLE_BASE_URL: str | None = None
-    FLOWABLE_USERNAME: str | None = None
-    FLOWABLE_PASSWORD: str | None = None
-    FLOWABLE_PROCESS_DEFINITION_KEY: str = "pd_ecr_manager_approval"
-    FLOWABLE_TIMEOUT_SECONDS: float = 10.0
-
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:

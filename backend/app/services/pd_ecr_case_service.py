@@ -11,6 +11,7 @@ from app.models import (
     PD_ECR_STATUSES,
     PdEcrActivity,
     PdEcrAttachment,
+    PdEcrApprovalTask,
     PdEcrCase,
     PdEcrCaseCreate,
     PdEcrCaseUpdate,
@@ -30,17 +31,63 @@ from app.models import (
     User,
 )
 from app.services.pd_ecr_audit_service import write_activity
+from app.services.pd_ecr_lifecycle_service import (
+    LIFECYCLE_APPLICANT_CONFIRMING,
+    LIFECYCLE_CANCELLED,
+    LIFECYCLE_CLOSED,
+    LIFECYCLE_DRAFT,
+    LIFECYCLE_EXPIRED,
+    LIFECYCLE_LEADER_REVIEWING,
+    LIFECYCLE_REJECTED,
+    LIFECYCLE_RESULT_CONFIRMING,
+    LIFECYCLE_SUBMITTED,
+    LIFECYCLE_TASK_EXECUTING,
+    allowed_next_statuses,
+    lifecycle_payload,
+    transition_case_lifecycle,
+)
 
 
 WRITE_TRANSITIONS: dict[str, set[str]] = {
-    "draft": {"submitted", "cancelled"},
-    "submitted": {"in_review", "changes_requested", "cancelled"},
-    "in_review": {"approved", "changes_requested", "cancelled"},
-    "changes_requested": {"submitted", "cancelled"},
-    "approved": {"implementation", "closed"},
-    "implementation": {"closed", "changes_requested"},
-    "closed": set(),
-    "cancelled": set(),
+    LIFECYCLE_DRAFT: {LIFECYCLE_SUBMITTED, LIFECYCLE_CANCELLED},
+    LIFECYCLE_SUBMITTED: {
+        LIFECYCLE_APPLICANT_CONFIRMING,
+        LIFECYCLE_LEADER_REVIEWING,
+        LIFECYCLE_TASK_EXECUTING,
+        LIFECYCLE_REJECTED,
+        LIFECYCLE_CANCELLED,
+    },
+    LIFECYCLE_REJECTED: {LIFECYCLE_DRAFT, LIFECYCLE_SUBMITTED, LIFECYCLE_CANCELLED},
+    LIFECYCLE_APPLICANT_CONFIRMING: {
+        LIFECYCLE_LEADER_REVIEWING,
+        LIFECYCLE_REJECTED,
+        LIFECYCLE_CANCELLED,
+    },
+    LIFECYCLE_LEADER_REVIEWING: {
+        LIFECYCLE_TASK_EXECUTING,
+        LIFECYCLE_REJECTED,
+        LIFECYCLE_CANCELLED,
+    },
+    LIFECYCLE_TASK_EXECUTING: {
+        LIFECYCLE_RESULT_CONFIRMING,
+        LIFECYCLE_REJECTED,
+        LIFECYCLE_EXPIRED,
+        LIFECYCLE_CANCELLED,
+    },
+    LIFECYCLE_RESULT_CONFIRMING: {
+        LIFECYCLE_CLOSED,
+        LIFECYCLE_TASK_EXECUTING,
+        LIFECYCLE_REJECTED,
+        LIFECYCLE_CANCELLED,
+    },
+    LIFECYCLE_EXPIRED: {LIFECYCLE_TASK_EXECUTING, LIFECYCLE_CANCELLED},
+    LIFECYCLE_CLOSED: set(),
+    LIFECYCLE_CANCELLED: set(),
+    # Backward-compatible legacy transitions.
+    "in_review": {"approved", "changes_requested", LIFECYCLE_LEADER_REVIEWING, LIFECYCLE_REJECTED},
+    "changes_requested": {LIFECYCLE_SUBMITTED, LIFECYCLE_CANCELLED},
+    "approved": {LIFECYCLE_TASK_EXECUTING, LIFECYCLE_CLOSED},
+    "implementation": {LIFECYCLE_CLOSED, LIFECYCLE_REJECTED},
 }
 
 MODULE_MANAGEMENT_FIELDS = {
@@ -551,6 +598,7 @@ def delete_case(
         PdEcrAttachment,
         PdEcrComment,
         PdEcrLeaderReviewTask,
+        PdEcrApprovalTask,
         PdEcrExecutionTask,
         PdEcrDepartmentVisibility,
         PdEcrDepartmentTask,
@@ -568,32 +616,13 @@ def transition_case(
     *, session: Session, case: PdEcrCase, next_status: str, current_user: User
 ) -> PdEcrCase:
     ensure_write_access(case, current_user)
-    if next_status not in PD_ECR_STATUSES:
-        raise HTTPException(status_code=422, detail=f"Invalid status: {next_status}")
-    allowed = WRITE_TRANSITIONS.get(case.status, set())
-    if next_status not in allowed and not current_user.is_superuser:
-        raise HTTPException(
-            status_code=409,
-            detail=f"Cannot transition from {case.status} to {next_status}",
-        )
-    previous_status = case.status
-    case.status = next_status
-    case.updated_at = now_utc()
-    if next_status == "closed":
-        case.closed_at = now_utc()
-    session.add(case)
-    write_activity(
+    return transition_case_lifecycle(
         session=session,
+        case=case,
+        next_status=next_status,
+        current_user=current_user,
         action="case.transitioned",
-        case_id=case.id,
-        actor_id=current_user.id,
-        target_id=str(case.id),
-        message=f"{previous_status} -> {next_status}",
-        metadata={"from": previous_status, "to": next_status},
     )
-    session.commit()
-    session.refresh(case)
-    return case
 
 
 def list_modules(*, session: Session, case_id: uuid.UUID) -> list[PdEcrModule]:
@@ -830,12 +859,17 @@ def write_version(
 
 def serialize_case(case: PdEcrCase) -> dict[str, Any]:
     display_status = "historical" if case.is_historical else case.status
+    lifecycle = lifecycle_payload(case.status)
     return {
         "id": str(case.id),
         "case_no": case.case_no,
         "title": case.title,
         "status": display_status,
         "raw_status": case.status,
+        "lifecycle_status": "historical" if case.is_historical else lifecycle["lifecycle_status"],
+        "lifecycle_label": "Historical" if case.is_historical else lifecycle["lifecycle_label"],
+        "is_legacy_status": lifecycle["is_legacy_status"],
+        "allowed_next_statuses": [] if case.is_historical else allowed_next_statuses(case.status),
         "source_type": case.source_type,
         "is_historical": case.is_historical,
         "created_by_id": str(case.created_by_id) if case.created_by_id else None,
@@ -854,13 +888,6 @@ def serialize_case(case: PdEcrCase) -> dict[str, Any]:
         "created_at": case.created_at.isoformat() if case.created_at else None,
         "updated_at": case.updated_at.isoformat() if case.updated_at else None,
         "closed_at": case.closed_at.isoformat() if case.closed_at else None,
-        "flowable_process_instance_id": case.flowable_process_instance_id,
-        "flowable_process_definition_key": case.flowable_process_definition_key,
-        "flowable_business_key": case.flowable_business_key,
-        "flowable_status": case.flowable_status,
-        "flowable_last_synced_at": case.flowable_last_synced_at.isoformat()
-        if case.flowable_last_synced_at
-        else None,
         "source_file": case.case_no,
         "customer": case.customer_project,
         "project": case.customer_project,

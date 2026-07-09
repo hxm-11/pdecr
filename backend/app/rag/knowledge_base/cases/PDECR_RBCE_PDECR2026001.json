@@ -1,0 +1,53 @@
+{
+  "case_id": "PDECR_RBCE_PDECR2026001",
+  "source": {
+    "source_file": "T0007 PD-ECR_JP360轴套_F03Z20045R-00_20060421.xlsx",
+    "file_type": "xlsx",
+    "parser": "excel",
+    "raw_markdown_path": null,
+    "raw_json_path": null,
+    "checksum": "4cf3116401223bedc9bfec160fb24ceb4941f2e28ffcacc18085ad0ae39c8fe5"
+  },
+  "metadata": {
+    "dc_no": "RBCE-PDECR2026001",
+    "date": "2026-04-07",
+    "mcr_no": null,
+    "customer_project": [
+      "JP360"
+    ],
+    "affected_product_no": [
+      "F03ZS0000B-04"
+    ],
+    "component_no": [
+      "F03Z20045R-00"
+    ],
+    "initiator": "FENG Ying",
+    "department": null,
+    "product_family": null,
+    "change_type": null
+  },
+  "modules": {
+    "change_reason": "轴套与转轴当前是过渡配合，在生产压装轴套工位中，发生轴套被工装带起，压装失效。",
+    "current_design": "当前设计是过渡配合，转轴尺寸46.5(+0.025/+0.009)，钢套尺寸46.5(0.02/0)，配合量（-0.025，+0.011）",
+    "change_proposal": "调整钢套内径公差，将配合改为过盈装配\n建议调整为过盈配合，转轴尺寸46.5(+0.025/+0.009)，钢套尺寸46.5(0/-0.02)，配合量（-0.045，-0.009）",
+    "impact_analysis": "产品可靠性提高\n1.确认产线压入力和压入程序等参数是否合适；2. 需要2件极限件做压入力验证：Done\n采购件变更\n需要采购确认\n库存(发货)处理指示: 可以使用\n改后第一批货物的发货要求？Answer回答：维持一样",
+    "validation_plan": "Tial run  2026.04.10  HU Bin  Done",
+    "implementation_plan": "Step 5 Documents release / 文档发布\n1. Documents release (drawing, offer drawing, Bom, Spec., ) / 文档发布 (图纸, 客户图纸， …)\nDevelopment confirmation/ 研发确认: FENG Ying\n\nStep 6.1 Implementation check list / 导入清单\nDevelopment:\nN Change BOMs & Drawings & Documents in POE system  Responsible: FENG Ying\nN Inform documents update (check work-on can met requirements)  Responsible: FENG Ying\nY Update Offer drawing, TCD, D-FMEA\nN Norm, WB, HF...\nN MoC，IMDS.\n\nManufacturing:\nY Related (Production/Testing) equipement be ready on site\nY Related (Production/Testing) program be ready\nY Related (Production/Testing) tooling / cutting / fixture etc. be ready\nY Old tooling / cutting / fixture disposal\nY Old materials disposal\nY Planner update the planning sheet\nY Update FMEA\nY Update CP/FC (Control Plan/Flow Chart)\nY Update WI/PDS (Include attachments.)\nY First batch Mark, Special Mark (Inside Package)\nY First batch Mark, Special Mark (Outside Package)\nY Training\n\nCOS:\nY Confirm the storage of old parts and coordinate the introduction date for new part (RM)\nY Confirm the delivery date of old parts and first delivery of new parts (FG)\nY Check sample orders which affected:material order of CKD\nY Confirm production scheduling according to the alignment, any changes share the information to MOEx,MFE\nY Confirm the old stock/ do prioritize delivery and inventory handling\nY Inform the first delivery to PMO\n\nPurchasing:\nY Check sample orders which affected: material order of purchasing parts\nY Inform internal related departments(COS,MFE,MOEx)with following requirements.:Yellow sticker, delivery quantities and date, PN No. and name,change description…\nY Update incoming inspection plan  Responsible: ZHOU zhaoxin\n\nQuality:\nY Update testing programe on testing equipment\nY Update inspection plan for CKD parts\n\nCPjM:\nY Distribute the Offer drawing, TCD to customer\n\nLOP:\nY Check 10 digit material order\n\nPMO:\nY Check sample orders which affected: Customer order\nY Inform Customer the first delivery information\n\nStep 6.2 Implementation date / 执行日期\nPlanned implementation date: 20260530",
+    "risk_analysis": null,
+    "approval_summary": "Step 4 Technical feasibility & Validation plan approval / 技术可行性&验证计划批准\nDevelopment/研发: XIANG Liangshan\nPurchasing/采购: TAO Jiong\nMFE/工艺: HE Yonggang\nQuality/质量: XIA Qian\nCPjM/客户项目: SU Jian\nCOS/样品: HE Yonggang\nMOEx/生产: LUO Zhi\nLOG/物流: XU Baochun\n\nStep 7 Implementation approval / 导入清单\nDevelopment/研发: XIANG Liangshan\nPurchasing/采购: TAO Jiong\nMFE/工艺: HE Yonggang\nCOS/样品: HE Yonggang\nQuality/质量: XIA Qian\nCPjM/客户项目: SU Jian\nMOEx/生产: LUO Zhi\nLOG/物流: XU Baochun",
+    "remarks": null
+  },
+  "impact_departments": [],
+  "tasks": [],
+  "attachments": [],
+  "quality_control": {
+    "extraction_status": "complete",
+    "missing_fields": [
+      "modules.risk_analysis",
+      "modules.remarks"
+    ],
+    "confidence": 0.7,
+    "needs_human_review": false,
+    "errors": []
+  }
+}

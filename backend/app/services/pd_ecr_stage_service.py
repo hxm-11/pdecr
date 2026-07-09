@@ -540,7 +540,7 @@ def confirm_staged_document(
     import traceback as _tb
     def _rebuild():
         try:
-            from app.rag.build_index import rebuild_index
+            from app.rag.ingest import rebuild_index
             rebuild_index()
         except Exception:
             _tb.print_exc()
@@ -592,7 +592,7 @@ def _build_vector_chunks(doc: PdEcrStagedDocument, case: PdEcrCase) -> int:
     provenance — enabling precise metadata-aware RAG retrieval.
     """
     import pickle
-    from app.rag.build_index import VECTOR_DIR as VS_DIR
+    from app.rag.ingest.build_index import VECTOR_DIR as VS_DIR
     from app.rag.pdecr_structured_extractor import extract_structured, build_row_chunks
 
     VS_DIR.mkdir(parents=True, exist_ok=True)

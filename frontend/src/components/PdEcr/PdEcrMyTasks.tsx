@@ -52,13 +52,7 @@ type WorkflowTask =
 
 type OpenTaskTarget = WorkflowTask & PdEcrTaskTarget;
 
-type WorkbenchLane =
-  | "inbox"
-  | "engineer"
-  | "leader"
-  | "submitted"
-  | "overdue"
-  | "closed";
+type WorkbenchLane = "submitted" | "inbox" | "overdue" | "closed";
 
 function statusClass(status: string) {
   switch (status) {
@@ -133,23 +127,10 @@ function isClosedTask(task: WorkflowTask) {
   );
 }
 
-function isEngineerTask(task: WorkflowTask) {
-  return "checklist_row_id" in task || "impact_result" in task;
-}
-
-function isLeaderTask(task: WorkflowTask) {
-  return "approver_email" in task || "reviewer_email" in task;
-}
-
 function taskMatchesLane(task: WorkflowTask, lane: WorkbenchLane) {
-  if (lane === "engineer") {
-    return isEngineerTask(task) && (!isClosedTask(task) || isReturnedTask(task));
-  }
-  if (lane === "leader") {
-    return isLeaderTask(task) && (!isClosedTask(task) || isReturnedTask(task));
-  }
   if (lane === "overdue") return isTaskOverdue(task);
   if (lane === "closed") return isClosedTask(task);
+  // "inbox" (待我处理) — every open action assigned to me, including leader review.
   return !isClosedTask(task) || isReturnedTask(task);
 }
 
@@ -355,12 +336,6 @@ export function PdEcrMyTasks() {
   const submittedApprovalCount = submittedApprovalTasks.filter(
     (t) => t.status === "pending",
   ).length;
-  const engineerCount = allTasks.filter((task) =>
-    taskMatchesLane(task, "engineer"),
-  ).length;
-  const leaderCount = allTasks.filter((task) =>
-    taskMatchesLane(task, "leader"),
-  ).length;
   const openCount =
     openExecutionCount +
     openLeaderReviewCount +
@@ -398,39 +373,27 @@ export function PdEcrMyTasks() {
     count: number;
   }> = [
     {
-      value: "inbox",
-      label: "待我处理",
-      helper: "All open actions assigned to me",
-      count: openCount,
-    },
-    {
-      value: "engineer",
-      label: "工程师执行",
-      helper: "Department checks, assignments, evidence",
-      count: engineerCount,
-    },
-    {
-      value: "leader",
-      label: "领导审批",
-      helper: "Manager approval and leader sign-off",
-      count: leaderCount,
-    },
-    {
       value: "submitted",
       label: "我发起的",
-      helper: "Requests waiting on others",
+      helper: "我创建/负责、等待他人处理的变更",
       count: submittedApprovalCount,
+    },
+    {
+      value: "inbox",
+      label: "待我处理",
+      helper: "分派给我、待我操作的任务(含领导审批)",
+      count: openCount,
     },
     {
       value: "overdue",
       label: "超期",
-      helper: "Items past due date",
+      helper: "已过期、待我处理的任务",
       count: overdueCount,
     },
     {
       value: "closed",
       label: "已完成",
-      helper: "Closed approvals visible to me",
+      helper: "我可见的已办结任务",
       count: closedCount,
     },
   ];
@@ -534,15 +497,14 @@ export function PdEcrMyTasks() {
         ) : null}
       </header>
 
-      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-5">
-        <MetricCard label="待我处理" value={openCount} tone="accent" />
-        <MetricCard label="工程师执行" value={engineerCount} />
-        <MetricCard label="领导审批" value={leaderCount} />
+      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <MetricCard label="我发起的" value={submittedApprovalCount} />
-        <MetricCard label="超期任务" value={overdueCount} tone="accent" />
+        <MetricCard label="待我处理" value={openCount} tone="accent" />
+        <MetricCard label="超期" value={overdueCount} tone="accent" />
+        <MetricCard label="已完成" value={closedCount} />
       </div>
 
-      <div className="enterprise-panel grid gap-2 p-3 md:grid-cols-2 xl:grid-cols-6">
+      <div className="enterprise-panel grid gap-2 p-3 md:grid-cols-2 xl:grid-cols-4">
         {workbenchLaneOptions.map((option) => (
           <button
             key={option.value}

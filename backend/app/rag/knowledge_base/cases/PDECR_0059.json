@@ -1,0 +1,51 @@
+{
+  "case_id": "PDECR_0059",
+  "source": {
+    "source_file": "T0001-PDECR - eCom anorld M6 Bolt 04M-02.xlsx",
+    "file_type": "xlsx",
+    "parser": "excel",
+    "raw_markdown_path": null,
+    "raw_json_path": null,
+    "checksum": "6e4e58eb888143eead9ae81a5e8cc56a4fd0a39a4029212ca2b55219f7fe82c6"
+  },
+  "metadata": {
+    "dc_no": "PDECR_0059",
+    "date": "2025-11-20",
+    "mcr_no": null,
+    "customer_project": [
+      "All"
+    ],
+    "affected_product_no": [
+      "E-Compressor"
+    ],
+    "component_no": [
+      "F01Z7A004M-02",
+      "F01Z7A004M-03"
+    ],
+    "initiator": "Zhu Wenwu",
+    "department": null,
+    "product_family": null,
+    "change_type": "Supplier request / 供应商请求"
+  },
+  "modules": {
+    "change_reason": "F01Z7A004M-02供应商柏中退出供货，切换量产供应商阿诺德，件号更新为F01Z7A004M-03，以持续供货",
+    "current_design": "F01Z7A004M-02\n供应商：柏中\nF01Z7A004M-02\n不带Logo&不带强度",
+    "change_proposal": "F01Z7A004M-03\n供应商：阿诺德\nF01Z7A004M-03\n带Logo&带强度",
+    "impact_analysis": "1. Function&Performance will be influenced? / 产品功能性能影响?\nIf Yes, product impaction evaluation?\n如果是，产品影响评估？(如果是初次样件放行，空白处请说明样件目的） NA\nWhether need sample to test? Plan？\n是否需要样件进行验证？计划？ Detail see Doc. attachment\n\n2.1 Interface&boundary to customer will be influenced? / 接口&边界是否影响客户?\nPlease explain the impact and whether it has been confirmed by the customer?请说明影响和是否得到客户的确认？ 研发做验证结果，销售决定如何告知客户\n\n2.2 Interface&boundary to internal will be influenced? / 接口&边界是否影响内部?\nIf Yes, internal impaction evaluation?\n如果是，内部影响是否评估？(例如： 测试接头，噪音测试夹具等） NA\n\n3. Mechanical strength&Durability will be influenced? / 产品可靠性、鲁棒性影响 ？\nIf Yes, How to evaluate？Plan? 如果是，请说明影响和如何评估,计划？\n(例如:仿真分析等) NA\nWhether need new sample or fixture to test? Plan？\n是否需要样件以及定制/改制夹具进行验证？计划？ NA\n\n4. Others component will be influenced? / 影响其它零部件?\nIf yes, Which components will change in parallel? 如果影响， 哪些零部件也需要同时变更? No affect\n\n5. Manufactory/assembly/testing will be influenced? / 加工,装配,测试是否影响?\nFeedback from manufacturing engineer? 生产制造装配是否影响，反馈？\nInfluence on project&product delivery time? 对项目&产品交货时间的影响？\nInfluence on manufacturing cost / 对生产成本的影响?\n\n6. Influence on supplier part？ Feedback from Supplier/Purchasing？\nWas this change confirmed with Purchasing (Supplier) for feasibility? Feedback from Supplier？\n变更后的零件，生产可行性供应商是否确认？反馈？\nQuality: 已确认\nInfluence on purchasing part delivery time? 对采购件交货时间的影响？ NA\n涉及到变更的零件，博世已出PR ，供应商还未来得及生产的订单，是否已经通知供应商取消.\n7：Does the change influence on purchasing cost ? 变更对采购成本的影响?\n\n8. Changed parts Stock& treatment / 需要变更零件的库存统计和处理？\n(只针对涉及到已经生产过的零件变更，新放行零件和本条不相关)\nRBCW仓库和RBCD仓库，是否有库存，\n供应商处是否有库存，\n在途，运输中是否有库存\n被影响到的实物库存处理指示:\n(设计工程师组织会议讨论)\n\n9. DFMA & Sample prodcution OPL?\nDFMA 会议纪要，请附件说明；如果变更无需DFMA或前期PDECR已经做过DFMA，请说明并列出之前的PD_ECR号 Any OPL not closed from last time sample production? 上次样件生产是否仍有OPL没有完成？请说明或者附件说明\n\n10. PM alignment？(Influence on project Timeline? Cost?);\n是否同意对项目时间和成本的影响____________; 需求样品订单数量____________ ;\n\n11. 如果涉及以下情况需TCR3 审核确认。 不涉及则",
+    "validation_plan": "Whether need sample to test? Plan？\n是否需要样件进行验证？计划？ Detail see Doc. attachment\n\nStep 3.2 Quality Assurance Items / 检查项目\nValidations 验证\tPlan finish date 计划完成日期\tResp.person 负责人\tComments 备注\nCapability Studies_ CMK\nCapability Studies_ MSA\nMAE release\nCleanness test\nQZ test\n200h PDL\nTest program or fixture etc.",
+    "implementation_plan": "Step 5 Documents release / 文档发布\n1. Documents release (drawing, offer drawing, Bom, Spec., ) / 文档发布 (图纸, 客户图纸， …)\nDevelopment confirmation/ 研发确认: __________\n\nStep 6.1 Implementation check list / 导入清单\nDevelopment Y Change BOMs & Drawings & Documents in POE system Responsible: Li Pingzheng Due date: 2025-11-21 00:00:00\nDevelopment N Inform documents update (check work-on can met requirements)\nDevelopment N Update Offer drawing, TCD, D-FMEA\nDevelopment N Norm, WB, HF...\nDevelopment N MoC，IMDS.\nManufacturing N Related (Production/Testing) equipement be ready on site\nManufacturing N Related (Production/Testing) program be ready\nManufacturing N Related (Production/Testing) tooling / cutting / fixture etc. be ready\nManufacturing N Old tooling / cutting / fixture disposal\nManufacturing N Old materials disposal\nManufacturing N Planner update the planning sheet\nManufacturing N Update FMEA\nManufacturing N Update CP/FC (Control Plan/Flow Chart)\nManufacturing N Update WI/PDS (Include attachments.)\nManufacturing N First batch Mark, Special Mark (Inside Package)\nManufacturing N First batch Mark, Special Mark (Outside Package)\nManufacturing N Training\nCOS N Confirm the storage of old parts and coordinate the introduction date for new part (RM)\nCOS N Confirm the delivery date of old parts and first delivery of new parts (FG)\nCOS N Check sample orders which affected:material order of CKD\nCOS N Confirm production scheduling according to the alignment, any changes share the information to MOEx,MFE\nCOS N Confirm the old stock/ do prioritize delivery and inventory handling\nCOS N Inform the first delivery to PMO\nPPS (PPS->PMQ/PQA) N Check sample orders which affected: material order of purchasing parts\nPPS (PPS->PMQ/PQA) N Inform internal related departments(COS,MFE,MOEx)with following requirements.:Yellow sticker, delivery quantities and date, PN No. and name,change description…\nPPS (PPS->PMQ/PQA) N Update incoming inspection plan\nQMM1 N Update testing programe on testing equipment\nQMM1 N Update inspection plan for CKD parts\nEIS4 N Distribute the Offer drawing, TCD to customer\nLOP N Check 10 digit material order\nPMO N Check sample orders which affected: Customer order\nPMO N Inform Customer the first delivery information\n\nStep 6.2 Implementation date / 执行日期\nPlanned implementation date:\n变更计划执行日期____________________________________",
+    "risk_analysis": "8. Changed parts Stock& treatment / 需要变更零件的库存统计和处理？\n(只针对涉及到已经生产过的零件变更，新放行零件和本条不相关)\nRBCW仓库和RBCD仓库，是否有库存，\n供应商处是否有库存，\n在途，运输中是否有库存\n被影响到的实物库存处理指示:\n(设计工程师组织会议讨论)",
+    "approval_summary": "Step 4 Technical feasibility & Validation plan approval / 技术可行性&验证计划批准\nDesign team leader\nDevelopment SM\nSMP-TMS\nTCR3\nSignature / 签名:\n\nQuality: 已确认",
+    "remarks": "Customer project Name/ 客户项目名称：All\nMCR No. / MCR号: -\nSample type / 样品类型:\nPlanned implementation date:\n变更计划执行日期____________________________________"
+  },
+  "impact_departments": [],
+  "tasks": [],
+  "attachments": [],
+  "quality_control": {
+    "extraction_status": "complete",
+    "missing_fields": [],
+    "confidence": 0.7,
+    "needs_human_review": false,
+    "errors": []
+  }
+}

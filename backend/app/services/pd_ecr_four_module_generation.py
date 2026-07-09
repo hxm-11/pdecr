@@ -152,15 +152,22 @@ def _impact_module(
         likely_yes = index in {0, 2, 4} or (
             index == 3 and bool(affected_departments)
         )
+        ai_suggestion = _impact_ai_suggestion(
+            label,
+            likely_yes,
+            summary,
+            reason,
+            evidence_note,
+        )
         impacts.append(
             {
+                "yn": "Y" if likely_yes else "N",
                 "no": not likely_yes,
                 "yes": likely_yes,
                 "confirmedBy": "",
                 "confirmedAt": "",
-                "desc": _impact_desc(label, summary, reason, evidence_note)
-                if likely_yes
-                else "",
+                "desc": ai_suggestion["measure"] if likely_yes else "",
+                "aiSuggestion": ai_suggestion,
             }
         )
 
@@ -244,6 +251,29 @@ def _impact_desc(label: str, summary: str, reason: str, evidence_note: str) -> s
     return f"Check {label} for {base}. {evidence_note}"
 
 
+def _impact_ai_suggestion(
+    label: str,
+    impacted: bool,
+    summary: str,
+    reason: str,
+    evidence_note: str,
+) -> dict[str, Any]:
+    base = summary or reason or "Change Description input"
+    measure = _impact_desc(label, summary, reason, evidence_note) if impacted else ""
+    rationale = (
+        f"AI marks this as impacted because the change may affect {label.replace('?', '').lower()}."
+        if impacted
+        else f"AI did not find a direct signal that this change affects {label.replace('?', '').lower()}."
+    )
+    return {
+        "yn": "Y" if impacted else "N",
+        "impacted": impacted,
+        "measure": measure,
+        "rationale": f"{rationale} Basis: {base}.",
+        "source": evidence_note,
+    }
+
+
 def _validation_module(
     source_cases: list[str],
     source_files: list[str],
@@ -265,6 +295,7 @@ def _validation_module(
             "comments": _evidence_note(source_cases, source_files)
             if label in checked
             else "",
+            "aiGenerated": True,
         }
         for label in [
             "Try run",
@@ -305,6 +336,8 @@ def _implementation_module(
             "dueDate": "",
             "result": "",
             "resultNote": "",
+            "aiGenerated": True,
+            "aiRationale": _evidence_note(source_cases, source_files),
         }
         for index, (department, description) in enumerate(IMPLEMENTATION_CHECKLIST_TEMPLATE)
     ]

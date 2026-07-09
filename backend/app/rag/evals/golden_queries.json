@@ -1,0 +1,47 @@
+[
+  {
+    "id": "guide-ring-chamfer-stuck",
+    "name": "导油环回油口无倒角导致压装卡滞",
+    "query": {
+      "customer_project": "JP360",
+      "product_no": "F03ZS0000B-04",
+      "component_no": "F03Z20046V-01",
+      "reason": "导油环回油口处未设计倒角，入机壳时发生卡滞，压装不到位",
+      "current_design": "回油口无倒角",
+      "change_proposal": "回油口增加C角1x45度和圆角R1",
+      "remarks": "避免压装发生卡滞"
+    },
+    "expected_sources": ["PDECR24_093", "导油环"],
+    "expected_terms": ["回油口", "倒角", "卡滞"]
+  },
+  {
+    "id": "air-pipe-a-sample-release",
+    "name": "空管件 A Sample 样件放行",
+    "query": {
+      "customer_project": "JIM 493",
+      "product_no": "",
+      "component_no": "",
+      "reason": "客户要求空管件A样件释放，用于后续样件验证",
+      "current_design": "当前无空管件样件释放记录",
+      "change_proposal": "释放空管件A样件并完成相关验证计划",
+      "remarks": "A Sample release"
+    },
+    "expected_sources": ["PDECR26_002", "空管件"],
+    "expected_terms": ["空管件", "A-Sample", "样件放行"]
+  },
+  {
+    "id": "scr-low-coating-test-sample",
+    "name": "SCR 低涂敷测试样件放行",
+    "query": {
+      "customer_project": "JIM 493",
+      "product_no": "",
+      "component_no": "",
+      "reason": "需要释放SCR低涂敷测试样件，用于性能和标定验证",
+      "current_design": "当前SCR催化器为标准涂敷方案",
+      "change_proposal": "释放低涂敷SCR测试样件并安排验证",
+      "remarks": "SCR low coating test sample release"
+    },
+    "expected_sources": ["PDECR24_128", "SCR低涂敷"],
+    "expected_terms": ["SCR", "低涂敷", "测试样件"]
+  }
+]

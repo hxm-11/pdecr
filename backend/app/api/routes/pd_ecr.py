@@ -14,7 +14,15 @@ from pathlib import Path
 from typing import Any, Dict
 from urllib.parse import quote
 
-from fastapi import APIRouter, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import (
+    APIRouter,
+    File,
+    Form,
+    HTTPException,
+    UploadFile,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from jinja2 import BaseLoader, Environment
@@ -55,31 +63,43 @@ from app.services.pd_ecr_case_service import (
     update_module,
 )
 from app.services.pd_ecr_notification_service import (
-    record_workflow_notification,
     run_due_reminders,
     send_module_assignment_email,
 )
+from app.services.pd_ecr_approval_service import (
+    approve_submitted_case,
+    create_case_and_submit_for_approval,
+    reject_submitted_case,
+    submit_case_for_approval,
+)
+from app.services.pd_ecr_audit_service import write_activity
+from app.services.pd_ecr_attachment_service import (
+    ALLOWED_SECTIONS,
+    delete_attachment,
+    get_attachment_or_404,
+    list_attachments,
+    save_attachment,
+    serialize_attachment,
+)
+from app.services.pd_ecr_form_service import form_contract
+from app.services.pd_ecr_lifecycle_service import lifecycle_contract
+from app.services.pd_ecr_person_directory_service import (
+    directory_contract,
+    search_people,
+    serialize_person,
+)
 from app.services.pd_ecr_workflow import (
-    approve_case,
     assign_execution_tasks,
     complete_execution_task,
     confirm_department_task,
     confirm_execution_assignment,
-    create_approval_task,
     get_workflow_state,
     list_my_workflow_tasks,
     publish_case_to_departments,
-    reject_case,
     request_department_changes,
     request_execution_task_changes,
     review_leader_task,
     submit_for_department_confirmation,
-)
-from app.services.pd_ecr_flowable_service import (
-    FlowableIntegrationError,
-    complete_manager_approval_task,
-    start_manager_approval_process,
-    sync_approval_task_from_flowable,
 )
 from app.services.pd_ecr_ai_case_service import (
     apply_generated_module,
@@ -288,10 +308,14 @@ class PdEcrLeaderReviewPayload(BaseModel):
 class PdEcrSubmitForApprovalPayload(BaseModel):
     """P0: Submit a case for manager approval."""
     title: str = ""
+    product: str | None = None
     initiator: str | None = None
     customer_project: str | None = None
     product_no: str | None = None
     part_no: str | None = None
+    change_reason: str | None = None
+    change_description: str | None = None
+    affected_departments: list[str] | None = None
     target_close_date: str | None = None
     # Form data for AI generation after approval
     form_data: Dict[str, Any] | None = None
@@ -308,6 +332,20 @@ class PdEcrApprovePayload(BaseModel):
 class PdEcrRejectPayload(BaseModel):
     """P0: Manager rejects a submitted case."""
     rejection_reason: str | None = None
+
+
+def _approval_form_data(payload: PdEcrSubmitForApprovalPayload) -> Dict[str, Any]:
+    form_data: Dict[str, Any] = dict(payload.form_data or {})
+    for key in (
+        "product",
+        "change_reason",
+        "change_description",
+        "affected_departments",
+    ):
+        value = getattr(payload, key, None)
+        if value not in (None, "", []):
+            form_data.setdefault(key, value)
+    return form_data
 
 
 class PdEcrImportPayload(BaseModel):
@@ -1682,6 +1720,43 @@ def create_pd_ecr_case(
     }
 
 
+@router.get("/meta/lifecycle")
+def get_pd_ecr_lifecycle_contract():
+    return lifecycle_contract()
+
+
+@router.get("/meta/new-form")
+def get_pd_ecr_new_form_contract():
+    return form_contract()
+
+
+@router.get("/people/me")
+def get_pd_ecr_current_person(current_user: CurrentUser):
+    return serialize_person(current_user)
+
+
+@router.get("/people")
+def list_pd_ecr_people(
+    session: SessionDep,
+    current_user: CurrentUser,
+    query: str | None = None,
+    department: str | None = None,
+    role: str | None = None,
+    limit: int = 50,
+):
+    return {
+        "people": search_people(
+            session=session,
+            query=query,
+            department=department,
+            role=role,
+            limit=limit,
+        ),
+        "directory": directory_contract(),
+        "current_user": serialize_person(current_user),
+    }
+
+
 @router.post("/cases/generate-from-ai")
 def create_pd_ecr_case_from_ai(
     payload: PdEcrGenerateCasePayload,
@@ -1714,154 +1789,38 @@ def submit_for_approval(
     current_user: CurrentUser,
 ):
     """Submit a PD-ECR case for manager approval before AI generation."""
-    from app.models import PdEcrCase, PdEcrModule, User
-
-    # 1. Create the case in "submitted" status
-    case_no = f"PD-ECR-{uuid.uuid4().hex[:8].upper()}"
-    case = PdEcrCase(
-        case_no=case_no,
-        title=payload.title or "PD-ECR Change Request",
-        status="submitted",
-        source_type="manual",
-        initiator=payload.initiator or (current_user.display_name or current_user.email),
-        created_by_id=current_user.id,
-        owner_id=current_user.id,
+    return create_case_and_submit_for_approval(
+        session=session,
+        title=payload.title,
+        initiator=payload.initiator,
         customer_project=payload.customer_project,
         product_no=payload.product_no,
         part_no=payload.part_no,
-        target_close_date=datetime.fromisoformat(payload.target_close_date) if payload.target_close_date else None,
-    )
-    session.add(case)
-    session.flush()
-
-    form_data = payload.form_data or {}
-    module_data = {
-        **form_data,
-        "title": payload.title or form_data.get("title") or "PD-ECR Change Request",
-        "changeTitle": form_data.get("changeTitle") or payload.title,
-        "initiator": payload.initiator or form_data.get("initiator") or (current_user.display_name or current_user.email),
-        "customer_project": payload.customer_project or form_data.get("customer_project") or form_data.get("customer"),
-        "product_no": payload.product_no or form_data.get("product_no") or form_data.get("product"),
-        "part_no": payload.part_no or form_data.get("part_no") or form_data.get("component_no") or form_data.get("partNumber"),
-        "component_no": payload.part_no or form_data.get("component_no") or form_data.get("partNumber"),
-        "target_close_date": payload.target_close_date or form_data.get("target_close_date"),
-        "leader_confirmed": False,
-        "content": form_data.get("changeSummary") or form_data.get("change_proposal") or form_data.get("description") or payload.title or "",
-        "summary": form_data.get("changeSummary") or form_data.get("change_proposal") or payload.title or "",
-    }
-    session.add(
-        PdEcrModule(
-            case_id=case.id,
-            module_id="change-description",
-            title="Change Request description",
-            content_json=module_data,
-            content_md=str(module_data.get("content") or ""),
-            source_cases=[case.case_no],
-            source_files=[],
-            needs_human_input=False,
-            status="submitted",
-            version=1,
-            updated_by_id=current_user.id,
-        )
+        target_close_date=payload.target_close_date,
+        form_data=_approval_form_data(payload),
+        approver_email=payload.approver_email,
+        approver_name=payload.approver_name,
+        current_user=current_user,
     )
 
-    # 2. Resolve approver
-    approver_email = payload.approver_email
-    approver_name = payload.approver_name
-    approver_id: uuid.UUID | None = None
 
-    if not approver_email:
-        members = form_data.get("members") if isinstance(form_data.get("members"), list) else []
-        owner = next((m for m in members if isinstance(m, dict) and m.get("role") == "owner"), None)
-        if owner and isinstance(owner, dict):
-            approver_email = owner.get("email", "")
-            approver_name = owner.get("displayName", "")
-        if not approver_email:
-            # Fallback: find department leader in initiator's department
-            dept = current_user.department
-            if dept:
-                leader = session.exec(
-                    select(User).where(
-                        User.department == dept,
-                        User.pd_ecr_role == "department_leader",
-                        User.is_active,  # noqa: E712
-                    ).limit(1)
-                ).first()
-                if leader:
-                    approver_email = leader.email
-                    approver_name = leader.display_name or leader.full_name
-                    approver_id = leader.id
-
-    if approver_email and not approver_id:
-        approver = session.exec(
-            select(User).where(
-                User.email == approver_email,
-                User.is_active,  # noqa: E712
-            ).limit(1)
-        ).first()
-        if approver:
-            approver_id = approver.id
-            approver_name = approver_name or approver.display_name or approver.full_name
-
-    # 3. Create approval task
-    flowable_task: dict[str, Any] | None = None
-    try:
-        flowable_result = start_manager_approval_process(
-            case=case,
-            approver_id=approver_id,
-            approver_email=approver_email,
-            approver_name=approver_name,
-            form_data=form_data,
-        )
-        flowable_task = (
-            flowable_result.get("task")
-            if isinstance(flowable_result, dict)
-            else None
-        )
-    except FlowableIntegrationError as exc:
-        session.rollback()
-        raise HTTPException(
-            status_code=502,
-            detail=f"Failed to start Flowable approval process: {exc}",
-        ) from exc
-
-    approval_task = create_approval_task(
+@router.post("/cases/{case_id}/submit-approval")
+def submit_existing_case_for_approval(
+    case_id: str,
+    payload: PdEcrSubmitForApprovalPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Submit an existing draft PD-ECR case for manager approval."""
+    case = get_case_or_404(session=session, case_id=case_id)
+    return submit_case_for_approval(
         session=session,
         case=case,
-        approver_id=approver_id,
-        approver_email=approver_email,
-        approver_name=approver_name,
-        flowable_task_id=(
-            str(flowable_task.get("id") or "")
-            if isinstance(flowable_task, dict)
-            else None
-        ),
-        flowable_task_definition_key=(
-            str(flowable_task.get("taskDefinitionKey") or "")
-            if isinstance(flowable_task, dict)
-            else None
-        ),
-        commit=False,
+        form_data=_approval_form_data(payload),
+        approver_email=payload.approver_email,
+        approver_name=payload.approver_name,
+        current_user=current_user,
     )
-    sync_approval_task_from_flowable(
-        approval_task=approval_task,
-        flowable_task=flowable_task,
-    )
-    session.commit()
-    session.refresh(case)
-    session.refresh(approval_task)
-
-    return {
-        "case": serialize_case(case),
-        "approval_task": {
-            "id": str(approval_task.id),
-            "status": approval_task.status,
-            "approver_email": approval_task.approver_email,
-            "approver_name": approval_task.approver_name,
-            "flowable_task_id": approval_task.flowable_task_id,
-            "flowable_task_definition_key": approval_task.flowable_task_definition_key,
-        },
-    }
 
 
 @router.post("/cases/{case_id}/manager-approve")
@@ -1871,92 +1830,12 @@ def manager_approve_case(
     current_user: CurrentUser,
 ):
     """Manager approves a submitted case."""
-    from app.models import PdEcrApprovalTask, PdEcrCase, PdEcrModule
-
-    case = session.exec(
-        select(PdEcrCase).where(PdEcrCase.id == uuid.UUID(case_id))
-    ).first()
-    if not case:
-        raise HTTPException(status_code=404, detail="Case not found")
-    if case.status != "submitted":
-        raise HTTPException(status_code=409, detail=f"Case is {case.status}, not submitted")
-
-    approval = session.exec(
-        select(PdEcrApprovalTask).where(
-            PdEcrApprovalTask.case_id == uuid.UUID(case_id),
-            PdEcrApprovalTask.status == "pending",
-        )
-    ).first()
-    if not approval:
-        raise HTTPException(status_code=404, detail="No pending approval task for this case")
-
-    if approval.approver_id and approval.approver_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Only the assigned approver can approve")
-    if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
-        raise HTTPException(status_code=403, detail="Only the assigned approver can approve")
-
-    module = session.exec(
-        select(PdEcrModule).where(
-            PdEcrModule.case_id == uuid.UUID(case_id),
-            PdEcrModule.module_id == "change-description",
-        )
-    ).first()
-    try:
-        complete_manager_approval_task(
-            case=case,
-            approval_task=approval,
-            current_user=current_user,
-            approved=True,
-        )
-    except FlowableIntegrationError as exc:
-        session.rollback()
-        raise HTTPException(
-            status_code=502,
-            detail=f"Failed to complete Flowable approval task: {exc}",
-        ) from exc
-
-    approve_case(
+    case = get_case_or_404(session=session, case_id=case_id)
+    return approve_submitted_case(
         session=session,
         case=case,
-        approval_task=approval,
         current_user=current_user,
-        module=module,
-        flowable_status=case.flowable_status,
     )
-
-    recipient_email = None
-    owner = session.get(User, case.owner_id) if case.owner_id else None
-    creator = (
-        session.get(User, case.created_by_id)
-        if case.created_by_id and case.created_by_id != case.owner_id
-        else owner
-    )
-    if owner and owner.email:
-        recipient_email = owner.email
-    elif creator and creator.email:
-        recipient_email = creator.email
-    elif case.initiator and "@" in case.initiator:
-        recipient_email = case.initiator
-
-    notification = record_workflow_notification(
-        session=session,
-        case=case,
-        recipient_email=recipient_email,
-        notification_type="manager_approval_approved",
-        department=current_user.department or "manager_approval",
-        comment=(
-            f"Approved by "
-            f"{current_user.display_name or current_user.full_name or current_user.email}"
-        ),
-    )
-    session.commit()
-    session.refresh(notification)
-
-    return {
-        "case": serialize_case(case),
-        "message": "Case approved. AI generation can now proceed.",
-        "notification": notification.model_dump(mode="json"),
-    }
 
 
 @router.post("/cases/{case_id}/manager-reject")
@@ -1967,55 +1846,13 @@ def manager_reject_case(
     current_user: CurrentUser,
 ):
     """Manager rejects a submitted case."""
-    from app.models import PdEcrApprovalTask, PdEcrCase
-
-    case = session.exec(
-        select(PdEcrCase).where(PdEcrCase.id == uuid.UUID(case_id))
-    ).first()
-    if not case:
-        raise HTTPException(status_code=404, detail="Case not found")
-
-    approval = session.exec(
-        select(PdEcrApprovalTask).where(
-            PdEcrApprovalTask.case_id == uuid.UUID(case_id),
-            PdEcrApprovalTask.status == "pending",
-        )
-    ).first()
-    if not approval:
-        raise HTTPException(status_code=404, detail="No pending approval task for this case")
-
-    if approval.approver_id and approval.approver_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Only the assigned approver can reject")
-    if not approval.approver_id and approval.approver_email and approval.approver_email != current_user.email:
-        raise HTTPException(status_code=403, detail="Only the assigned approver can reject")
-
-    try:
-        complete_manager_approval_task(
-            case=case,
-            approval_task=approval,
-            current_user=current_user,
-            approved=False,
-            rejection_reason=payload.rejection_reason,
-        )
-    except FlowableIntegrationError as exc:
-        session.rollback()
-        raise HTTPException(
-            status_code=502,
-            detail=f"Failed to complete Flowable rejection task: {exc}",
-        ) from exc
-
-    reject_case(
+    case = get_case_or_404(session=session, case_id=case_id)
+    return reject_submitted_case(
         session=session,
         case=case,
-        approval_task=approval,
+        current_user=current_user,
         rejection_reason=payload.rejection_reason,
-        flowable_status=case.flowable_status,
     )
-
-    return {
-        "case": serialize_case(case),
-        "message": "Case rejected. Initiator can revise and resubmit.",
-    }
 
 
 @router.patch("/cases/{case_id}")
@@ -2459,6 +2296,164 @@ def list_pd_ecr_case_activity(case_id: str, session: SessionDep):
     }
 
 
+@router.post("/cases/{case_id}/attachments")
+async def upload_pd_ecr_attachment(
+    case_id: str,
+    session: SessionDep,
+    current_user: CurrentUser,
+    file: UploadFile = File(...),
+    section: str = Form("other"),
+    module_id: str | None = Form(None),
+):
+    """Persist a real uploaded file against a case (optionally a module)."""
+    case = get_case_or_404(session=session, case_id=case_id)
+    if section and section not in ALLOWED_SECTIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid section '{section}'. Allowed: {sorted(ALLOWED_SECTIONS)}",
+        )
+    content = await file.read()
+    attachment = save_attachment(
+        session=session,
+        case=case,
+        filename=file.filename or "file",
+        content=content,
+        content_type=file.content_type,
+        section=section,
+        module_id=module_id or None,
+        current_user=current_user,
+    )
+    return serialize_attachment(attachment)
+
+
+@router.get("/cases/{case_id}/attachments")
+def list_pd_ecr_attachments(
+    case_id: str,
+    session: SessionDep,
+    section: str | None = None,
+    module_id: str | None = None,
+):
+    """List persisted attachments for a case, optionally filtered."""
+    case = get_case_or_404(session=session, case_id=case_id)
+    attachments = list_attachments(
+        session=session, case=case, section=section, module_id=module_id
+    )
+    return {
+        "case_id": str(case.id),
+        "attachments": [serialize_attachment(a) for a in attachments],
+    }
+
+
+@router.delete("/attachments/{attachment_id}")
+def delete_pd_ecr_attachment(
+    attachment_id: str,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    attachment = get_attachment_or_404(session=session, attachment_id=attachment_id)
+    delete_attachment(session=session, attachment=attachment)
+    return {"deleted": True, "id": attachment_id}
+
+
+@router.get("/attachments/{attachment_id}/download")
+def download_pd_ecr_attachment(attachment_id: str, session: SessionDep):
+    attachment = get_attachment_or_404(session=session, attachment_id=attachment_id)
+    if not Path(attachment.stored_path).exists():
+        raise HTTPException(status_code=404, detail="Stored file missing")
+    return FileResponse(
+        attachment.stored_path,
+        media_type=attachment.content_type or "application/octet-stream",
+        filename=attachment.filename,
+    )
+
+
+@router.get("/cases/{case_id}/signoffs")
+def list_pd_ecr_case_signoffs(case_id: str, session: SessionDep):
+    """Persisted signoff records for a case (a filtered view of the activity log)."""
+    case = get_case_or_404(session=session, case_id=case_id)
+    activities = session.exec(
+        select(PdEcrActivity)
+        .where(PdEcrActivity.case_id == case.id)
+        .where(col(PdEcrActivity.action).like("signoff.%"))
+        .order_by(PdEcrActivity.created_at.asc())
+    ).all()
+    return {
+        "case_id": str(case.id),
+        "signoffs": [
+            {
+                "id": str(a.id),
+                "step": (a.metadata_json or {}).get("step"),
+                "role": (a.metadata_json or {}).get("role"),
+                "action": a.action.split("signoff.", 1)[-1],
+                "operator_id": str(a.actor_id) if a.actor_id else None,
+                "operator_name": (a.metadata_json or {}).get("operator_name"),
+                "comment": a.message,
+                "metadata": a.metadata_json,
+                "created_at": a.created_at.isoformat() if a.created_at else None,
+            }
+            for a in activities
+        ],
+    }
+
+
+class PdEcrSignoffPayload(BaseModel):
+    step: str | None = None
+    role: str | None = None
+    action: str = "signed"
+    comment: str | None = None
+    signer_name: str | None = None
+    module_id: str | None = None
+    metadata: dict[str, Any] | None = None
+
+
+@router.post("/cases/{case_id}/signoffs")
+def create_pd_ecr_case_signoff(
+    case_id: str,
+    payload: PdEcrSignoffPayload,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Persist a single signoff action to the audit trail (PdEcrActivity)."""
+    case = get_case_or_404(session=session, case_id=case_id)
+    operator_name = (
+        getattr(current_user, "full_name", None)
+        or getattr(current_user, "email", None)
+    )
+    metadata: dict[str, Any] = dict(payload.metadata or {})
+    metadata.update(
+        {
+            "step": payload.step,
+            "role": payload.role,
+            "signer_name": payload.signer_name or operator_name,
+            "operator_name": operator_name,
+        }
+    )
+    activity = write_activity(
+        session=session,
+        action=f"signoff.{payload.action}",
+        case_id=case.id,
+        actor_id=current_user.id,
+        target_type="module" if payload.module_id else "case",
+        target_id=payload.module_id,
+        message=payload.comment,
+        metadata=metadata,
+    )
+    session.commit()
+    session.refresh(activity)
+    return {
+        "id": str(activity.id),
+        "step": payload.step,
+        "role": payload.role,
+        "action": payload.action,
+        "operator_id": str(current_user.id),
+        "operator_name": operator_name,
+        "comment": payload.comment,
+        "created_at": activity.created_at.isoformat()
+        if activity.created_at
+        else None,
+    }
+
+
 @router.post("/cases/{case_id}/tasks")
 def create_pd_ecr_case_task(
     case_id: str,
@@ -2567,7 +2562,7 @@ async def upload_pd_ecr_case_file(
     # Trigger background FAISS index rebuild
     def _rebuild():
         try:
-            from app.rag.build_index import rebuild_index
+            from app.rag.ingest import rebuild_index
             rebuild_index()
         except Exception:
             traceback.print_exc()
@@ -2606,7 +2601,7 @@ def get_knowledge_base_status(session: SessionDep):
     """
     import shutil
 
-    from app.rag.build_index import (
+    from app.rag.ingest.build_index import (
         INDEX_PATH,
         META_PATH,
         VECTOR_DIR,
@@ -2622,6 +2617,18 @@ def get_knowledge_base_status(session: SessionDep):
         file_count = len([
             p for p in knowledge_dir.rglob("*")
             if p.suffix.lower() in (".md", ".txt") and "_signature_structured" not in p.stem
+        ])
+
+    rag_dir = Path(__file__).resolve().parents[2] / "rag"
+    knowledge_base_dir = rag_dir / "knowledge_base"
+    kb_cases_dir = knowledge_base_dir / "cases"
+    kb_chunks_path = knowledge_base_dir / "chunks" / "chunks.jsonl"
+    kb_case_count = len(list(kb_cases_dir.glob("*.json"))) if kb_cases_dir.exists() else 0
+    kb_chunk_count = 0
+    if kb_chunks_path.exists():
+        kb_chunk_count = len([
+            line for line in kb_chunks_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
         ])
 
     staged_docs = session.exec(select(PdEcrStagedDocument)).all()
@@ -2642,6 +2649,18 @@ def get_knowledge_base_status(session: SessionDep):
     return {
         "knowledge_files_on_disk": file_count,
         "knowledge_dir": str(knowledge_dir),
+        "standardized_knowledge_base": {
+            "cases_dir": str(kb_cases_dir),
+            "chunks_path": str(kb_chunks_path),
+            "case_count": kb_case_count,
+            "chunk_count": kb_chunk_count,
+            "chunks_exists": kb_chunks_path.exists(),
+            "chunks_updated_at": (
+                datetime.fromtimestamp(kb_chunks_path.stat().st_mtime).isoformat()
+                if kb_chunks_path.exists()
+                else None
+            ),
+        },
         "vector_store": {
             "index_path": str(INDEX_PATH),
             "meta_path": str(META_PATH),

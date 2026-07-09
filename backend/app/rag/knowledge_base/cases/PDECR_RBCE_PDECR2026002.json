@@ -1,0 +1,52 @@
+{
+  "case_id": "PDECR_RBCE_PDECR2026002",
+  "source": {
+    "source_file": "T0004-PD-ECR_JP360cooler.xlsx",
+    "file_type": "xlsx",
+    "parser": "excel",
+    "raw_markdown_path": null,
+    "raw_json_path": null,
+    "checksum": "7635584816464cb8b9def0344b145488ea727af40eb7c2baa9000671fc752b06"
+  },
+  "metadata": {
+    "dc_no": "RBCE-PDECR2026002",
+    "date": "2026-02-06",
+    "mcr_no": null,
+    "customer_project": [
+      "JP360"
+    ],
+    "affected_product_no": [
+      "F03ZS0000B-04"
+    ],
+    "component_no": [
+      "F03Z20046M-02"
+    ],
+    "initiator": "huangwei",
+    "department": null,
+    "product_family": null,
+    "change_type": null
+  },
+  "modules": {
+    "change_reason": "零件供应商由中间供应商切换为直供供应商, 更正图纸",
+    "current_design": "当前设计\n版本01\n当前供应商料号\nF03Z20046m-02",
+    "change_proposal": "Update the drawings(F03Z20046m-02)\n将二维码调整到底面，维持之前给客户端的供货样式\n将进出水口的标识符取消，维持之前给客户端的供货样式\n版本02\n新供应商料号\nF03Z20088D-00\n释放新图纸",
+    "impact_analysis": "Step 3.1 Impact analysis / 影响分析\n1. Function&Performance will be influenced? / 产品功能性能影响? Confirmed by: _huangwei_____\n2. Interface and Apperance will be influenced? / 接口和外观影响? Confirmed by: _huangwei_______\n3. Reliability and robustness will be influenced? / 产品可靠性、鲁棒性影响?\nDescription of above points, and concern point analysis / 对上述影响的描述, 以及分析是否存在顾虑点\n4. Others component will be influenced? / 影响其它零部件? Confirmed by: _huangwei__________\nIf yes, Which components will change in parallel? 如果影响， 哪些零部件也需要同时变更?\n5. Manufactory/assembly/testing will be influenced? / 加工, 装配, 测试是否影响? Confirmed by:___________\n6. Influence on supplier part？ Feedback from Supplier/Purchasing？ Confirmed by:___________\n7. Influence on System/Hardware/Software/Calibration/Mechnical parts？ Confirmed by:_____huangwei______\n8. Influence on cost / 对成本的影响\n9. Stock/Delivery treatment / 库存(发货)处理指示: 可以使用\nMixed Deliveries Permissible? 改前改后是否可以混合供货？ YES NO\nHow to deal with 1st delviery after change? 改后第一批货物的发货要求？ Answer回答：_____维持跟先前一样________________\nRaw materials: Not affect Use in other products Scrap Rework Use up\nParts/Subassemblies: Not affect Use in other products Scrap Rework Use up\nFinished goods(inhouse): Not affect Scrap Rework Use up\nFinished goods(RDC外库): Not affect Scrap Rework Use up\nFinished goods(customer): Not affect Recall Rework",
+    "validation_plan": "Step 3.2 Quality Assurance Items / 检查项目\nValidations 验证 Plan finish date 计划完成日期 Resp.person 负责人 Comments 备注\nCapability Studies_ CMK\nCapability Studies_ MSA\nMAE release\nCleanness test\nQZ test\n200h PDL\nBOM check\nTest report\nPAV release",
+    "implementation_plan": "Step 5 Documents release / 文档发布\n1. Documents release (drawing, offer drawing, Bom, Spec., ) / 文档发布 (图纸, 客户图纸， …)\nDevelopment confirmation/ 研发确认: __________\n\nStep 6.1 Implementation check list / 导入清单\nDevelopment\nN Change BOMs & Drawings & Documents in POE system\nN Inform documents update (check work-on can met requirements)\nY Update Offer drawing, TCD, D-FMEA\nN Norm, WB, HF...\nN MoC，IMDS.\nManufacturing\nY Related (Production/Testing) equipement be ready on site\nY Related (Production/Testing) program be ready\n( If related to lettering, labeling or marking change, it's mandatory to provide the change evidence in Remark column)\nY Related (Production/Testing) tooling / cutting / fixture etc. be ready\nY Old tooling / cutting / fixture disposal\nY Old materials disposal\nY Planner update the planning sheet\nY Update FMEA\nY Update CP/FC (Control Plan/Flow Chart)\nY Update WI/PDS (Include attachments.)\nY First batch Mark, Special Mark (Inside Package)\nY First batch Mark, Special Mark (Outside Package)\nY Training\nCOS\nY Confirm the storage of old parts and coordinate the introduction date for new part (RM)\nY Confirm the delivery date of old parts and first delivery of new parts (FG)\nY Check sample orders which affected:material order of CKD\nY Confirm production scheduling according to the alignment, any changes share the information to MOEx,MFE\nY Confirm the old stock/ do prioritize delivery and inventory handling\nY Inform the first delivery to PMO\nPurchasing\nY Check sample orders which affected: material order of purchasing parts\nY Inform internal related departments(COS,MFE,MOEx)with following requirements.:Yellow sticker, delivery quantities and date, PN No. and name,change description…\nY Update incoming inspection plan\nQuality\nY Update testing programe on testing equipment\nY Update inspection plan for CKD parts\nCPjM\nY Distribute the Offer drawing, TCD to customer\nLOP\nY Check 10 digit material order\nPMO\nY Check sample orders which affected: Customer order\nY Inform Customer the first delivery information\nOthers (e.g. actions in HW, SW)\n\nStep 6.2 Implementation date / 执行日期\nPlanned implementation date:\n变更计划执行日期_________________________________________",
+    "risk_analysis": null,
+    "approval_summary": "Step 4 Technical feasibility & Validation plan approval / 技术可行性&验证计划批准\nDevelopment/ 研发: huangwei\nPurchasing/采购: tbd\nMFE/工艺: hubin\nQuality/质量: chen jianfeng\nCPjM/客户项目: yangshen/gong xu\nCOS/样品: yan jianjun\nMOEx/ 生产: xie qiangqiang\nLOG/物流: xiong zhiren",
+    "remarks": "将二维码调整到底面，维持之前给客户端的供货样式\n将进出水口的标识符取消，维持之前给客户端的供货样式"
+  },
+  "impact_departments": [],
+  "tasks": [],
+  "attachments": [],
+  "quality_control": {
+    "extraction_status": "complete",
+    "missing_fields": [
+      "modules.risk_analysis"
+    ],
+    "confidence": 0.7,
+    "needs_human_review": false,
+    "errors": []
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "C:\\Users\\AXU6WX\\AppData\\Local\\Temp\\pytest-of-AXU6WX\\pytest-32\\test_directory_ingest_auto_dis0\\PDECR_WORD_001.docx": {
+    "source_file": "C:\\Users\\AXU6WX\\AppData\\Local\\Temp\\pytest-of-AXU6WX\\pytest-32\\test_directory_ingest_auto_dis0\\PDECR_WORD_001.docx",
+    "checksum": "945f65448d817832ed2d927547f2ee19a225a545dcc2617f6bb5af8e5525692b",
+    "case_id": "CASE_c177aa4246d1",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:56:34.468268+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0001-PDECR - eCom anorld M6 Bolt 04M-02.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0001-PDECR - eCom anorld M6 Bolt 04M-02.xlsx",
+    "checksum": "6e4e58eb888143eead9ae81a5e8cc56a4fd0a39a4029212ca2b55219f7fe82c6",
+    "case_id": "PDECR_0059",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:57:40.600253+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0002-PDECR_0060 800V DCAC B1到B2变更.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0002-PDECR_0060 800V DCAC B1到B2变更.xlsx",
+    "checksum": "556a42cae95f8619a63b61cb79161edf86b84f84ef41b6007e773559b6cb82b1",
+    "case_id": "PDECR_0060",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:57:57.526179+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0003-PD-ECR_PTS_Enhancement.xls": {
+    "source_file": "app\\rag\\excel_source\\T0003-PD-ECR_PTS_Enhancement.xls",
+    "checksum": "e5e77f320485033d6322dfdb04335eed10ba80b93a11ea97bbac6cd6e460969f",
+    "case_id": "CASE_d293932d2dd3",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T07:01:18.387339+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0004-PD-ECR_JP360cooler.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0004-PD-ECR_JP360cooler.xlsx",
+    "checksum": "7635584816464cb8b9def0344b145488ea727af40eb7c2baa9000671fc752b06",
+    "case_id": "PDECR_RBCE_PDECR2026002",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:58:08.390484+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0005-PD-ECR_JP360导油环_F03Z20046V-01_20260422.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0005-PD-ECR_JP360导油环_F03Z20046V-01_20260422.xlsx",
+    "checksum": "e1219d8c0df91dfd1b9d249c3e3b15ef56c49348ea190e744f0aa97600b0e267",
+    "case_id": "PDECR_RBCE_PDECR2026006",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:58:18.804950+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0006-PD-ECR_JP360螺栓F03Z20088M-00-20260511.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0006-PD-ECR_JP360螺栓F03Z20088M-00-20260511.xlsx",
+    "checksum": "5378549b4d9a1449504ffb011113f78ec14509d3877b94d26f4bf177fc992a31",
+    "case_id": "PDECR_RBCE_PDECR2026003",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:58:29.381901+00:00",
+    "error_message": null
+  },
+  "app\\rag\\excel_source\\T0007 PD-ECR_JP360轴套_F03Z20045R-00_20060421.xlsx": {
+    "source_file": "app\\rag\\excel_source\\T0007 PD-ECR_JP360轴套_F03Z20045R-00_20060421.xlsx",
+    "checksum": "4cf3116401223bedc9bfec160fb24ceb4941f2e28ffcacc18085ad0ae39c8fe5",
+    "case_id": "PDECR_RBCE_PDECR2026001",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T06:58:39.242056+00:00",
+    "error_message": null
+  },
+  "C:\\Users\\AXU6WX\\AppData\\Local\\Temp\\pytest-of-AXU6WX\\pytest-33\\test_directory_ingest_auto_dis0\\PDECR_WORD_001.docx": {
+    "source_file": "C:\\Users\\AXU6WX\\AppData\\Local\\Temp\\pytest-of-AXU6WX\\pytest-33\\test_directory_ingest_auto_dis0\\PDECR_WORD_001.docx",
+    "checksum": "4f2823e8e1b70f8f7b8777ac4a223b102a49a94ae8f225e149543c925c8738e9",
+    "case_id": "CASE_c177aa4246d1",
+    "status": "indexed",
+    "indexed_at": "2026-07-08T07:04:19.957606+00:00",
+    "error_message": null
+  }
+}

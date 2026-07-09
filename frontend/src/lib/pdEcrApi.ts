@@ -810,6 +810,7 @@ export const PD_ECR_REQUIRED_FIELD_LABELS: Record<string, string> = {
   customer_project: "客户/项目",
   change_title: "变更名称",
   product_no: "产品编号",
+  change_source: "变更来源",
   change_reason: "变更原因",
   change_description: "变更描述",
   affected_departments: "影响部门",

@@ -34,7 +34,7 @@ import {
   saveGeneratedResult,
 } from "./pdEcrState";
 
-const SAMPLE_TYPE_OPTIONS = ["A", "B", "C", "FD"];
+const SAMPLE_TYPE_OPTIONS = ["A", "B", "C", "D","FD"];
 
 type ChangeAttachment = {
   name: string;
@@ -314,24 +314,41 @@ function WorkPanel({
   );
 }
 
+// 必填标记：视觉上一个红色星号，同时给屏幕阅读器一段隐藏的“必填”文本。
+function RequiredMark() {
+  return (
+    <>
+      <span className="ml-0.5 text-rose-500" aria-hidden="true">
+        *
+      </span>
+      <span className="sr-only">必填</span>
+    </>
+  );
+}
+
 function FormField({
   label,
   value,
   onChange,
   placeholder,
   className,
+  required,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  required?: boolean;
 }) {
   const inputId = useId();
 
   return (
     <label className={`space-y-1 ${className ?? ""}`} htmlFor={inputId}>
-      <span className="enterprise-field-label">{label}</span>
+      <span className="enterprise-field-label">
+        {label}
+        {required ? <RequiredMark /> : null}
+      </span>
       <Input
         id={inputId}
         aria-label={label}
@@ -405,6 +422,7 @@ function DepartmentCheckboxGroup({
     >
       <legend className="px-1 text-xs font-semibold text-slate-600">
         影响部门
+        <RequiredMark />
       </legend>
       <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-slate-700">
         {departmentOptions.map((department) => (
@@ -796,13 +814,17 @@ export function PdEcrPlatform() {
   const submitLeaderApprovalMutation = useMutation({
     mutationFn: () => {
       const title = newChange.title.trim();
-      // Client-side pre-check of the backend's 7 required MVP fields, so users
-      // see what's missing before the round-trip (backend re-validates too).
+      // Client-side pre-check of required fields, so users see what's missing
+      // before the round-trip. product/customer/title/product_no/reason/
+      // description/departments are also re-validated by the backend.
+      // change_source is enforced on the client only for now — the backend
+      // does not yet include it in its required-field check.
       const requiredValues: Record<string, unknown> = {
         product: newChange.product,
         customer_project: newChange.customer,
         change_title: title,
         product_no: newChange.productNo || newChange.product,
+        change_source: newChange.source,
         change_reason: newChange.reason,
         change_description: newChange.description,
         affected_departments: newChange.departments,
@@ -1173,36 +1195,38 @@ export function PdEcrPlatform() {
                 <PdEcrProcessFlowButton />
               </div>
             </div>
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <div className="mt-2 flex flex-col gap-2 border-t border-slate-100 pt-2 lg:flex-row lg:items-center lg:justify-between">
               <h1 className="min-w-0 truncate text-xl font-semibold tracking-tight text-slate-950">
                 {newChange.title.trim() || "New PD-ECR Change"}
               </h1>
-              <label className="flex items-center gap-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  Nr
-                </span>
-                <Input
-                  aria-label="Nr"
-                  value={newChange.nr}
-                  onChange={(event) =>
-                    updateNewChange("nr", event.target.value)
-                  }
-                  className="h-8 w-36 rounded-md border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-800 shadow-sm transition-colors focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
-                />
-              </label>
-              <label className="flex items-center gap-2">
-                <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  Target close date
-                </span>
-                <input
-                  type="date"
-                  value={newChange.targetCloseDate}
-                  onChange={(e) =>
-                    updateNewChange("targetCloseDate", e.target.value)
-                  }
-                  className="enterprise-input h-8 w-36 px-2 text-sm"
-                />
-              </label>
+              <div className="flex shrink-0 flex-wrap items-center gap-2 lg:justify-end">
+                <label className="flex h-9 items-center gap-2 rounded-md border border-slate-200 bg-slate-50/80 px-2.5 shadow-sm transition-colors focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Nr
+                  </span>
+                  <Input
+                    aria-label="Nr"
+                    value={newChange.nr}
+                    onChange={(event) =>
+                      updateNewChange("nr", event.target.value)
+                    }
+                    className="h-7 w-32 border-0 bg-transparent px-0 text-sm font-semibold text-slate-800 shadow-none focus-visible:ring-0"
+                  />
+                </label>
+                <label className="flex h-9 items-center gap-2 rounded-md border border-slate-200 bg-slate-50/80 px-2.5 shadow-sm transition-colors focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100">
+                  <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    Target close date
+                  </span>
+                  <input
+                    type="date"
+                    value={newChange.targetCloseDate}
+                    onChange={(e) =>
+                      updateNewChange("targetCloseDate", e.target.value)
+                    }
+                    className="h-7 w-36 border-0 bg-transparent px-0 text-sm font-semibold text-slate-800 outline-none"
+                  />
+                </label>
+              </div>
             </div>
           </div>
           
@@ -1221,11 +1245,13 @@ export function PdEcrPlatform() {
                   label="产品"
                   value={newChange.product}
                   onChange={(value) => updateNewChange("product", value)}
+                  required
                 />
                 <FormField
                   label="客户/平台"
                   value={newChange.customer}
                   onChange={(value) => updateNewChange("customer", value)}
+                  required
                 />
                 <FormField
                   label="变更发起人"
@@ -1241,6 +1267,7 @@ export function PdEcrPlatform() {
                   value={newChange.title}
                   onChange={(value) => updateNewChange("title", value)}
                   placeholder="例如：JIM 493 C-sample release / 螺栓供应商切换"
+                  required
                 />
               </div>
 
@@ -1268,7 +1295,10 @@ export function PdEcrPlatform() {
               {/* 变更来源 — 多选 + 一行一个 + 各自备注 */}
               <section className="enterprise-field-surface mt-2 !px-3 !py-2">
                 <label className="block space-y-1">
-                  <span className="enterprise-field-label">变更来源</span>
+                  <span className="enterprise-field-label">
+                    变更来源
+                    <RequiredMark />
+                  </span>
                   <SourceMultiSelect
                     selected={newChange.source}
                     onChange={(value) => updateNewChange("source", value)}
@@ -1316,16 +1346,24 @@ export function PdEcrPlatform() {
                 })()}
               </section>
 
-              <section className="enterprise-field-surface mt-2 !px-3 !py-2">
+              <section className="enterprise-field-surface mt-2 !px-3 !py-1.5">
                 <label className="block space-y-1">
-                  <span className="enterprise-field-label">变更背景原因</span>
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="enterprise-field-label">
+                      变更背景原因
+                      <RequiredMark />
+                    </span>
+                    <span className="text-[11px] tabular-nums text-slate-400">
+                      {newChange.reason.trim().length} 字
+                    </span>
+                  </span>
                   <textarea
                     value={newChange.reason}
                     onChange={(event) =>
                       updateNewChange("reason", event.target.value)
                     }
-                    placeholder="请说明为什么需要变更，可包含客户要求、质量问题、供应风险、成本/工艺优化等背景。"
-                    className="enterprise-textarea min-h-16 !py-1.5"
+                    placeholder="为什么需要变更：客户要求、质量问题、供应风险、成本或工艺优化等背景。"
+                    className="enterprise-textarea min-h-14 !py-1.5"
                   />
                 </label>
               </section>
@@ -1338,16 +1376,24 @@ export function PdEcrPlatform() {
                 />
               </div>
 
-              <section className="enterprise-field-surface mt-2 !px-3 !py-2">
+              <section className="enterprise-field-surface mt-2 !px-3 !py-1.5">
                 <label className="block space-y-1">
-                  <span className="enterprise-field-label">变更描述</span>
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="enterprise-field-label">
+                      变更描述
+                      <RequiredMark />
+                    </span>
+                    <span className="text-[11px] tabular-nums text-slate-400">
+                      {newChange.description.trim().length} 字
+                    </span>
+                  </span>
                   <textarea
                     value={newChange.description}
                     onChange={(event) =>
                       updateNewChange("description", event.target.value)
                     }
-                    placeholder="请描述当前状态、拟变更内容、变更原因、影响范围和期望结果。"
-                    className="enterprise-textarea min-h-16 !py-1.5"
+                    placeholder="当前状态、拟变更内容、影响范围与期望结果。"
+                    className="enterprise-textarea min-h-14 !py-1.5"
                   />
                 </label>
               </section>
